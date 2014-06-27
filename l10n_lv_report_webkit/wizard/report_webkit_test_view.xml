@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+	    <record id="form_view_report_webkit_test" model="ir.ui.view">
+	    	<field name="name">Report Webkit Test</field>
+	    	<field name="model">report.webkit.test</field>
+	    	<field name="type">form</field>
+	    	<field name="arch" type="xml">
+	    		<form string="Report Webkit Test" version="7.0">
+                    <p colspan="4">Print a report of type Webkit to test fonts for latvian characters.</p>
+                    <footer>
+                        <button name="print_report" string="Print" type="object" class="oe_highlight"/>
+                        <button special="cancel" string="Cancel" class="oe_link"/>
+                    </footer>
+	    		</form>
+	    	</field>
+	    </record>
+
+	    <record id="view_action_report_webkit_test_menu" model="ir.actions.act_window">
+		    <field name="name">Report Webkit Test</field>
+		    <field name="res_model">report.webkit.test</field>
+		    <field name="view_type">form</field>
+		    <field name="view_mode">form</field>
+            <field name="target">new</field>
+		    <field name="view_id" ref="form_view_report_webkit_test"/>
+	    </record>
+
+        <menuitem id="menu_report_testing_main" name="Testing" parent="base.menu_reporting" sequence="20" groups="base.group_no_one"/>
+
+	    <menuitem action="view_action_report_webkit_test_menu" id="menu_report_webkit_test" name="Character Test" parent="menu_report_testing_main" groups="base.group_no_one"/>
+
+    </data>
+</openerp>

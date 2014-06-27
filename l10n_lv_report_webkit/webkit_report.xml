@@ -1,0 +1,17 @@
+<openerp>
+    <data>
+
+        <report
+            auto="False"
+            menu="False"
+            id="test_webkit_report"
+            model="report.webkit.test"
+            name="test.webkit.report"
+            string="Symbol Testing"
+            header="True"
+            webkit_header="ir_header_webkit_pi"
+            file="l10n_lv_report_webkit/report/test_webkit_report.mako"
+            report_type="webkit"/>
+
+    </data>
+</openerp>

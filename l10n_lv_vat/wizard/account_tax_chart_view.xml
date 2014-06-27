@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<openerp>
+	<data>
+
+        <record id="view_account_tax_chart_inherit_l10n_lv_vat" model="ir.ui.view">
+            <field name="name">account.tax.chart.form.inherit.l10n.lv.vat</field>
+            <field name="model">account.tax.chart</field>
+            <field name="inherit_id" ref="account.view_account_tax_chart"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="/form/group/div/field[@name='period_id']" position="after">
+                    <label for="period_to_id" string="-" class="oe_inline"/>
+                    <field name="period_to_id" class="oe_inline"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</openerp>

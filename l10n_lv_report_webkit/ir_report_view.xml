@@ -1,0 +1,18 @@
+<openerp>
+    <data>
+
+        <record id="act_report_xml_view_inherit_wk" model="ir.ui.view">
+            <field name="name">ir.actions.report.xml.inherit.wk</field>
+            <field name="model">ir.actions.report.xml</field>
+            <field name="inherit_id" ref="report_webkit.act_report_xml_view"/>
+            <field name="arch" type="xml">
+
+                <field name="precise_mode" position="after">
+                    <field name="font"/>
+                </field>
+
+            </field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,82 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* l10n_lv_report_webkit
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-02-05 14:14+0000\n"
+"PO-Revision-Date: 2014-02-05 14:14+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_lv_report_webkit
+#: view:report.webkit.test:0
+msgid "Print a report of type Webkit to test fonts for latvian characters."
+msgstr "Webkit atskaites drukāšana latviešu rakstzīmju fontu testēšanai."
+
+#. module: l10n_lv_report_webkit
+#: model:ir.actions.act_window,name:l10n_lv_report_webkit.view_action_report_webkit_test_menu
+#: view:report.webkit.test:0
+msgid "Report Webkit Test"
+msgstr "Webkit atskaites testēšana"
+
+#. module: l10n_lv_report_webkit
+#: view:report.webkit.test:0
+msgid "Print"
+msgstr "Drukāt"
+
+#. module: l10n_lv_report_webkit
+#: model:ir.ui.menu,name:l10n_lv_report_webkit.menu_report_testing_main
+msgid "Testing"
+msgstr "Testēšana"
+
+#. module: l10n_lv_report_webkit
+#: model:ir.model,name:l10n_lv_report_webkit.model_ir_actions_report_xml
+msgid "ir.actions.report.xml"
+msgstr "ir.actions.report.xml"
+
+#. module: l10n_lv_report_webkit
+#: model:ir.model,name:l10n_lv_report_webkit.model_report_webkit_test
+msgid "report.webkit.test"
+msgstr "report.webkit.test"
+
+#. module: l10n_lv_report_webkit
+#: model:ir.ui.menu,name:l10n_lv_report_webkit.menu_report_webkit_test
+msgid "Character Test"
+msgstr "Rakstzīmju testēšana"
+
+#. module: l10n_lv_report_webkit
+#: model:ir.actions.report.xml,name:l10n_lv_report_webkit.test_webkit_report
+msgid "Symbol Testing"
+msgstr "Simbolu testēšana"
+
+#. module: l10n_lv_report_webkit
+#: help:ir.actions.report.xml,font:0
+msgid "Define a report font, if it will be necessary for the template"
+msgstr "Norādiet atskaites fontu, ja tas būs nepieciešams tās template dokumentam"
+
+#. module: l10n_lv_report_webkit
+#: view:report.webkit.test:0
+msgid "Cancel"
+msgstr "Atcelt"
+
+#. module: l10n_lv_report_webkit
+#: model:ir.model,name:l10n_lv_report_webkit.model_report_font_setting
+msgid "report.font.setting"
+msgstr "report.font.setting"
+
+#. module: l10n_lv_report_webkit
+#: field:ir.actions.report.xml,font:0
+msgid "Report Font"
+msgstr "Atskaites fonts"
+
+#. module: l10n_lv_report_webkit
+#: report:addons/order_dispatch/report/invoice_report_html.mako:202
+msgid "Character Testing"
+msgstr "Rakstzīmju testēšana"
