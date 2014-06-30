@@ -18,15 +18,4 @@
 
 </data>
 
-<data noupdate="1">
-
-    <record id="hr_rule_visibility" model="ir.rule">
-        <field name="name">Employees - Public</field>
-        <field ref="model_hr_employee" name="model_id"/>
-        <field name="domain_force">[('visibility','!=','private')]</field>
-        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-    </record>
-
-</data>
-
 </openerp>

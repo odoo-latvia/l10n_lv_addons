@@ -115,6 +115,32 @@
                     <attribute name="invisible">1</attribute>
                 </xpath> -->
 
+                <!-- Security -->
+
+                <label for="category_ids" position="attributes">
+                    <attribute name="groups">base.group_hr_user,base.group_hr_reader</attribute>
+                </label>
+
+                <field name="category_ids" position="attributes">
+                    <attribute name="groups">base.group_hr_user,base.group_hr_reader</attribute>
+                </field>
+
+                <page string="Personal Information" position="attributes">
+                    <attribute name="groups">base.group_hr_user,base.group_hr_reader</attribute>
+                </page>
+
+                <field name="identification_id" position="attributes">
+                    <attribute name="groups">base.group_hr_user,base.group_hr_reader</attribute>
+                </field>
+
+                <field name="passport_id" position="attributes">
+                    <attribute name="groups">base.group_hr_user,base.group_hr_reader</attribute>
+                </field>
+
+                <page string="HR Settings" position="attributes">
+                    <attribute name="groups">base.group_hr_user,base.group_hr_reader</attribute>
+                </page>
+
             </field>
         </record>
 
