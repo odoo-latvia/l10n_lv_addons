@@ -91,189 +91,173 @@ class wizard_multi_charts_accounts(osv.osv_memory):
         return res
 
     def _remove_unnecessary_account_fiscal_position_tax_templates(self, cr, uid, ids, context=None):
-        acc_fpos_tax_ids = []
-        acc_fpos_tax_obj = self.pool.get('account.fiscal.position.tax.template')
-        fiscal_position_normal_taxes = acc_fpos_tax_obj.search(cr, uid, [('position_id.name', '=', 'Normal Taxes')])
-        acc_fpos_tax_ids.extend(fiscal_position_normal_taxes)
-        fiscal_position_tax_exempt = acc_fpos_tax_obj.search(cr, uid, [('position_id.name', '=', 'Tax Exempt')])
-        acc_fpos_tax_ids.extend(fiscal_position_tax_exempt)
-        res = acc_fpos_tax_obj.unlink(cr, uid, acc_fpos_tax_ids)
+        acc_fpos_tax_tmp_obj = self.pool.get('account.fiscal.position.tax.template')
+        data_obj = self.pool.get('ir.model.data')
+        rem_ids = []
+        rem_list = [
+            'fiscal_position_normal_taxes',
+            'fiscal_position_tax_exempt'
+        ]
+        for item in rem_list:
+            rem_ids.append(data_obj.get_object(cr, uid, 'account', item).id)
+        res = {}
+        if rem_ids:
+            res = acc_fpos_tax_tmp_obj.unlink(cr, uid, rem_ids)
         return res
 
     def _remove_unnecessary_account_fiscal_position_templates(self, cr, uid, ids, context=None):
-        acc_fpos_ids = []
-        acc_fpos_obj = self.pool.get('account.fiscal.position.template')
-        fiscal_position_normal_taxes_template1 = acc_fpos_obj.search(cr, uid, [('name', '=', 'Normal Taxes')])
-        acc_fpos_ids.extend(fiscal_position_normal_taxes_template1)
-        fiscal_position_tax_exempt_template2 = acc_fpos_obj.search(cr, uid, [('name', '=', 'Tax Exempt')])
-        acc_fpos_ids.extend(fiscal_position_tax_exempt_template2)
-        res = acc_fpos_obj.unlink(cr, uid, acc_fpos_ids)
+        acc_fpos_tmp_obj = self.pool.get('account.fiscal.position.template')
+        data_obj = self.pool.get('ir.model.data')
+        rem_ids = []
+        rem_list = [
+            'fiscal_position_normal_taxes_template1',
+            'fiscal_position_tax_exempt_template2'
+        ]
+        for item in rem_list:
+            rem_ids.append(data_obj.get_object(cr, uid, 'account', item).id)
+        res = {}
+        if rem_ids:
+            res = acc_fpos_tmp_obj.unlink(cr, uid, rem_ids)
         return res
 
     def _remove_unnecessary_account_tax_templates(self, cr, uid, ids, context=None):
-        acc_tax_ids = []
-        acc_tax_obj = self.pool.get('account.tax.template')
-        otaxs = acc_tax_obj.search(cr, uid, [('name', '=', 'OTAX S')])
-        acc_tax_ids.extend(otaxs)
-        otaxr = acc_tax_obj.search(cr, uid, [('name', '=', 'OTAX R')])
-        acc_tax_ids.extend(otaxr)
-        otaxx = acc_tax_obj.search(cr, uid, [('name', '=', 'OTAX X')])
-        acc_tax_ids.extend(otaxx)
-        otaxo = acc_tax_obj.search(cr, uid, [('name', '=', 'OTAX O')])
-        acc_tax_ids.extend(otaxo)
-        itaxs = acc_tax_obj.search(cr, uid, [('name', '=', 'ITAX S')])
-        acc_tax_ids.extend(itaxs)
-        itaxr = acc_tax_obj.search(cr, uid, [('name', '=', 'ITAX R')])
-        acc_tax_ids.extend(itaxr)
-        itaxx = acc_tax_obj.search(cr, uid, [('name', '=', 'ITAX X')])
-        acc_tax_ids.extend(itaxx)
-        itaxo = acc_tax_obj.search(cr, uid, [('name', '=', 'ITAX O')])
-        acc_tax_ids.extend(itaxo)
-        res = acc_tax_obj.unlink(cr, uid, acc_tax_ids)
+        acc_tax_tmp_obj = self.pool.get('account.tax.template')
+        data_obj = self.pool.get('ir.model.data')
+        rem_ids = []
+        rem_list = [
+            'otaxs',
+            'otaxr',
+            'otaxx',
+            'otaxo',
+            'itaxs',
+            'itaxr',
+            'itaxx',
+            'itaxo'
+        ]
+        for item in rem_list:
+            rem_ids.append(data_obj.get_object(cr, uid, 'account', item).id)
+        res = {}
+        if rem_ids:
+            res = acc_tax_tmp_obj.unlink(cr, uid, rem_ids)
         return res
 
     def _remove_unnecessary_account_tax_code_templates(self, cr, uid, ids, context=None):
-        acc_tax_code_ids = []
-        acc_tax_code_obj = self.pool.get('account.tax.code.template')
-        tax_code_chart_root = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Plan Fees ')])
-        acc_tax_code_ids.extend(tax_code_chart_root)
-        tax_code_balance_net = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Tax Balance to Pay')])
-        acc_tax_code_ids.extend(tax_code_balance_net)
-        tax_code_input = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Tax Received')])
-        acc_tax_code_ids.extend(tax_code_input)
-        tax_code_input_S = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Tax Received Rate S (15%)')])
-        acc_tax_code_ids.extend(tax_code_input_S)
-        tax_code_input_R = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Tax Received Rate R (5%)')])
-        acc_tax_code_ids.extend(tax_code_input_R)
-        tax_code_input_X = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Tax Received Rate X (Exempt)')])
-        acc_tax_code_ids.extend(tax_code_input_X)
-        tax_code_input_O = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Tax Received Rate O (Out of scope)')])
-        acc_tax_code_ids.extend(tax_code_input_O)
-        tax_code_output = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Tax Paid')])
-        acc_tax_code_ids.extend(tax_code_output)
-        tax_code_output_S = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Tax Paid Rate S (15%)')])
-        acc_tax_code_ids.extend(tax_code_output_S)
-        tax_code_output_R = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Tax Paid Rate R (5%)')])
-        acc_tax_code_ids.extend(tax_code_output_R)
-        tax_code_output_X = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Tax Paid Rate X (Exempt)')])
-        acc_tax_code_ids.extend(tax_code_output_X)
-        tax_code_output_O = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Tax Paid Rate O (Out of scope)')])
-        acc_tax_code_ids.extend(tax_code_output_O)
-        tax_code_base_net = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Tax Bases')])
-        acc_tax_code_ids.extend(tax_code_base_net)
-        tax_code_base_purchases = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Taxable Purchases Base')])
-        acc_tax_code_ids.extend(tax_code_base_purchases)
-        tax_code_purch_S = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Taxable Purchases Rated S (15%)')])
-        acc_tax_code_ids.extend(tax_code_purch_S)
-        tax_code_purch_R = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Taxable Purchases Rated R (5%)')])
-        acc_tax_code_ids.extend(tax_code_purch_R)
-        tax_code_purch_X = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Taxable Purchases Type X (Exempt)')])
-        acc_tax_code_ids.extend(tax_code_purch_X)
-        tax_code_purch_O = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Taxable Purchases Type O (Out of scope)')])
-        acc_tax_code_ids.extend(tax_code_purch_O)
-        tax_code_base_sales = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Base of Taxable Sales')])
-        acc_tax_code_ids.extend(tax_code_base_sales)
-        tax_code_sales_S = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Taxable Sales Rated S (15%)')])
-        acc_tax_code_ids.extend(tax_code_sales_S)
-        tax_code_sales_R = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Taxable Sales Rated R (5%)')])
-        acc_tax_code_ids.extend(tax_code_sales_R)
-        tax_code_sales_X = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Taxable Sales Type X (Exempt)')])
-        acc_tax_code_ids.extend(tax_code_sales_X)
-        tax_code_sales_O = acc_tax_code_obj.search(cr, uid, [('name', '=', 'Taxable Sales Type O (Out of scope)')])
-        acc_tax_code_ids.extend(tax_code_sales_O)
-        res = acc_tax_code_obj.unlink(cr, uid, acc_tax_code_ids)
+        acc_tax_code_tmp_obj = self.pool.get('account.tax.code.template')
+        data_obj = self.pool.get('ir.model.data')
+        rem_ids = []
+        rem_list = [
+            'tax_code_chart_root',
+            'tax_code_balance_net',
+            'tax_code_input',
+            'tax_code_input_S',
+            'tax_code_input_R',
+            'tax_code_input_X',
+            'tax_code_input_O',
+            'tax_code_output',
+            'tax_code_output_S',
+            'tax_code_output_R',
+            'tax_code_output_X',
+            'tax_code_output_O',
+            'tax_code_base_net',
+            'tax_code_base_purchases',
+            'tax_code_purch_S',
+            'tax_code_purch_R',
+            'tax_code_purch_X',
+            'tax_code_purch_O',
+            'tax_code_base_sales',
+            'tax_code_sales_S',
+            'tax_code_sales_R',
+            'tax_code_sales_X',
+            'tax_code_sales_O'
+        ]
+        for item in rem_list:
+            rem_ids.append(data_obj.get_object(cr, uid, 'account', item).id)
+        res = {}
+        if rem_ids:
+            res = acc_tax_code_tmp_obj.unlink(cr, uid, rem_ids)
         return res
 
     def _remove_unnecessary_account_templates(self, cr, uid, ids, context=None):
-        acc_template_ids = []
         acc_template_obj = self.pool.get('account.account.template')
-        conf_chart0 = acc_template_obj.search(cr, uid, [('name', '=', 'Configurable Account Chart')])
-        acc_template_ids.extend(conf_chart0)
-        conf_bal = acc_template_obj.search(cr, uid, [('name', '=', 'Balance Sheet')])
-        acc_template_ids.extend(conf_bal)
-        conf_fas = acc_template_obj.search(cr, uid, [('name', '=', 'Fixed Assets')])
-        acc_template_ids.extend(conf_fas)
-        conf_xfa = acc_template_obj.search(cr, uid, [('name', '=', 'Fixed Asset Account')])
-        acc_template_ids.extend(conf_xfa)
-        conf_nca = acc_template_obj.search(cr, uid, [('name', '=', 'Net Current Assets')])
-        acc_template_ids.extend(conf_nca)
-        conf_cas = acc_template_obj.search(cr, uid, [('name', '=', 'Current Assets')])
-        acc_template_ids.extend(conf_cas)
-        conf_stk = acc_template_obj.search(cr, uid, [('name', '=', 'Purchased Stocks')])
-        acc_template_ids.extend(conf_stk)
-        conf_a_recv = acc_template_obj.search(cr, uid, [('name', '=', 'Debtors')])
-        acc_template_ids.extend(conf_a_recv)
-        conf_ova = acc_template_obj.search(cr, uid, [('name', '=', 'Tax Paid')])
-        acc_template_ids.extend(conf_ova)
-        conf_bnk = acc_template_obj.search(cr, uid, [('name', '=', 'Bank Current Account')])
-        acc_template_ids.extend(conf_bnk)
-        conf_o_income = acc_template_obj.search(cr, uid, [('name', '=', 'Opening Income Account')])
-        acc_template_ids.extend(conf_o_income)
-        conf_cli = acc_template_obj.search(cr, uid, [('name', '=', 'Current Liabilities')])
-        acc_template_ids.extend(conf_cli)
-        conf_a_pay = acc_template_obj.search(cr, uid, [('name', '=', 'Creditors')])
-        acc_template_ids.extend(conf_a_pay)
-        conf_iva = acc_template_obj.search(cr, uid, [('name', '=', 'Tax Received')])
-        acc_template_ids.extend(conf_iva)
-        conf_a_reserve_and_surplus = acc_template_obj.search(cr, uid, [('name', '=', 'Reserve and Profit/Loss Account')])
-        acc_template_ids.extend(conf_a_reserve_and_surplus)
-        conf_o_expense = acc_template_obj.search(cr, uid, [('name', '=', 'Opening Expense Account')])
-        acc_template_ids.extend(conf_o_expense)
-        conf_gpf = acc_template_obj.search(cr, uid, [('name', '=', 'Profit and Loss')])
-        acc_template_ids.extend(conf_gpf)
-        conf_rev = acc_template_obj.search(cr, uid, [('name', '=', 'Revenue')])
-        acc_template_ids.extend(conf_rev)
-        conf_a_sale = acc_template_obj.search(cr, uid, [('name', '=', 'Product Sales')])
-        acc_template_ids.extend(conf_a_sale)
-        conf_cos = acc_template_obj.search(cr, uid, [('name', '=', 'Cost of Sales')])
-        acc_template_ids.extend(conf_cos)
-        conf_cog = acc_template_obj.search(cr, uid, [('name', '=', 'Cost of Goods Sold')])
-        acc_template_ids.extend(conf_cog)
-        conf_ovr = acc_template_obj.search(cr, uid, [('name', '=', 'Overheads')])
-        acc_template_ids.extend(conf_ovr)
-        conf_a_expense = acc_template_obj.search(cr, uid, [('name', '=', 'Expenses')])
-        acc_template_ids.extend(conf_a_expense)
-        conf_a_salary_expense = acc_template_obj.search(cr, uid, [('name', '=', 'Salary Expenses')])
-        acc_template_ids.extend(conf_a_salary_expense)
-        res = acc_template_obj.unlink(cr, uid, acc_template_ids)
+        data_obj = self.pool.get('ir.model.data')
+        rem_ids = []
+        rem_list = [
+            'conf_chart0',
+            'conf_bal',
+            'conf_fas',
+            'conf_xfa',
+            'conf_nca',
+            'conf_cas',
+            'conf_stk',
+            'conf_a_recv',
+            'conf_ova',
+            'conf_bnk',
+            'conf_o_income',
+            'conf_cli',
+            'conf_a_pay',
+            'conf_iva',
+            'conf_a_reserve_and_surplus',
+            'conf_o_expense',
+            'conf_gpf',
+            'conf_rev',
+            'conf_a_sale',
+            'conf_cos',
+            'conf_cog',
+            'conf_ovr',
+            'conf_a_expense',
+            'conf_a_salary_expense',
+            'conf_a_sale',
+            'conf_a_expense'
+        ]
+        for item in rem_list:
+            rem_ids.append(data_obj.get_object(cr, uid, 'account', item).id)
+        res = {}
+        if rem_ids:
+            res = acc_template_obj.unlink(cr, uid, rem_ids)
         return res
 
     def _remove_unnecessary_account_charts(self, cr, uid, ids, context=None):
-        acc_chart_ids = []
-        acc_chart_obj = self.pool.get('account.chart.template')
-        account_chart_id = acc_chart_obj.search(cr, uid, [('name', '=', 'Configurable Account Chart Template')])
-        acc_chart_ids.extend(account_chart_id)
-        res = acc_chart_obj.unlink(cr, uid, acc_chart_ids)
+        acc_chart_tmp_obj = self.pool.get('account.chart.template')
+        data_obj = self.pool.get('ir.model.data')
+        chart_tmp_id = data_obj.get_object(cr, uid, 'account', 'configurable_chart_template').id
+        res = acc_chart_tmp_obj.unlink(cr, uid, chart_tmp_id)
         return res
 
     def _remove_unnecessary_account_types(self, cr, uid, ids, context=None):
-        acc_type_ids = []
         acc_type_obj = self.pool.get('account.account.type')
-        acc_view_id = acc_type_obj.search(cr, uid, [('name', '=', 'Income View')])
-        acc_type_ids.extend(acc_view_id)
-        acc_asset_id = acc_type_obj.search(cr, uid, [('code', '=', 'asset')])
-        acc_type_ids.extend(acc_asset_id)
-        acc_bank_id = acc_type_obj.search(cr, uid, [('code', '=', 'bank')])
-        acc_type_ids.extend(acc_bank_id)
-        acc_cash_id = acc_type_obj.search(cr, uid, [('code', '=', 'cash')])
-        acc_type_ids.extend(acc_cash_id)
-        acc_expense_id = acc_type_obj.search(cr, uid, [('code', '=', 'expense')])
-        acc_type_ids.extend(acc_expense_id)
-        acc_income_id = acc_type_obj.search(cr, uid, [('code', '=', 'income')])
-        acc_type_ids.extend(acc_income_id)
-        acc_liability_id = acc_type_obj.search(cr, uid, [('code', '=', 'liability')])
-        acc_type_ids.extend(acc_liability_id)
-        acc_payable_id = acc_type_obj.search(cr, uid, [('code', '=', 'payable')])
-        acc_type_ids.extend(acc_payable_id)
-        acc_receivable_id = acc_type_obj.search(cr, uid, [('code', '=', 'receivable')])
-        acc_type_ids.extend(acc_receivable_id)
-        acc_tax_id = acc_type_obj.search(cr, uid, [('code', '=', 'tax')])
-        acc_type_ids.extend(acc_tax_id)
-        acc_equity_id = acc_type_obj.search(cr, uid, [('code', '=', 'equity')])
-        acc_type_ids.extend(acc_equity_id)
-        acc_check_id = acc_type_obj.search(cr, uid, [('code', '=', 'check')])
-        acc_type_ids.extend(acc_check_id)
-        res = acc_type_obj.unlink(cr, uid, acc_type_ids)
+        data_obj = self.pool.get('ir.model.data')
+        rem_ids = []
+        rem_list = [
+            'data_account_type_receivable',
+            'data_account_type_payable',
+            'data_account_type_bank',
+            'data_account_type_cash',
+            'data_account_type_asset',
+            'account_type_asset_view1',
+            'data_account_type_liability',
+            'account_type_liability_view1',
+            'data_account_type_income',
+            'account_type_income_view1',
+            'data_account_type_expense',
+            'account_type_expense_view1',
+#            'account_type_cash_equity',
+            'conf_account_type_equity',
+            'conf_account_type_tax',
+            'conf_account_type_chk',
+        ]
+        for item in rem_list:
+            rem_ids.append(data_obj.get_object(cr, uid, 'account', item).id)
+
+        res = {}
+        mod_obj = self.pool.get('ir.module.module')
+        acc_mod_ids = mod_obj.search(cr, uid, [('name','=','account')])
+        allow = True
+        if acc_mod_ids:
+            acc_mod = mod_obj.browse(cr, uid, acc_mod_ids[0])
+            if acc_mod.demo == True:
+                allow = False
+        if rem_ids and allow == True:
+            res = acc_type_obj.unlink(cr, uid, rem_ids)
         return res
 
     def execute(self, cr, uid, ids, context=None):

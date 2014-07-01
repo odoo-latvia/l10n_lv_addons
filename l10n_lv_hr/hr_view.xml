@@ -90,7 +90,7 @@
                 </xpath>
 
                 <xpath expr="/form/sheet/notebook/page[@string='Personal Information']" position="after">
-                    <page string="CV" groups="base.group_hr_manager">
+                    <page string="CV" groups="base.group_hr_manager,base.group_hr_reader">
                         <field name="cv_text" nolabel="1"/>
                     </page>
                 </xpath>
