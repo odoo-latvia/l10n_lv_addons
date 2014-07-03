@@ -29,7 +29,12 @@ class account_cash_order_report(osv.osv_memory):
     _description = "Cash Order Report"
 
     _columns = {
-        'report_line_ids': fields.many2many('account.bank.statement.line', 'account_bank_statement_line_rel', 'report_line_id', 'line_id', 'Cash Book Lines', help='Select a Cash Register Line to print the Order from')
+        'report_line_ids': fields.many2many('account.bank.statement.line', 'account_bank_statement_line_rel', 'report_line_id', 'line_id', 'Cash Book Lines', help='Select a Cash Register Line to print the Order from'),
+        'user_id': fields.many2one('res.users', 'User')
+    }
+
+    _defaults = {
+        'user_id': lambda self, cr, uid, context: uid
     }
 
 account_cash_order_report()

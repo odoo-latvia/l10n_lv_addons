@@ -43,7 +43,7 @@
 		        header="False"
                 webkit_header="l10n_lv_report_webkit.ir_header_webkit_inv"/>
   
-      <report auto="False"
+<!--      <report auto="False"
                 id="report_account_cash_order_l10n_lv_html"
                 model="account.cash.order.report"
                 name="l10n_lv_account.cash_order"
@@ -51,7 +51,7 @@
                 string="Order from Cash Register"
                 report_type="webkit"
 				menu="False"
-                webkit_header="l10n_lv_report_webkit.ir_header_webkit_pi"/>
+                webkit_header="l10n_lv_report_webkit.ir_header_webkit_pi"/> -->
 
 <!--        <report auto="False"
                 id="report_account_cash_book_l10n_lv_html"
@@ -85,6 +85,15 @@
                 name="l10n_lv_account.cash_book"
                 file="l10n_lv_account.cash_book"
                 report_type="qweb-pdf"/>
+
+        <report auto="False"
+                id="report_account_cash_order_l10n_lv"
+                string="Order from Cash Register"
+                model="account.cash.order.report"
+                name="l10n_lv_account.cash_order"
+                file="l10n_lv_account.cash_order"
+                report_type="qweb-pdf"
+                menu="False"/>
 
     </data>
 

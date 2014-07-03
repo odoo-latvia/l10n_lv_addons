@@ -58,6 +58,7 @@ Invoicing (Accounting) -> Reporting -> Legal Reports -> Accounting Reports -> Jo
         'wizard/account_move_line_export_view.xml',
         'account_invoice_view.xml',
         'views/cash_book.xml',
+        'views/cash_order.xml'
         ],
     'auto_install': False,
     'installable': True,
