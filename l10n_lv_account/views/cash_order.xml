@@ -7,7 +7,7 @@
             <div class="page">
                 <div class="oe_structure"/>
                 <h2>
-                    <span>Kases slēgums: </span><span t-field="o.user_id.name"/>
+                    <span>Kases orderis: </span><span t-field="o.ref"/>
                 </h2>
                 <div class="oe_structure"/>
             </div>
@@ -16,8 +16,10 @@
 
 <template id="cash_order">
     <t t-call="report.html_container">
-        <t t-foreach="doc_ids" t-as="doc_id">
-            <t t-raw="translate_doc(doc_id, doc_model, 'user_id.lang', 'l10n_lv_account.cash_order_document')"/>
+        <t t-foreach="docs" t-as="o">
+            <t t-foreach="o.report_line_ids" t-as="line">
+                <t t-raw="translate_doc(line.id, 'account.bank.statement.line', 'partner_id.lang', 'l10n_lv_account.cash_order_document')"/>
+            </t>
         </t>
     </t>
 </template>
