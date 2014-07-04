@@ -33,14 +33,14 @@
                             <span t-field="o.company_id.currency_id.symbol"/>
                         </td>
                         <td class="text-right">
-                            <span t-field="o.amount"/> <!-- negatīvas vērtības-->
+                            <span t-esc="abs_amount(o.amount)"/> 
                         </td>              
                 </tbody> 
             </table>
             
              <div class="row mt32 mb32">
                 <div>
-                    <span>Summa vārdiem: </span><span /> <!--summa-->
+                    <span>Summa vārdiem: </span><span t-esc="verbose_amount(abs_amount(o.amount), o.company_id.currency_id.name)" /> <!--summa-->
                 </div>
             </div>
              <div class="row mt32 mb32">

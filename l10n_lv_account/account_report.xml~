@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-      <!--  <report auto="False"
+        <report auto="False"
                 id="report_account_invoice_list_l10n_lv_html"
                 model="account.invoice"
                 name="l10n_lv_account.invoice_list"
@@ -41,9 +41,7 @@
                 report_type="webkit"
 		        menu="True"
 		        header="False"
-                webkit_header="l10n_lv_report_webkit.ir_header_webkit_inv"/> -->
-                
-<!--///////////////////////////////////////////////////////////////////////////////////////////////  -->              
+                webkit_header="l10n_lv_report_webkit.ir_header_webkit_inv"/>
   
 <!--      <report auto="False"
                 id="report_account_cash_order_l10n_lv_html"

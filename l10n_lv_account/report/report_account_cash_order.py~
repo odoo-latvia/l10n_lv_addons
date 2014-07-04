@@ -23,22 +23,25 @@
 ##############################################################################
 
 import time
+import openerp.addons.l10n_lv_verbose as verb
 from openerp.osv import osv
 from openerp.report import report_sxw
+from openerp import pooler
 
 class report_account_cash_order(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         super(report_account_cash_order, self).__init__(cr, uid, name, context=context)
         self.localcontext.update({
-            'abs_amount': self.abs_amount, 
-           # 'time': time,
-           # 'cr':cr,
-           # 'uid': uid
+            'abs_amount': self.abs_amount,
+            'verbose_currency': self.verbose_currency,           
         })
         self.context = context
         
     def abs_amount(self, amount):
         return abs(amount)
+        
+    def verbose_currency(self, amount, currency):
+        return verb.verbose_currency(self, amount, currency)      
 
 class cash_order(osv.AbstractModel):
     _name = 'report.l10n_lv_account.cash_order'
