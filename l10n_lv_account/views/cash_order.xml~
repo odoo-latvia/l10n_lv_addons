@@ -63,7 +63,7 @@
             <div class="row mt32 mb32">
                 <div>
                     <span t-if="o.amount >= 0"><span> Grāmatvedis: _______________________________ Kasieris: _______________________________ </span></span>
-                    <span t-if="o.amount &lt; 0"><span> Vadītājs: ____________________________ Grāmatvedis: ____________________________ Izsniedza kasieris: ____________________________ </span></span>
+                    <span t-if="o.amount &lt; 0"><span> Vadītājs: ___________________________ Grāmatvedis: ___________________________ Izsniedza kasieris: ___________________________ </span></span>
                 </div>
             </div>
                 <div class="oe_structure"/>

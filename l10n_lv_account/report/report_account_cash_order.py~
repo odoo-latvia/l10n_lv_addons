@@ -37,7 +37,7 @@ class report_account_cash_order(report_sxw.rml_parse):
         })
         self.context = context
         
-    def abs_amount(self, amount):
+    def abs_amount(amount):
         return abs(amount)
 
 class cash_order(osv.AbstractModel):

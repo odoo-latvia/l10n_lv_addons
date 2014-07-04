@@ -33,7 +33,7 @@
                             <span t-field="o.company_id.currency_id.symbol"/>
                         </td>
                         <td class="text-right">
-                            <span t-field="o.amount"/> <!-- negatīvas vērtības-->
+                            <span t-esc="abs_amount(o.amount)"/> <!-- negatīvas vērtības-->
                         </td>              
                 </tbody> 
             </table>
