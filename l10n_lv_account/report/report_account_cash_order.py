@@ -25,6 +25,7 @@
 import time
 from openerp.osv import osv
 from openerp.report import report_sxw
+from openerp.
 
 class report_account_cash_order(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
