@@ -11,11 +11,9 @@
                     <span t-if="o.amount &lt; 0"><span> Kases izdevumu orderis: </span></span>
                     <span t-field="o.ref"/>
                 </h2>
-                <div class="row mt32 mb32">
                 <h3>
                     <span t-field="o.date"/>
                 </h3>
-                </div>
                              
                 <table class="table table-condensed">
                 <thead>
@@ -27,7 +25,7 @@
                 </thead>
                 <tbody>                   
                         <td class="text-center">
-                            <span t-field="o.partner_id.property_account_receivable.code"/>
+                           <span t-if="o.partner_id"><span t-field=" o.partner_id.property_account_receivable.code"/></span>                           
                         </td>
                         <td class="text-center">
                             <span t-field="o.company_id.currency_id.symbol"/>
@@ -40,20 +38,20 @@
             
              <div class="row mt32 mb32">
                 <div>
-                    <span>Summa vārdiem: </span><span t-esc="verbose_amount(abs_amount(o.amount), o.company_id.currency_id.name)" /> <!--summa-->
+                    <span>Summa vārdiem: </span><span t-esc="verbose_currency(abs_amount(o.amount), o.company_id.currency_id.name)" />
                 </div>
             </div>
-             <div class="row mt32 mb32">
+             <div class="row mt mb">
                 <div>
                     <span t-if="o.amount >= 0"><span> Pieņemts no: </span></span>
                     <span t-if="o.amount &lt; 0"><span> Izsniegts: </span></span>
-                    <span t-if="o.partner_id.name"><span t-field="o.partner_id.name"/></span>
-                    <span t-if="o.partner_id.name == 0"><span>__________________________________________</span></span>
+                    <span t-if="o.partner_id"><span t-field="o.partner_id.name"/></span>
+                    <span t-if="not o.partner_id"><span>__________________________________________</span></span>
                     <span> p.k. </span>
                     <span t-if="o.partner_id.ref"><span t-field="o.partner_id.ref"/></span>
-                    <span t-if="o.partner_id.ref == 0"><span>_______________________________</span></span>
+                    <span t-if="not o.partner_id or not o.partner_id.ref"><span>_______________________________</span></span>
                 </div>                   
-                </div>
+                </div> 
             
             <div class="row mt32 mb32">
                 <div>
