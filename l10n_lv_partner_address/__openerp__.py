@@ -26,7 +26,7 @@
     'name': 'Partner - Address',
     'version': '1.0',
     'description': """
-Addresses.
+Addresses and similar Partner check.
 =====================================
 
 Adds a new object for addresses, so you don't have to necessarily create a Partner to add an Address (but, if a Partner with address fields is created, a new Address with Partner will be created automatically, and you can edit this Address from a Partner's card or from an Address card, by choice).
@@ -35,6 +35,8 @@ Also, you can create Address Types for juridical or physical persons.
 Adds Office Address and Delivery Address to a Partner, if the Partner is a Company.
 
 Adds a new field 'Company Registry' to Partner (if it is a company).
+
+Adds a checkbox 'Allow similar Partner creation'. If it is not checked, the system looks for similar Partners already created in the system, when saving the Partner's data. The similar Partner search is based on the Partner's Name and Company Registry field.
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',

@@ -26,34 +26,50 @@
     'name': 'Latvia - Employee Directory',
     'version': '1.0',
     'description': """
-Latvian localisation for hr module.
+Latvian localisation for hr and hr_contract modules.
 =====================================
-
 Field Home Address changed to Declared Address.
+
 New field Residence Address added.
+
 All address fields changed to res.partner.address.
+
 New fields for passport added: Passport Issue Date and Passport Expiration Date.
+
 New fields for Additional Information added: Contract, Contract Start Date and Introductory Done
-Settings -> Configuration -> Human Resources: Personal Information: Use employee name and surname in separate fields.
-Settings -> Configuration -> Human Resources: Curriculum Vitae: Use employees CV text.
+
+Separate fields for employee name and surname.
+
+Section (tab) for employees CV text.
 
 Addtional fields for Contracts: Main Duties, Additional Duties, Other Terms.
 
-Report for Contracts: Employee Contract - prints out a contract to sign.
+Report for Contracts: Employee Contract - prints out a contract to sign. (Needs upgrading from Webkit to QWeb.)
 
 Removes User simple view, so that new users (with default name) can be created from employees.
+
+Looks for Employees with the same Name field in the system when creating/updating an Employee. If such Employees are found, the corresponding Employee cannot be created/updated.
+
+Adds a User access rights group 'HR Reader' which can access all HR documents in readonly mode.
+Adds a User access rights group 'HR Instructor' for Introductory Done field.
+
+Adds a Code field to HR Departments, which is used also in the name_get() methos of the corresponding object.
+
+HR Job: only active Employees in count fields.
+
+Adds 3 new fields in Company form view: 'Responsible Person', 'Position of Responsible Person', 'Justification of Act of the Responsible Person' for Contract report.
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
     'category': 'Localization/Human Resources',
-    'depends': ['hr_contract', 'report_webkit', 'l10n_lv_partner_address'],
+    'depends': ['hr_contract', 'l10n_lv_partner_address'],
     'demo_xml': [],
     'update_xml': [
         'security/hr_security.xml',
         'security/ir.model.access.csv',
         'res_company_view.xml',
         'hr_view.xml',
-        'hr_report.xml'
+#        'hr_report.xml'
     ],
     'auto_install': False,
     'installable': True,

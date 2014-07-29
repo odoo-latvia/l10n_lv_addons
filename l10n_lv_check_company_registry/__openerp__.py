@@ -28,7 +28,9 @@
     'description': """
 Partner Company Registry Check.
 =====================================
-
+Adds a checkbox 'Load data from LV company registry' in Partner form view. If this checkbox is checked, data from Latvian Company Registry is loaded in the corresponding Partner's data fields.
+The data search is based on the Company Registry field's value.
+When the data loading checkbox is checked, the loaded data is not saved, so that the user can choose to save/edit the new data or leave the old data by pressing 'Discard'.
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
