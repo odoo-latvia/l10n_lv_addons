@@ -7,12 +7,12 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_supplier_form"/>
             <field name="arch" type="xml">
-		<xpath expr="/form/sheet/group/group/field[@name='partner_id']" position="after">
-		    <field name="address_invoice_id"/>
-		</xpath>
-		<xpath expr="/form/sheet/notebook/page[@string='Other Info']/group/group/field[@name='user_id']" position="after">
-		    <field name="address_contact_id"/>
-		</xpath>
+		        <field name="partner_id" position="after">
+		            <field name="address_invoice_id"/>
+		        </field>
+		        <field name="user_id" position="after">
+		            <field name="address_contact_id"/>
+		        </field>
             </field>
         </record>
 
@@ -21,12 +21,12 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
-		<xpath expr="/form/sheet/group/group/field[@name='partner_id']" position="after">
-		    <field name="address_invoice_id"/>
-		</xpath>
-		<xpath expr="/form/sheet/notebook/page[@string='Other Info']/group/group/field[@name='user_id']" position="after">
-		    <field name="address_contact_id"/>
-		</xpath>
+		        <field name="partner_id" position="after">
+		            <field name="address_invoice_id"/>
+		        </field>
+		        <field name="user_id" position="after">
+		            <field name="address_contact_id"/>
+		        </field>
             </field>
         </record>
 
