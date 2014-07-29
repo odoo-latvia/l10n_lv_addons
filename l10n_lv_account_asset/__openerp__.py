@@ -29,8 +29,6 @@
 Latvian localization for account_asset module.
 =====================================
 
-Adds Asset Categoty field to Supplier Invoice Lines tree (list) view, which enables the creation of a new asset, when validating a Supplier Invoice, if an Asset Category is chosen.
-
 Adds new checkbox Compute from Next Month to Asset Category and Assets, which enables the start of depreciation computation from the first day of the month, following the month of Purchase Date.
 
 Adds columns Date Confirmed and Date Closed to Assets, which will be needed later, when computing data for reports. Date Confirmed is set automatically, when an Asset is confirmed (as the date of the current day), but Date Closed is set via a wizard, wich is called, when action Set to Close is launched.
@@ -53,7 +51,6 @@ Invoicing (Accounting) -> Reporting -> Assets Reports -> List of assets: calls a
     'demo_xml': [],
     'update_xml': [
         'account_asset_view.xml',
-        'account_asset_invoice_view.xml',
         'account_asset_report.xml',
         'wizard/account_asset_set_close_date_view.xml',
         'wizard/report_account_asset_turnover_view.xml',

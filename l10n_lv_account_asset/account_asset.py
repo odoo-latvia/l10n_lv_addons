@@ -65,6 +65,7 @@ class account_asset_asset(osv.osv):
                         amount = (amount_to_depr / asset.method_number) / total_days * days
                     elif i == undone_dotation_number:
                         amount = (amount_to_depr / asset.method_number) / total_days * (total_days - days)
+                # if next_month:
                 if asset.next_month and asset.method_period == 12:
                     amount = amount_to_depr / asset.method_number
                     months = 12 - float(depreciation_date.strftime('%m')) + 1
@@ -80,6 +81,7 @@ class account_asset_asset(osv.osv):
                         amount = (residual_amount * asset.method_progress_factor) / total_days * days
                     elif i == undone_dotation_number:
                         amount = (residual_amount * asset.method_progress_factor) / total_days * (total_days - days)
+                # if next_month:
                 if asset.next_month and asset.method_period == 12:
                     amount = amount_to_depr / asset.method_number
                     months = asset.method_period - float(depreciation_date.strftime('%m')) + 1
@@ -97,7 +99,7 @@ class account_asset_asset(osv.osv):
             while depreciation_date <= end_date:
                 depreciation_date = (datetime(depreciation_date.year, depreciation_date.month, depreciation_date.day) + relativedelta(months=+asset.method_period))
                 undone_dotation_number += 1
-        if asset.prorata or (asset.next_month and asset.method_period == 12):
+        if asset.prorata or (asset.next_month and asset.method_period == 12): # includes next_month
             undone_dotation_number += 1
         return undone_dotation_number
 
@@ -115,6 +117,7 @@ class account_asset_asset(osv.osv):
             amount_to_depr = residual_amount = asset.value_residual
             if asset.prorata:
                 depreciation_date = datetime.strptime(self._get_last_depreciation_date(cr, uid, [asset.id], context)[asset.id], '%Y-%m-%d')
+            # if next_month:
             elif asset.next_month:
                 if asset.state == 'open':
                     # depreciation_date = 1st of the next month after confirmation month
@@ -177,11 +180,13 @@ class account_asset_asset(osv.osv):
             context = {}
         return self.write(cr, uid, ids, {
             'state':'open',
+            # confirmation_date is set and Depreciation Board re-computed:
             'confirmation_date': time.strftime('%Y-%m-%d'),
         }, context) and self.compute_depreciation_board(cr, uid, ids, context=context)
 
     def set_to_close(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state': 'close'}, context=context)
+        # returns a wizard for close_date setting:
         return {
             'type': 'ir.actions.act_window',
             'name': 'Set Date Closed for Account Asset',
@@ -211,29 +216,19 @@ class account_asset_asset(osv.osv):
         return res
 
     def onchange_category_id(self, cr, uid, ids, category_id, context=None):
-        res = {'value':{}}
+        res = super(account_asset_asset, self).onchange_category_id(cr, uid, ids, category_id, context=context)
         asset_categ_obj = self.pool.get('account.asset.category')
         if category_id:
             category_obj = asset_categ_obj.browse(cr, uid, category_id, context=context)
-            res['value'] = {
-                            'method': category_obj.method,
-                            'method_number': category_obj.method_number,
-                            'method_time': category_obj.method_time,
-                            'method_period': category_obj.method_period,
-                            'method_progress_factor': category_obj.method_progress_factor,
-                            'method_end': category_obj.method_end,
-                            'prorata': category_obj.prorata,
-                            'next_month': category_obj.next_month
-            }
+            res['value'].update({'next_month': category_obj.next_month})
         return res
 
 class account_asset_asset_depreciation_line(osv.osv):
     _inherit = 'account.asset.depreciation.line'
 
     def create_move(self, cr, uid, ids, context=None):
+        context = dict(context or {})
         can_close = False
-        if context is None:
-            context = {}
         asset_obj = self.pool.get('account.asset.asset')
         period_obj = self.pool.get('account.period')
         move_obj = self.pool.get('account.move')
@@ -242,7 +237,7 @@ class account_asset_asset_depreciation_line(osv.osv):
         created_move_ids = []
         asset_ids = []
         for line in self.browse(cr, uid, ids, context=context):
-            depreciation_date = line.depreciation_date or time.strftime('%Y-%m-%d')
+            depreciation_date = line.depreciation_date or time.strftime('%Y-%m-%d') # depreciation_date from line
             period_ids = period_obj.find(cr, uid, depreciation_date, context=context)
             company_currency = line.asset_id.company_id.currency_id.id
             current_currency = line.asset_id.currency_id.id
@@ -298,6 +293,7 @@ class account_asset_asset_depreciation_line(osv.osv):
         for asset in asset_obj.browse(cr, uid, list(set(asset_ids)), context=context):
             if currency_obj.is_zero(cr, uid, asset.currency_id, asset.value_residual):
                 asset.write({'state': 'close'})
+                # returns closing date setting wizard if closed (needs review):
                 return {
                     'type': 'ir.actions.act_window',
                     'name': 'Set Date Closed for Account Asset',
