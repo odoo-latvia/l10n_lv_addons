@@ -243,7 +243,7 @@ class account_asset_asset_depreciation_line(osv.osv):
             current_currency = line.asset_id.currency_id.id
             context.update({'date': depreciation_date})
             amount = currency_obj.compute(cr, uid, current_currency, company_currency, line.amount, context=context)
-            sign = line.asset_id.category_id.journal_id.type = 'purchase' and 1 or -1
+            sign = line.asset_id.category_id.journal_id.type == 'purchase' and 1 or -1
             asset_name = line.asset_id.name
             reference = line.name
             move_vals = {
@@ -289,20 +289,25 @@ class account_asset_asset_depreciation_line(osv.osv):
             self.write(cr, uid, line.id, {'move_id': move_id}, context=context)
             created_move_ids.append(move_id)
             asset_ids.append(line.asset_id.id)
+        asset_close_ids = [] # list of closable asset ids
         # we re-evaluate the assets to determine whether we can close them
         for asset in asset_obj.browse(cr, uid, list(set(asset_ids)), context=context):
             if currency_obj.is_zero(cr, uid, asset.currency_id, asset.value_residual):
                 asset.write({'state': 'close'})
-                # returns closing date setting wizard if closed (needs review):
-                return {
-                    'type': 'ir.actions.act_window',
-                    'name': 'Set Date Closed for Account Asset',
-                    'view_mode': 'form',
-                    'view_type': 'form',
-                    'res_model': 'account.asset.set.close.date',
-                    'target': 'new',
-                    'context': context,
-                    }
+                asset_close_ids.append(asset.id) # add asset to closable list
+        # returns closing date setting wizard if closable asset ids exist:
+        if asset_close_ids:
+            ctx = context.copy()
+            ctx.update({'active_ids': asset_close_ids})
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Set Date Closed for Account Asset',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_model': 'account.asset.set.close.date',
+                'target': 'new',
+                'context': ctx,
+            }
         return created_move_ids
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

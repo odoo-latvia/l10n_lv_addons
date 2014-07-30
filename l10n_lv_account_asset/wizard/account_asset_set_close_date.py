@@ -42,16 +42,19 @@ class account_asset_set_close_date(osv.osv_memory):
         if context is None:
             context = {}
         asset_obj = self.pool.get('account.asset.asset')
-        asset_id = context.get('active_id', False)
-        asset = asset_obj.browse(cr, uid, asset_id, context=context)
+        asset_ids = context.get('active_ids', [])
         data = self.browse(cr, uid, ids[0], context=context)
 
         asset_vals = {
             'close_date': data.close_date
         }
-        asset_obj.write(cr, uid, [asset_id], asset_vals, context=context)
+        if asset_ids:
+            asset_obj.write(cr, uid, asset_ids, asset_vals, context=context)
 
-        return {'type': 'ir.actions.act_window_close'}
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'reload',
+        }
 
 account_asset_set_close_date()
 
