@@ -21,7 +21,7 @@
             <field name="model">hr.contract</field>
             <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
             <field name="arch" type="xml">
-                <xpath expr="/form/sheet/notebook/page[@name='information']/group/group[@name='duration_group']" position="after">
+                <xpath expr="//notebook/page[@name='information']/group/group[@name='duration_group']" position="after">
 		            <group name="duties_group" string="Duties">
             	        <field name="main_duties" colspan="2"/>
             	        <field name="additional_duties" colspan="2"/>
@@ -41,55 +41,55 @@
 
 	            <!-- Working Address, Declared Address, Residence Address -->
 
-                <xpath expr="/form/sheet/notebook/page[@string='Public Information']/group/group[@string='Contact Information']/field[@name='address_id']" position="replace">
+                <field name="address_id" position="replace">
                     <field name="address_work_id" domain="[('type.id','=',3)]" context="{'default_type': 3}"/>
-                </xpath>
+                </field>
 
-                <xpath expr="/form/sheet/notebook/page[@string='Personal Information']/group/group[@string='Contact Information']/field[@name='address_home_id']" position="after">
+                <field name="address_home_id" position="after">
                     <field name="address_declared_id" domain="[('type.id','=',1)]" context="{'default_type': 1}"/>
                     <field name="address_residence_id" domain="[('type.id','in',[1,2])]" context="{'default_type': 2}"/>
-                </xpath>
+                </field>
 
-                <xpath expr="/form/sheet/notebook/page[@string='Personal Information']/group/group[@string='Contact Information']/field[@name='address_home_id']" position="attributes">
+                <field name="address_home_id" position="attributes">
                     <attribute name="invisible">1</attribute>
-                </xpath>
+                </field>
 
 	            <!-- Name, Surname -->
 
-                <xpath expr="/form/sheet/div[@class='oe_title']/label[@for='name']" position="attributes">
+                <label for="name" position="attributes">
                     <attribute name="string">Full Name</attribute>
-                </xpath>
+                </label>
 
-                <xpath expr="/form/sheet/div[@class='oe_title']/label[@for='category_ids']" position="before">
+                <label for="category_ids" position="before">
 		            <group>
 		                <field name="employee_name" on_change="onchange_employee_name_surname(employee_name,employee_surname)"/>
 		                <field name="employee_surname" on_change="onchange_employee_name_surname(employee_name,employee_surname)"/>
 		            </group>
-                </xpath>
+                </label>
 
-                <xpath expr="/form/sheet/div[@class='oe_title']/h1/field[@name='name']" position="attributes">
+                <field name="name" position="attributes">
                     <attribute name="on_change">onchange_name(name)</attribute>
-                </xpath>
+                </field>
 
 	            <!-- Additional fields. -->
 
-                <xpath expr="/form/sheet/notebook/page[@string='Personal Information']/group/group[@string='Citizenship &amp; Other Info']/field[@name='passport_id']" position="after">
+                <field name="passport_id" position="after">
                     <field name="passport_issue_date"/>            
                     <field name="passport_expire_date"/>            
-                </xpath>
+                </field>
 
-                <xpath expr="/form/sheet/notebook/page[@string='Public Information']/group/group[@string='Position']/field[@name='manager']" position="after">
+                <field name="manager" position="after">
 		            <field name="introductory_done" groups="base.group_hr_instructor"/>
-	            </xpath>
+	            </field>
 
-                <xpath expr="/form/sheet/notebook/page[@string='Personal Information']/group/group[@string='Birth']" position="after">
+                <xpath expr="//notebook/page[@string='Personal Information']/group/group[@string='Birth']" position="after">
 		            <group string="Contract Information">
             	        <field name="contract_id" groups="base.group_hr_manager,base.group_hr_reader"/>
             	        <field name="contract_date_start" readonly="1" groups="base.group_hr_manager,base.group_hr_reader"/>
 		            </group>
                 </xpath>
 
-                <xpath expr="/form/sheet/notebook/page[@string='Personal Information']" position="after">
+                <xpath expr="//notebook/page[@string='Personal Information']" position="after">
                     <page string="CV" groups="base.group_hr_manager,base.group_hr_reader">
                         <field name="cv_text" nolabel="1"/>
                     </page>
@@ -97,23 +97,17 @@
 
 	            <!-- Removed fields -->
 
-                <xpath expr="/form/sheet/notebook/page[@string='Personal Information']/group/group[@string='Citizenship &amp; Other Info']/field[@name='otherid']" position="replace"/>
+                <field name="otherid" position="replace"/>
 
-                <xpath expr="/form/sheet/notebook/page[@string='Public Information']/group/group[@string='Contact Information']/field[@name='work_location']" position="replace"/>
+                <field name="work_location" position="replace"/>
 
-                <xpath expr="/form/sheet/notebook/page[@string='Public Information']/group/group[@string='Position']/field[@name='coach_id']" position="replace"/>
+                <field name="coach_id" position="replace"/>
 
 	            <!-- Field parameters -->
 
-	            <xpath expr="/form/sheet/notebook/page[@string='Public Information']/group/group[3]/field[@name='user_id']" position="attributes">
+	            <field name="user_id" position="attributes">
 	                <attribute name="context">{'default_name': name}</attribute>
-	            </xpath>
-
-                <!-- Contracts button removed -->
-
-<!--                <xpath expr="//div[@name='button_box']/button[@string='Contracts']" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </xpath> -->
+	            </field>
 
                 <!-- Security -->
 
@@ -143,10 +137,6 @@
 
             </field>
         </record>
-
-        <!-- Action for contract opening: -->
-
-        <act_window context="{'search_default_employee_id': [active_id], 'default_employee_id': active_id}" id="act_hr_employee_2_hr_contract1" name="Contracts" res_model="hr.contract" src_model="hr.employee"/>
 
 	    <!-- hr.employee tree view -->
 
@@ -199,9 +189,9 @@
             <field name="inherit_id" ref="hr.view_department_form"/>
             <field name="arch" type="xml">
 
-                <xpath expr="/form/sheet/group/field[@name='name']" position="before">
+                <field name="name" position="before">
                     <field name="code"/>
-                </xpath>
+                </field>
 
             </field>
         </record>
@@ -212,9 +202,9 @@
             <field name="inherit_id" ref="hr.view_department_tree"/>
             <field name="arch" type="xml">
 
-                <xpath expr="/tree/field[@name='complete_name']" position="before">
+                <field name="complete_name" position="before">
                     <field name="code"/>
-                </xpath>
+                </field>
 
             </field>
         </record>
@@ -225,9 +215,9 @@
             <field name="inherit_id" ref="hr.view_department_filter"/>
             <field name="arch" type="xml">
 
-                <xpath expr="/search/field[@name='name']" position="before">
+                <field name="name" position="before">
                     <field name="code"/>
-                </xpath>
+                </field>
 
             </field>
         </record>
