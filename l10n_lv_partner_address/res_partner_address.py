@@ -366,6 +366,29 @@ class res_users(osv.osv):
         default.update({'allow_creation': True})
         return super(res_users, self).copy(cr, uid, id, default, context)
 
+    def create(self, cr, uid, vals, context=None):
+        if context is None:
+            context = {}
+        context.update({'default_allow_creation': True})
+        return super(res_users, self).create(cr, uid, vals, context=context)
+
 res_users()
+
+class res_company(osv.osv):
+    _inherit = "res.company"
+
+    def copy(self, cr, uid, id, default=None, context=None):
+        if default is None:
+            default = {}
+        default.update({'allow_creation': True})
+        return super(res_company, self).copy(cr, uid, id, default, context)
+
+    def create(self, cr, uid, vals, context=None):
+        if context is None:
+            context = {}
+        context.update({'default_allow_creation': True})
+        return super(res_company, self).create(cr, uid, vals, context=context)
+
+res_company()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
