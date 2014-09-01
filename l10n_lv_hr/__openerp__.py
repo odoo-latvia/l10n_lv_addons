@@ -58,6 +58,8 @@ Adds a Code field to HR Departments, which is used also in the name_get() methos
 HR Job: only active Employees in count fields.
 
 Adds 3 new fields in Company form view: 'Responsible Person', 'Position of Responsible Person', 'Justification of Act of the Responsible Person' for Contract report.
+
+Multy-company rule for Employees and Company filter for Empoloyees and contracts.
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',

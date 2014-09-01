@@ -29,6 +29,7 @@ from openerp import tools
 _logger = logging.getLogger(__name__)
 import time
 from openerp.tools.translate import _
+from openerp import SUPERUSER_ID
 
 class hr_contract(osv.osv):
     _name = 'hr.contract'
@@ -40,10 +41,24 @@ class hr_contract(osv.osv):
         'other_terms': fields.text('Other Terms'),
         'employee_name': fields.related('employee_id', 'employee_name', type='char', string='Name', store=True),
         'employee_surname': fields.related('employee_id', 'employee_surname', type='char', string='Surname', store=True),
-        'active': fields.related('employee_id', 'active', type='boolean', string='Active')
+        'active': fields.related('employee_id', 'active', type='boolean', string='Active'),
+        'company_id': fields.related('employee_id', 'company_id', type='many2one', relation='res.company', string='Company')
         }
 
     _sql_constraints = [('contract_name', 'unique(name)', 'Contract Reference must be unique!')]
+
+    def search(self, cr, uid, args, offset=0, limit=None, order=None, context=None, count=False):
+        if context is None:
+            context = {}
+        ctx = context.copy()
+        if ctx.get('my_company_filter',False) == True:
+            ctx['my_company_filter'] = False
+            for place, item in enumerate(args):
+                if item == ['company_id','=',0]:
+                    user = self.pool.get('res.users').browse(cr, SUPERUSER_ID, uid, context=context)
+                    company_id = user.company_id and user.company_id.id or False
+                    args[place] = ['company_id','=',company_id]
+        return super(hr_contract, self).search(cr, uid, args, offset=offset, limit=limit, order=order, context=ctx, count=count)
     
 hr_contract()
 
@@ -112,6 +127,19 @@ class hr_employee(osv.osv):
                 raise osv.except_osv(_("Cannot update employee !"), _("An employee with the given name already exists!"))
         return super(hr_employee, self).write(cr, uid, ids, vals, context=context)
 
+    def search(self, cr, uid, args, offset=0, limit=None, order=None, context=None, count=False):
+        if context is None:
+            context = {}
+        ctx = context.copy()
+        if ctx.get('my_company_filter',False) == True:
+            ctx['my_company_filter'] = False
+            for place, item in enumerate(args):
+                if item == ['company_id','=',0]:
+                    user = self.pool.get('res.users').browse(cr, SUPERUSER_ID, uid, context=context)
+                    company_id = user.company_id and user.company_id.id or False
+                    args[place] = ['company_id','=',company_id]
+        return super(hr_employee, self).search(cr, uid, args, offset=offset, limit=limit, order=order, context=ctx, count=count)
+
 hr_employee()
 
 class hr_department(osv.osv):
@@ -134,6 +162,19 @@ class hr_department(osv.osv):
             tit = "%s" % (string)
             res.append((record.id, tit))
         return res
+
+    def search(self, cr, uid, args, offset=0, limit=None, order=None, context=None, count=False):
+        if context is None:
+            context = {}
+        ctx = context.copy()
+        if ctx.get('my_company_filter',False) == True:
+            ctx['my_company_filter'] = False
+            for place, item in enumerate(args):
+                if item == ['company_id','=',0]:
+                    user = self.pool.get('res.users').browse(cr, SUPERUSER_ID, uid, context=context)
+                    company_id = user.company_id and user.company_id.id or False
+                    args[place] = ['company_id','=',company_id]
+        return super(hr_department, self).search(cr, uid, args, offset=offset, limit=limit, order=order, context=ctx, count=count)
 
 hr_department()
 

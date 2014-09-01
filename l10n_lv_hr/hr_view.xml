@@ -12,6 +12,9 @@
                 <field name="employee_id" position="replace">
                     <field name="employee_name"/>
                     <field name="employee_surname"/>
+                </field>
+                <field name="wage" position="after">
+                    <field name="company_id" groups="base.group_multi_company"/>
                 </field>          
             </field>
         </record>
@@ -29,6 +32,21 @@
 		            </group>
                 </xpath>          
             </field>    
+        </record>
+
+        <record id="hr_contract_view_search_inherit_l10n_lv" model="ir.ui.view">
+            <field name="name">hr.contract.view.search</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_search"/>
+            <field name="arch" type="xml">
+                <field name="employee_id" position="after">
+                    <filter name="my_company" string="My Company" domain="[('company_id','=',0)]" context="{'my_company_filter': 1}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="hr_contract.action_hr_contract" model="ir.actions.act_window">
+            <field name="context">{'search_default_my_company': 1, 'search_default_current':1}</field>
         </record>
 
 	    <!-- hr.employee form view -->
@@ -171,6 +189,25 @@
 	        </field>
         </record>
 
+        <!-- hr.employee search view -->
+
+        <record id="view_employee_filter_inherit_l10n_lv" model="ir.ui.view">
+            <field name="name">Employees</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_filter"/>
+            <field name="arch" type="xml">
+                <field name="category_ids" position="after">
+                    <filter name="my_company" string="My Company" domain="[('company_id','=',0)]" context="{'my_company_filter': 1}"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Employee opening action -->
+
+        <record id="hr.open_view_employee_list_my" model="ir.actions.act_window">
+            <field name="context">{'search_default_my_company': 1}</field>
+        </record>
+
 	    <!-- Group access rights for already existing menuitems -->
 
         <menuitem action="hr_contract.action_hr_contract" id="hr_contract.hr_menu_contract" parent="hr.menu_hr_main" name="Contracts" sequence="4" groups="base.group_hr_manager,base.group_hr_reader"/>
@@ -219,7 +256,15 @@
                     <field name="code"/>
                 </field>
 
+                <field name="manager_id" position="after">
+                    <filter name="my_company" string="My Company" domain="[('company_id','=',0)]" context="{'my_company_filter': 1}"/>
+                </field>
+
             </field>
+        </record>
+
+        <record id="hr.open_module_tree_department" model="ir.actions.act_window">
+            <field name="context">{'search_default_my_company': 1}</field>
         </record>
 
     </data>
