@@ -42,6 +42,8 @@ Adds an Asset Confirmation report to Invoicing (Accounting) -> Assets -> Assets,
 Invoicing (Accounting) -> Reporting -> Assets Reports -> Account Asset Turnover: calls a wizard, in which you have to choose a period, by defining it's starting and ending Date, and then you can print out a report of total value of Assets available in the period chosen, their acquisition, depreciation and liquidation (the calculations are grouped by accounts).
 
 Invoicing (Accounting) -> Reporting -> Assets Reports -> List of assets: calls a wizard, in which you have to choose a Date, and then you can print out a report of list of assets available in the Date chosen (the calculations are grouped by accounts).
+
+My Company filter for Assets.
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',

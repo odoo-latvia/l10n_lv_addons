@@ -25,8 +25,8 @@
 import time
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-
 from openerp.osv import osv, fields
+from openerp import SUPERUSER_ID
 
 class account_asset_category(osv.osv):
     _inherit = 'account.asset.category'
@@ -222,6 +222,19 @@ class account_asset_asset(osv.osv):
             category_obj = asset_categ_obj.browse(cr, uid, category_id, context=context)
             res['value'].update({'next_month': category_obj.next_month})
         return res
+
+    def search(self, cr, uid, args, offset=0, limit=None, order=None, context=None, count=False):
+        if context is None:
+            context = {}
+        ctx = context.copy()
+        if ctx.get('my_company_filter',False) == True:
+            ctx['my_company_filter'] = False
+            for place, item in enumerate(args):
+                if item == ['company_id','=',0]:
+                    user = self.pool.get('res.users').browse(cr, SUPERUSER_ID, uid, context=context)
+                    company_id = user.company_id and user.company_id.id or False
+                    args[place] = ['company_id','=',company_id]
+        return super(account_asset_asset, self).search(cr, uid, args, offset=offset, limit=limit, order=order, context=ctx, count=count)
 
 class account_asset_asset_depreciation_line(osv.osv):
     _inherit = 'account.asset.depreciation.line'
