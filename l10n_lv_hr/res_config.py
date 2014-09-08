@@ -22,9 +22,15 @@
 #
 ##############################################################################
 
-import res_config
-import res_company
-import hr
-import report
+from openerp.osv import fields, osv
+
+class hr_config_settings(osv.osv_memory):
+    _inherit = 'hr.config.settings'
+
+    _columns = {
+        'group_multiple_emp_id_vat': fields.boolean("Use Multiple Personal ID / TIN for Countries",
+            implied_group='l10n_lv_hr.group_multiple_emp_id_vat',
+            help="Allows you to use multiple Identification Numbers and TINs for Employees in different Countries."),
+    }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_human_resources_configuration_inherit_l10n_lv" model="ir.ui.view">
+            <field name="name">hr settings l10n_lv</field>
+            <field name="model">hr.config.settings</field>
+            <field name="inherit_id" ref="hr.view_human_resources_configuration"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="/form" position="inside">
+                    <group name="personal_grp">
+                        <label for="id" string="Personal Information"/>
+                        <div>
+                            <div>
+                                <field name="group_multiple_emp_id_vat" class="oe_inline"/>
+                                <label for="group_multiple_emp_id_vat"/>
+                            </div>
+                        </div>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</openerp>

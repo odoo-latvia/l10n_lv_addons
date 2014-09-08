@@ -60,6 +60,8 @@ HR Job: only active Employees in count fields.
 Adds 3 new fields in Company form view: 'Responsible Person', 'Position of Responsible Person', 'Justification of Act of the Responsible Person' for Contract report.
 
 Multy-company rule for Employees and Company filter for Empoloyees and contracts.
+
+Configuration: Multiple Identification Numbers and TINs for Employee in different countries.
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
@@ -71,7 +73,8 @@ Multy-company rule for Employees and Company filter for Empoloyees and contracts
         'security/ir.model.access.csv',
         'res_company_view.xml',
         'hr_view.xml',
-#        'hr_report.xml'
+#        'hr_report.xml',
+        'res_config_view.xml'
     ],
     'auto_install': False,
     'installable': True,

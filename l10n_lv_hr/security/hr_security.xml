@@ -16,6 +16,11 @@
         <field name="implied_ids" eval="[(4, ref('base.group_hr_reader'))]"/>
     </record>
 
+    <record id="group_multiple_emp_id_vat" model="res.groups">
+        <field name="name">Use Multiple Personal ID / TIN for Countries</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
 </data>
 <data noupdate="1">
 

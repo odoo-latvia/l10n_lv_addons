@@ -114,6 +114,19 @@
                     </page>
                 </xpath>
 
+                <xpath expr="//notebook/page[@string='Personal Information']/group" position="inside">
+                    <group string="ID" colspan="4" groups="l10n_lv_hr.group_multiple_emp_id_vat">
+                        <field name="identification_ids" nolabel="1" colspan="4">
+                            <tree editable="bottom">
+                                <field name="country_id"/>
+                                <field name="identification_id"/>
+                                <field name="vat"/>
+                                <field name="comment"/>
+                            </tree>
+                        </field>
+                    </group>
+                </xpath>
+
 	            <!-- Removed fields -->
 
                 <field name="otherid" position="replace"/>

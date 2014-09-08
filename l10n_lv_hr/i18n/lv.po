@@ -26,6 +26,7 @@ msgid "Use employee name and surname in separate fields"
 msgstr "Izmantot darbinieka vārdu un uzvārdu atsevišķos laukos"
 
 #. module: l10n_lv_hr
+#: field:hr.employee.id,employee_id:0
 #: model:ir.model,name:l10n_lv_hr.model_hr_employee
 msgid "Employee"
 msgstr "Darbinieks"
@@ -428,3 +429,44 @@ msgstr "Nav iespējams atjaunot darbinieka datus !"
 #, python-format
 msgid "An employee with the given name already exists!"
 msgstr "Darbinieks ar doto vārdu jau eksistē!"
+
+#. module: l10n_lv_hr
+#: field:hr.contract,active:0
+msgid "Active"
+msgstr "Aktīvs"
+
+#. module: l10n_lv_hr
+#: help:hr.config.settings,group_multiple_emp_id_vat:0
+msgid "Allows you to use multiple Identification Numbers and TINs for Employees in different Countries."
+msgstr "Atļauj izmantot vairākus personas kodus un nodokļu maksātāju numurus darbiniekiem dažādās valstīs."
+
+#. module: l10n_lv_hr
+#: field:hr.employee.id,comment:0
+msgid "Comment"
+msgstr "Komentārs"
+
+#. module: l10n_lv_hr
+#: field:hr.employee.id,country_id:0
+msgid "Country"
+msgstr "Valsts"
+
+#. module: l10n_lv_hr
+#: field:hr.employee.id,identification_id:0
+msgid "Identification No"
+msgstr "Personas kods"
+
+#. module: l10n_lv_hr
+#: field:hr.employee,identification_ids:0
+msgid "Identifications"
+msgstr "Identifikācijas"
+
+#. module: l10n_lv_hr
+#: help:hr.employee.id,vat:0
+msgid "Tax Identification Number"
+msgstr "Nodokļu maksātāja numurs"
+
+#. module: l10n_lv_hr
+#: field:hr.config.settings,group_multiple_emp_id_vat:0
+#: model:res.groups,name:l10n_lv_hr.group_multiple_emp_id_vat
+msgid "Use Multiple Personal ID / TIN for Countries"
+msgstr "Izmantot vairākus personas kodus / nodokļu maksātāja numurus valstīm"

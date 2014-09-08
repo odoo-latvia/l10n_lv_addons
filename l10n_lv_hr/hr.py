@@ -103,6 +103,7 @@ class hr_employee(osv.osv):
         'introductory_done': fields.boolean('Introductory Done'),
         'contract_date_end': fields.related('contract_id', 'date_end', type='date', string='Contract End Date'),
         'contract_date_start': fields.related('contract_id', 'date_start', type='date', string='Contract Start Date'),
+        'identification_ids': fields.one2many('hr.employee.id', 'employee_id', 'Identifications')
     }
 
     _sql_constraints = [('unique_employee_id', 'unique(identification_id)', 'Identification No. must be unique!')]
@@ -141,6 +142,19 @@ class hr_employee(osv.osv):
         return super(hr_employee, self).search(cr, uid, args, offset=offset, limit=limit, order=order, context=ctx, count=count)
 
 hr_employee()
+
+class hr_employee_id(osv.osv):
+    _name = 'hr.employee.id'
+
+    _columns = {
+        'employee_id': fields.many2one('hr.employee', 'Employee', ondelete='cascade'),
+        'country_id': fields.many2one('res.country', 'Country', required=True),
+        'identification_id': fields.char('Identification No'),
+        'vat': fields.char('TIN', help='Tax Identification Number'),
+        'comment': fields.char('Comment')
+    }
+
+hr_employee_id()
 
 class hr_department(osv.osv):
     _inherit = 'hr.department'
