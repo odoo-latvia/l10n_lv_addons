@@ -75,6 +75,10 @@
 
 	            <!-- Name, Surname -->
 
+                <xpath expr="/form/sheet/div[@class='oe_title']" position="attributes">
+                    <attribute name="class">oe_title oe_left</attribute>
+                </xpath> <!-- Fix for button viewing -->
+
                 <label for="name" position="attributes">
                     <attribute name="string">Full Name</attribute>
                 </label>

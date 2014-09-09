@@ -62,6 +62,8 @@ Adds 3 new fields in Company form view: 'Responsible Person', 'Position of Respo
 Multy-company rule for Employees and Company filter for Empoloyees and contracts.
 
 Configuration: Multiple Identification Numbers and TINs for Employee in different countries.
+
+Fix for button viewing in Employee form view.
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
