@@ -23,3 +23,7 @@ access_res_partner_group_user,res.partner,l10n_lv_partner_address.model_res_part
 access_res_partner_group_hr_manager,res.partner,l10n_lv_partner_address.model_res_partner,base.group_hr_manager,1,1,1,1
 access_res_partner_group_hr_reader,res.partner,l10n_lv_partner_address.model_res_partner,base.group_hr_reader,1,0,0,0
 access_res_partner_group_hr_instructor,res.partner,l10n_lv_partner_address.model_res_partner,base.group_hr_instructor,1,1,0,0
+,,,,,,,
+access_hr_employee_id_group_user,hr.employee.id,model_hr_employee_id,base.group_user,1,0,0,0
+access_hr_employee_id_group_hr_reader,hr.employee.id,model_hr_employee_id,base.group_hr_reader,1,0,0,0
+access_hr_employee_id_group_hr_manager,hr.employee.id,model_hr_employee_id,base.group_hr_manager,1,1,1,1

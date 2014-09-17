@@ -64,6 +64,8 @@ Multy-company rule for Employees and Company filter for Empoloyees and contracts
 Configuration: Multiple Identification Numbers and TINs for Employee in different countries.
 
 Fix for button viewing in Employee form view.
+
+Company field visible in Job form view; Job menu in HR Configuration.
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',

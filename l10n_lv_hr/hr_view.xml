@@ -287,5 +287,22 @@
             <field name="context">{'search_default_my_company': 1}</field>
         </record>
 
+        <!-- Job -->
+
+        <record id="view_hr_job_form_inherit_l10n_lv" model="ir.ui.view">
+            <field name="name">hr.job.form.inherit.l10n.lv</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr.view_hr_job_form"/>
+            <field name="arch" type="xml">
+
+                <group name="employee_data" position="inside">
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </group>
+
+            </field>
+        </record>
+
+        <menuitem id="menu_hr_job_config" parent="hr.menu_hr_configuration" action="hr.action_hr_job"/>
+
     </data>
 </openerp>
