@@ -142,7 +142,7 @@
 	            <!-- Field parameters -->
 
 	            <field name="user_id" position="attributes">
-	                <attribute name="context">{'default_name': name}</attribute>
+	                <attribute name="context">{'default_name': name, 'form_view_ref': 'base.view_users_form'}</attribute>
 	            </field>
 
                 <!-- Security -->
@@ -232,10 +232,6 @@
         <menuitem action="hr_contract.action_hr_contract" id="hr_contract.hr_menu_contract" parent="hr.menu_hr_main" name="Contracts" sequence="4" groups="base.group_hr_manager,base.group_hr_reader"/>
 
         <menuitem id="hr.menu_hr_configuration" name="Configuration" parent="hr.menu_hr_root" groups="base.group_hr_manager,base.group_hr_reader" sequence="50"/>
-
-	    <!-- Deleting the simple user form in order to create a new user from employee -->
-
-	    <delete model="ir.ui.view" id="base.view_users_simple_form"/>
 
         <!-- Code for department -->
 
