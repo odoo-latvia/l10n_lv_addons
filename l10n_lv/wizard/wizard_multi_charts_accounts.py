@@ -32,51 +32,16 @@ class wizard_multi_charts_accounts(osv.osv_memory):
     _inherit = 'wizard.multi.charts.accounts'
 
     def onchange_chart_template_id(self, cr, uid, ids, chart_template_id=False, context=None):
-        res = {}
-        tax_templ_obj = self.pool.get('account.tax.template')
-        res['value'] = {'complete_tax_set': False, 'sale_tax': False, 'purchase_tax': False}
-        if chart_template_id:
-            data = self.pool.get('account.chart.template').browse(cr, uid, chart_template_id, context=context)
-            res['value'].update({'complete_tax_set': data.complete_tax_set})
-            if data.complete_tax_set:
-            # default tax is given by the lowest sequence. For same sequence we will take the latest created as it will be the case for tax created while isntalling the generic chart of account
-                sale_tax_ids = tax_templ_obj.search(cr, uid, [("chart_template_id"
-                                              , "=", chart_template_id), ('description', '=', 'PVN-SR')])
-                purchase_tax_ids = tax_templ_obj.search(cr, uid, [("chart_template_id"
-                                              , "=", chart_template_id), ('description', '=', 'Pr-SR')], order="sequence, id desc")
-                res['value'].update({'sale_tax': sale_tax_ids and sale_tax_ids[0] or False, 'purchase_tax': purchase_tax_ids and purchase_tax_ids[0] or False})
-
-            if data.code_digits:
-               res['value'].update({'code_digits': data.code_digits})
-        return res
-
-    def default_get(self, cr, uid, fields, context=None):
-        res = super(wizard_multi_charts_accounts, self).default_get(cr, uid, fields, context=context) 
-        tax_templ_obj = self.pool.get('account.tax.template')
-
-        if 'bank_accounts_id' in fields:
-            res.update({'bank_accounts_id': [{'acc_name': _('Kase'), 'account_type': 'cash'},{'acc_name': _('Banka'), 'account_type': 'bank'}]})
-        if 'company_id' in fields:
-            res.update({'company_id': self.pool.get('res.users').browse(cr, uid, [uid], context=context)[0].company_id.id})
-        if 'seq_journal' in fields:
-            res.update({'seq_journal': True})
-
-        ids = self.pool.get('account.chart.template').search(cr, uid, [('name', '=', 'Latvija – saimnieciskā aprēķina')], context=context)
-        if ids:
-            if 'chart_template_id' in fields:
-                res.update({'only_one_chart_template': len(ids) == 1, 'chart_template_id': ids[0]})
-            if 'sale_tax' in fields:
-                sale_tax_ids = tax_templ_obj.search(cr, uid, [("chart_template_id"
-                                              , "=", ids[0]), ('description', '=', 'PVN-SR')])
-                res.update({'sale_tax': sale_tax_ids and sale_tax_ids[0] or False})
-            if 'purchase_tax' in fields:
-                purchase_tax_ids = tax_templ_obj.search(cr, uid, [("chart_template_id"
-                                          , "=", ids[0]), ('description', '=', 'Pr-SR')])
-                res.update({'purchase_tax': purchase_tax_ids and purchase_tax_ids[0] or False})
-        res.update({
-            'purchase_tax_rate': 21.0,
-            'sale_tax_rate': 21.0,
-        })
+        res = super(wizard_multi_charts_accounts, self).onchange_chart_template_id(cr, uid, ids, chart_template_id=chart_template_id, context=context)
+        obj_data = self.pool.get('ir.model.data')
+        lv_chart_template = obj_data.get_object_reference(cr, uid, 'l10n_lv', 'lv_2012_chart_1')
+        lv_chart_template = lv_chart_template and lv_chart_template[1] or False
+        if chart_template_id == lv_chart_template:
+            lv_sale_tax = obj_data.get_object_reference(cr, uid, 'l10n_lv', 'lv_tax_PVN-SR')
+            res['value']['sale_tax'] = lv_sale_tax and lv_sale_tax[1] or False
+            lv_purchase_tax = obj_data.get_object_reference(cr, uid, 'l10n_lv', 'lv_tax_Pr-SR')
+            res['value']['purchase_tax'] = lv_purchase_tax and lv_purchase_tax[1] or False
+            res['value'].update({'purchase_tax_rate': 21.0, 'sale_tax_rate': 21.0})
         return res
 
     def _remove_unnecessary_account_fiscal_position_tax_templates(self, cr, uid, ids, context=None):
@@ -259,39 +224,19 @@ class wizard_multi_charts_accounts(osv.osv_memory):
         self._remove_unnecessary_account_types(cr, uid, ids, context=context)
         return super(wizard_multi_charts_accounts, self).execute(cr, uid, ids, context=context)
 
-    def _prepare_bank_account(self, cr, uid, line, new_code, acc_template_ref, ref_acc, company_id, context=None):
-        '''
-        This function prepares the value to use for the creation of the default debit and credit accounts of a
-        bank journal created through the wizard of generating COA from templates.
-
-        :param line: dictionary containing the values encoded by the user related to his bank account
-        :param new_code: integer corresponding to the next available number to use as account code
-        :param acc_template_ref: the dictionary containing the mapping between the ids of account templates and the ids
-            of the accounts that have been generated from them.
-        :param ref_acc_bank: browse record of the account template set as root of all bank accounts for the chosen
-            template
-        :param ref_acc_cash: browse record of the account template set as root of all cash accounts for the chosen
-            template
-        :param company_id: id of the company for which the wizard is running
-        :return: mapping of field names and values
-        :rtype: dict
-        '''
+    def _prepare_bank_account(self, cr, uid, line, new_code, acc_template_ref, ref_acc_bank, company_id, context=None):
+        res = super(wizard_multi_charts_accounts, self)._prepare_bank_account(cr, uid, line=line, new_code=new_code, acc_template_ref=acc_template_ref, ref_acc_bank=ref_acc_bank, company_id=company_id, context=context)
         obj_data = self.pool.get('ir.model.data')
-
-        # Get the id of the user types fr-or cash and bank
-        tmp = obj_data.get_object_reference(cr, uid, 'l10n_lv', 'account_type_2012_2_5')
-        cash_type = tmp and tmp[1] or False
-        tmp = obj_data.get_object_reference(cr, uid, 'l10n_lv', 'account_type_2012_2_5')
-        bank_type = tmp and tmp[1] or False
-        return {
-            'name': line['acc_name'],
-            'currency_id': line['currency_id'],
-            'code': new_code,
-            'type': 'other',
-            'user_type': line['account_type'] == 'cash' and cash_type or bank_type,
-            'parent_id': acc_template_ref[ref_acc.id] or False,
-            'company_id': company_id,
-        }
+        lv_bank_acc = obj_data.get_object_reference(cr, uid, 'l10n_lv', 'lv_2012_account_262')
+        lv_bank_acc = lv_bank_acc and lv_bank_acc[1] or False
+        lv_cash_acc = obj_data.get_object_reference(cr, uid, 'l10n_lv', 'lv_2012_account_261')
+        lv_cash_acc = lv_cash_acc and lv_cash_acc[1] or False
+        if ref_acc_bank.id in [lv_bank_acc, lv_cash_acc]:
+            res['type'] = 'other'
+            tmp = obj_data.get_object_reference(cr, uid, 'l10n_lv', 'account_type_2012_2_5')
+            tmp_type = tmp and tmp[1] or False
+            res['user_type'] = tmp_type
+        return res
 
     def _create_bank_journals_from_o2m(self, cr, uid, obj_wizard, company_id, acc_template_ref, context=None):
         '''
@@ -318,52 +263,73 @@ class wizard_multi_charts_accounts(osv.osv_memory):
                     'currency_id': acc.currency_id.id,
                 }
                 journal_data.append(vals)
+        obj_data = self.pool.get('ir.model.data')
+        # --> New: lv_chart_template for testing
+        lv_chart_template = obj_data.get_object_reference(cr, uid, 'l10n_lv', 'lv_2012_chart_1')
+        lv_chart_template = lv_chart_template and lv_chart_template[1] or False
         ref_acc_bank = obj_wizard.chart_template_id.bank_account_view_id
-        ref_acc_cash = obj_wizard.chart_template_id.cash_account_view_id
+        ref_acc_cash = obj_wizard.chart_template_id.cash_account_view_id # --> New: Cash Account
         if journal_data and not ref_acc_bank.code:
             raise osv.except_osv(_('Configuration Error !'), _('The bank account defined on the selected chart of accounts hasn\'t a code.'))
-        if journal_data and not ref_acc_cash.code:
+        # --> New: Cash Account
+        if (obj_wizard.chart_template_id.id == lv_chart_template) and (journal_data and not ref_acc_cash.code):
             raise osv.except_osv(_('Configuration Error !'), _('The cash account defined on the selected chart of accounts hasn\'t a code.'))
 
-        current_num_bank = 1
-        current_num_cash = 1
+        current_num = 1
+        current_num_bank = 1 # --> New: Bank Account
+        current_num_cash = 1 # --> New: Cash Account
         for line in journal_data:
-            # Seek the next available number for the account code
-            if line['account_type'] == 'bank':
+            # --> New: Check if LV Chart Template
+            if (obj_wizard.chart_template_id.id == lv_chart_template):
+                if line['account_type'] == 'bank':
+                    # Seek the next available number for the account code
+                    while True:
+                        new_code_bank = str(ref_acc_bank.code.ljust(code_digits-len(str(current_num_bank)), '0')) + str(current_num_bank)
+                        ids = obj_acc.search(cr, uid, [('code', '=', new_code_bank), ('company_id', '=', company_id)])
+                        if not ids:
+                            break
+                        else:
+                            current_num_bank += 1
+                    # Create the default debit/credit accounts for this bank journal
+                    vals_bank = self._prepare_bank_account(cr, uid, line, new_code_bank, acc_template_ref, ref_acc_bank, company_id, context=context)
+                    default_bank_account_id  = obj_acc.create(cr, uid, vals_bank, context=context)
+                    #create the bank journal
+                    vals_journal_bank = self._prepare_bank_journal(cr, uid, line, current_num_bank, default_bank_account_id, company_id, context=context)
+                    obj_journal.create(cr, uid, vals_journal_bank)
+                    current_num_bank += 1
+                if line['account_type'] == 'cash':
+                    # Seek the next available number for the account code
+                    while True:
+                        new_code_cash = str(ref_acc_cash.code.ljust(code_digits-len(str(current_num_cash)), '0')) + str(current_num_cash)
+                        ids = obj_acc.search(cr, uid, [('code', '=', new_code_cash), ('company_id', '=', company_id)])
+                        if not ids:
+                            break
+                        else:
+                            current_num_cash += 1
+                    # Create the default debit/credit accounts for this bank journal
+                    vals_cash = self._prepare_bank_account(cr, uid, line, new_code_cash, acc_template_ref, ref_acc_cash, company_id, context=context)
+                    default_cash_account_id  = obj_acc.create(cr, uid, vals_cash, context=context)
+                    #create the bank journal
+                    vals_journal_cash = self._prepare_bank_journal(cr, uid, line, current_num_cash, default_cash_account_id, company_id, context=context)
+                    obj_journal.create(cr, uid, vals_journal_cash)
+                    current_num_cash += 1
+            else:
+                # Seek the next available number for the account code
                 while True:
-                    new_code_bank = str(ref_acc_bank.code.ljust(code_digits-len(str(current_num_bank)), '0')) + str(current_num_bank)
-                    ids = obj_acc.search(cr, uid, [('code', '=', new_code_bank), ('company_id', '=', company_id)])
+                    new_code = str(ref_acc_bank.code.ljust(code_digits-len(str(current_num)), '0')) + str(current_num)
+                    ids = obj_acc.search(cr, uid, [('code', '=', new_code), ('company_id', '=', company_id)])
                     if not ids:
                         break
                     else:
-                        current_num_bank += 1
-            if line['account_type'] == 'cash':
-                while True:
-                    new_code_cash = str(ref_acc_cash.code.ljust(code_digits-len(str(current_num_cash)), '0')) + str(current_num_cash)
-                    ids = obj_acc.search(cr, uid, [('code', '=', new_code_cash), ('company_id', '=', company_id)])
-                    if not ids:
-                        break
-                    else:
-                        current_num_cash += 1
-            # Create the default debit/credit accounts for this bank journal
-            if line['account_type'] == 'bank':
-                vals_bank = self._prepare_bank_account(cr, uid, line, new_code_bank, acc_template_ref, ref_acc_bank, company_id, context=context)
-                default_bank_account_id  = obj_acc.create(cr, uid, vals_bank, context=context)
+                        current_num += 1
+                # Create the default debit/credit accounts for this bank journal
+                vals = self._prepare_bank_account(cr, uid, line, new_code, acc_template_ref, ref_acc_bank, company_id, context=context)
+                default_account_id  = obj_acc.create(cr, uid, vals, context=context)
 
-            if line['account_type'] == 'cash':
-                vals_cash = self._prepare_bank_account(cr, uid, line, new_code_cash, acc_template_ref, ref_acc_cash, company_id, context=context)
-                default_cash_account_id  = obj_acc.create(cr, uid, vals_cash, context=context)
-
-            #create the bank journal
-            if line['account_type'] == 'bank':
-                vals_journal_bank = self._prepare_bank_journal(cr, uid, line, current_num_bank, default_bank_account_id, company_id, context=context)
-                obj_journal.create(cr, uid, vals_journal_bank)
-                current_num_bank += 1
-
-            if line['account_type'] == 'cash':
-                vals_journal_cash = self._prepare_bank_journal(cr, uid, line, current_num_cash, default_cash_account_id, company_id, context=context)
-                obj_journal.create(cr, uid, vals_journal_cash)
-                current_num_cash += 1
+                #create the bank journal
+                vals_journal = self._prepare_bank_journal(cr, uid, line, current_num, default_account_id, company_id, context=context)
+                obj_journal.create(cr, uid, vals_journal)
+                current_num += 1
         return True
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
