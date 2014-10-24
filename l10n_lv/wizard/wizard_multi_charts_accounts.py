@@ -22,11 +22,110 @@
 #
 ##############################################################################
 
-import openerp.tools
+import openerp.tools as tools
 from openerp.osv import  osv, fields
 import openerp.addons
 import os
 from openerp.tools.translate import _
+
+fptt_list = [
+    'fiscal_position_normal_taxes',
+    'fiscal_position_tax_exempt'
+]
+
+fpt_list = [
+    'fiscal_position_normal_taxes_template1',
+    'fiscal_position_tax_exempt_template2'
+]
+
+tt_list = [
+    'otaxs',
+    'otaxr',
+    'otaxx',
+    'otaxo',
+    'itaxs',
+    'itaxr',
+    'itaxx',
+    'itaxo'
+]
+
+tct_list = [
+    'tax_code_chart_root',
+    'tax_code_balance_net',
+    'tax_code_input',
+    'tax_code_input_S',
+    'tax_code_input_R',
+    'tax_code_input_X',
+    'tax_code_input_O',
+    'tax_code_output',
+    'tax_code_output_S',
+    'tax_code_output_R',
+    'tax_code_output_X',
+    'tax_code_output_O',
+    'tax_code_base_net',
+    'tax_code_base_purchases',
+    'tax_code_purch_S',
+    'tax_code_purch_R',
+    'tax_code_purch_X',
+    'tax_code_purch_O',
+    'tax_code_base_sales',
+    'tax_code_sales_S',
+    'tax_code_sales_R',
+    'tax_code_sales_X',
+    'tax_code_sales_O'
+]
+
+template_list = [
+    'conf_chart0',
+    'conf_bal',
+    'conf_fas',
+    'conf_xfa',
+    'conf_nca',
+    'conf_cas',
+    'conf_stk',
+    'conf_a_recv',
+    'conf_ova',
+    'conf_bnk',
+    'conf_o_income',
+    'conf_cli',
+    'conf_a_pay',
+    'conf_iva',
+    'conf_a_reserve_and_surplus',
+    'conf_o_expense',
+    'conf_gpf',
+    'conf_rev',
+    'conf_a_sale',
+    'conf_cos',
+    'conf_cog',
+    'conf_ovr',
+    'conf_a_expense',
+    'conf_a_salary_expense',
+    'conf_a_sale',
+    'conf_a_expense'
+]
+
+chart_list = [
+    'configurable_chart_template'
+]
+
+type_list = [
+    'data_account_type_receivable',
+    'data_account_type_payable',
+#    'data_account_type_bank',
+#    'data_account_type_cash',
+    'data_account_type_asset',
+    'account_type_asset_view1',
+    'data_account_type_liability',
+    'account_type_liability_view1',
+    'data_account_type_income',
+    'account_type_income_view1',
+    'data_account_type_expense',
+    'account_type_expense_view1',
+#    'account_type_cash_equity',
+    'conf_account_type_equity',
+    'conf_account_type_tax',
+    'conf_account_type_chk',
+]
 
 class wizard_multi_charts_accounts(osv.osv_memory):
     _inherit = 'wizard.multi.charts.accounts'
@@ -44,184 +143,38 @@ class wizard_multi_charts_accounts(osv.osv_memory):
             res['value'].update({'purchase_tax_rate': 21.0, 'sale_tax_rate': 21.0})
         return res
 
-    def _remove_unnecessary_account_fiscal_position_tax_templates(self, cr, uid, ids, context=None):
-        acc_fpos_tax_tmp_obj = self.pool.get('account.fiscal.position.tax.template')
+    def _remove_unnecessary_data(self, cr, uid, rem_list, obj_name, context=None):
         data_obj = self.pool.get('ir.model.data')
+        obj = self.pool.get(obj_name)
         rem_ids = []
-        rem_list = [
-            'fiscal_position_normal_taxes',
-            'fiscal_position_tax_exempt'
-        ]
         for item in rem_list:
             rem_ids.append(data_obj.get_object(cr, uid, 'account', item).id)
         res = {}
-        if rem_ids:
-            res = acc_fpos_tax_tmp_obj.unlink(cr, uid, rem_ids)
-        return res
-
-    def _remove_unnecessary_account_fiscal_position_templates(self, cr, uid, ids, context=None):
-        acc_fpos_tmp_obj = self.pool.get('account.fiscal.position.template')
-        data_obj = self.pool.get('ir.model.data')
-        rem_ids = []
-        rem_list = [
-            'fiscal_position_normal_taxes_template1',
-            'fiscal_position_tax_exempt_template2'
-        ]
-        for item in rem_list:
-            rem_ids.append(data_obj.get_object(cr, uid, 'account', item).id)
-        res = {}
-        if rem_ids:
-            res = acc_fpos_tmp_obj.unlink(cr, uid, rem_ids)
-        return res
-
-    def _remove_unnecessary_account_tax_templates(self, cr, uid, ids, context=None):
-        acc_tax_tmp_obj = self.pool.get('account.tax.template')
-        data_obj = self.pool.get('ir.model.data')
-        rem_ids = []
-        rem_list = [
-            'otaxs',
-            'otaxr',
-            'otaxx',
-            'otaxo',
-            'itaxs',
-            'itaxr',
-            'itaxx',
-            'itaxo'
-        ]
-        for item in rem_list:
-            rem_ids.append(data_obj.get_object(cr, uid, 'account', item).id)
-        res = {}
-        if rem_ids:
-            res = acc_tax_tmp_obj.unlink(cr, uid, rem_ids)
-        return res
-
-    def _remove_unnecessary_account_tax_code_templates(self, cr, uid, ids, context=None):
-        acc_tax_code_tmp_obj = self.pool.get('account.tax.code.template')
-        data_obj = self.pool.get('ir.model.data')
-        rem_ids = []
-        rem_list = [
-            'tax_code_chart_root',
-            'tax_code_balance_net',
-            'tax_code_input',
-            'tax_code_input_S',
-            'tax_code_input_R',
-            'tax_code_input_X',
-            'tax_code_input_O',
-            'tax_code_output',
-            'tax_code_output_S',
-            'tax_code_output_R',
-            'tax_code_output_X',
-            'tax_code_output_O',
-            'tax_code_base_net',
-            'tax_code_base_purchases',
-            'tax_code_purch_S',
-            'tax_code_purch_R',
-            'tax_code_purch_X',
-            'tax_code_purch_O',
-            'tax_code_base_sales',
-            'tax_code_sales_S',
-            'tax_code_sales_R',
-            'tax_code_sales_X',
-            'tax_code_sales_O'
-        ]
-        for item in rem_list:
-            rem_ids.append(data_obj.get_object(cr, uid, 'account', item).id)
-        res = {}
-        if rem_ids:
-            res = acc_tax_code_tmp_obj.unlink(cr, uid, rem_ids)
-        return res
-
-    def _remove_unnecessary_account_templates(self, cr, uid, ids, context=None):
-        acc_template_obj = self.pool.get('account.account.template')
-        data_obj = self.pool.get('ir.model.data')
-        rem_ids = []
-        rem_list = [
-            'conf_chart0',
-            'conf_bal',
-            'conf_fas',
-            'conf_xfa',
-            'conf_nca',
-            'conf_cas',
-            'conf_stk',
-            'conf_a_recv',
-            'conf_ova',
-            'conf_bnk',
-            'conf_o_income',
-            'conf_cli',
-            'conf_a_pay',
-            'conf_iva',
-            'conf_a_reserve_and_surplus',
-            'conf_o_expense',
-            'conf_gpf',
-            'conf_rev',
-            'conf_a_sale',
-            'conf_cos',
-            'conf_cog',
-            'conf_ovr',
-            'conf_a_expense',
-            'conf_a_salary_expense',
-            'conf_a_sale',
-            'conf_a_expense'
-        ]
-        for item in rem_list:
-            rem_ids.append(data_obj.get_object(cr, uid, 'account', item).id)
-        res = {}
-        if rem_ids:
-            res = acc_template_obj.unlink(cr, uid, rem_ids)
-        return res
-
-    def _remove_unnecessary_account_charts(self, cr, uid, ids, context=None):
-        acc_chart_tmp_obj = self.pool.get('account.chart.template')
-        data_obj = self.pool.get('ir.model.data')
-        chart_tmp_id = data_obj.get_object(cr, uid, 'account', 'configurable_chart_template').id
-        res = acc_chart_tmp_obj.unlink(cr, uid, chart_tmp_id)
-        return res
-
-    def _remove_unnecessary_account_types(self, cr, uid, ids, context=None):
-        acc_type_obj = self.pool.get('account.account.type')
-        data_obj = self.pool.get('ir.model.data')
-        rem_ids = []
-        rem_list = [
-            'data_account_type_receivable',
-            'data_account_type_payable',
-            'data_account_type_bank',
-            'data_account_type_cash',
-            'data_account_type_asset',
-            'account_type_asset_view1',
-            'data_account_type_liability',
-            'account_type_liability_view1',
-            'data_account_type_income',
-            'account_type_income_view1',
-            'data_account_type_expense',
-            'account_type_expense_view1',
-#            'account_type_cash_equity',
-            'conf_account_type_equity',
-            'conf_account_type_tax',
-            'conf_account_type_chk',
-        ]
-        for item in rem_list:
-            rem_ids.append(data_obj.get_object(cr, uid, 'account', item).id)
-
-        res = {}
-        mod_obj = self.pool.get('ir.module.module')
-        acc_mod_ids = mod_obj.search(cr, uid, [('name','=','account')])
         allow = True
-        if acc_mod_ids:
-            acc_mod = mod_obj.browse(cr, uid, acc_mod_ids[0])
-            if acc_mod.demo == True:
-                allow = False
+        if obj_name == 'account.account.type':
+            mod_obj = self.pool.get('ir.module.module')
+            acc_mod_ids = mod_obj.search(cr, uid, [('name','=','account')])
+            if acc_mod_ids:
+                acc_mod = mod_obj.browse(cr, uid, acc_mod_ids[0])
+                if acc_mod.demo == True:
+                    allow = False
         if rem_ids and allow == True:
-            res = acc_type_obj.unlink(cr, uid, rem_ids)
+            res = obj.unlink(cr, uid, rem_ids)
         return res
 
     def execute(self, cr, uid, ids, context=None):
-        self._remove_unnecessary_account_fiscal_position_tax_templates(cr, uid, ids, context=context)
-        self._remove_unnecessary_account_fiscal_position_templates(cr, uid, ids, context=context)
-        self._remove_unnecessary_account_tax_templates(cr, uid, ids, context=context)
-        self._remove_unnecessary_account_tax_code_templates(cr, uid, ids, context=context)
-        self._remove_unnecessary_account_templates(cr, uid, ids, context=context)
-        self._remove_unnecessary_account_charts(cr, uid, ids, context=context)
-        self._remove_unnecessary_account_types(cr, uid, ids, context=context)
+        data = self.browse(cr, uid, ids[0], context=context)
+        obj_data = self.pool.get('ir.model.data')
+        lv_chart_template = obj_data.get_object_reference(cr, uid, 'l10n_lv', 'lv_2012_chart_1')
+        lv_chart_template = lv_chart_template and lv_chart_template[1] or False
+        if data.chart_template_id.id == lv_chart_template:
+            self._remove_unnecessary_data(cr, uid, fptt_list, 'account.fiscal.position.tax.template', context=context)
+            self._remove_unnecessary_data(cr, uid, fpt_list, 'account.fiscal.position.template', context=context)
+            self._remove_unnecessary_data(cr, uid, tt_list, 'account.tax.template', context=context)
+            self._remove_unnecessary_data(cr, uid, tct_list, 'account.tax.code.template', context=context)
+            self._remove_unnecessary_data(cr, uid, template_list, 'account.account.template', context=context)
+            self._remove_unnecessary_data(cr, uid, chart_list, 'account.chart.template', context=context)
+            self._remove_unnecessary_data(cr, uid, type_list, 'account.account.type', context=context)
         return super(wizard_multi_charts_accounts, self).execute(cr, uid, ids, context=context)
 
     def _prepare_bank_account(self, cr, uid, line, new_code, acc_template_ref, ref_acc_bank, company_id, context=None):
@@ -330,7 +283,8 @@ class wizard_multi_charts_accounts(osv.osv_memory):
                 vals_journal = self._prepare_bank_journal(cr, uid, line, current_num, default_account_id, company_id, context=context)
                 obj_journal.create(cr, uid, vals_journal)
                 current_num += 1
+        if (obj_wizard.chart_template_id.id == lv_chart_template):
+            self._remove_unnecessary_data(cr, uid, ['data_account_type_bank', 'data_account_type_cash'], 'account.account.type', context=context)
         return True
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-
