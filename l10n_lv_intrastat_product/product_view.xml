@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- product.template form for intrastat_id replacing -->
+        <record id="product_template_form_view_intrastat_remove" model="ir.ui.view">
+            <field name="name">intrastat.base.product.template.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="report_intrastat.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <field name="intrastat_id" position="replace"/>
+            </field>
+        </record>
+
+        <!-- product.template form -->
+        <record id="product_template_form_view" model="ir.ui.view">
+            <field name="name">intrastat.base.product.template.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="account.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <group name="properties" position="after">
+                    <group string="Intrastat Properties" name="intrastat">
+                        <field name="intrastat_id" attrs="{'invisible': [('type', '=', 'service')]}"/>
+                        <field name="country_id" attrs="{'invisible': [('type', '=', 'service')]}"/>
+                        <field name="exclude_from_intrastat"/> <!-- intrastat_base -->
+                        <field name="is_accessory_cost" attrs="{'invisible': [('type', '!=', 'service')]}"/> <!-- intrastat_base -->
+                    </group>
+                </group>
+            </field>
+        </record>
+
+        <!-- Add field on product.supplierinfo -->
+        <record id="product_supplierinfo_form_view" model="ir.ui.view">
+            <field name="name">lv.intrastat.product.product.supplierinfo.form</field>
+            <field name="model">product.supplierinfo</field>
+            <field name="inherit_id" ref="product.product_supplierinfo_form_view"/>
+            <field name="arch" type="xml">
+                <field name="product_uom" position="after">
+                    <field name="origin_country_id" />
+                </field>
+            </field>
+        </record>
+
+        <!-- Add intrastat_id on Product category -->
+        <record id="product_category_form_view" model="ir.ui.view">
+            <field name="name">lv.intrastat.product.category.form</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='parent']" position="inside">
+                    <group name="intrastat" string="Intrastat Properties" colspan="2">
+                        <field name="intrastat_id" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Add the field intrastat_label on product UoM -->
+        <record id="product_uom_form_view" model="ir.ui.view">
+            <field name="name">lv.intrastat.product.uom.form</field>
+            <field name="model">product.uom</field>
+            <field name="inherit_id" ref="product.product_uom_form_view" />
+            <field name="arch" type="xml">
+                <data>
+                    <field name="category_id" position="after">
+                        <field name="intrastat_label"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <!-- Add search view for Intrastat code -->
+        <record id="view_report_intrastat_code_search" model="ir.ui.view">
+            <field name="name">lv.intrastat.product.intrastat.code.search</field>
+            <field name="model">report.intrastat.code</field>
+            <field name="arch" type="xml">
+                <search string="Intrastat Code">
+                    <field name="name" />
+                    <field name="description"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Update tree view for Intrastat code -->
+        <record id="view_report_intrastat_code_tree" model="ir.ui.view">
+            <field name="name">report.intrastat.code.tree</field>
+            <field name="model">report.intrastat.code</field>
+            <field name="inherit_id" ref="report_intrastat.view_report_intrastat_code_tree"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="intrastat_code"/>
+                </field>
+                <field name="description" position="after">
+                    <field name="intrastat_uom_id"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Update form view for Intrastat code -->
+        <record id="view_report_intrastat_code_form" model="ir.ui.view">
+            <field name="name">report.intrastat.code.form</field>
+            <field name="model">report.intrastat.code</field>
+            <field name="inherit_id" ref="report_intrastat.view_report_intrastat_code_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="intrastat_code"/>
+                </field>
+                <field name="description" position="after">
+                    <field name="intrastat_uom_id"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Additional menu entries for Intrastat code -->
+
+        <menuitem id="product_intrastat_code_menu" action="report_intrastat.action_report_intrastat_code_tree" parent="product.prod_config_main"/>
+
+        <menuitem id="product_intrastat_code_menu_purchase" action="report_intrastat.action_report_intrastat_code_tree" parent="purchase.menu_product_in_config_purchase"/>
+
+        <menuitem id="product_intrastat_code_menu_stock" action="report_intrastat.action_report_intrastat_code_tree" parent="stock.menu_product_in_config_stock"/>
+
+        <delete model="ir.ui.menu" id="report_intrastat.menu_report_intrastat_code"/>
+
+    </data>
+</openerp>

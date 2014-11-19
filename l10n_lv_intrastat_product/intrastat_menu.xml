@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Menu entry for Intrastat -->
+        <menuitem id="menu_intrastat_base_root" name="Intrastat Reporting" parent="account.menu_finance_legal_statement"/>
+
+    </data>
+</openerp>
