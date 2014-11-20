@@ -111,6 +111,10 @@
             </field>
         </record>
 
+        <record id="report_intrastat.action_report_intrastat_code_tree" model="ir.actions.act_window">
+            <field name="name">Intrastat Codes</field>
+        </record>
+
         <!-- Additional menu entries for Intrastat code -->
 
         <menuitem id="product_intrastat_code_menu" action="report_intrastat.action_report_intrastat_code_tree" parent="product.prod_config_main"/>
