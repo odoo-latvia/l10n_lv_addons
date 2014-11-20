@@ -53,4 +53,11 @@ class stock_picking(orm.Model):
         return super(stock_picking, self)._create_invoice_from_picking(
             cr, uid, picking, vals, context=context)
 
+    def onchange_picking_type_id(self, cr, uid, ids, picking_type_id, context=None):
+        res = {}
+        if picking_type_id:
+            pick_type = self.pool.get('stock.picking.type').browse(cr, uid, picking_type_id, context=context)
+            res = {'value': {'picking_type_code': pick_type.code}}
+        return res
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

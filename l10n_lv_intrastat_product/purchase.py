@@ -22,14 +22,23 @@
 #
 ##############################################################################
 
-import product
-import tax
-import intrastat_common
-import intrastat_type
-import company
-import invoice
-import stock
-import purchase
-import sale
+from openerp.osv import osv, orm, fields
+from openerp.tools.translate import _
+
+class purchase_order(orm.Model):
+    _inherit = "purchase.order"
+
+    def _prepare_invoice(self, cr, uid, order, line_ids, context=None):
+        invoice_vals = super(purchase_order, self)._prepare_invoice(
+            cr, uid, order, line_ids, context=context)
+        if order.partner_id.country_id:
+            invoice_vals['intrastat_country_id'] = \
+                order.partner_id.country_id.id
+        if order.picking_ids and len(order.picking_ids) == 1:
+            invoice_vals['intrastat_transport'] = \
+                order.picking_ids[0].intrastat_transport
+            invoice_vals['intrastat_type_id'] = \
+                order.picking_ids[0].intrastat_type_id and order.picking_ids[0].intrastat_type_id.id or False
+        return invoice_vals
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
