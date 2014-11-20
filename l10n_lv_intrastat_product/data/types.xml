@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='utf-8'?>
+<openerp>
+  <data>
+    <record model='report.intrastat.type' id='report_intrastat_type_41'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>import</field>
+      <field name='name'>Tieša pirkšana/pārdošana</field>
+      <field name='object_type'>in_invoice</field>
+      <field name='transaction_code'>11</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_45'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>export</field>
+      <field name='name'>Tieša pirkšana/pārdošana</field>
+      <field name='object_type'>out_invoice</field>
+      <field name='transaction_code'>11</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_46'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>import</field>
+      <field name='name'>Citi</field>
+      <field name='object_type'>in_invoice</field>
+      <field name='transaction_code'>19</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_47'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>import</field>
+      <field name='name'>Pieiegādes  nosūtīšanai vai piegādes ar tirdzniecības pārstāvja palīdzību</field>
+      <field name='object_type'>out_invoice</field>
+      <field name='transaction_code'>12</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_48'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>import</field>
+      <field name='name'>Maiņas tirdzniecība</field>
+      <field name='object_type'>out_invoice</field>
+      <field name='transaction_code'>13</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_49'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>export</field>
+      <field name='name'>Finanšu līzings</field>
+      <field name='object_type'>out_invoice</field>
+      <field name='transaction_code'>14</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_50'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>import</field>
+      <field name='name'>Preču nosūtīšana atpakaļ</field>
+      <field name='object_type'>out_invoice</field>
+      <field name='transaction_code'>21</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_51'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>export</field>
+      <field name='name'>Preču nosūtīšana atpakaļ</field>
+      <field name='object_type'>in_invoice</field>
+      <field name='transaction_code'>21</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_52'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>export</field>
+      <field name='name'>Citi</field>
+      <field name='object_type'>out_invoice</field>
+      <field name='transaction_code'>19</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_53'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>export</field>
+      <field name='name'>Pieiegādes  nosūtīšanai vai piegādes ar tirdzniecības pārstāvja palīdzību</field>
+      <field name='object_type'>in_invoice</field>
+      <field name='transaction_code'>12</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_54'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>import</field>
+      <field name='name'>Finanšu līzings</field>
+      <field name='object_type'>in_invoice</field>
+      <field name='transaction_code'>14</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_55'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>export</field>
+      <field name='name'>Atpakaļ nosūtīto preču aizstāšana</field>
+      <field name='object_type'>out_invoice</field>
+      <field name='transaction_code'>22</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_56'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>import</field>
+      <field name='name'>Atpakaļ nosūtīto preču aizstāšana</field>
+      <field name='object_type'>in_invoice</field>
+      <field name='transaction_code'>22</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_57'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>export</field>
+      <field name='name'>Atpakaļ nenosūtīto preču aizstāšana (piemēram, saskaņā ar garantijas noteikumiem)</field>
+      <field name='object_type'>out_invoice</field>
+      <field name='transaction_code'>23</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_58'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>import</field>
+      <field name='name'>Atpakaļ nenosūtīto preču aizstāšana (piemēram, saskaņā ar garantijas noteikumiem)</field>
+      <field name='object_type'>in_invoice</field>
+      <field name='transaction_code'>23</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_59'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>export</field>
+      <field name='name'>Citi</field>
+      <field name='object_type'>out_invoice</field>
+      <field name='transaction_code'>29</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_60'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>import</field>
+      <field name='name'>Citi</field>
+      <field name='object_type'>in_invoice</field>
+      <field name='transaction_code'>29</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_61'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>import</field>
+      <field name='name'>Darījumi, kas ietver īpašumtiesību nodošanu bez finansiālas kompensācijas vai kompensācijas graudā (piemēram, palīdzības sūtījumi)</field>
+      <field name='object_type'>incoming</field>
+      <field name='transaction_code'>30</field>
+    </record>
+    <record model='report.intrastat.type' id='report_intrastat_type_62'>
+      <field name='active' eval='True'/>
+      <field name='intrastat_product_type'>export</field>
+      <field name='name'>Darījumi, kas ietver īpašumtiesību nodošanu bez finansiālas kompensācijas vai kompensācijas graudā (piemēram, palīdzības sūtījumi)</field>
+      <field name='object_type'>outgoing</field>
+      <field name='transaction_code'>30</field>
+    </record>
+  </data>
+</openerp>

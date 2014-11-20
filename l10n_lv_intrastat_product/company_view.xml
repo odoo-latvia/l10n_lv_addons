@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_company_form" model="ir.ui.view">
+            <field name="name">lv.intrastat.product.company.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form" />
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Intrastat Settings">
+                        <group string="Settings for Intrastat">
+                            <field name="export_obligation_level"/>
+                            <field name="import_obligation_level"/>
+                            <field name="default_intrastat_transport"/>
+                            <field name="default_intrastat_type_out_invoice" domain="[('object_type', '=', 'out_invoice')]" context="{'default_object_type': 'out_invoice'}"/>
+                            <field name="default_intrastat_type_out_refund" domain="[('object_type', '=', 'out_refund')]" context="{'default_object_type': 'out_refund'}"/>
+                            <field name="default_intrastat_type_in_invoice" domain="[('object_type', '=', 'in_invoice')]" context="{'default_object_type': 'in_invoice'}"/>
+                            <field name="default_intrastat_type_in_picking" domain="[('object_type', '=', 'incoming')]" context="{'default_object_type': 'incoming'}"/>
+                            <field name="default_intrastat_type_out_picking" domain="[('object_type', '=', 'outgoing')]" context="{'default_object_type': 'outgoing'}"/>
+                            <field name="statistical_pricelist_id"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+    </data>
+</openerp>

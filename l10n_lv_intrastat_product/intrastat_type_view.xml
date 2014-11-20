@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Intrastat Type - Search view -->
+        <record id="intrastat_type_search" model="ir.ui.view">
+            <field name="name">lv.intrastat.product.report.intrastat.type.search</field>
+            <field name="model">report.intrastat.type</field>
+            <field name="arch" type="xml">
+                <search string="Search Intrastat Types">
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Intrastat Type - Tree view -->
+        <record id="intrastat_type_tree" model="ir.ui.view">
+            <field name="name">lv.intrastat.product.report.intrastat.type.tree</field>
+            <field name="model">report.intrastat.type</field>
+            <field name="arch" type="xml">
+                <tree string="Intrastat type">
+                    <field name="name"/>
+                    <field name="transaction_code"/>
+                    <field name="object_type"/>
+                    <field name="intrastat_product_type"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Intrastat Type - Form view -->
+        <record id="intrastat_type_form" model="ir.ui.view">
+            <field name="name">lv.intrastat.product.report.intrastat.type.form</field>
+            <field name="model">report.intrastat.type</field>
+            <field name="arch" type="xml">
+                <form string="Intrastat type">
+                    <group name="main">
+                        <field name="name"/>
+                        <field name="active"/>
+                        <field name="object_type"/>
+                        <field name="transaction_code"/>
+                        <field name="intrastat_product_type"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!-- Intrastat type - Action for Configuration -->
+        <record id="intrastat_type_action" model="ir.actions.act_window">
+            <field name="name">Intrastat Types</field>
+            <field name="res_model">report.intrastat.type</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Menu entry for Intrastat type -->
+        <menuitem id="menu_intrastat_type" action="intrastat_type_action" parent="account.menu_configuration_misc"/>
+
+    </data>
+</openerp>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Add field on supplier invoice -->
+        <record id="invoice_supplier_form" model="ir.ui.view">
+            <field name="name">lv.intrastat.product.supplier.invoice.in</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Intrastat" name="intrastat">
+                        <group>
+                            <field name="intrastat_type_id" domain="[('object_type', '=', type)]" context="{'default_object_type': type}"/>
+                            <field name="intrastat_country_id" string="Origin country"/>
+                            <field name="intrastat_transport"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+        <!-- Add field on customer invoice -->
+        <record id="invoice_form" model="ir.ui.view">
+            <field name="name">lv.intrastat.product.invoice.out</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Intrastat" name="intrastat">
+                        <group>
+                            <field name="intrastat_type_id" domain="[('object_type', '=', type)]" context="{'default_object_type': type}"/>
+                            <field name="intrastat_country_id" string="Destination country"/>
+                            <field name="intrastat_transport"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+    </data>
+</openerp>
