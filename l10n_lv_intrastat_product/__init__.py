@@ -31,5 +31,6 @@ import invoice
 import stock
 import purchase
 import sale
+import intrastat_product
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
