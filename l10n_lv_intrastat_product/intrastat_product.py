@@ -1,8 +1,13 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012 ITS-1 (<http://www.its1.lv/>)
+#    Odoo, Open Source Management Solution
+#    Copyright (C) 2010-2011 Akretion (http://www.akretion.com). All Rights Reserved
+#    @author Alexis de Lattre <alexis.delattre@akretion.com>
+#    Copyright (c) 2008-2012 Alistek Ltd. (http://www.alistek.com)
+#                       All Rights Reserved.
+#                       General contacts <info@alistek.com>
+#    Copyright (C) 2014 ITS-1 (<http://www.its1.lv/>)
 #                       E-mail: <info@its1.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
 #                       Phone: +371 66116534
@@ -69,6 +74,7 @@ class report_instrastat_product_xml(osv.osv):
                 ('import', 'Import'),
                 ('export', 'Export')
             ], 'Type', required=True),
+        'report_id': fields.many2one('report.intrastat.product', 'Report')
         
     }
 
@@ -79,13 +85,26 @@ class report_intrastat_product(osv.osv):
     _order = "start_date desc, type"
 
     def _compute_end_date(self, cr, uid, ids, name, arg, context=None):
-        res = {}
-        for id in ids:
-            res[id] = self.pool.get('report.intrastat.common')._compute_dates(cr, uid, ids, self, context=context)[id]['end_date']
-        return res
+        result = {}
+        for intrastat in self.browse(cr, uid, ids, context=context):
+            start_date_datetime = datetime.strptime(intrastat.start_date, '%Y-%m-%d')
+            end_date_str = datetime.strftime(start_date_datetime + relativedelta(day=31), '%Y-%m-%d')
+            result[intrastat.id] = end_date_str
+        return result
 
     def _compute_numbers(self, cr, uid, ids, name, arg, context=None):
-        return self.pool.get('report.intrastat.common')._compute_numbers(cr, uid, ids, self, context=context)
+        result = {}
+        for intrastat in self.browse(cr, uid, ids, context=context):
+            total_amount = 0.0
+            num_lines = 0
+            for line in intrastat.intrastat_line_ids:
+                total_amount += line.amount_company_currency
+                num_lines += 1
+            result[intrastat.id] = {
+                'num_lines': num_lines,
+                'total_amount': total_amount,
+            }
+        return result
 
     def _compute_total_fiscal_amount(self, cr, uid, ids, name, arg, context=None):
         result = {}
@@ -94,6 +113,13 @@ class report_intrastat_product(osv.osv):
             for line in intrastat.intrastat_line_ids:
                 total_fiscal_amount += line.amount_company_currency
             result[intrastat.id] = total_fiscal_amount
+        return result
+
+    def _xml_count(self, cr, uid, ids, name, arg, context=None):
+        result = {}
+        for intrastat in self.browse(cr, uid, ids, context=context):
+            xml_ids = self.pool.get('report.intrastat.product.xml').search(cr, uid, [('report_id','=',intrastat.id)], context=context)
+            result[intrastat.id] = len(xml_ids)
         return result
 
     def _get_intrastat_from_product_line(self, cr, uid, ids, context=None):
@@ -115,7 +141,7 @@ class report_intrastat_product(osv.osv):
                 ('export', 'Export')
             ], 'Type', required=True, states={'done':[('readonly',True)]},
             help="Select the type of Intrastat."),
-        'obligation_level' : fields.selection([
+        'obligation_level': fields.selection([
                 ('detailed', 'Intrastat-1B/2B'),
                 ('simplified', 'Intrastat-1A/2A')
             ], 'CBS defined limiting values for a reporting year', required=True,
@@ -143,15 +169,16 @@ class report_intrastat_product(osv.osv):
             help="Total fiscal amount in company currency of the declaration."),
         'currency_id': fields.related('company_id', 'currency_id', readonly=True,
             type='many2one', relation='res.currency', string='Currency'),
-        'state' : fields.selection([
+        'state': fields.selection([
                 ('draft','Draft'),
                 ('done','Done'),
             ], 'State', select=True, readonly=True,
             help="State of the declaration. When the state is set to 'Done', the parameters become read-only."),
-        'date_done' : fields.datetime('Date done', readonly=True,
+        'date_done': fields.datetime('Date done', readonly=True,
             help="Last date when the intrastat declaration was converted to 'Done' state."),
         'notes' : fields.text('Notes',
             help="You can add some comments here if you want."),
+        'xml_count': fields.function(_xml_count, type="integer", string="XML File Count")
     }
 
     _defaults = {
@@ -186,7 +213,12 @@ class report_intrastat_product(osv.osv):
         return res
 
     def _check_start_date(self, cr, uid, ids, context=None):
-        return self.pool.get('report.intrastat.common')._check_start_date(cr, uid, ids, self, context=context)
+        '''Check that the start date is the first day of the month'''
+        for date_to_check in self.read(cr, uid, ids, ['start_date'], context=context):
+            datetime_to_check = datetime.strptime(date_to_check['start_date'], '%Y-%m-%d')
+            if datetime_to_check.day != 1:
+                return False
+        return True
 
     _constraints = [
         (_check_start_date, "Start date must be the first day of a month", ['start_date']),
@@ -420,12 +452,12 @@ class report_intrastat_product(osv.osv):
                     line_to_create['amount_product_value_inv_cur'] += amount_product_value_inv_cur_to_write
                     break
             incoterm_code = ''
-            if hasattr(parent_obj, 'incoterm'):
-                if isinstance(parent_obj, str):
+            if hasattr(parent_obj, 'incoterm') and parent_obj.incoterm:
+                if isinstance(parent_obj.incoterm, str) or isinstance(parent_obj.incoterm, unicode):
                     incoterm_code = parent_obj.incoterm
                 else:
                     incoterm_code = parent_obj.incoterm.code
-            if hasattr(parent_obj, 'incoterm_id'):
+            if hasattr(parent_obj, 'incoterm_id') and parent_obj.incoterm_id:
                 incoterm_code = parent_obj.incoterm_id.code
             if create_new_line == True:
                 lines_to_create.append({
@@ -480,11 +512,24 @@ class report_intrastat_product(osv.osv):
 
         return True
 
+    def _check_generate_lines(self, cr, uid, intrastat, context=None):
+        if not intrastat.company_id.country_id:
+            raise orm.except_orm(
+                _('Error :'),
+                _("The country is not set on the company '%s'.")
+                % intrastat.company_id.name)
+        if not intrastat.currency_id.name == 'EUR':
+            raise orm.except_orm(
+                _('Error :'),
+                _("The company currency must be 'EUR', but is currently '%s'.")
+                % intrastat.currency_id.name)
+        return True
+
     # ---------------LINE-GENERATION-BUTTON-INVOICE---------------
 
     def generate_product_lines_from_invoice(self, cr, uid, ids, context=None):
         intrastat = self.browse(cr, uid, ids[0], context=context)
-        self.pool.get('report.intrastat.common')._check_generate_lines(cr, uid, intrastat, context=context)
+        self._check_generate_lines(cr, uid, intrastat, context=context)
         self.remove_intrastat_product_lines(cr, uid, ids, 'invoice_id', context=context)
 
         invoice_obj = self.pool.get('account.invoice')
@@ -578,7 +623,7 @@ class report_intrastat_product(osv.osv):
     def generate_product_lines_from_picking(self, cr, uid, ids, context=None):
         '''Function used to have the Intrastat lines corresponding to repairs'''
         intrastat = self.browse(cr, uid, ids[0], context=context)
-        self.pool.get('report.intrastat.common')._check_generate_lines(cr, uid, intrastat, context=context)
+        self._check_generate_lines(cr, uid, intrastat, context=context)
         # not needed when type = export and oblig_level = simplified, cf p26 du BOD
         if intrastat.type == 'export' and intrastat.obligation_level == 'simplified':
             raise osv.except_osv(_('Error :'), _("You don't need to get lines from picking for an export Intrastat in 'Intrastat-1A/2A' obligation level."))
@@ -821,16 +866,29 @@ class report_intrastat_product(osv.osv):
             'data_xml': data_xml,
             'company_id': company.id,
             'type': this.type,
+            'report_id': this.id
         }, context=context)
 
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'report.intrastat.product.xml',
             'view_type': 'form',
-            'view_mode': 'form',
             'res_id': res_id,
             'views': [(False,'form')],
             'nodestroy': True
+        }
+
+    def open_xml_files(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        return {
+            'name': _('XML Files'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'report.intrastat.product.xml',
+            'view_type': 'form',
+            'views': [(False,'tree'), (False,'form')],
+            'nodestroy': True,
+            'domain': [('report_id','in',ids)]
         }
 
     # ---------------STATES---------------

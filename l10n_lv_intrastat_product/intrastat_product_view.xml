@@ -5,6 +5,51 @@
         <!-- Main Menu entry for Intrastat Reports -->
         <menuitem id="menu_intrastat_base_root" name="Intrastat Reporting" parent="account.menu_finance_legal_statement"/>
 
+        <!-- Intrastat Reports XML form -->
+        <record id="report_intrastat_product_xml_form" model="ir.ui.view">
+            <field name="name">report.intrastat.product.xml.form</field>
+            <field name="model">report.intrastat.product.xml</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Intrastat Reports">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="type"/>
+                            <field name="data_xml" filename="filename"/>
+                            <field name="company_id"/>
+                            <field name="filename" invisible="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Intrastat Reports XML tree -->
+        <record id="report_intrastat_product_xml_tree" model="ir.ui.view">
+            <field name="name">report.intrastat.product.xml.tree</field>
+            <field name="model">report.intrastat.product.xml</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Intrastat Reports">
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Intrastat Reports XML action -->
+        <record id="lv_intrastat_product_reports_action" model="ir.actions.act_window">
+            <field name="name">Intrastat Reports</field>
+            <field name="res_model">report.intrastat.product.xml</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Intrastat Reports XML menu -->
+        <menuitem id="lv_intrastat_product_report_menu" parent="menu_intrastat_base_root" action="lv_intrastat_product_reports_action" sequence="10"/>
+
         <!-- Form view of DEB, with integrated form+tree view of lines -->
         <record id="lv_intrastat_product_form" model="ir.ui.view">
             <field name="name">lv.intrastat.product.form</field>
@@ -17,7 +62,7 @@
                         <button icon="gtk-convert" name="back2draft" string="Back to draft" type="object" colspan="1" states="done"/>
                         <field name="state" widget="statusbar"/>
                     </header>
-                    <group col="6">
+                    <group col="8">
                         <group>
                             <field name="start_date" on_change="onchange_start_date(start_date)"/>
                             <field name="end_date"/>
@@ -33,6 +78,13 @@
                             <field name="num_lines"/>
                             <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                             <field name="total_fiscal_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                        <group name="buttons">
+                            <button class="oe_inline oe_stat_button" type="object" colspan="2"
+                                name="open_xml_files"
+                                icon="fa-code">
+                                <field string="XML Files" name="xml_count" widget="statinfo"/>
+                            </button>
                         </group>
                     </group>
                     <label for="notes"/>
@@ -155,52 +207,7 @@
         </record>
 
         <!-- Intrastat product menu -->
-        <menuitem id="lv_intrastat_product_menu" parent="menu_intrastat_base_root" action="lv_intrastat_product_tree_action"/>
-
-        <!-- Intrastat Reports XML form -->
-        <record id="report_intrastat_product_xml_form" model="ir.ui.view">
-            <field name="name">report.intrastat.product.xml.form</field>
-            <field name="model">report.intrastat.product.xml</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form string="Intrastat Reports">
-                    <sheet>
-                        <group>
-                            <field name="name"/>
-                            <field name="type"/>
-                            <field name="data_xml" filename="filename"/>
-                            <field name="company_id"/>
-                            <field name="filename" invisible="1"/>
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <!-- Intrastat Reports XML tree -->
-        <record id="report_intrastat_product_xml_tree" model="ir.ui.view">
-            <field name="name">report.intrastat.product.xml.tree</field>
-            <field name="model">report.intrastat.product.xml</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <tree string="Intrastat Reports">
-                    <field name="name"/>
-                    <field name="type"/>
-                    <field name="company_id"/>
-                </tree>
-            </field>
-        </record>
-
-        <!-- Intrastat Reports XML action -->
-        <record id="lv_intrastat_product_reports_action" model="ir.actions.act_window">
-            <field name="name">Intrastat Reports</field>
-            <field name="res_model">report.intrastat.product.xml</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-        </record>
-
-        <!-- Intrastat Reports XML menu -->
-        <menuitem id="lv_intrastat_product_report_menu" parent="menu_intrastat_base_root" action="lv_intrastat_product_reports_action"/>
+        <menuitem id="lv_intrastat_product_menu" parent="menu_intrastat_base_root" action="lv_intrastat_product_tree_action" sequence="1"/>
 
     </data>
 </openerp>
