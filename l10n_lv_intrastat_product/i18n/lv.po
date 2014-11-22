@@ -1,13 +1,14 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 #	* l10n_lv_intrastat_product
+#	* report_intrastat
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-20 14:58+0000\n"
-"PO-Revision-Date: 2014-11-20 14:58+0000\n"
+"POT-Creation-Date: 2014-11-22 09:29+0000\n"
+"PO-Revision-Date: 2014-11-22 09:29+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -121,6 +122,11 @@ msgid "99"
 msgstr "99"
 
 #. module: l10n_lv_intrastat_product
+#: sql_constraint:report.intrastat.product:0
+msgid "A Intrastat of the same type already exists for this month !"
+msgstr "Šāda tipa Intrastat atskaite jau ir izveidota šim mēnesim!"
+
+#. module: l10n_lv_intrastat_product
 #: help:product.template,is_accessory_cost:0
 msgid "Activate this option for shipping costs, packaging costs and all services related to the sale of products. This option is used for Intrastat reports."
 msgstr "Aktivizējiet šo opciju piegādes izmaksām, iepakojuma izmaksām un visiem pakalpojumiem, kas saistīti ar produktu pārdošanu. Šī opcija tiek izmantota Intrastat atskaitēs."
@@ -131,11 +137,78 @@ msgid "Active"
 msgstr "Aktīvs"
 
 #. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "Additionnal information"
+msgstr "Papildus informācija"
+
+#. module: l10n_lv_intrastat_product
 #: selection:account.invoice,intrastat_transport:0
+#: selection:report.intrastat.product.line,transport:0
 #: selection:res.company,default_intrastat_transport:0
 #: selection:stock.picking,intrastat_transport:0
 msgid "Air transport"
 msgstr "Gaisa transports"
+
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Amount"
+msgstr "Summa"
+
+#. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product.line,amount_company_currency:0
+msgid "Amount in company currency to write in the declaration. Amount in company currency = amount in invoice currency converted to company currency with the rate of the invoice date (for pickings : with the rate of the 'date done') and rounded at 0 digits"
+msgstr "Summa uzņēmuma valūtā, ko rakstīt deklarācijā. Summa uzņēmuma valūtā = summa rēķina valūtā, kas konvertēta uzņēmuma valūtā pēc rēķina datuma kursa (komplektēšanām: pēc komplektēšanas datuma kursa) un noapaļota līdz veselam skaitlim"
+
+#. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product.line,amount_invoice_currency:0
+msgid "Amount in invoice currency = amount of product value in invoice currency + amount of accessory cost in invoice currency (not rounded)"
+msgstr "Summa rēķina valūtā = produktu vērtības summa rēķina valūtā + aksesuāru izmaksas summa rēķina valūtā (nenoapaļotas)"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,amount_accessory_cost_inv_cur:0
+msgid "Amount of accessory costs in invoice currency"
+msgstr "Aksesuāru vērtības summa rēķina valūtā"
+
+#. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product.line,amount_accessory_cost_inv_cur:0
+msgid "Amount of accessory costs in invoice currency = total amount of accessory costs of the invoice broken down into each product line at the pro-rata of the value"
+msgstr "Aksesuāru vērtības summa rēķina valūtā = rēķina aksesuāru vērtības summa sadalīta katrā produkta rindā proporcionāli tā vērtībai"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,amount_product_value_inv_cur:0
+msgid "Amount of product value in invoice currency"
+msgstr "Produkta vērtības summa rēķina valūtā"
+
+#. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product.line,amount_product_value_inv_cur:0
+msgid "Amount of product value in invoice currency. For invoices, it is the amount of the invoice line or group of invoice lines. For pickings, it is the value of the product given by the pricelist for statistical value of the company."
+msgstr "Produkta vērtības summa rēķina valūtā. Rēķiniem tā ir rēķina summa. Komplektēšanai tā ir produkta vērtība, kuru nosaka uzņēmumam definētais statistiskās vērtības cenrādis."
+
+#. module: report_intrastat
+#: selection:report.intrastat,month:0
+msgid "April"
+msgstr "Aprīlis"
+
+#. module: report_intrastat
+#: selection:report.intrastat,month:0
+msgid "August"
+msgstr "Augusts"
+
+#. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "Back to draft"
+msgstr "Atzīmēt kā melnrakstu"
+
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Base"
+msgstr "Bāze"
+
+#. modules: l10n_lv_intrastat_product, report_intrastat
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+#: field:report.intrastat.code,name:0
+msgid "C.N. code"
+msgstr "KN kods"
 
 #. module: l10n_lv_intrastat_product
 #: help:report.intrastat.code,intrastat_code:0
@@ -143,7 +216,18 @@ msgid "C.N. code. Must be part of the 'Nomenclature combinée' (NC) with 8 digit
 msgstr "KN kods. Papildus informācijai skatīt Preču Kombinēto nomenklatūru."
 
 #. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product,obligation_level:0
+msgid "CBS defined limiting values for a reporting year"
+msgstr "CSP pārskata gadam noteiktās robežvērtības"
+
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Cancelled Invoice"
+msgstr "Atcelts Rēķins"
+
+#. module: l10n_lv_intrastat_product
 #: selection:account.invoice,intrastat_transport:0
+#: selection:report.intrastat.product.line,transport:0
 #: selection:res.company,default_intrastat_transport:0
 #: selection:stock.picking,intrastat_transport:0
 msgid "Carrying without means of transport"
@@ -154,15 +238,47 @@ msgstr "Pārvietošana bez transportlīdzekļa"
 msgid "Code from the Harmonised System. If this code is not set on the product itself, it will be read here, on the related product category."
 msgstr "Harmonizētās Sistēmas kods. Ja kods nav norādīts produkta kartiņā, tas tiks nolasīts šeit, saistītajā produkta kategorijā."
 
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Comment:"
+msgstr "Piezīmes:"
+
 #. module: l10n_lv_intrastat_product
-#: model:ir.model,name:l10n_lv_intrastat_product.model_report_intrastat_common
-msgid "Common functions for intrastat reports for products "
-msgstr "Common functions for intrastat reports for products "
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "Comp. Cur."
+msgstr "Apr. Pašr."
 
 #. module: l10n_lv_intrastat_product
 #: model:ir.model,name:l10n_lv_intrastat_product.model_res_company
 msgid "Companies"
 msgstr "Uzņēmumi"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product,company_id:0
+#: field:report.intrastat.product.line,company_id:0
+#: field:report.intrastat.product.xml,company_id:0
+msgid "Company"
+msgstr "Uzņēmums"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,company_currency_id:0
+msgid "Company currency"
+msgstr "Uzņēmuma valūta"
+
+#. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product.xml,company_id:0
+msgid "Company, the report belongs to."
+msgstr "Uzņēmums, uz kuru attiecas atskaite."
+
+#. module: report_intrastat
+#: model:ir.model,name:report_intrastat.model_res_country
+msgid "Country"
+msgstr "Valsts"
+
+#. module: report_intrastat
+#: field:report.intrastat,code:0
+msgid "Country code"
+msgstr "Valsts kods"
 
 #. module: l10n_lv_intrastat_product
 #: field:product.supplierinfo,origin_country_id:0
@@ -180,17 +296,29 @@ msgstr "Produkta izcelsmes valsts (produkts 'izgatavots _____') to nopērkot no 
 msgid "Country of origin of the product i.e. product 'made in ____'. If you have different countries of origin depending on the supplier from which you purchased the product, leave this field empty and use the equivalent field on the 'product supplier info' form."
 msgstr "Produkta izcelsmes valsts t.i. 'izgatavots _____'. Ja ir vairāki piegādātāji ar atšķirīgām izcelsmes valstīm, atstāt šo lauku tukšu un lietot attiecīgo lauku 'produkta piegādātāja info' formā."
 
-#. module: l10n_lv_intrastat_product
-#: field:report.intrastat.common,create_uid:0
+#. modules: l10n_lv_intrastat_product, report_intrastat
+#: field:report.intrastat.product,create_uid:0
+#: field:report.intrastat.product.line,create_uid:0
+#: field:report.intrastat.product.xml,create_uid:0
 #: field:report.intrastat.type,create_uid:0
+#: field:report.intrastat.code,create_uid:0
 msgid "Created by"
 msgstr "Izveidojis"
 
-#. module: l10n_lv_intrastat_product
-#: field:report.intrastat.common,create_date:0
+#. modules: l10n_lv_intrastat_product, report_intrastat
+#: field:report.intrastat.product,create_date:0
+#: field:report.intrastat.product.line,create_date:0
+#: field:report.intrastat.product.xml,create_date:0
 #: field:report.intrastat.type,create_date:0
+#: field:report.intrastat.code,create_date:0
 msgid "Created on"
 msgstr "Izveidots"
+
+#. modules: l10n_lv_intrastat_product, report_intrastat
+#: field:report.intrastat.product,currency_id:0
+#: field:report.intrastat,currency_id:0
+msgid "Currency"
+msgstr "Valūta"
 
 #. module: l10n_lv_intrastat_product
 #: selection:report.intrastat.type,object_type:0
@@ -201,6 +329,21 @@ msgstr "Klienta rēķins"
 #: selection:report.intrastat.type,object_type:0
 msgid "Customer Refund"
 msgstr "Kredītrēķins"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.xml,data_xml:0
+msgid "Data"
+msgstr "Dati"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product,date_done:0
+msgid "Date done"
+msgstr "Pabeigšanas datums"
+
+#. module: report_intrastat
+#: selection:report.intrastat,month:0
+msgid "December"
+msgstr "Decembris"
 
 #. module: l10n_lv_intrastat_product
 #: field:res.company,default_intrastat_type_out_invoice:0
@@ -232,6 +375,13 @@ msgstr "Noklusētais piegādātāja rēķina intrastat tips"
 msgid "Default type of transport"
 msgstr "Transporta veids pēc noklusējuma"
 
+#. modules: l10n_lv_intrastat_product, report_intrastat
+#: field:report.intrastat.product.xml,name:0
+#: field:report.intrastat.code,description:0
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Description"
+msgstr "Apraksts"
+
 #. module: l10n_lv_intrastat_product
 #: help:report.intrastat.type,name:0
 msgid "Description of the Intrastat type."
@@ -247,6 +397,50 @@ msgstr "Galamērķa valsts"
 msgid "Destination/Origin country of the goods"
 msgstr "Preču Galamērķa/Izcelsmes valsts"
 
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Discount (%)"
+msgstr "Atlaide (%)"
+
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Document:"
+msgstr "Dokuments:"
+
+#. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_search
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_tree
+#: selection:report.intrastat.product,state:0
+msgid "Done"
+msgstr "Pabeigts"
+
+#. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_search
+#: selection:report.intrastat.product,state:0
+msgid "Draft"
+msgstr "Melnraksts"
+
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Draft Invoice"
+msgstr "Neapstiprināts Rēķins"
+
+#. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "Eksport to XML"
+msgstr "Eksportēt kā XML"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product,end_date:0
+msgid "End date"
+msgstr "Beigu datums"
+
+#. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product,end_date:0
+msgid "End date for the declaration. Is the last day of the month of the start date."
+msgstr "Deklarācijas beigu datums. Ir sākuma mēneša pēdējā diena."
+
 #. module: l10n_lv_intrastat_product
 #: field:product.template,exclude_from_intrastat:0
 msgid "Exclude from Intrastat reports"
@@ -257,8 +451,12 @@ msgstr "Izslēgt no Intrastat atskaitēm"
 msgid "Exclude invoice line from intrastat if this tax is present"
 msgstr "Izslēgt rēķina rindu no intrastat, ja norādīts šis nodoklis"
 
-#. module: l10n_lv_intrastat_product
+#. modules: l10n_lv_intrastat_product, report_intrastat
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_search
+#: selection:report.intrastat.product,type:0
+#: selection:report.intrastat.product.xml,type:0
 #: selection:report.intrastat.type,intrastat_product_type:0
+#: selection:report.intrastat,type:0
 msgid "Export"
 msgstr "Eksports"
 
@@ -273,7 +471,38 @@ msgid "Export-Intrastat-1A limiting value for year 2014 is 130000 EUR."
 msgstr "Izvedums-Intrastat-1A robežvērtība 2014.g.ir 130000 EUR."
 
 #. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_search
+msgid "Extended Filters..."
+msgstr "Paplašinātie Filtri..."
+
+#. module: report_intrastat
+#: selection:report.intrastat,month:0
+msgid "February"
+msgstr "Februāris"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.xml,filename:0
+msgid "Filename"
+msgstr "Faila nosaukums"
+
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Fiscal Position:"
+msgstr "Nodokļu Profils:"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,amount_company_currency:0
+msgid "Fiscal value in company currency"
+msgstr "Fiskālā vērtība uzņēmuma valūtā"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,amount_invoice_currency:0
+msgid "Fiscal value in invoice currency"
+msgstr "Fiskālā vērtība rēķina valūtā"
+
+#. module: l10n_lv_intrastat_product
 #: selection:account.invoice,intrastat_transport:0
+#: selection:report.intrastat.product.line,transport:0
 #: selection:res.company,default_intrastat_transport:0
 #: selection:stock.picking,intrastat_transport:0
 msgid "Fixed transport systems (pipelines)"
@@ -284,9 +513,28 @@ msgstr "Stacionāras transportiekārtas (cauruļvadi)"
 msgid "For a customer invoice, contains the country to which the goods have been shipped. For a supplier invoice, contains the country from which the goods have been shipped."
 msgstr "Klienta rēķinam norāda valsti, uz kuru ir nosūtītas preces. Piegādātāja rēķinam norāda valsti, no kuras ir nosūtītas preces."
 
+#. module: report_intrastat
+#: help:report.intrastat.code,name:0
+msgid "Full lenght C.N. code"
+msgstr "Pilns K.N. kods"
+
 #. module: l10n_lv_intrastat_product
-#: field:report.intrastat.common,id:0
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "Generate lines from invoices"
+msgstr "Veidot rindas no rēķiniem"
+
+#. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "Generate repair lines from picking"
+msgstr "Veidot rindas no noliktavas dokumentiem"
+
+#. modules: l10n_lv_intrastat_product, report_intrastat
+#: field:report.intrastat.product,id:0
+#: field:report.intrastat.product.line,id:0
+#: field:report.intrastat.product.xml,id:0
 #: field:report.intrastat.type,id:0
+#: field:report.intrastat,id:0
+#: field:report.intrastat.code,id:0
 msgid "ID"
 msgstr "ID"
 
@@ -298,15 +546,19 @@ msgstr "Ja atzīmēts, šis produkts vai pakalpojums netiks ņemts vērā Intras
 #. module: l10n_lv_intrastat_product
 #: help:res.company,default_intrastat_transport:0
 msgid "If the 'Type of Transport' is not set on the invoice, Odoo will use this value."
-msgstr "If the 'Type of Transport' is not set on the invoice, Odoo will use this value."
+msgstr "Ja rēķinā nav norādīts 'Transporta veids', Odoo izmantos šo vērtību."
 
 #. module: l10n_lv_intrastat_product
 #: help:account.tax,exclude_from_intrastat_if_present:0
 msgid "If this tax is present on an invoice line, this invoice line will be skipped when generating Intrastat Product or Service lines from invoices."
 msgstr "Ja šis nodoklis ir pievienots rēķina rindai, ģenerējot Intrastat Produktu vai Pakalpojumu rindas no rēķiniem, šis rēķins tiks izlaists."
 
-#. module: l10n_lv_intrastat_product
+#. modules: l10n_lv_intrastat_product, report_intrastat
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_search
+#: selection:report.intrastat.product,type:0
+#: selection:report.intrastat.product.xml,type:0
 #: selection:report.intrastat.type,intrastat_product_type:0
+#: selection:report.intrastat,type:0
 msgid "Import"
 msgstr "Imports"
 
@@ -326,34 +578,73 @@ msgid "Incoming products"
 msgstr "Ienākošie produkti"
 
 #. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,incoterm_code:0
+msgid "Incoterm code"
+msgstr "Inkoterms kods"
+
+#. module: l10n_lv_intrastat_product
 #: model:ir.model,name:l10n_lv_intrastat_product.model_product_supplierinfo
 msgid "Information about a product supplier"
-msgstr "Informācija par produkta piegādātāju"
+msgstr "Informācijas par produkta piegādātāju"
+
+#. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "Information to declare"
+msgstr "Deklarējamā informācija"
 
 #. module: l10n_lv_intrastat_product
 #: selection:account.invoice,intrastat_transport:0
+#: selection:report.intrastat.product.line,transport:0
 #: selection:res.company,default_intrastat_transport:0
 #: selection:stock.picking,intrastat_transport:0
 msgid "Inland waterway transport"
 msgstr "Iekšējo ūdensceļu transports"
 
 #. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "Intra. UoM"
+msgstr "Intra. Mērv."
+
+#. modules: l10n_lv_intrastat_product, report_intrastat
 #: view:account.invoice:l10n_lv_intrastat_product.invoice_form
 #: view:account.invoice:l10n_lv_intrastat_product.invoice_supplier_form
+#: model:ir.actions.act_window,name:report_intrastat.action_report_intrastat_tree_all
+#: model:ir.ui.menu,name:report_intrastat.menu_report_intrastat_all
+#: view:website:report_intrastat.report_intrastatinvoice_document
 msgid "Intrastat"
 msgstr "Intrastat"
 
-#. module: l10n_lv_intrastat_product
+#. modules: l10n_lv_intrastat_product, report_intrastat
 #: view:report.intrastat.code:l10n_lv_intrastat_product.view_report_intrastat_code_search
+#: view:report.intrastat.code:report_intrastat.view_report_intrastat_code_form
 msgid "Intrastat Code"
 msgstr "Intrastat kods"
 
-#. module: l10n_lv_intrastat_product
+#. modules: l10n_lv_intrastat_product, report_intrastat
 #: model:ir.ui.menu,name:l10n_lv_intrastat_product.product_intrastat_code_menu
 #: model:ir.ui.menu,name:l10n_lv_intrastat_product.product_intrastat_code_menu_purchase
 #: model:ir.ui.menu,name:l10n_lv_intrastat_product.product_intrastat_code_menu_stock
+#: model:ir.actions.act_window,name:report_intrastat.action_report_intrastat_code_tree
 msgid "Intrastat Codes"
 msgstr "Intrastat Kodi"
+
+#. module: report_intrastat
+#: view:report.intrastat:report_intrastat.view_report_intrastat_search
+#: view:report.intrastat:report_intrastat.view_report_intrastat_tree
+msgid "Intrastat Data"
+msgstr "Intrastat Dati"
+
+#. module: report_intrastat
+#: model:ir.actions.report.xml,name:report_intrastat.account_intrastatinvoices
+msgid "Intrastat Invoices"
+msgstr "Intrastat Rēķini"
+
+#. module: l10n_lv_intrastat_product
+#: model:ir.actions.act_window,name:l10n_lv_intrastat_product.lv_intrastat_product_tree_action
+#: model:ir.ui.menu,name:l10n_lv_intrastat_product.lv_intrastat_product_menu
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_tree
+msgid "Intrastat Product"
+msgstr "Intrastat Produkti"
 
 #. module: l10n_lv_intrastat_product
 #: view:product.category:l10n_lv_intrastat_product.product_category_form_view
@@ -364,6 +655,14 @@ msgstr "Intrastat rekvizīti"
 #. module: l10n_lv_intrastat_product
 #: model:ir.ui.menu,name:l10n_lv_intrastat_product.menu_intrastat_base_root
 msgid "Intrastat Reporting"
+msgstr "Intrastat Atskaites"
+
+#. module: l10n_lv_intrastat_product
+#: model:ir.actions.act_window,name:l10n_lv_intrastat_product.lv_intrastat_product_reports_action
+#: model:ir.ui.menu,name:l10n_lv_intrastat_product.lv_intrastat_product_report_menu
+#: view:report.intrastat.product.xml:l10n_lv_intrastat_product.report_intrastat_product_xml_form
+#: view:report.intrastat.product.xml:l10n_lv_intrastat_product.report_intrastat_product_xml_tree
+msgid "Intrastat Reports"
 msgstr "Intrastat Atskaites"
 
 #. module: l10n_lv_intrastat_product
@@ -378,20 +677,71 @@ msgid "Intrastat Types"
 msgstr "Intrastat tipi"
 
 #. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,intrastat_uom_id:0
+msgid "Intrastat UoM"
+msgstr "Intrastat Mērv."
+
+#. modules: l10n_lv_intrastat_product, report_intrastat
 #: model:ir.model,name:l10n_lv_intrastat_product.model_report_intrastat_code
 #: field:product.category,intrastat_id:0
 #: field:report.intrastat.code,intrastat_code:0
+#: field:report.intrastat.product.line,intrastat_code:0
+#: model:ir.model,name:report_intrastat.model_report_intrastat_code
+#: field:product.template,intrastat_id:0
+#: field:report.intrastat,intrastat_id:0
+#: view:report.intrastat.code:report_intrastat.view_report_intrastat_code_tree
 msgid "Intrastat code"
 msgstr "Intrastat kods"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,intrastat_code_id:0
+msgid "Intrastat code (not used in XML)"
+msgstr "Intrastat kods (netiek lietots XML)"
 
 #. module: l10n_lv_intrastat_product
 #: field:product.uom,intrastat_label:0
 msgid "Intrastat label"
 msgstr "Nosaukums Intrastat atskaitē"
 
+#. module: report_intrastat
+#: field:res.country,intrastat:0
+msgid "Intrastat member"
+msgstr "Intrastat biedrs"
+
+#. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "Intrastat product lines"
+msgstr "Intrastat atskaites produktu rindas"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,parent_id:0
+msgid "Intrastat product ref"
+msgstr "Intrastat produkta kods"
+
+#. module: report_intrastat
+#: model:ir.model,name:report_intrastat.model_report_intrastat
+msgid "Intrastat report"
+msgstr "Intrastat atskaite"
+
+#. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product.xml,data_xml:0
+msgid "Intrastat report XML representation"
+msgstr "Intrastat atskaite XML formātā"
+
+#. module: l10n_lv_intrastat_product
+#: model:ir.model,name:l10n_lv_intrastat_product.model_report_intrastat_product
+msgid "Intrastat report for products"
+msgstr "Intrastat produktu atskaite"
+
+#. module: l10n_lv_intrastat_product
+#: model:ir.model,name:l10n_lv_intrastat_product.model_report_intrastat_product_xml
+msgid "Intrastat report for products in with XML representation"
+msgstr "Intrastat produktu atskaite XML formātā"
+
 #. module: l10n_lv_intrastat_product
 #: field:account.invoice,intrastat_type_id:0
 #: model:ir.model,name:l10n_lv_intrastat_product.model_report_intrastat_type
+#: field:report.intrastat.product.line,intrastat_type_id:0
 #: view:report.intrastat.type:l10n_lv_intrastat_product.intrastat_type_form
 #: view:report.intrastat.type:l10n_lv_intrastat_product.intrastat_type_tree
 #: field:stock.picking,intrastat_type_id:0
@@ -399,50 +749,115 @@ msgid "Intrastat type"
 msgstr "Intrastat tips"
 
 #. module: l10n_lv_intrastat_product
+#: selection:report.intrastat.product,obligation_level:0
 #: selection:res.company,export_obligation_level:0
 #: selection:res.company,import_obligation_level:0
 msgid "Intrastat-1A/2A"
 msgstr "Intrastat-1A/2A"
 
 #. module: l10n_lv_intrastat_product
+#: selection:report.intrastat.product,obligation_level:0
 #: selection:res.company,export_obligation_level:0
 #: selection:res.company,import_obligation_level:0
 msgid "Intrastat-1B/2B"
 msgstr "Intrastat-1B/2B"
 
-#. module: l10n_lv_intrastat_product
+#. modules: l10n_lv_intrastat_product, report_intrastat
 #: model:ir.model,name:l10n_lv_intrastat_product.model_account_invoice
+#: view:website:report_intrastat.report_intrastatinvoice_document
 msgid "Invoice"
 msgstr "Rēķins"
+
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Invoice Date:"
+msgstr "Rēķina Datums:"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,invoice_currency_id:0
+msgid "Invoice currency"
+msgstr "Rēķina valūta"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,invoice_id:0
+msgid "Invoice ref"
+msgstr "Rēķina numurs"
 
 #. module: l10n_lv_intrastat_product
 #: field:product.template,is_accessory_cost:0
 msgid "Is accessory cost"
 msgstr "Ir piederumu izmaksas"
 
+#. module: report_intrastat
+#: selection:report.intrastat,month:0
+msgid "January"
+msgstr "Janvāris"
+
+#. module: report_intrastat
+#: selection:report.intrastat,month:0
+msgid "July"
+msgstr "Jūlijs"
+
+#. module: report_intrastat
+#: selection:report.intrastat,month:0
+msgid "June"
+msgstr "Jūnijs"
+
 #. module: l10n_lv_intrastat_product
 #: help:product.uom,intrastat_label:0
 msgid "Label used in the XML file export of the Intrastat product report for this unit of measure."
 msgstr "Apzīmējums produkta mērvienībai Intrastat XML atskaitē."
 
-#. module: l10n_lv_intrastat_product
-#: field:report.intrastat.common,write_uid:0
+#. modules: l10n_lv_intrastat_product, report_intrastat
+#: field:report.intrastat.product,write_uid:0
+#: field:report.intrastat.product.line,write_uid:0
+#: field:report.intrastat.product.xml,write_uid:0
 #: field:report.intrastat.type,write_uid:0
+#: field:report.intrastat.code,write_uid:0
 msgid "Last Updated by"
 msgstr "Pēdējo izmaiņu veicējs"
 
-#. module: l10n_lv_intrastat_product
-#: field:report.intrastat.common,write_date:0
+#. modules: l10n_lv_intrastat_product, report_intrastat
+#: field:report.intrastat.product,write_date:0
+#: field:report.intrastat.product.line,write_date:0
+#: field:report.intrastat.product.xml,write_date:0
 #: field:report.intrastat.type,write_date:0
+#: field:report.intrastat.code,write_date:0
 msgid "Last Updated on"
 msgstr "Pēdējo izmaiņu datums"
 
 #. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product,date_done:0
+msgid "Last date when the intrastat declaration was converted to 'Done' state."
+msgstr "Datums, kad intrastat deklarācijai tika apstiprināta un pabeigta."
+
+#. module: l10n_lv_intrastat_product
+#: model:ir.model,name:l10n_lv_intrastat_product.model_report_intrastat_product_line
+msgid "Lines of intrastat product declaration (Intrastat)"
+msgstr "Intrastat produkta deklarācijas rindas (Intrastat)"
+
+#. module: report_intrastat
+#: selection:report.intrastat,month:0
+msgid "March"
+msgstr "Marts"
+
+#. module: l10n_lv_intrastat_product
 #: selection:account.invoice,intrastat_transport:0
+#: selection:report.intrastat.product.line,transport:0
 #: selection:res.company,default_intrastat_transport:0
 #: selection:stock.picking,intrastat_transport:0
 msgid "Maritime transport"
 msgstr "Jūras transports"
+
+#. module: report_intrastat
+#: selection:report.intrastat,month:0
+msgid "May"
+msgstr "Maijs"
+
+#. module: report_intrastat
+#: field:report.intrastat,month:0
+msgid "Month"
+msgstr "Mēnesis"
 
 #. module: l10n_lv_intrastat_product
 #: field:report.intrastat.type,name:0
@@ -455,6 +870,31 @@ msgid "None"
 msgstr "Nav"
 
 #. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product,notes:0
+msgid "Notes"
+msgstr "Piezīmes"
+
+#. module: report_intrastat
+#: selection:report.intrastat,month:0
+msgid "November"
+msgstr "Novembris"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product,num_lines:0
+msgid "Number of lines"
+msgstr "Rindu skaits"
+
+#. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product,num_lines:0
+msgid "Number of lines in this declaration."
+msgstr "Rindu skaits deklarācijā."
+
+#. module: report_intrastat
+#: selection:report.intrastat,month:0
+msgid "October"
+msgstr "Oktobris"
+
+#. module: l10n_lv_intrastat_product
 #: view:account.invoice:l10n_lv_intrastat_product.invoice_supplier_form
 msgid "Origin country"
 msgstr "Izcelsmes valsts"
@@ -464,10 +904,46 @@ msgstr "Izcelsmes valsts"
 msgid "Outgoing products"
 msgstr "Izejošie produkti"
 
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "PRO-FORMA"
+msgstr "Priekšapmaksas"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,partner_id:0
+msgid "Partner"
+msgstr "Partneris"
+
+#. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "Partner C."
+msgstr "Partnera V."
+
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Partner Ref.:"
+msgstr "Partnera Kods:"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,partner_country_code:0
+#: field:report.intrastat.product.line,partner_country_id:0
+msgid "Partner country"
+msgstr "Partnera valsts"
+
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Payment Term:"
+msgstr "Apmaksas Termiņš:"
+
 #. module: l10n_lv_intrastat_product
 #: model:ir.model,name:l10n_lv_intrastat_product.model_stock_picking
 msgid "Picking List"
 msgstr "Iepakošanas Saraksts"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,picking_id:0
+msgid "Picking ref"
+msgstr "Komplektēšanas kods"
 
 #. module: l10n_lv_intrastat_product
 #: field:report.intrastat.type,object_type:0
@@ -476,6 +952,7 @@ msgstr "Iespējams dokumentā"
 
 #. module: l10n_lv_intrastat_product
 #: selection:account.invoice,intrastat_transport:0
+#: selection:report.intrastat.product.line,transport:0
 #: selection:res.company,default_intrastat_transport:0
 #: selection:stock.picking,intrastat_transport:0
 msgid "Post"
@@ -487,12 +964,18 @@ msgid "Pricelist for statistical value"
 msgstr "Statistiskās vērtības cenrādis"
 
 #. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "Product C/O"
+msgstr "Produkta izcelsmes valsts"
+
+#. module: l10n_lv_intrastat_product
 #: model:ir.model,name:l10n_lv_intrastat_product.model_product_category
 msgid "Product Category"
 msgstr "Produkta kategorija"
 
-#. module: l10n_lv_intrastat_product
+#. modules: l10n_lv_intrastat_product, report_intrastat
 #: model:ir.model,name:l10n_lv_intrastat_product.model_product_template
+#: model:ir.model,name:report_intrastat.model_product_template
 msgid "Product Template"
 msgstr "Produkta Veidne"
 
@@ -502,19 +985,58 @@ msgid "Product Unit of Measure"
 msgstr "Produkta mērvienība"
 
 #. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,product_country_origin_code:0
+#: field:report.intrastat.product.line,product_country_origin_id:0
+msgid "Product country of origin"
+msgstr "Produkta izcelsmes valsts"
+
+#. module: l10n_lv_intrastat_product
 #: model:ir.model,name:l10n_lv_intrastat_product.model_purchase_order
 msgid "Purchase Order"
 msgstr "Iepirkums"
 
 #. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "Qty"
+msgstr "Sk."
+
+#. modules: l10n_lv_intrastat_product, report_intrastat
+#: field:report.intrastat.product.line,quantity:0
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Quantity"
+msgstr "Skaits"
+
+#. module: l10n_lv_intrastat_product
 #: selection:account.invoice,intrastat_transport:0
+#: selection:report.intrastat.product.line,transport:0
 #: selection:res.company,default_intrastat_transport:0
 #: selection:stock.picking,intrastat_transport:0
 msgid "Rail transport"
 msgstr "Dzelzceļa transports"
 
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Refund"
+msgstr "Atmaksa"
+
+#. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product,company_id:0
+msgid "Related company."
+msgstr "Saistītais uzņēmums."
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.xml,report_id:0
+msgid "Report"
+msgstr "Atskaite"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product,intrastat_line_ids:0
+msgid "Report intrastat product lines"
+msgstr "Intrastat atskaites produktu rindas"
+
 #. module: l10n_lv_intrastat_product
 #: selection:account.invoice,intrastat_transport:0
+#: selection:report.intrastat.product.line,transport:0
 #: selection:res.company,default_intrastat_transport:0
 #: selection:stock.picking,intrastat_transport:0
 msgid "Road transport"
@@ -536,6 +1058,11 @@ msgid "Select the pricelist that will be used to compute the statistical value i
 msgstr "Izvēlieties cenrādi, kas tiks izmantots statistiskās vērtības noteikšanai produktu rindām intrastat atskaitei."
 
 #. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product,type:0
+msgid "Select the type of Intrastat."
+msgstr "Izvēlieties Intrastat tipu."
+
+#. module: l10n_lv_intrastat_product
 #: help:stock.picking,intrastat_transport:0
 msgid "Select the type of transport of the goods. This information is required for the product intrastat report."
 msgstr "Izvēlieties produktu transporta veidu. Šī informācija ir nepieciešama produktu Intrastat atskaitē."
@@ -545,20 +1072,83 @@ msgstr "Izvēlieties produktu transporta veidu. Šī informācija ir nepiecieša
 msgid "Select the unit of measure if one is required for this particular intrastat code (other than the weight in Kg). If no particular unit of measure is required, leave empty."
 msgstr "Izvēlieties mērvienību, ja tā ir nepieciešama attiecīgajam intrastat kodam. Ja mērvienība nav nepieciešama, atstājiet tukšu."
 
+#. module: report_intrastat
+#: selection:report.intrastat,month:0
+msgid "September"
+msgstr "Septembris"
+
 #. module: l10n_lv_intrastat_product
 #: view:res.company:l10n_lv_intrastat_product.view_company_form
 msgid "Settings for Intrastat"
 msgstr "Intrastat Uzstādījumi"
 
+#. module: report_intrastat
+#: help:report.intrastat.code,description:0
+msgid "Short text description of the C.N. category"
+msgstr "K.N. kategorijas īss apraksts"
+
 #. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,source_uom_id:0
+msgid "Source UoM"
+msgstr "Izejas Mērv."
+
+#. module: report_intrastat
+#: field:report.intrastat,ref:0
+msgid "Source document"
+msgstr "Izejas dokuments"
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product,start_date:0
+msgid "Start date"
+msgstr "Sākuma datums"
+
+#. module: l10n_lv_intrastat_product
+#: constraint:report.intrastat.product:0
+msgid "Start date must be the first day of a month"
+msgstr "Sākuma datumam jābūt mēneša pirmajai dienai"
+
+#. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product,start_date:0
+msgid "Start date of the declaration. Must be the first day of a month."
+msgstr "Deklarācijas sākuma datums. Mēneša pirmā diena."
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product,state:0
+#: field:report.intrastat.product.line,state:0
+msgid "State"
+msgstr "Stāvoklis"
+
+#. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product,state:0
+msgid "State of the declaration. When the state is set to 'Done', the parameters become read-only."
+msgstr "Deklarācijas stāvoklis. Kad stāvoklis ir 'Pabeigts', parametri kļūst tikai lasāmi."
+
+#. modules: l10n_lv_intrastat_product, report_intrastat
 #: selection:report.intrastat.type,object_type:0
+#: view:website:report_intrastat.report_intrastatinvoice_document
 msgid "Supplier Invoice"
 msgstr "Piegādātāja Rēķins"
 
-#. module: l10n_lv_intrastat_product
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Supplier Refund"
+msgstr "Ienākošie Kredītrēķini"
+
+#. module: report_intrastat
+#: field:report.intrastat,supply_units:0
+msgid "Supply Units"
+msgstr "Piegādātās Vienības"
+
+#. modules: l10n_lv_intrastat_product, report_intrastat
 #: model:ir.model,name:l10n_lv_intrastat_product.model_account_tax
+#: view:website:report_intrastat.report_intrastatinvoice_document
 msgid "Tax"
 msgstr "Nodoklis"
+
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Taxes"
+msgstr "Nodokļi"
 
 #. module: l10n_lv_intrastat_product
 #: constraint:report.intrastat.code:0
@@ -575,7 +1165,45 @@ msgstr "Aktīvais lauks ļauj slēpt Intrastat tipu, to neizdzēšot."
 msgid "The pair (procedure code, transaction code) must be unique."
 msgstr "Pārim (procedūras kods, transakcijas kods) jābūt unikālam."
 
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Total"
+msgstr "Kopā"
+
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Total Without Taxes"
+msgstr "Kopā Bez Nodokļiem"
+
 #. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_tree
+#: field:report.intrastat.product,total_amount:0
+msgid "Total amount"
+msgstr "Summa kopā"
+
+#. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product,total_amount:0
+msgid "Total amount in company currency of the declaration."
+msgstr "Atskaites summa kopā uzņēmuma valūtā."
+
+#. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_tree
+#: field:report.intrastat.product,total_fiscal_amount:0
+msgid "Total fiscal amount"
+msgstr "Fiskālā summa kopā"
+
+#. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product,total_fiscal_amount:0
+msgid "Total fiscal amount in company currency of the declaration."
+msgstr "Fiskālā summa kopā deklarācijā norādītajā uzņēmuma valūtā."
+
+#. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "Transac."
+msgstr "Transakc."
+
+#. module: l10n_lv_intrastat_product
+#: field:report.intrastat.product.line,transaction_code:0
 #: field:report.intrastat.type,transaction_code:0
 msgid "Transaction code"
 msgstr "Transakcijas kods"
@@ -586,12 +1214,22 @@ msgid "Transaction nature codes, according to Intrastat annex No 4."
 msgstr "Darījumu veidu kodi, atbilstoši Intrastat 4. pielikumam."
 
 #. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "Transport"
+msgstr "Transports"
+
+#. modules: l10n_lv_intrastat_product, report_intrastat
+#: field:report.intrastat.product,type:0
+#: field:report.intrastat.product.line,type:0
+#: field:report.intrastat.product.xml,type:0
 #: field:report.intrastat.type,intrastat_product_type:0
+#: field:report.intrastat,type:0
 msgid "Type"
 msgstr "Tips"
 
 #. module: l10n_lv_intrastat_product
 #: field:account.invoice,intrastat_transport:0
+#: field:report.intrastat.product.line,transport:0
 #: field:stock.picking,intrastat_transport:0
 msgid "Type of transport"
 msgstr "Transporta veids"
@@ -601,10 +1239,37 @@ msgstr "Transporta veids"
 msgid "Type of transport of the goods. This information is required for the product intrastat report."
 msgstr "Preču transporta veids. Informācija ir nepieciešama produkta intrastat atskaitei."
 
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Unit Price"
+msgstr "Vienības cena"
+
+#. module: report_intrastat
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Unit of measure"
+msgstr "Mērvienība"
+
 #. module: l10n_lv_intrastat_product
 #: field:report.intrastat.code,intrastat_uom_id:0
 msgid "UoM for intrastat product report"
 msgstr "Intrastat atskaites mērv."
+
+#. module: report_intrastat
+#: field:report.intrastat,value:0
+msgid "Value"
+msgstr "Vērtība"
+
+#. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "Value CC"
+msgstr "Vērtība UV"
+
+#. modules: l10n_lv_intrastat_product, report_intrastat
+#: field:report.intrastat.product.line,weight:0
+#: field:report.intrastat,weight:0
+#: view:website:report_intrastat.report_intrastatinvoice_document
+msgid "Weight"
+msgstr "Masa"
 
 #. module: l10n_lv_intrastat_product
 #: constraint:product.template:0
@@ -617,7 +1282,26 @@ msgid "Wrong configuration of the supplier information"
 msgstr "Nepareiza piegādātāja informācijas konfigurācija"
 
 #. module: l10n_lv_intrastat_product
-#: view:stock.picking:l10n_lv_intrastat_product.view_picking_form
-msgid "onchange_picking_type_id(picking_type_id)"
-msgstr "onchange_picking_type_id(picking_type_id)"
+#: field:report.intrastat.product,xml_count:0
+msgid "XML File Count"
+msgstr "XML failu skaits"
 
+#. module: l10n_lv_intrastat_product
+#: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_form
+msgid "XML Files"
+msgstr "XML faili"
+
+#. module: report_intrastat
+#: field:report.intrastat,name:0
+msgid "Year"
+msgstr "Gads"
+
+#. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product,notes:0
+msgid "You can add some comments here if you want."
+msgstr "Šeit iespējams ievadīt komentārus, pēc izvēles."
+
+#. module: l10n_lv_intrastat_product
+#: help:report.intrastat.product,obligation_level:0
+msgid "Your obligation level for a certain type of Intrastat (Import or Export) depends on the total value that you export or import per year."
+msgstr "Intrastat atskaites tips ir atkarīgs no uzņēmuma importa/eksporta apjoma gadā."

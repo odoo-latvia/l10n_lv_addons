@@ -19,6 +19,7 @@
                             <field name="data_xml" filename="filename"/>
                             <field name="company_id"/>
                             <field name="filename" invisible="1"/>
+                            <field name="report_id" invisible="1"/>
                         </group>
                     </sheet>
                 </form>
@@ -82,7 +83,7 @@
                         <group name="buttons">
                             <button class="oe_inline oe_stat_button" type="object" colspan="2"
                                 name="open_xml_files"
-                                icon="fa-code">
+                                icon="fa-code" context="{'default_report_id': active_id}">
                                 <field string="XML Files" name="xml_count" widget="statinfo"/>
                             </button>
                         </group>
@@ -118,8 +119,8 @@
                                 <field name="intrastat_code"/>
                                 <field name="partner_country_id" domain="[('intrastat', '=', True)]"/>
                                 <newline/>
-                                <field name="amount_company_currency"/>
-                                <field name="company_currency_id" nolabel="1"/>
+                                <field name="amount_company_currency" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
+                                <field name="company_currency_id"/>
                                 <newline/>
                                 <field name="weight"/>
                                 <field name="quantity"/>
@@ -134,11 +135,11 @@
                                 <field name="invoice_id"/>
                                 <field name="picking_id"/>
                                 <newline/>
-                                <field name="amount_invoice_currency"/>
+                                <field name="amount_invoice_currency" widget="monetary" options="{'currency_field': 'invoice_currency_id'}"/>
                                 <field name="invoice_currency_id"/>
                                 <newline/>
-                                <field name="amount_product_value_inv_cur"/>
-                                <field name="amount_accessory_cost_inv_cur"/>
+                                <field name="amount_product_value_inv_cur" widget="monetary" options="{'currency_field': 'invoice_currency_id'}"/>
+                                <field name="amount_accessory_cost_inv_cur" widget="monetary" options="{'currency_field': 'invoice_currency_id'}"/>
                                 <newline/>
                                 <field name="source_uom_id"/>
                                 <field name="parent_id" invisible="1"/>
