@@ -1,0 +1,732 @@
+<?xml version='1.0' encoding='utf-8'?>
+<openerp>
+  <data noupdate="1">
+      <record model='product.category.drn' id='product_category_drn_150'>
+      <field name='code'>1.</field>
+      <field name='name'>Liela izmēra mājsaimniecības iekārtas</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_151'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.1</field>
+      <field name='name'>liela izmēra dzesēšanas ierīces</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>84181</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_152'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.2</field>
+      <field name='name'>ledusskapji</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>84182</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_153'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.3</field>
+      <field name='name'>saldētavas</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>84183</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_154'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.4</field>
+      <field name='name'>citas liela izmēra iekārtas, ko izmanto pārtikas dzesēšanai, saglabāšanai un glabāšanai</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>84185</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_155'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.5</field>
+      <field name='name'>veļas mazgāšanas mašīnas</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>84501</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_156'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.6</field>
+      <field name='name'>drēbju žāvētavas</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>84211</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_157'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.7</field>
+      <field name='name'>trauku mazgāšanas mašīnas</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>84221</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_158'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.8</field>
+      <field name='name'>kulinārās apstrādes aprīkojums</field>
+      <field name='type'>electronics</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_159'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.9</field>
+      <field name='name'>elektriskās krāsnis</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>85166</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_160'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.10</field>
+      <field name='name'>elektriskās plītiņas, elektriskie šķīvju sildītāji</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>85166</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_161'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.11</field>
+      <field name='name'>mikroviļņu krāsnis</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>85166</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_162'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.12</field>
+      <field name='name'>citas liela izmēra iekārtas, ko izmanto ēdiena, pārtikas pagatavošanai un pārtikas apstrādei</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>84198</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_163'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.13</field>
+      <field name='name'>elektriskās sildīšanas ierīces</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>84198</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_164'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.14</field>
+      <field name='name'>elektriskie radiatori</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>85161</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_165'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.15</field>
+      <field name='name'>citas liela izmēra iekārtas telpu, gultu un sēdēšanai paredzētu mēbeļu apsildīšanai</field>
+      <field name='type'>electronics</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_166'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.16</field>
+      <field name='name'>elektriskie ventilatori</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>84145</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_167'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.17</field>
+      <field name='name'>gaisa kondicionēšanas iekārtas</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8415</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_168'>
+      <field ref='product_category_drn_150' name='parent_id'/>
+      <field name='code'>1.18</field>
+      <field name='name'>citas ventilācijas, izplūdes ventilācijas un kondicionēšanas iekārtas</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>84145</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_169'>
+      <field name='code'>2.</field>
+      <field name='name'>Maza izmēra mājsaimniecības iekārtas</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_170'>
+      <field ref='product_category_drn_169' name='parent_id'/>
+      <field name='code'>2.1</field>
+      <field name='name'>putekļu sūcēji</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8508</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_171'>
+      <field ref='product_category_drn_169' name='parent_id'/>
+      <field name='code'>2.2</field>
+      <field name='name'>elektriskās sukas</field>
+      <field name='type'>electronics</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_172'>
+      <field ref='product_category_drn_169' name='parent_id'/>
+      <field name='code'>2.3</field>
+      <field name='name'>citas tīrīšanas iekārtas</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8509</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_173'>
+      <field ref='product_category_drn_169' name='parent_id'/>
+      <field name='code'>2.4</field>
+      <field name='name'>ierīces, ko izmanto šūšanai, adīšanai, aušanai un citādai tekstilmateriālu apstrādei</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8516</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_174'>
+      <field ref='product_category_drn_169' name='parent_id'/>
+      <field name='code'>2.5</field>
+      <field name='name'>gludekļi un citas iekārtas gludināšanai, rullēšanai un citādai apģērbu kopšanai</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8516</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_175'>
+      <field ref='product_category_drn_169' name='parent_id'/>
+      <field name='code'>2.6</field>
+      <field name='name'>tosteri</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8516</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_176'>
+      <field ref='product_category_drn_169' name='parent_id'/>
+      <field name='code'>2.7</field>
+      <field name='name'>cepšanas ierīces</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8516</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_177'>
+      <field ref='product_category_drn_169' name='parent_id'/>
+      <field name='code'>2.8</field>
+      <field name='name'>dzirnaviņas, kafijas automāti un ierīces trauku vai iepakojuma atvēršanai vai noslēgšanai</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8516</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_178'>
+      <field ref='product_category_drn_169' name='parent_id'/>
+      <field name='code'>2.9</field>
+      <field name='name'>elektriskie naži</field>
+      <field name='type'>electronics</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_179'>
+      <field ref='product_category_drn_169' name='parent_id'/>
+      <field name='code'>2.1</field>
+      <field name='name'>matu griešanas, žāvēšanas, zobu tīrīšanas, skūšanās, masāžas un citas ķermeņa kopšanas ierīces</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8510</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_180'>
+      <field ref='product_category_drn_169' name='parent_id'/>
+      <field name='code'>2.11</field>
+      <field name='name'>pulksteņi, rokas pulksteņi un iekārtas laika mērīšanai, rādīšanai vai reģistrēšanai</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9101</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_181'>
+      <field ref='product_category_drn_169' name='parent_id'/>
+      <field name='code'>2.12</field>
+      <field name='name'>svari</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8423</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_182'>
+      <field name='code'>3.</field>
+      <field name='name'>Informācijas  tehnoloģijas un  elektrosakaru iekārtas</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_183'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.1</field>
+      <field name='name'>centralizēta datu apstrāde:</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_184'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.1.1</field>
+      <field name='name'>centrālie procesori</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8471</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_185'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.1.2</field>
+      <field name='name'>minidatori</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8471</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_186'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.1.3</field>
+      <field name='name'>printeri</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8443</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_187'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.2</field>
+      <field name='name'>personālā datortehnika:</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_188'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.2.1</field>
+      <field name='name'>personālie datori (arī centrālais procesors, pele, ekrāns un tastatūra)</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8471</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_189'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.2.2</field>
+      <field name='name'>klēpja datori (arī centrālais procesors, pele, ekrāns un tastatūra)</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8471</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_190'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.2.3</field>
+      <field name='name'>piezīmjdatori</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8471</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_191'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.2.4</field>
+      <field name='name'>plaukstdatori</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8471</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_192'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.2.5</field>
+      <field name='name'>printeri</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8443</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_193'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.2.6</field>
+      <field name='name'>kopēšanas iekārtas</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8443</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_194'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.2.7</field>
+      <field name='name'>elektriskās un elektroniskās rakstāmmašīnas</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8469</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_195'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.2.8</field>
+      <field name='name'>kabatas un galda elektroniskās skaitļošanas mašīnas (kalkulatori)</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8470</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_196'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.2.9</field>
+      <field name='name'>citas iekārtas informācijas vākšanai, glabāšanai, apstrādei, noformēšanai vai pārraidīšanai elektroniskā veidā</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8471</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_197'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.3</field>
+      <field name='name'>lietotāju termināliekārtas un sistēmas</field>
+      <field name='type'>electronics</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_198'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.4</field>
+      <field name='name'>faksimili</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8443</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_199'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.5</field>
+      <field name='name'>teleksi</field>
+      <field name='type'>electronics</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_200'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.6</field>
+      <field name='name'>telefoni</field>
+      <field name='type'>electronics</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_201'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.7</field>
+      <field name='name'>telefona automāti</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8517</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_202'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.8</field>
+      <field name='name'>bezvada telefoni</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8517</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_203'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.9</field>
+      <field name='name'>mobilie telefoni</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8517</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_204'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.1</field>
+      <field name='name'>automātisko atbildētāju sistēmas</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8519</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_205'>
+      <field ref='product_category_drn_182' name='parent_id'/>
+      <field name='code'>3.11</field>
+      <field name='name'>citas iekārtas skaņas, attēlu vai citas informācijas pārraidīšanai ar elektrosakaru starpniecību</field>
+      <field name='type'>electronics</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_206'>
+      <field name='code'>4.</field>
+      <field name='name'>Patērētāju  iekārtas</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_207'>
+      <field ref='product_category_drn_206' name='parent_id'/>
+      <field name='code'>4.1</field>
+      <field name='name'>radioaparāti</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8527</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_208'>
+      <field ref='product_category_drn_206' name='parent_id'/>
+      <field name='code'>4.2</field>
+      <field name='name'>televizori</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8528</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_209'>
+      <field ref='product_category_drn_206' name='parent_id'/>
+      <field name='code'>4.3</field>
+      <field name='name'>videokameras</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8527</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_210'>
+      <field ref='product_category_drn_206' name='parent_id'/>
+      <field name='code'>4.4</field>
+      <field name='name'>videomagnetofoni</field>
+      <field name='type'>electronics</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_211'>
+      <field ref='product_category_drn_206' name='parent_id'/>
+      <field name='code'>4.5</field>
+      <field name='name'>augstas precizitātes magnetofoni</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8519</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_212'>
+      <field ref='product_category_drn_206' name='parent_id'/>
+      <field name='code'>4.6</field>
+      <field name='name'>audiopastiprinātāji</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8518</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_213'>
+      <field ref='product_category_drn_206' name='parent_id'/>
+      <field name='code'>4.7</field>
+      <field name='name'>mūzikas instrumenti</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9207</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_214'>
+      <field ref='product_category_drn_206' name='parent_id'/>
+      <field name='code'> 4.8 </field>
+      <field name='name'>citas preces vai iekārtas skaņas vai attēlu, arī signālu ierakstīšanai vai atskaņošanai, vai citas skaņu un attēlu izplatīšanas </field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8519</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_215'>
+      <field name='code'>5.</field>
+      <field name='name'>Apgaismes  iekārtas</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_216'>
+      <field ref='product_category_drn_215' name='parent_id'/>
+      <field name='code'>5.1</field>
+      <field name='name'>dienasgaismas spuldžu gaismekļi, izņemot  mājsaimniecību gaismekļus</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9405</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_217'>
+      <field ref='product_category_drn_215' name='parent_id'/>
+      <field name='code'>5.2</field>
+      <field name='name'>taisnās dienasgaismas spuldzes</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9405</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_218'>
+      <field ref='product_category_drn_215' name='parent_id'/>
+      <field name='code'>5.3</field>
+      <field name='name'>kompaktās dienasgaismas spuldzes</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9405</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_219'>
+      <field ref='product_category_drn_215' name='parent_id'/>
+      <field name='code'>5.4</field>
+      <field name='name'>augstas intensitātes gāzizlādes spuldzes, arī augstspiediena nātrija spuldzes un metālu halīdu spuldzes</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8539</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_220'>
+      <field ref='product_category_drn_215' name='parent_id'/>
+      <field name='code'>5.5</field>
+      <field name='name'>zema spiediena nātrija spuldzes</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8539</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_221'>
+      <field ref='product_category_drn_215' name='parent_id'/>
+      <field name='code'>5.6</field>
+      <field name='name'>cits apgaismojums vai iekārtas apgaismošanai vai gaismas kontrolei, izņemot kvēlspuldzes</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8539</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_222'>
+      <field name='code'>6.</field>
+      <field name='name'>Elektriskie un  elektronikas instrumenti  (izņemot liela izmēra  stacionārus ražošanas  mehānismus, kas nav  pārnēsājami vai ir </field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_223'>
+      <field ref='product_category_drn_222' name='parent_id'/>
+      <field name='code'>6.1</field>
+      <field name='name'>urbji</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8467</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_224'>
+      <field ref='product_category_drn_222' name='parent_id'/>
+      <field name='code'>6.2</field>
+      <field name='name'>zāģi</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8467</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_225'>
+      <field ref='product_category_drn_222' name='parent_id'/>
+      <field name='code'>6.3</field>
+      <field name='name'>šujmašīnas</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8452</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_226'>
+      <field ref='product_category_drn_222' name='parent_id'/>
+      <field name='code'>6.4</field>
+      <field name='name'>virpošanas, frēzēšanas, noslīpēšanas, slīpēšanas,  zāģēšanas, griešanas, lokšņu griešanas, urbšanas,  caurumošanas, štancēšanas,</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8467</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_227'>
+      <field ref='product_category_drn_222' name='parent_id'/>
+      <field name='code'>6.5</field>
+      <field name='name'>kniedēšanas, naglošanas vai skrūvēšanas instrumenti vai kniežu, naglu, skrūvju izņemšanas instrumenti un tiem līdzīgi instrument</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8440</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_228'>
+      <field ref='product_category_drn_222' name='parent_id'/>
+      <field name='code'>6.6</field>
+      <field name='name'>metināšanas, lodēšanas vai tiem līdzīgi instrumenti</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8515</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_229'>
+      <field ref='product_category_drn_222' name='parent_id'/>
+      <field name='code'>6.7</field>
+      <field name='name'>šķidrumu vai gāzveida vielu izsmidzināšanas, izplatīšanas, izkliedēšanas iekārtas vai cita veida apstrādes iekārtas</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8413</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_230'>
+      <field ref='product_category_drn_222' name='parent_id'/>
+      <field name='code'>6.8</field>
+      <field name='name'>pļaušanas vai citi dārza darba rīki</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8433</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_231'>
+      <field name='code'>7.</field>
+      <field name='name'>Rotaļlietas,  atpūtas un sporta piederumi</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_232'>
+      <field ref='product_category_drn_231' name='parent_id'/>
+      <field name='code'>7.1</field>
+      <field name='name'>elektriskie vilcieni vai sacīkšu automašīnu komplekti</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9503</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_233'>
+      <field ref='product_category_drn_231' name='parent_id'/>
+      <field name='code'>7.2</field>
+      <field name='name'>rokas videospēļu pultis</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9504</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_234'>
+      <field ref='product_category_drn_231' name='parent_id'/>
+      <field name='code'>7.3</field>
+      <field name='name'>videospēles</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9504</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_235'>
+      <field ref='product_category_drn_231' name='parent_id'/>
+      <field name='code'>7.4</field>
+      <field name='name'>datori braukšanai ar velosipēdu, skriešanai, airēšanai u.c.</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9506</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_236'>
+      <field ref='product_category_drn_231' name='parent_id'/>
+      <field name='code'>7.5</field>
+      <field name='name'>sporta piederumi ar elektriskām vai elektroniskām detaļām</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9506</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_237'>
+      <field ref='product_category_drn_231' name='parent_id'/>
+      <field name='code'>7.6</field>
+      <field name='name'>naudas un žetonu elektroniskie azartspēļu automāti</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9504</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_238'>
+      <field name='code'>8.</field>
+      <field name='name'>Medicīniskās  ierīces (izņemot visas  implantētās un inficētās  medicīniskās ierīces)</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_239'>
+      <field ref='product_category_drn_238' name='parent_id'/>
+      <field name='code'>8.1</field>
+      <field name='name'>medicīniskās terapeitiskās rentgenstaru ierīces</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9022</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_240'>
+      <field ref='product_category_drn_238' name='parent_id'/>
+      <field name='code'>8.2</field>
+      <field name='name'>medicīniskās ierīces, ko lieto kardioloģijā</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9018</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_241'>
+      <field ref='product_category_drn_238' name='parent_id'/>
+      <field name='code'>8.3</field>
+      <field name='name'>hemodialīzes ierīces</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9018</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_242'>
+      <field ref='product_category_drn_238' name='parent_id'/>
+      <field name='code'>8.4</field>
+      <field name='name'>mākslīgās plaušu ventilācijas ierīces</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9019</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_243'>
+      <field ref='product_category_drn_238' name='parent_id'/>
+      <field name='code'>8.5</field>
+      <field name='name'>medicīniskās ierīces, ko lieto kodolmedicīnā</field>
+      <field name='type'>electronics</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_244'>
+      <field ref='product_category_drn_238' name='parent_id'/>
+      <field name='code'>8.6</field>
+      <field name='name'>laboratorijas ierīces, ko lieto in vitro diagnostikā</field>
+      <field name='type'>electronics</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_245'>
+      <field ref='product_category_drn_238' name='parent_id'/>
+      <field name='code'>8.7</field>
+      <field name='name'>medicīnas laboratoriju analizatori</field>
+      <field name='type'>electronics</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_246'>
+      <field ref='product_category_drn_238' name='parent_id'/>
+      <field name='code'>8.8</field>
+      <field name='name'>saldējamās ierīces</field>
+      <field name='type'>electronics</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_247'>
+      <field ref='product_category_drn_238' name='parent_id'/>
+      <field name='code'>8.9</field>
+      <field name='name'>testi grūtniecības noteikšanai</field>
+      <field name='type'>electronics</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_248'>
+      <field ref='product_category_drn_238' name='parent_id'/>
+      <field name='code'>8.10</field>
+      <field name='name'>citas ierīces, ko lieto slimību, traumu vai nespējas diagnostikai, profilaksei, novērošanai, ārstēšanai, atvieglošanai</field>
+      <field name='cn_group'>9018</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_249'>
+      <field name='code'>9.</field>
+      <field name='name'>Monitoringa un  kontroles instrumenti</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_250'>
+      <field ref='product_category_drn_249' name='parent_id'/>
+      <field name='code'>9.1</field>
+      <field name='name'>dūmu detektori</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9027</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_251'>
+      <field ref='product_category_drn_249' name='parent_id'/>
+      <field name='code'>9.2</field>
+      <field name='name'>siltumregulatori</field>
+      <field name='type'>electronics</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_252'>
+      <field ref='product_category_drn_249' name='parent_id'/>
+      <field name='code'>9.3</field>
+      <field name='name'>termostati</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>9032</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_253'>
+      <field ref='product_category_drn_249' name='parent_id'/>
+      <field name='code'>9.4</field>
+      <field name='name'>mērīšanas, svēršanas vai regulēšanas/koriģēšanas ierīces mājsaimniecībām vai laboratorijām</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8423</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_254'>
+      <field ref='product_category_drn_249' name='parent_id'/>
+      <field name='code'>9.5</field>
+      <field name='name'>citi monitoringa un kontroles instrumenti, ko izmanto rūpnieciskās iekārtās (piemēram, kontrolpaneļos)</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8531</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_255'>
+      <field name='code'>10.</field>
+      <field name='name'>Tirdzniecības  automāti</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_256'>
+      <field ref='product_category_drn_255' name='parent_id'/>
+      <field name='code'>10.1</field>
+      <field name='name'>karsto dzērienu tirdzniecības automāti</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8476</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_257'>
+      <field ref='product_category_drn_255' name='parent_id'/>
+      <field name='code'>10.2</field>
+      <field name='name'>karsto vai auksto dzērienu pudeļu vai kārbu tirdzniecības automāti</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8476</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_258'>
+      <field ref='product_category_drn_255' name='parent_id'/>
+      <field name='code'>10.3</field>
+      <field name='name'>cietu produktu tirdzniecības automāti</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8476</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_259'>
+      <field ref='product_category_drn_255' name='parent_id'/>
+      <field name='code'>10.4</field>
+      <field name='name'>bankas automāti  bankomāti</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8472</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_260'>
+      <field ref='product_category_drn_255' name='parent_id'/>
+      <field name='code'>10.5</field>
+      <field name='name'>visas ierīces, kas automātiski izsniedz jebkura veida preces</field>
+      <field name='type'>electronics</field>
+      <field name='cn_group'>8476</field>
+    </record>
+  </data>
+</openerp>

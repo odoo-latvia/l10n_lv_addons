@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='utf-8'?>
+<openerp>
+  <data noupdate="1">
+    <record model='product.category.drn' id='product_category_drn_140'>
+      <field name='code'>IEP</field>
+      <field name='name'>IEPAKOJUMS</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_273'>
+      <field ref='product_category_drn_140' name='parent_id'/>
+      <field name='code'>1</field>
+      <field name='name'>Stikls</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_143'>
+      <field ref='product_category_drn_273' name='parent_id'/>
+      <field name='code'>1.01</field>
+      <field name='name'>Stikls</field>
+      <field name='type'>package</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_141'>
+      <field ref='product_category_drn_140' name='parent_id'/>
+      <field name='code'>2</field>
+      <field name='name'>Polimēri (izņemot PET, polistirolu un bioplastmasas)</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_265'>
+      <field ref='product_category_drn_141' name='parent_id'/>
+      <field name='code'>2.01</field>
+      <field name='name'>polimēri</field>
+      <field name='type'>package</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_266'>
+      <field ref='product_category_drn_141' name='parent_id'/>
+      <field name='code'>2.02</field>
+      <field name='name'>maisiņi (1000gb svars nepārsniedz 3kg)</field>
+      <field name='type'>package</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_267'>
+      <field ref='product_category_drn_141' name='parent_id'/>
+      <field name='code'>2.03</field>
+      <field name='name'>maisiņi (1000gb svars pārsniedz 3kg)</field>
+      <field name='type'>package</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_146'>
+      <field ref='product_category_drn_141' name='parent_id'/>
+      <field name='code'>2.04</field>
+      <field name='name'>Oksi-sadalāmā plastmasa</field>
+      <field name='type'>package</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_268'>
+      <field ref='product_category_drn_140' name='parent_id'/>
+      <field name='code'>3</field>
+      <field name='name'>PET</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_269'>
+      <field ref='product_category_drn_268' name='parent_id'/>
+      <field name='code'>3.01</field>
+      <field name='name'>PET</field>
+      <field name='type'>package</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_147'>
+      <field ref='product_category_drn_140' name='parent_id'/>
+      <field name='code'>4</field>
+      <field name='name'>Polistirols</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_274'>
+      <field ref='product_category_drn_147' name='parent_id'/>
+      <field name='code'>4.01</field>
+      <field name='name'>Polistirols</field>
+      <field name='type'>package</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_270'>
+      <field ref='product_category_drn_140' name='parent_id'/>
+      <field name='code'>5</field>
+      <field name='name'>Dabiskās šķiedras</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_148'>
+      <field ref='product_category_drn_270' name='parent_id'/>
+      <field name='code'>5.01</field>
+      <field name='name'>Papīrs, kartons vai citu dabisko šķiedru izejmateriāli</field>
+      <field name='type'>package</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_149'>
+      <field ref='product_category_drn_270' name='parent_id'/>
+      <field name='code'>5.02</field>
+      <field name='name'>Koks</field>
+      <field name='type'>package</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_144'>
+      <field ref='product_category_drn_270' name='parent_id'/>
+      <field name='code'>5.03</field>
+      <field name='name'>Citi</field>
+      <field name='type'>package</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_271'>
+      <field ref='product_category_drn_270' name='parent_id'/>
+      <field name='code'>5.04</field>
+      <field name='name'>bioplastmasas</field>
+      <field name='type'>package</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_142'>
+      <field ref='product_category_drn_140' name='parent_id'/>
+      <field name='code'>6</field>
+      <field name='name'>Metāli</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_272'>
+      <field ref='product_category_drn_142' name='parent_id'/>
+      <field name='code'>6.01</field>
+      <field name='name'>Metāls</field>
+      <field name='type'>package</field>
+    </record>
+    <record model='product.category.drn' id='product_category_drn_145'>
+      <field name='code'>NO</field>
+      <field name='name'>No transport Package</field>
+      <field name='type'>empty</field>
+    </record>
+  </data>
+</openerp>

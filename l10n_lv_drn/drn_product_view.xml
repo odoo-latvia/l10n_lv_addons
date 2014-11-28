@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Products and Product Templates -->
+
+        <record model="ir.ui.view" id="view_product_template_drn_form">
+            <field name="name">product.template.drn.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Natural Resources Tax" attrs="{'invisible':[('type', '!=', 'product')]}">
+                        <group col="4">
+                            <field name="is_eei" colspan="2"/>
+                            <field name="drn_prod_categ_id" colspan="2" domain="[('type', '=', 'electronics')]" attrs="{'required':[('is_eei','=',True)]}"/>
+                            <field name="drn_prod_pack_categ_id" colspan="4" domain="[('type', '=', 'package')]"/>
+                        </group>
+                        <group col="4" string="Hazardous Subproducts included in this product (kg)">
+                            <field name="lubri_weight" colspan="2"/>
+                            <newline/>
+                            <field name="accu_lead_weight" colspan="2"/>
+                            <newline/>
+                            <field name="accu_nicd_weight" colspan="2"/>
+                            <newline/>
+                            <field name="accu_pri_weight" colspan="2"/>
+                            <newline/>
+                            <field name="accu_oth_weight" colspan="2"/>
+                            <newline/>
+                            <field name="tires_weight" colspan="2"/>
+                            <newline/>
+                            <field name="oil_filt_weight" colspan="2"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+        <!-- Product Packaging -->
+
+        <record id="product_packaging_form_view_without_product_inherit_drn" model="ir.ui.view">
+            <field name="name">product.packaging.form.view.without.product.drn</field>
+            <field name="model">product.packaging</field>
+            <field name="inherit_id" ref="product.product_packaging_form_view_without_product"/>
+            <field name="arch" type="xml">
+                <field name="ul" position="after">
+                    <field name="drn_cat_id" domain="[('type','=','package')]" required="1"/>
+                </field>
+                <field name="qty" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <!-- weight_ul? -->
+            </field>
+        </record>
+
+        <record id="product_packaging_form_view_inherit_drn" model="ir.ui.view">
+            <field name="name">product.packaging.form.view.drn</field>
+            <field name="model">product.packaging</field>
+            <field name="inherit_id" ref="product.product_packaging_form_view"/>
+            <field name="arch" type="xml">
+                <field name="ul" position="after">
+                    <field name="drn_cat_id" domain="[('type','=','package')]" required="1"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Product Category -->
+
+        <record id="product_category_form_view" model="ir.ui.view">
+            <field name="name">product.category.form</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='parent']" position="inside">
+                    <group name="nrt" string="NRT" colspan="2">
+                        <field name="is_eei"/>
+                        <field name="drn_product_category" attrs="{'required':[('is_eei','=',True)]}"/>
+                        <field name="drn_product_pack_category"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Natural Resources Tax Product Category -->
+
+        <record model="ir.ui.view" id="view_drn_product_category_form">
+            <field name="name">drn.product.category.form</field>
+            <field name="model">product.category.drn</field>
+            <field name="arch" type="xml">
+                <form string="Natural Resources Tax Product Categories">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+					            <field name="name"/>
+                            </h1>
+                        </div>
+                        <group col="4">
+                            <field name="code"/>
+                            <field name="cn_group"/>
+                            <field name="parent_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_drn_product_category_tree">
+            <field name="name">drn.product.category.tree</field>
+            <field name="model">product.category.drn</field>
+            <field name="arch" type="xml">
+                <tree string="Natural Resources Tax Product Categories">
+                    <field name="code"/>
+                    <field name="cn_group"/>
+		            <field name="name"/>
+                    <field name="parent_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_drn_product_category_search">
+            <field name="name">drn.product.category.search</field>
+            <field name="model">product.category.drn</field>
+            <field name="arch" type="xml">
+                <search string="Natural Resources Tax Product Categories">
+                    <field name="code"/>
+		            <field name="name"/>
+                    <field name="cn_group"/>
+                    <field name="parent_id"/>
+                    <group expand="1" string="Group By...">
+                        <filter name="parent" string="Parent" context="{'group_by':'parent_id'}" icon="terp-stock_symbol-selection"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+    </data>
+</openerp>
