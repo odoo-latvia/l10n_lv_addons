@@ -26,7 +26,7 @@
 ##############################################################################
 
 import drn
-#import drn_stock_move
-#import wizard
+import drn_stock_move
+import wizard
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

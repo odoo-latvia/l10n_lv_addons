@@ -13,7 +13,15 @@
 
         <menuitem name="Natural Resources Tax" sequence="10" id="natural_resources_tax_menu" parent="account.menu_finance_legal_statement" icon="STOCK_OPEN"/>
 
-        <!-- Place for wizard menu -->
+        <record model="ir.actions.act_window" id="action_drn_return_wizard_natural_resources_tax">
+            <field name="name">Natural Resources Tax</field>
+            <field name="res_model">drn.return.wizard</field>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <menuitem name="Natural Resources Tax" parent="natural_resources_tax_menu" sequence="1" action="action_drn_return_wizard_natural_resources_tax" id="drn_return_wizard_natural_resources_tax_menu" icon="STOCK_EXECUTE"/>
 
         <record model="ir.actions.act_window" id="action_sr_return_type_sr_return_type">
             <field name="name">Natural Resources Tax Reports</field>
