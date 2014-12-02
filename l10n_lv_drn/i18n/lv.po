@@ -1,0 +1,441 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* l10n_lv_drn
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-02 15:08+0000\n"
+"PO-Revision-Date: 2014-12-02 15:08+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_lv_drn
+#: field:product.template,tires_weight:0
+msgid "All types of tires"
+msgstr "Visu veidu riepas"
+
+#. module: l10n_lv_drn
+#: view:stock.move:l10n_lv_drn.view_move_form_inherit_drn
+#: view:stock.move:l10n_lv_drn.view_move_picking_form_inherit_drn
+msgid "CMR Information"
+msgstr "CMR Informācija"
+
+#. module: l10n_lv_drn
+#: field:product.category.drn,cn_group:0
+msgid "CN group Code"
+msgstr "KN grupas Kods"
+
+#. module: l10n_lv_drn
+#: view:drn.return.wizard:l10n_lv_drn.view_drn_declaration_wizard_form
+msgid "Cancel"
+msgstr "Atcelt"
+
+#. module: l10n_lv_drn
+#: field:product.category.drn,code:0
+msgid "Category Code"
+msgstr "Kategorijas Kods"
+
+#. module: l10n_lv_drn
+#: field:product.category.drn,name:0
+msgid "Category Name"
+msgstr "Kategorijas Nosaukums"
+
+#. module: l10n_lv_drn
+#: field:product.category.drn,type:0
+msgid "Category Type"
+msgstr "Kategorijas Tips"
+
+#. module: l10n_lv_drn
+#: field:drn.return.log,create_uid:0
+#: field:drn.return.wizard,create_uid:0
+#: field:product.category.drn,create_uid:0
+msgid "Created by"
+msgstr "Izveidojis"
+
+#. module: l10n_lv_drn
+#: field:drn.return.log,create_date:0
+#: field:drn.return.wizard,create_date:0
+#: field:product.category.drn,create_date:0
+msgid "Created on"
+msgstr "Izveidots"
+
+#. module: l10n_lv_drn
+#: model:sr.return_type,code_external:l10n_lv_drn.sr_return_type_7
+msgid "DRN_LV"
+msgstr "DRN_LV"
+
+#. module: l10n_lv_drn
+#: model:sr.report_templates,name:l10n_lv_drn.sr_report_templates_7
+msgid "Dabas Resursu Nodoklis (Zaļais punkts)"
+msgstr "Dabas Resursu Nodoklis (Zaļais punkts)"
+
+#. module: l10n_lv_drn
+#: field:drn.return.wizard,name:0
+msgid "Description"
+msgstr "Apraksts"
+
+#. module: l10n_lv_drn
+#: selection:drn.return.wizard,state:0
+msgid "Done"
+msgstr "Pabeigts"
+
+#. module: l10n_lv_drn
+#: selection:drn.return.wizard,state:0
+msgid "Draft"
+msgstr "Melnraksts"
+
+#. module: l10n_lv_drn
+#: field:product.template,drn_prod_categ_id:0
+msgid "EEI Category for NRT"
+msgstr "EEI Kategorija DRN atskaitei"
+
+#. module: l10n_lv_drn
+#: field:product.template,accu_nicd_weight:0
+msgid "Electric accumulators, Ni-Cd un Fe-Ni"
+msgstr "Elektriskie akumulatori, Ni-Cd un Fe-Ni"
+
+#. module: l10n_lv_drn
+#: field:drn.return.wizard,date_stop:0
+msgid "End of Period"
+msgstr "Perioda Beigas"
+
+#. module: l10n_lv_drn
+#: help:drn.return.wizard,name:0
+msgid "Enter declaration description here"
+msgstr "Šeit ievadīt deklarācijas aprakstu"
+
+#. module: l10n_lv_drn
+#: selection:drn.return.log,type:0
+msgid "Error"
+msgstr "Kļūda"
+
+#. module: l10n_lv_drn
+#: selection:drn.return.wizard,state:0
+msgid "Errors"
+msgstr "Kļūdas"
+
+#. module: l10n_lv_drn
+#: field:drn.return.wizard,except_move_ids:0
+msgid "Except stock moves"
+msgstr "Izņēmuma noliktavas grāmatojumi"
+
+#. module: l10n_lv_drn
+#: field:drn.return.wizard,excluded_move_ids:0
+msgid "Excluded stock moves"
+msgstr "Izslēgtie noliktavas grāmatojumi"
+
+#. module: l10n_lv_drn
+#: view:product.category.drn:l10n_lv_drn.view_drn_product_category_search
+msgid "Group By..."
+msgstr "Grupēt pēc..."
+
+#. module: l10n_lv_drn
+#: view:product.template:l10n_lv_drn.view_product_template_drn_form
+msgid "Hazardous Subproducts included in this product (kg)"
+msgstr "Bīstamie Subprodukti, kas iekļauti produktā (kg)"
+
+#. module: l10n_lv_drn
+#: field:drn.return.wizard,logs_history_warning2:0
+msgid "History warning2"
+msgstr "Vēsturiskais brīdinājums2"
+
+#. module: l10n_lv_drn
+#: field:drn.return.log,id:0
+#: field:drn.return.wizard,id:0
+#: field:product.category.drn,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_lv_drn
+#: field:product.category,is_eei:0
+#: field:product.template,is_eei:0
+msgid "Is EEI subject?"
+msgstr "Ir EEI prece?"
+
+#. module: l10n_lv_drn
+#: field:drn.return.log,write_uid:0
+#: field:drn.return.wizard,write_uid:0
+#: field:product.category.drn,write_uid:0
+msgid "Last Updated by"
+msgstr "Pēdējo reizi atjaunojis"
+
+#. module: l10n_lv_drn
+#: field:drn.return.log,write_date:0
+#: field:drn.return.wizard,write_date:0
+#: field:product.category.drn,write_date:0
+msgid "Last Updated on"
+msgstr "Pēdējo reizi atjaunots"
+
+#. module: l10n_lv_drn
+#: field:product.template,accu_lead_weight:0
+msgid "Lead-containing electric accumulators"
+msgstr "Svinu saturoši elektriskie akumulatori"
+
+#. module: l10n_lv_drn
+#: view:drn.return.log:l10n_lv_drn.view_drn_return_error_form
+#: view:drn.return.log:l10n_lv_drn.view_drn_return_error_tree
+#: view:drn.return.wizard:l10n_lv_drn.view_drn_declaration_wizard_form
+msgid "Log"
+msgstr "Žurnāls"
+
+#. module: l10n_lv_drn
+#: field:drn.return.wizard,logs:0
+msgid "Logs"
+msgstr "Žurnāla Ieraksti"
+
+#. module: l10n_lv_drn
+#: field:product.template,lubri_weight:0
+msgid "Lubricanting Oils"
+msgstr "Smēreļļas"
+
+#. module: l10n_lv_drn
+#: view:drn.return.log:l10n_lv_drn.view_drn_return_error_form
+#: field:drn.return.log,name:0
+#: view:drn.return.wizard:l10n_lv_drn.view_drn_declaration_wizard_form
+#: field:drn.return.wizard,message:0
+msgid "Message"
+msgstr "Ziņa"
+
+#. module: l10n_lv_drn
+#: view:product.category:l10n_lv_drn.product_category_form_view
+msgid "NRT"
+msgstr "DRN"
+
+#. module: l10n_lv_drn
+#: field:stock.move,cmr_package_drn_categ:0
+msgid "NRT Transport Package Type"
+msgstr "DRN Transporta Iepakojuma Tips"
+
+#. module: l10n_lv_drn
+#: model:ir.actions.act_window,name:l10n_lv_drn.action_product_category_drn_nrt_categories
+msgid "NRT categories"
+msgstr "DRN kategorijas"
+
+#. module: l10n_lv_drn
+#: field:drn.return.log,drn_return_id:0
+msgid "NRT return"
+msgstr "DRN atskaite"
+
+#. module: l10n_lv_drn
+#: model:ir.actions.act_window,name:l10n_lv_drn.action_drn_return_wizard_natural_resources_tax
+#: model:ir.ui.menu,name:l10n_lv_drn.drn_return_wizard_natural_resources_tax_menu
+#: model:ir.ui.menu,name:l10n_lv_drn.natural_resources_tax_menu
+#: view:product.template:l10n_lv_drn.view_product_template_drn_form
+#: model:sr.return_type,name:l10n_lv_drn.sr_return_type_7
+msgid "Natural Resources Tax"
+msgstr "Dabas Resursu Nodoklis"
+
+#. module: l10n_lv_drn
+#: field:product.category,drn_product_category:0
+#: field:product.packaging,drn_cat_id:0
+msgid "Natural Resources Tax Category"
+msgstr "Dabas Resursu Nodokļa Kategorija"
+
+#. module: l10n_lv_drn
+#: view:drn.return.wizard:l10n_lv_drn.view_drn_declaration_wizard_form
+msgid "Natural Resources Tax Decalaration for Latvia"
+msgstr "Dabas Resursu Nodokļa Deklarācija"
+
+#. module: l10n_lv_drn
+#: model:ir.model,name:l10n_lv_drn.model_drn_return_wizard
+msgid "Natural Resources Tax Declaration"
+msgstr "Dabas Resursu Nodokļa Deklarācija"
+
+#. module: l10n_lv_drn
+#: view:product.category.drn:l10n_lv_drn.view_drn_product_category_form
+#: view:product.category.drn:l10n_lv_drn.view_drn_product_category_search
+#: view:product.category.drn:l10n_lv_drn.view_drn_product_category_tree
+msgid "Natural Resources Tax Product Categories"
+msgstr "Produkta Dabas Resursu Nodokļa Kategorijas"
+
+#. module: l10n_lv_drn
+#: model:ir.actions.act_window,name:l10n_lv_drn.action_sr_return_type_sr_return_type
+#: model:ir.ui.menu,name:l10n_lv_drn.sr_return_type_natural_resources_tax_reports_menu
+msgid "Natural Resources Tax Reports"
+msgstr "Sagatavotās Dabas Resursu Nodokļa Atskaites"
+
+#. module: l10n_lv_drn
+#: view:drn.return.wizard:l10n_lv_drn.view_drn_declaration_wizard_form
+msgid "Next"
+msgstr "Nākošais"
+
+#. module: l10n_lv_drn
+#: field:drn.return.wizard,not_excluded_move_ids:0
+msgid "Not excluded stock moves"
+msgstr "Neizslēgtie noliktavas grāmatojumi"
+
+#. module: l10n_lv_drn
+#: field:product.template,oil_filt_weight:0
+msgid "Oil Filters"
+msgstr "Eļļas Filtri"
+
+#. module: l10n_lv_drn
+#: field:product.template,accu_oth_weight:0
+msgid "Other electric accumulators"
+msgstr "Citi elektriskie akumulatori"
+
+#. module: l10n_lv_drn
+#: field:stock.move,cmr_line_weight:0
+msgid "Pack Gross Weight (kg)  in CMR"
+msgstr "Preču pakas kopējais svars (kg) CMR"
+
+#. module: l10n_lv_drn
+#: model:ir.model,name:l10n_lv_drn.model_product_packaging
+msgid "Packaging"
+msgstr "Iepakojums"
+
+#. module: l10n_lv_drn
+#: field:product.category,drn_product_pack_category:0
+msgid "Packaging Natural Resources Tax Category"
+msgstr "Dabas Resursu Nodokļa Kategorija Iepakojumam"
+
+#. module: l10n_lv_drn
+#: field:stock.move,add_drn_package_weight:0
+msgid "Pallets and similar, included in shipment (kg)"
+msgstr "Iekļautas paletes vai tamlīdzīgs transportēšanas iepakojums (kg)"
+
+#. module: l10n_lv_drn
+#: view:product.category.drn:l10n_lv_drn.view_drn_product_category_search
+msgid "Parent"
+msgstr "Virsobjekts"
+
+#. module: l10n_lv_drn
+#: field:product.category.drn,parent_id:0
+msgid "Parent Category"
+msgstr "Virskategorija"
+
+#. module: l10n_lv_drn
+#: field:drn.return.wizard,performer:0
+msgid "Performer"
+msgstr "Izpildītājs"
+
+#. module: l10n_lv_drn
+#: field:product.template,drn_prod_pack_categ_id:0
+msgid "Primary Package Category for NRT"
+msgstr "DRN Kategorija Primārajam Iepakojumam"
+
+#. module: l10n_lv_drn
+#: field:product.template,accu_pri_weight:0
+msgid "Primary cells and primary batteries"
+msgstr "Barošanas elementi un baterijas"
+
+#. module: l10n_lv_drn
+#: field:drn.return.log,product_id:0
+msgid "Product"
+msgstr "Produkts"
+
+#. module: l10n_lv_drn
+#: model:ir.model,name:l10n_lv_drn.model_product_category
+#: model:ir.model,name:l10n_lv_drn.model_product_category_drn
+msgid "Product Category"
+msgstr "Produkta kategorija"
+
+#. module: l10n_lv_drn
+#: model:ir.model,name:l10n_lv_drn.model_product_template
+msgid "Product Template"
+msgstr "Produkta Veidne"
+
+#. module: l10n_lv_drn
+#: model:ir.ui.menu,name:l10n_lv_drn.product_category_drn_products_categories_for_nrt_menu
+msgid "Products Categories For NRT"
+msgstr "Produktu DRN Kategorijas"
+
+#. module: l10n_lv_drn
+#: field:drn.return.wizard,responsible:0
+msgid "Responsible"
+msgstr "Atbildīgais"
+
+#. module: l10n_lv_drn
+#: field:drn.return.wizard,date_start:0
+msgid "Start of Period"
+msgstr "Perioda Sākums"
+
+#. module: l10n_lv_drn
+#: field:drn.return.wizard,state:0
+msgid "State"
+msgstr "Stāvoklis"
+
+#. module: l10n_lv_drn
+#: field:drn.return.log,move_id:0
+#: model:ir.model,name:l10n_lv_drn.model_stock_move
+msgid "Stock Move"
+msgstr "Noliktavas kustība"
+
+#. module: l10n_lv_drn
+#: help:stock.move,cmr_line_weight:0
+msgid "This is for Natural Resources Tax only:  \n"
+"enter here a gross weight of goods package  (kgs)."
+msgstr "Tikai Dabas Resursu Nodokļa atskaitei:  \n"
+"šeit ievadīt preču pakas kopējo svaru (kg)."
+
+#. module: l10n_lv_drn
+#: help:stock.move,cmr_package_drn_categ:0
+msgid "This is for Natural Resources Tax only:  \n"
+"enter here a gross weight of goods package as stated in CMR."
+msgstr "Tikai Dabas Resursu Nodokļa atskaitei:  \n"
+"šeit ievadīt preču pakas kopējo svaru, kas norādīts CMR."
+
+#. module: l10n_lv_drn
+#: help:stock.move,add_drn_package_weight:0
+msgid "This is for Natural Resources Tax only:  \n"
+"enter here net weight of transportation package (kgs). (20-25kgs, for standard EURO pallet).\n"
+"Transportation package can be pallets, wooden boxes, polyethylene etc."
+msgstr "Tikai Dabas Resursu Nodokļa atskaitei:  \n"
+"šeit ievadīt transporta papildus iepakojuma svaru (kg).Papildus Transporta iepakojums jau ir iekļauts CMR norādītajā kopējā pakas svarā.\n"
+"Tas ir manuāli jāaprēķina vai arī jāizmanto tipisko iepakojumu svara tabula. (20-25kg, standarta EURO paletei)\n"
+"Papildus Transporta iepakojums var būt paletes liela izmēra koka un kartona kastes utt.\n"
+""
+
+#. module: l10n_lv_drn
+#: help:stock.move,add_drn_package_cat:0
+msgid "This is for Natural Resources Tax only:  \n"
+"enter here type of transportation package if stated in CMR. \n"
+"Transportation package can be pallets, wooden boxes, polyethylene etc."
+msgstr "Tikai Dabas Resursu Nodokļa atskaitei:  \n"
+"šeit ievadīt transporta iepakojuma tipu.\n"
+"Transporta iepakojums var būt papīrs, kartons, polietilēns utt.\n"
+""
+
+#. module: l10n_lv_drn
+#: help:product.template,accu_lead_weight:0
+#: help:product.template,accu_nicd_weight:0
+#: help:product.template,accu_oth_weight:0
+#: help:product.template,accu_pri_weight:0
+#: help:product.template,drn_prod_categ_id:0
+#: help:product.template,drn_prod_pack_categ_id:0
+#: help:product.template,lubri_weight:0
+#: help:product.template,oil_filt_weight:0
+#: help:product.template,tires_weight:0
+msgid "This is for Natural Resources Tax only:  \n"
+"enter here weight (kgs) of hazardous unit included in product."
+msgstr "Tikai Dabas Resursu Nodokļa atskaitei:  \n"
+"šeit ievadīt bīstamās preces, kas iekļauta produktā, svaru (kg)."
+
+#. module: l10n_lv_drn
+#: field:stock.move,add_drn_package_cat:0
+msgid "Transportation Package Type for pallets and similar"
+msgstr "Palešu vai tamlīdzīga transportēšanas iepakojuma Tips"
+
+#. module: l10n_lv_drn
+#: constraint:stock.move:0
+msgid "Transportation Package value for pallets and similar cannot be less or equal than zero!"
+msgstr "Paletēm vai tamlīdzīgam transportēšanas iepakojumam svars nevar būt <0, ja tas ir norādīts!"
+
+#. module: l10n_lv_drn
+#: field:drn.return.log,type:0
+#: field:drn.return.wizard,type_id:0
+msgid "Type"
+msgstr "Tips"
+
+#. module: l10n_lv_drn
+#: selection:drn.return.log,type:0
+#: selection:drn.return.wizard,state:0
+msgid "Warning"
+msgstr "Brīdinājums"
+
