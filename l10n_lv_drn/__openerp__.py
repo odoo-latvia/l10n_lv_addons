@@ -33,7 +33,7 @@
     "website" : "http://www.its1.lv/",
     "category" : "Accounting & Finance",
     "url" : "",
-    "depends" : ['stock_landed_costs', 'delivery', 'base_returns'],
+    "depends" : ['stock_landed_costs', 'delivery', 'hr', 'base_returns'],
     "init_xml" : [],
     "data" : [
         'wizard/drn_wizard_view.xml',

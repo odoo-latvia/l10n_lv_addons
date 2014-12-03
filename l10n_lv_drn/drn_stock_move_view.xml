@@ -24,7 +24,7 @@
             <field name="inherit_id" ref="stock.view_move_form"/>
             <field name="arch" type="xml">
                 <group name="quants_grp" position="before">
-                    <group name="cmr" string="CMR Information" colspan="4" col="4">
+                    <group name="cmr" string="CMR Information" colspan="4" col="2">
                         <field name="cmr_line_weight"/>
                         <field name="cmr_package_drn_categ"/>
                         <field name="add_drn_package_weight"/>
