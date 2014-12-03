@@ -136,7 +136,7 @@ class drn_return_wizard(osv.osv_memory):
                 log_rec = (0,0,{'type':'error',
                                 'name':bml.name,
                                 'move_id':bml.id})
-                if log_rec not in error_logs and this.state not in ('warning','warning2'):
+                if log_rec not in error_logs and this.state != 'warning':
                     error_logs.append(log_rec)
 
         logs = error_logs+warning_logs
@@ -166,10 +166,10 @@ class drn_return_wizard(osv.osv_memory):
                         ml_ids = self.pool.get('stock.move').search(cr, uid, [('quant_ids','in',quant_ids)], context=context)
                     else:
                         ml_ids = self.pool.get('stock.move').search(cr, uid, [('reserved_quant_ids','in',quant_ids)], context=context)
-                    prodlot_moves = [m for m in self.pool.get('stock_move').browse(cr, uid, ml_ids, context=context)]
+                    prodlot_moves = [m for m in self.pool.get('stock.move').browse(cr, uid, ml_ids, context=context)]
                     pick_in_stock_move = filter(lambda ml: ml.picking_id and ml.picking_id.picking_type_id.code == 'incoming', prodlot_moves)
                     bad_move_lines = filter(lambda ml: not ml.picking_id.partner_id.property_account_position, pick_in_stock_move) # check Fiscal position for supplier
-                    if this.state not in ('warning','warning2'):
+                    if this.state != 'warning':
                         for bml in bad_move_lines:
                             log_rec = (0,0,{'type':'error',
                                         'name':bml.name,
@@ -206,7 +206,7 @@ class drn_return_wizard(osv.osv_memory):
                                 'name':ml.name,
                                 'move_id':ml.id})
                 except_move_ids.append(ml.id)
-                if log_rec not in warning_logs and this.state not in ('warning','warning2'):
+                if log_rec not in warning_logs and this.state != 'warning':
                     warning_logs.append(log_rec)
 
             logs = error_logs+warning_logs
@@ -346,7 +346,7 @@ class drn_return_wizard(osv.osv_memory):
                                     'product_id':ml.product_id.id})
                     if log_rec not in error_logs:
                         error_logs.append(log_rec)
-                for pkg in ml.product_id.packaging:
+                for pkg in ml.product_id.packaging_ids:
                     if logging and pkg.drn_cat_id and pkg.qty <= 0: # product secondary weight CHECKING
                         log_state = 'error'
                         log_rec = (0,0,{'type':'error',
@@ -357,9 +357,9 @@ class drn_return_wizard(osv.osv_memory):
                     group_key = pkg.qty!=0 and pkg.drn_cat_id or False
                     if group_key:
                         if group_key not in pkg_type_list['secondary']:
-                            pkg_type_list['secondary'][group_key] = (math.ceil(ml.product_qty / pkg.qty) * pkg.weight_ul)
+                            pkg_type_list['secondary'][group_key] = (math.ceil(ml.product_qty / pkg.qty) * pkg.weight)
                         else:
-                            pkg_type_list['secondary'][group_key] += (math.ceil(ml.product_qty / pkg.qty) * pkg.weight_ul)
+                            pkg_type_list['secondary'][group_key] += (math.ceil(ml.product_qty / pkg.qty) * pkg.weight)
                         secondary_weight += pkg_type_list['secondary'][group_key]
                 # tertiary calculation
                 if not excepted:
@@ -385,9 +385,7 @@ class drn_return_wizard(osv.osv_memory):
                         else:
                             pkg_type_list['tertiary'][group_key] += ml.add_drn_package_weight
         logs = error_logs+warning_logs
-        if logging and logs and this.state != 'warning2':
-            if log_state=='warning':
-                log_state='warning2'
+        if logging and logs and this.state != 'warning':
             this.write({'state':log_state,'logs':logs,'message':message})
             return {
                 'type': 'ir.actions.act_window',
@@ -441,13 +439,13 @@ class drn_return_wizard(osv.osv_memory):
                         'quantity':quantity_sum,
                     }
                 # secondary calculation
-                for pkg in p.packaging:
+                for pkg in p.packaging_ids:
                     group_key_secondary = pkg.qty!=0 and pkg.drn_cat_id or False
                     if group_key_secondary:
                         if excepted:
-                            secondary_weight = math.ceil(data['product_qty'] / pkg.qty) * pkg.weight_ul
+                            secondary_weight = math.ceil(data['product_qty'] / pkg.qty) * pkg.weight
                         else:
-                            secondary_weight = (math.ceil(data['product_qty'] / pkg.qty) * pkg.weight_ul) / data['product_qty'] * out_qty
+                            secondary_weight = (math.ceil(data['product_qty'] / pkg.qty) * pkg.weight) / data['product_qty'] * out_qty
                         res_data['secondary'][group_key_secondary] = secondary_weight
                 # hazardous calculation
                 for group_key_hazardous in ['lubri_weight','accu_lead_weight','accu_nicd_weight'\
@@ -635,7 +633,7 @@ class drn_return_wizard(osv.osv_memory):
 
                 curr_categ_node.appendChild(group_node)
 
-        xml_file = base64.encodestring(xmldoc.toprettyxml())
+        xml_file = base64.encodestring(xmldoc.toprettyxml().encode('utf8'))
         return_id = self.pool.get('sr.return').create(cr, uid, {
             'name':this.name+' '+this.date_start+' - '+this.date_stop,
             'type_id':this.type_id.id,

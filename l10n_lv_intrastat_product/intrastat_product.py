@@ -859,7 +859,7 @@ class report_intrastat_product(osv.osv):
         currNode = createTextNode(xmldoc, currNode, "ColumnNumber", "2")
         currNode = createTextNode(xmldoc, currNode, "Value", str(round((time.time() - start_time)/60, 4)))
 
-        data_xml = base64.encodestring(xmldoc.toprettyxml())
+        data_xml = base64.encodestring(xmldoc.toprettyxml().encode('utf8'))
         res_id = self.pool.get('report.intrastat.product.xml').create(cr, uid, {
             'name': obligation_level + ' (%%0%sd.%%0%sd.)' % (2, 4) % (date_struct.tm_mon,date_struct.tm_year), 
             'filename': obligation_level.replace('/', '_') + '_%%0%sd-%%0%sd.xml' % (2, 4) % (date_struct.tm_mon,date_struct.tm_year),
