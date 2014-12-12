@@ -1,8 +1,13 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012 ITS-1 (<http://www.its1.lv/>)
+#    Odoo, Open Source Management Solution
+#    Copyright (C) 2010-2011 Akretion (http://www.akretion.com). All Rights Reserved
+#    @author Alexis de Lattre <alexis.delattre@akretion.com>
+#    Copyright (c) 2008-2012 Alistek Ltd. (http://www.alistek.com)
+#                       All Rights Reserved.
+#                       General contacts <info@alistek.com>
+#    Copyright (C) 2014 ITS-1 (<http://www.its1.lv/>)
 #                       E-mail: <info@its1.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
 #                       Phone: +371 66116534

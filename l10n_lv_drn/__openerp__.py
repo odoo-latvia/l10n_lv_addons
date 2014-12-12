@@ -2,8 +2,6 @@
 ##############################################################################
 #
 #    Odoo, Open Source Management Solution
-#    Copyright (C) 2010-2011 Akretion (http://www.akretion.com). All Rights Reserved
-#    @author Alexis de Lattre <alexis.delattre@akretion.com>
 #    Copyright (c) 2008-2012 Alistek Ltd. (http://www.alistek.com)
 #                       All Rights Reserved.
 #                       General contacts <info@alistek.com>
@@ -27,14 +25,31 @@
 #
 ##############################################################################
 
-import product
-import tax
-import intrastat_type
-import company
-import invoice
-import stock
-import purchase
-import sale
-import intrastat_product
+{
+    "name" : "LV Natural resources tax",
+    "version" : "1.0",
+    "description" : """Module provides wizard for computing data for Natural resources tax declarations for Latvia.""",
+    "author" : "Alistek Ltd, ITS-1",
+    "website" : "http://www.its1.lv/",
+    "category" : "Accounting & Finance",
+    "url" : "",
+    "depends" : ['stock_landed_costs', 'delivery', 'hr', 'base_returns'],
+    "init_xml" : [],
+    "data" : [
+        'wizard/drn_wizard_view.xml',
+        'l10n_lv_drn_menu.xml',
+        'drn_product_view.xml',
+        'drn_stock_move_view.xml',
+        'security/ir.model.access.csv',
+        'data/data_eei.xml',
+        'data/report_data.xml',
+        'data/data.xml'
+    ],
+    "demo_xml" : [],
+    "license" : "GPL-3",
+    "installable" : True,
+    "active" : False,
+
+}
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

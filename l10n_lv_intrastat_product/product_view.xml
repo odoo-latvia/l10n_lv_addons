@@ -49,7 +49,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//group[@name='parent']" position="inside">
                     <group name="intrastat" string="Intrastat Properties" colspan="2">
-                        <field name="intrastat_id" />
+                        <field name="intrastat_id"/>
                     </group>
                 </xpath>
             </field>

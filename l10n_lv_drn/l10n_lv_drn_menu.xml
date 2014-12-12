@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.actions.act_window" id="action_product_category_drn_nrt_categories">
+            <field name="name">NRT categories</field>
+            <field name="res_model">product.category.drn</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <menuitem action="action_product_category_drn_nrt_categories" name="Products Categories For NRT" id="product_category_drn_products_categories_for_nrt_menu" parent="stock.menu_product_in_config_stock" icon="STOCK_JUSTIFY_FILL"/>
+
+        <menuitem name="Natural Resources Tax" sequence="10" id="natural_resources_tax_menu" parent="account.menu_finance_legal_statement" icon="STOCK_OPEN"/>
+
+        <record model="ir.actions.act_window" id="action_drn_return_wizard_natural_resources_tax">
+            <field name="name">Natural Resources Tax</field>
+            <field name="res_model">drn.return.wizard</field>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <menuitem name="Natural Resources Tax" parent="natural_resources_tax_menu" sequence="1" action="action_drn_return_wizard_natural_resources_tax" id="drn_return_wizard_natural_resources_tax_menu" icon="STOCK_EXECUTE"/>
+
+        <record model="ir.actions.act_window" id="action_sr_return_type_sr_return_type">
+            <field name="name">Natural Resources Tax Reports</field>
+            <field name="res_model">sr.return</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('type_id.code_system','=','DRN_LV')]</field>
+        </record>
+
+        <menuitem name="Natural Resources Tax Reports" parent="natural_resources_tax_menu" sequence="10" action="action_sr_return_type_sr_return_type" id="sr_return_type_natural_resources_tax_reports_menu" icon="STOCK_JUSTIFY_FILL"/>
+
+    </data>
+</openerp>

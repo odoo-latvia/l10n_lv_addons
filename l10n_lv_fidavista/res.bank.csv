@@ -1,24 +1,24 @@
-id,name,bic
-res_bank_2,Aizkraukles banka AS,AIZKLV22
-res_bank_3,"Akciju komercbanka ""Baltikums"" AS",CBBRLV22
-res_bank_4,Baltic International Bank AS,BLIBLV22
-res_bank_5,Baltic Trust Bank AS,BATRLV2X
-res_bank_6,Citadele banka AS,PARXLV22
-res_bank_7,DNB Latvija AS,RIKOLV2X
-res_bank_8,HVB Bank Latvia AS,VBRILV2X
-res_bank_9,Lateko Banka AS,LATBLV22
-res_bank_10,Latvijas Banka,LACBLV2X
-res_bank_11,Latvijas Biznesa banka AS,MOSBLV2X
-res_bank_12,Latvijas Hipotēku un zemes banka VAS,LHZBLV22
-res_bank_13,Latvijas Krājbanka AS,UBALLV2X
-res_bank_14,Latvijas tirdzniecības banka AS,LATCLV22
-res_bank_15,Nordea Bank Finland Plc Latvijas filiāle,NDEALV2X
-res_bank_16,Ogres komercbanka AS,OKBALV22
-res_bank_17,Paritate Banka AS,PRTTLV22
-res_bank_18,Rietumu Banka AS,RTMBLV2X
-res_bank_19,Sampo banka AS,MARALV22
-res_bank_20,SEB Latvijas Unibanka AS,UNLALV2X
-res_bank_21,SMP Banka AS,MULTLV2X
-res_bank_22,Swedbank AS,HABALV22
-res_bank_23,Trasta komercbanka AS,KBRBLV2X
-res_bank_24,VEF banka AS,VEFBLV22
+id,name,bic,email,phone,fax,street,city,zip,country:id
+res_bank_2,ABLV Bank AS,AIZKLV22,info@ablv.com,+371 67775222,+371 67775200,Elizabetes ielā 23,Rīga,LV-1010,base.lv
+res_bank_3,Baltikums Bank AS,CBBRLV22,info@baltikums.eu,+371 67031311,+371 67031300,M.Pils ielā 13,Rīga,LV-1050,base.lv
+res_bank_4,Baltic International Bank AS,BLIBLV22,info@bib.eu,+371 67000444,+371 67000555,Kalēju iela 43,Rīga,LV-1050,base.lv
+res_bank_5,Bank M2M Europe AS,LLBBLV2X,info@bankm2m.com,+371 67080000,+371 67080001,Antonijas iela 3,Rīga,LV-1010,base.lv
+res_bank_6,Citadele banka AS,PARXLV22,info@citadele.lv,+371 6 7010000,+371 6 7010001,Republikas laukums 2A,Rīga,LV-1010,base.lv
+res_bank_7,DNB Latvija AS,RIKOLV2X,info@dnb.lv,+371 67171880,+371 67323449,Skanstes iela 12,Rīga,LV-1013,base.lv
+res_bank_8,Latvijas pasta banka AS,LAPBLV2X,info@lpb.lv,+371 67772999,,Brīvības iela 54,Rīga,LV-1011,base.lv
+res_bank_9,Norvik Banka AS,LATBLV22,welcome@norvik.eu,+371 67041100,+371 67041111,E.Birznieka-Upīša iela 21,Rīga,LV-1011,base.lv
+res_bank_10,Latvijas Banka,LACBLV2X,info@bank.lv,+371 67022300,+371 67022420,K. Valdemāra ielā 2A,Rīga,LV-1050,base.lv
+res_bank_11,"Eesti Krediidipank AS, Latvijas filiāle",MOSBLV2X,info@ekp.lv,+371 67775888,+371 67775849 ,Cēsu iela 31/3,Rīga,LV-1012,base.lv
+res_bank_12,Pohjola Bank Plc filiāle Latvijā,OKOYLV2X,office@pohjola.lv,+371 67777007,+371 67777006,Muitas iela 1,Rīga,LV-1010,base.lv
+res_bank_13,Reģionālā investīciju banka AS,RIBRLV22,bank@ribbank.com,+371 67508989,+371 67508988,J. Alunāna iela 2,Rīga,LV-1010,base.lv
+res_bank_14,Expobank AS,LATCLV22,info@expobank.eu,+371 67043500,+371 67043501,Kr. Valdemāra iela 19,Rīga,LV-1010,base.lv
+res_bank_15,Nordea Bank Finland Plc Latvijas filiāle,NDEALV2X,info@nordea.lv,+371 67096096,+371 67820325,К. Valdemāra 62,Rīga,LV-1013,base.lv
+res_bank_16,Rigensis Bank AS,RGNSLV22,info@rigensisbank.com,+371 67555551,+371 67333303,Teātra iela 3,Rīga,LV-1050,base.lv
+res_bank_17,PrivatBank AS,PRTTLV22,welcome@privatbank.lv,+371 67041368,+371 67282981,Muitas iela 1,Rīga,LV-1134,base.lv
+res_bank_18,Rietumu Banka AS,RTMBLV2X,info@rietumu.lv,+371 67025555,+371 67025588,Vesetas ielā 7,Rīga,LV-1013,base.lv
+res_bank_19,Danske Bank A/S filiāle Latvijā,MARALV22,info@danskebank.lv,+371 67959599,+371 67959103,Cēsu iela 31/8,Rīga,LV-1012,base.lv
+res_bank_20,SEB Banka AS,UNLALV2X,contact@seb.lv,+371 67215535,+371 67215335,Meistaru 1,Valdlauči,LV-1076,base.lv
+res_bank_21,Meridian Trade Bank AS,MULTLV2X,info@mtbank.eu,+371 67019153,+371 67019149,Elizabetes iela 57,Rīga,LV-1050,base.lv
+res_bank_22,Swedbank AS,HABALV22,uznemumi@swedbank.lv,+371 67444444,+371 67444344,Balasta dambis 1a,Rīga,LV-1048,base.lv
+res_bank_23,Trasta komercbanka AS,KBRBLV2X,info@tkb.lv,+371 67027777 ,+371 67027700,Palasta iela 1,Rīga,LV-1050,base.lv
+res_bank_24,Svenska Handelsbanken AB Latvijas filiāle,HANDLV22,riga@handelsbanken.lv,+371 67385843,+371 67385857,Cēsu iela 31/9,Rīga,LV-1012,base.lv
