@@ -23,11 +23,11 @@
 ##############################################################################
 
 import math
-
 from openerp.osv import fields,osv
 import openerp.tools
 import openerp.pooler
 from openerp.tools.translate import _
+import xml.etree.ElementTree as ET
 
 class res_partner_address_type(osv.osv):
     _description ='Partner Address Types'
@@ -44,29 +44,21 @@ class res_partner_address(osv.osv):
     _description ='Partner Addresses'
     _name = 'res.partner.address'
     _order = 'type, street'
-    _rec_name = 'street'
 
     _columns = {
         'partner_id': fields.many2one('res.partner', 'Partner', ondelete='cascade'),
         'type': fields.many2one('res.partner.address.type', 'Type'),
-        'street': fields.char('Street', size=256),
+        'street': fields.char('Street'),
+        'street2': fields.char('Street2'),
         'zip': fields.char('Zip', change_default=True, size=24),
-        'city': fields.char('City', size=128),
-        'state_id': fields.many2one("res.country.state", 'Fed. State', domain="[('country_id','=',country_id)]"),
-        'country_id': fields.many2one('res.country', 'Country'),
+        'city': fields.char('City'),
+        'state_id': fields.many2one('res.country.state', 'State', domain="[('country_id','=',country_id)]", ondelete='restrict'),
+        'country_id': fields.many2one('res.country', 'Country', ondelete='restrict'),
         'is_customer_add': fields.related('partner_id', 'customer', type='boolean', string='Customer'),
         'is_supplier_add': fields.related('partner_id', 'supplier', type='boolean', string='Supplier'),
         'active': fields.boolean('Active', help="Uncheck the active field to hide the contact."),
-        'company_id': fields.many2one('res.company', 'Company',select=1),
+        'company_id': fields.many2one('res.company', 'Company', select=1),
         'color': fields.integer('Color Index'),
-        'partner_street': fields.related('partner_id', 'street', type='char', string='Partner Street'),
-        'partner_street2': fields.related('partner_id', 'street2', type='char', string='Partner Street 2'),
-        'partner_city': fields.related('partner_id', 'city', type='char', string='Partner City'),
-        'partner_zip': fields.related('partner_id', 'zip', type='char', string='Partner Zip'),
-        'partner_state': fields.related('partner_id', 'state_id', type='many2one', relation='res.country.state', string='Partner State'),
-        'partner_country': fields.related('partner_id', 'country_id', type='many2one', relation='res.country', string='Partner Country'),
-        'for_domain1': fields.char('For Domain 1', size=16),
-        'for_domain2': fields.char('For Domain 2', size=16),
     }
 
     def _get_default_country(self, cr, uid, ids, context=None):
@@ -74,15 +66,13 @@ class res_partner_address(osv.osv):
             context = {}
         company_obj = self.pool.get('res.company')
         company_id = company_obj._company_default_get(cr, uid, 'res.partner.address', context=context)
-        country_id = company_obj.browse(cr, uid, company_id, context=context).partner_id.country_id.id or ''
+        country_id = company_obj.browse(cr, uid, company_id, context=context).partner_id.country_id.id or False
         return country_id
 
     _defaults = {
         'active': lambda *a: 1,
         'company_id': lambda s,cr,uid,c: s.pool.get('res.company')._company_default_get(cr, uid, 'res.partner.address', context=c),
         'country_id': _get_default_country,
-        'for_domain1': 'juridical',
-        'for_domain2': 'physical'
     }
 
     def name_get(self, cr, user, ids, context=None):
@@ -91,65 +81,78 @@ class res_partner_address(osv.osv):
         if not len(ids):
             return []
         res = []
-        for r in self.read(cr, user, ids, ['street','city','zip','country_id']):
-            # make a comma-separated list with the following non-empty elements
-            elems = [r['street'], r['city'], r['zip']]
+        for r in self.browse(cr, user, ids, context=context):
+            elems = [r.street, r.street2, r.city, r.zip]
+            if r.state_id:
+               elems.append(r.state_id.name)
+            if r.country_id:
+                elems.append(r.country_id.name)
             addr = ', '.join(filter(bool, elems))
-            res.append((r['id'], addr or '/'))
+            params = context.get('params',{})
+            if (r.partner_id or r.type) and (params.get('model',False) != 'res.partner'):
+                x = []
+                if r.partner_id:
+                    x.append(r.partner_id.name)
+                if r.type:
+                    x.append(r.type.name)
+                if addr:
+                    addr += ' '
+                addr += ('(' + ', '.join(filter(bool,x)) + ')')
+            res.append((r.id, addr or '/'))
         return res
 
-    def onchange_street(self, cr, uid, ids, street, partner_id, context=None):
+    def _update_partner(self, cr, uid, record, vals, context=None):
         if context is None:
             context = {}
-        if partner_id:
-            return {'value': {'partner_street': street, 'partner_street2': False}}
-        return {}
+        partner_obj = self.pool.get('res.partner')
+        address_type_decl = self.pool.get('ir.model.data').get_object(cr, uid, 'l10n_lv_partner_address', 'res_partner_address_type_declared').id
+        address_type_legal = self.pool.get('ir.model.data').get_object(cr, uid, 'l10n_lv_partner_address', 'res_partner_address_type_legal').id
+        is_company = record.partner_id.is_company
+        type = record.type and record.type.id or False
+        if (is_company == True and type == address_type_legal) or (is_company == False and type == address_type_decl):
+            partner_vals = {}
+            if 'street' in vals:
+                partner_vals.update({'street': vals['street']})
+            if 'street2' in vals:
+                partner_vals.update({'street2': vals['street2']})
+            if 'city' in vals:
+                partner_vals.update({'city': vals['city']})
+            if 'zip' in vals:
+                partner_vals.update({'zip': vals['zip']})
+            if 'state_id' in vals:
+                partner_vals.update({'state_id': vals['state_id']})
+            if 'country_id' in vals:
+                partner_vals.update({'country_id': vals['country_id']})
+            if partner_vals:
+                ctx = context.copy()
+                ctx.update({'no_update_partner': True})
+                partner_obj.write(cr, uid, [record.partner_id.id], partner_vals, context=ctx)
+        return True
 
-    def onchange_city(self, cr, uid, ids, city, partner_id, context=None):
+    def create(self, cr, uid, vals, context=None):
         if context is None:
             context = {}
-        if partner_id:
-            return {'value': {'partner_city': city}}
-        return {}
+        res = super(res_partner_address, self).create(cr, uid, vals, context=context)
+        if not context.get('no_update_address',False):
+            record = self.browse(cr, uid, res, context=context)
+            if record.partner_id:
+                self._update_partner(cr, uid, record, vals, context=context)
+        return res
 
-    def onchange_zip(self, cr, uid, ids, zip, partner_id, context=None):
+    def write(self, cr, uid, ids, vals, context=None):
         if context is None:
             context = {}
-        if partner_id:
-            return {'value': {'partner_zip': zip}}
-        return {}
-
-    def onchange_state_id(self, cr, uid, ids, state_id, partner_id, context=None):
-        if context is None:
-            context = {}
-        if partner_id:
-            return {'value': {'partner_state': state_id}}
-        return {}
-
-    def onchange_country_id(self, cr, uid, ids, country_id, partner_id, context=None):
-        if context is None:
-            context = {}
-        domain = {}
-        if country_id:
-            domain = {'state_id': [('country_id', '=', country_id)]}
-        if partner_id:
-            return {'value': {'partner_country': country_id}, 'domain': domain}
-        return {'domain': domain}
+        res = super(res_partner_address, self).write(cr, uid, ids, vals, context=context)
+        if not context.get('no_update_address',False):
+            for record in self.browse(cr, uid, ids, context=context):
+                if record.partner_id:
+                    self._update_partner(cr, uid, record, vals, context=context)
+        return res
 
 res_partner_address()
 
 class res_partner(osv.osv):
     _inherit = "res.partner"
-
-    def _address_type(self, cr, uid, ids, field_name, arg, context=None):
-        if context is None:
-            context = {}
-        res = {}
-        for part in self.browse(cr, uid, ids, context=context):
-            office_address = self.pool.get('ir.model.data').get_object(cr, uid, 'l10n_lv_partner_address', 'res_partner_address_type_office').id
-            delivery_address = self.pool.get('ir.model.data').get_object(cr, uid, 'l10n_lv_partner_address', 'res_partner_address_type_delivery').id
-            res.update({part.id: {'office_address_type': office_address, 'delivery_address_type': delivery_address}})
-        return res
 
     _columns = {
         'name': fields.char('Name', size=148, required=True, select=True),
@@ -157,112 +160,70 @@ class res_partner(osv.osv):
         'address_id': fields.one2many('res.partner.address', 'partner_id', 'Address'),
         'office_address': fields.many2one('res.partner.address', 'Office Address', help='Enter this address, if it differs from Legal Address.'),
         'delivery_address': fields.many2one('res.partner.address', 'Delivery Address', help='Enter this address, if it differs from Legal Address.'),
-        'allow_creation': fields.boolean('Allow similar Partner creation'),
-        'office_address_type': fields.function(_address_type, type='many2one', relation='res.partner.address.type', string='Office Address Type', multi='address_type'),
-        'delivery_address_type': fields.function(_address_type, type='many2one', relation='res.partner.address.type', string='Delivery Address Type', multi='address_type')
+        'allow_creation': fields.boolean('Allow similar Partner creation')
     }
 
-    def _create_address(self, cr, uid, record, vals, method, context=None):
+    def fields_view_get(self, cr, uid, view_id=None, view_type='tree', context=None, toolbar=False, submenu=False):
+        if context is None:
+            context = {}
+        res = super(res_partner,self).fields_view_get(cr, uid, view_id=view_id, view_type=view_type, context=context, toolbar=toolbar, submenu=submenu)
+        if view_type == 'form':
+            doc = ET.XML(res['arch'])
+            office_type = self.pool.get('ir.model.data').get_object(cr, uid, 'l10n_lv_partner_address', 'res_partner_address_type_office').id
+            node_office = doc.find(".//field[@name='office_address']")
+            node_office.set('domain', "[('partner_id','=',id), ('type','=',%s)]" %(office_type))
+            node_office.set('context', "{'default_partner_id': id, 'default_type': %s}" %(office_type))
+            delivery_type = self.pool.get('ir.model.data').get_object(cr, uid, 'l10n_lv_partner_address', 'res_partner_address_type_delivery').id
+            node_delivery = doc.find(".//field[@name='delivery_address']")
+            node_delivery.set('domain', "[('partner_id','=',id), ('type','=',%s)]" %(delivery_type))
+            node_delivery.set('context', "{'default_partner_id': id, 'default_type': %s}" %(delivery_type))
+            res['arch'] = ET.tostring(doc, encoding='utf8', method='xml')
+        return res
+
+    def _create_address(self, cr, uid, record, vals, context=None):
         if context is None:
             context = {}
         address_obj = self.pool.get('res.partner.address')
         address_type_obj = self.pool.get('res.partner.address.type')
-        address_type_physical = address_type_obj.search(cr, uid, [('for','=','physical')], context=context)[0]
-        address_type_juridical = address_type_obj.search(cr, uid, [('for','=','juridical')], context=context)[0]
-        street = vals.get('street',[])
-        street2 = vals.get('street2',[])
-        if (street != []) or (street2 != []):
-            if (street != []) and (street2 != []):
-                if (street != False) and (street2 != False):
-                    street = street + ' ' + street2
-                if (street != False) and (street2 == False):
-                    street = street
-                if (street2 != False) and (street == False):
-                    street = street2
-            if (street != []) and (street2 == []):
-                if record.street2:
-                    if street:
-                        street = street + ' ' + record.street2
-                    else:
-                        street = record.street2
-                else:
-                    street = street
-            if (street2 != []) and (street == []):
-                if record.street:
-                    if street2:
-                        street = record.street + ' ' + street2
-                    else:
-                        street = record.street
-                else:
-                    street = street2
-        city = vals.get('city',[])
-        zip = vals.get('zip',[])
-        state = vals.get('state_id',[])
-        country = vals.get('country_id',[])
-        is_company = vals.get('is_company',[])
-        address_id = []
+        address_type_decl = self.pool.get('ir.model.data').get_object(cr, uid, 'l10n_lv_partner_address', 'res_partner_address_type_declared').id
+        address_type_legal = self.pool.get('ir.model.data').get_object(cr, uid, 'l10n_lv_partner_address', 'res_partner_address_type_legal').id
+
         address_vals = {}
-        for addr in record.address_id:
-            address_id.append((addr.id))
-        if address_id:
-            if street != []:
-                address_obj.write(cr, uid, address_id, {'street': street}, context=context)
-            if city != []:
-                address_obj.write(cr, uid, address_id, {'city': city}, context=context)
-            if zip != []:
-                address_obj.write(cr, uid, address_id, {'zip': zip}, context=context)
-            if state != []:
-                address_obj.write(cr, uid, address_id, {'state_id': state}, context=context)
-            if country != []:
-                address_obj.write(cr, uid, address_id, {'country_id': country}, context=context)
-            if is_company != []:
-                if is_company == True:
-                    address_obj.write(cr, uid, address_id, {'type': address_type_juridical, 'for_domain1': 'juridical', 'for_domain2': 'juridical'}, context=context)
-                if is_company == False:
-                    address_obj.write(cr, uid, address_id, {'type': address_type_physical, 'for_domain1': 'physical', 'for_domain2': 'physical'}, context=context)
-        test_val = []
-        if method == 'create':
-            test_val = False
-        if method == 'write':
-            test_val = []
-        if (not address_id) and ((street != test_val) or (city != test_val) or (zip != test_val) or (state != test_val) or (country != test_val)):
-            if is_company != []:
-                if is_company == True:
-                    addr_type = address_type_juridical
-                    for_domain1 = 'juridical'
-                    for_domain2 = 'juridical'
-                if is_company == False:
-                    addr_type = address_type_physical
-                    for_domain1 = 'physical'
-                    for_domain2 = 'physical'
-            if is_company == []:
-                if record.is_company == True:
-                    addr_type = address_type_juridical
-                    for_domain1 = 'juridical'
-                    for_domain2 = 'juridical'
-                if record.is_company == False:
-                    addr_type = address_type_physical
-                    for_domain1 = 'physical'
-                    for_domain2 = 'physical'
-            address_vals.update({
-                'partner_id': record.id,
-                'type': addr_type,
-                'for_domain1': for_domain1,
-                'for_domain2': for_domain2
-            })
-            if street != test_val:
-                address_vals.update({'street': street})
-            if city != test_val:
-                address_vals.update({'city': city})
-            if zip != test_val:
-                address_vals.update({'zip': zip})
-            if state != test_val:
-                address_vals.update({'state_id': state})
-            if country != test_val:
-                address_vals.update({'country_id': country})
-            if (country == []) or (country == False):
-                context.update({'default_country_id': False})
-            address_obj.create(cr, uid, address_vals, context=context)
+        if 'street' in vals:
+            address_vals.update({'street': vals['street']})
+        if 'street2' in vals:
+            address_vals.update({'street2': vals['street2']})
+        if 'city' in vals:
+            address_vals.update({'city': vals['city']})
+        if 'zip' in vals:
+            address_vals.update({'zip': vals['zip']})
+        if 'state_id' in vals:
+            address_vals.update({'state_id': vals['state_id']})
+        if 'country_id' in vals:
+            address_vals.update({'country_id': vals['country_id']})
+
+        is_company = record.is_company
+        if 'is_company' in vals:
+            is_company = vals['is_company']
+        addr_domain = [('partner_id','=',record.id)]
+        if is_company == True:
+            address_vals.update({'type': address_type_legal})
+            addr_domain += [('type','=',address_type_legal)]
+        if is_company == False:
+            address_vals.update({'type': address_type_decl})
+            addr_domain += [('type','=',address_type_decl)]
+        address_id = address_obj.search(cr, uid, addr_domain, context=context)
+
+        if address_vals:
+            ctx = context.copy()
+            ctx.update({'no_update_address': True})
+            if address_id:
+                address_obj.write(cr, uid, address_id, address_vals, context=ctx)
+            if not address_id:
+                address_vals.update({
+                    'partner_id': record.id
+                })
+                address_obj.create(cr, uid, address_vals, context=ctx)
         return True
 
     def _add_partner_name(self, cr, uid, partner, partner_count, context=None):
@@ -322,13 +283,14 @@ class res_partner(osv.osv):
     def create(self, cr, uid, vals, context=None):
         if context is None:
             context = {}
-        if (vals.get('allow_creation',[]) == False):
+        if 'allow_creation' not in vals or vals['allow_creation'] == False:
             name = vals.get('name',False)
             company_registry = vals.get('company_registry',False)
             self.test_partners(cr, uid, name, company_registry, context=context)
         res = super(res_partner, self).create(cr, uid, vals, context=context)
-        record = self.browse(cr, uid, res, context=context)
-        self._create_address(cr, uid, record, vals, 'create', context=context)
+        if not context.get('no_update_partner',False):
+            record = self.browse(cr, uid, res, context=context)
+            self._create_address(cr, uid, record, vals, context=context)
         return res
 
     def write(self, cr, uid, ids, vals, context=None):
@@ -344,15 +306,16 @@ class res_partner(osv.osv):
             ids = [int(ids)]
         partner_ids = self.search(cr, uid, [('id','in',ids)], context=context)
         for record in self.browse(cr, uid, partner_ids, context=context):
-            if (vals.get('allow_creation',[]) == []) and (record.allow_creation == False):
+            if (('allow_creation' not in vals) and (record.allow_creation == False)) or vals['allow_creation'] == False:
                 self.test_partners(cr, uid, name, company_registry, context=context)
-            self._create_address(cr, uid, record, vals, 'write', context=context)
+            if not context.get('no_update_partner',False):
+                self._create_address(cr, uid, record, vals, context=context)
         return super(res_partner, self).write(cr, uid, ids, vals, context=context)
 
     def copy(self, cr, uid, id, default=None, context=None):
         if default is None:
             default = {}
-        default.update({'allow_creation': True})
+        default.update({'allow_creation': True, 'office_address': False, 'delivery_address': False})
         return super(res_partner, self).copy(cr, uid, id, default, context)
 
 res_partner()
