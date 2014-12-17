@@ -307,7 +307,7 @@ class res_partner(osv.osv):
             ids = [int(ids)]
         partner_ids = self.search(cr, uid, [('id','in',ids)], context=context)
         for record in self.browse(cr, uid, partner_ids, context=context):
-            if (('allow_creation' not in vals) and (record.allow_creation == False)) or (('allow_creation' in vals) and (vals['allow_creation'] == False)):
+            if (('allow_creation' not in vals) and (record.allow_creation == False)) or (('allow_creation' not in vals) and (vals['allow_creation'] == False)):
                 self.test_partners(cr, uid, name, company_registry, context=context)
             if not context.get('no_update_partner',False):
                 self._create_address(cr, uid, record, vals, context=context)
