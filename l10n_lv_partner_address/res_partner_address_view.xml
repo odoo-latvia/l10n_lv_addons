@@ -15,8 +15,9 @@
                         <filter string="Supplier" name="supplier" domain="[('is_supplier_add','=','1')]" />
                         <separator orientation="vertical"/>
                         <field name="partner_id" string="Partner"/>
-                        <field name="street"/>
-                        <field name="country_id" />
+                        <field name="street" filter_domain="['|', ('street','ilike',self), ('street2','ilike',self)]"/>
+                        <field name="state_id"/>
+                        <field name="country_id"/>
                     </group>
                     <newline/>
                     <group expand="0" string="Group By...">
@@ -36,8 +37,10 @@
                 <tree string="Partner Addresses">
                     <field name="partner_id"/>
 		            <field name="street"/>
+                    <field name="street2"/>
                     <field name="city"/>
                     <field name="zip"/>
+                    <field name="state_id"/>
                     <field name="country_id"/>
                     <field name="type"/>
                 </tree>
@@ -66,22 +69,22 @@
                             <field name="partner_id" colspan="2" invisible="1"/>
                     	</group>
                         <group colspan="2" col="2">
-                            <separator string="Postal Address" colspan="4" col="4"/>
-                            <field name="street" on_change="onchange_street(street, partner_id)"/>
-                            <field name="city" on_change="onchange_city(city, partner_id)"/>
-                            <field name="zip" on_change="onchange_zip(zip, partner_id)"/>
-                            <field name="state_id" on_change="onchange_state_id(state_id, partner_id)"/>
-                            <field name="country_id" on_change="onchange_country_id(country_id, partner_id)"/>
-                            <field name="for_domain1" invisible="1"/>
-                            <field name="for_domain2" invisible="1"/>
-                            <field name="type" domain="['|',('for','=',for_domain1),('for','=',for_domain2)]"/>
-                            <field name="partner_street" invisible="1"/>
-                            <field name="partner_street2" invisible="1"/>
-                            <field name="partner_city" invisible="1"/>
-                            <field name="partner_zip" invisible="1"/>
-                            <field name="partner_state" invisible="1"/>
-                            <field name="partner_country" invisible="1"/>
+                            <separator string="Postal Address" colspan="2"/>
+                            <label for="street" string="Address"/>
+                            <div>
+                                <field name="street" placeholder="Street..."/>
+                                <field name="street2"/>
+                                <div class="address_format">
+                                    <field name="city" placeholder="City" style="width: 40%%"/>
+                                    <field name="state_id" class="oe_no_button" placeholder="State" style="width: 37%%" options='{"no_open": True}'/>
+                                    <field name="zip" placeholder="ZIP" style="width: 20%%"/>
+                                </div>
+                                <field name="country_id" placeholder="Country" class="oe_no_button" options='{"no_open": True}'/>
+                            </div>
+                            <field name="type" class="oe_inline" attrs="{'readonly': [('partner_id','!=',False)]}"/>
                         </group>
+                        <label for="notes"/>
+                        <field name="notes"/>
 		            </sheet>
                 </form>
             </field>
@@ -157,40 +160,23 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <xpath expr="/form/sheet/group/group/label[@for='street']" position="attributes">
+                <label for="street" position="attributes">
                     <attribute name="string">Legal Address</attribute>
-                </xpath>
-                <xpath expr="/form/sheet/group/group/div[2]/field[@name='street']" position="attributes">
+                </label>
+                <field name="street" position="attributes">
                     <attribute name="help">Legal Address for a Company and Declared address for a Person.</attribute>
-                </xpath>
+                </field>
                 <xpath expr="/form/sheet/group/group/div[2]" position="after">
-                    <field name="office_address_type" invisible="1"/>
-	                <field name="office_address" domain="[('type.id','=',office_address_type)]" context="{'default_type': office_address_type, 'default_partner_id': id}" attrs="{'invisible':[('is_company','=',False)]}"/>
-                    <field name="delivery_address_type" invisible="1"/>
-	                <field name="delivery_address" domain="[('type.id','=',delivery_address_type)]" context="{'default_type': delivery_address_type, 'default_partner_id': id}" attrs="{'invisible':[('is_company','=',False)]}"/>
+	                <field name="office_address" attrs="{'invisible':[('is_company','=',False)]}"/>
+	                <field name="delivery_address" attrs="{'invisible':[('is_company','=',False)]}"/>
                 </xpath>
-                <xpath expr="/form/sheet/group/group[2]/field[@name='email']" position="after">
+                <field name="email" position="after">
 	                <field name="company_registry" attrs="{'invisible': [('is_company','=',False)]}"/>
-	            </xpath>
-                <xpath expr="/form/sheet/group/group/div[2]/div[@class='address_format']/field[@name='state_id']" position="attributes">
-	                <attribute name="invisible">1</attribute>
-	            </xpath>
+	            </field>
                 <xpath expr="/form/sheet/div[@class='oe_title oe_left']/h1" position="after">
                     <field name="allow_creation" class="oe_edit_only"/>
                     <label for="allow_creation" class="oe_inline oe_edit_only"/>
                 </xpath>
-            </field>
-        </record>
-
-	<!-- Company form to hide 'state_id' -->
-        <record id="view_company_form_inherit_partner_address" model="ir.ui.view">
-            <field name="name">res.company.form.inherit.partner.address</field>
-            <field name="model">res.company</field>
-            <field name="inherit_id" ref="base.view_company_form"/>
-            <field name="arch" type="xml">
-	            <xpath expr="/form/sheet/notebook/page[@string='General Information']/group/group/div/div/field[@name='state_id']" position="attributes">
-	                <attribute name="invisible">1</attribute>
-	            </xpath>
             </field>
         </record>
 
