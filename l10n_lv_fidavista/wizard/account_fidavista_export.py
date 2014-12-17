@@ -153,7 +153,7 @@ class account_fidavista_export(osv.osv_memory):
                 flg = "Y"
             data_of_file += ("\n            <BenAccIbanFlg>" + flg + "</BenAccIbanFlg>")
             data_of_file += ("\n            <BenName>" + payment.partner_id.name + "</BenName>")
-            vat = payment.partner_id.company_registry
+            vat = hasattr(payment.partner_id,'company_registry') and payment.partner_id.company_registry or False
             if (not vat) and (payment.partner_id.vat):
                 vat = ((payment.partner_id.vat).replace(" ","").upper())[2:]
             if vat:
