@@ -78,6 +78,8 @@
                             <field name="country_id"/>
                             <field name="type" attrs="{'readonly': [('partner_id','!=',False)]}"/>
                         </group>
+                        <label for="notes"/>
+                        <field name="notes"/>
 		            </sheet>
                 </form>
             </field>

@@ -59,6 +59,7 @@ class res_partner_address(osv.osv):
         'active': fields.boolean('Active', help="Uncheck the active field to hide the contact."),
         'company_id': fields.many2one('res.company', 'Company', select=1),
         'color': fields.integer('Color Index'),
+        'notes': fields.text('Notes')
     }
 
     def _get_default_country(self, cr, uid, ids, context=None):
