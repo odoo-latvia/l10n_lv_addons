@@ -170,13 +170,13 @@
 	                <field name="office_address" attrs="{'invisible':[('is_company','=',False)]}"/>
 	                <field name="delivery_address" attrs="{'invisible':[('is_company','=',False)]}"/>
                 </xpath>
-                <field name="email" position="after">
+<!--                <field name="email" position="after">
 	                <field name="company_registry" attrs="{'invisible': [('is_company','=',False)]}"/>
-	            </field>
-                <xpath expr="/form/sheet/div[@class='oe_title oe_left']/h1" position="after">
+	            </field> -->
+<!--                <xpath expr="/form/sheet/div[@class='oe_title oe_left']/h1" position="after">
                     <field name="allow_creation" class="oe_edit_only"/>
                     <label for="allow_creation" class="oe_inline oe_edit_only"/>
-                </xpath>
+                </xpath> -->
             </field>
         </record>
 

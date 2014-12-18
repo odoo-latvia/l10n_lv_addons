@@ -156,8 +156,7 @@ class res_partner(osv.osv):
     _inherit = "res.partner"
 
     _columns = {
-        'name': fields.char('Name', size=148, required=True, select=True),
-        'company_registry': fields.char('Company Registry', size=64),
+        'company_registry': fields.char('Company Registry'),
         'address_id': fields.one2many('res.partner.address', 'partner_id', 'Address'),
         'office_address': fields.many2one('res.partner.address', 'Office Address', help='Enter this address, if it differs from Legal Address.'),
         'delivery_address': fields.many2one('res.partner.address', 'Delivery Address', help='Enter this address, if it differs from Legal Address.'),
@@ -227,67 +226,9 @@ class res_partner(osv.osv):
                 address_obj.create(cr, uid, address_vals, context=ctx)
         return True
 
-    def _add_partner_name(self, cr, uid, partner, partner_count, context=None):
-        if context is None:
-            context = {}
-        next_partner_name = ""
-        if partner_count == 1:
-            next_partner_name = (": " + partner.name)
-        if (partner_count != 1) and (partner_count <= 5):
-            next_partner_name += (", " + partner.name)
-        if partner_count == 6:
-            next_partner_name += "..."
-        return next_partner_name
-
-    def _form_name(self, cr, uid, name, context=None):
-        if context is None:
-            context = {}
-        new_name = name.upper()
-        replace_list = ['SIA', 'IU', 'I/U', 'AS', 'A/S', u'SABIEDRĪBA', 'LTD', 'CORP', 'INC']
-        for value in replace_list:
-            new_name_l = new_name.split(" ")
-            for v in new_name_l:
-                v1 = v.replace(",","").replace(" ","").replace('"',"").replace("'","")
-                if value == v1:
-                    new_name_l.remove(v)
-            new_name = " ".join(new_name_l)
-            new_name = new_name.strip().strip(",").replace('"',"").replace("'","")
-        return new_name
-
-    def test_partners(self, cr, uid, name, company_registry, context=None):
-        if context is None:
-            context = {}
-
-        test_name = False
-        if name:
-            test_name = self._form_name(cr, uid, name, context=context)
-        partner_ids = self.search(cr, uid, [], context=context)
-        partner_count = 0
-        partner_names = ""
-        partner_count_reg = 0
-        partner_names_reg = ""
-        for partner in self.browse(cr, uid, partner_ids, context=context):
-            if (test_name) and len(partner.name) > 1:
-                p_name = self._form_name(cr, uid, partner.name, context=context)
-                if (test_name in p_name) or (p_name in test_name):
-                    partner_count += 1
-                    if partner_count <= 6:
-                        partner_names += self._add_partner_name(cr, uid, partner, partner_count, context=context)
-            if (company_registry) and (partner.company_registry == company_registry):
-                partner_count_reg += 1
-                if partner_count_reg <= 6:
-                    partner_names_reg += self._add_partner_name(cr, uid, partner, partner_count_reg, context=context)
-        if (partner_count > 0) or (partner_count_reg > 0):
-            raise osv.except_osv(_("%s partners found with similar name%s. %s partners found with the same company registry%s.") % (str(partner_count), partner_names, str(partner_count_reg), partner_names_reg), _("Check the 'Allow similar Partner creation' box and try again if you want to save the Partner anyway."))
-        return False
-
     def create(self, cr, uid, vals, context=None):
         if context is None:
             context = {}
-        if 'allow_creation' not in vals or vals['allow_creation'] == False:
-            name = vals.get('name',False)
-            company_registry = vals.get('company_registry',False)
-            self.test_partners(cr, uid, name, company_registry, context=context)
         res = super(res_partner, self).create(cr, uid, vals, context=context)
         if not context.get('no_update_partner',False):
             record = self.browse(cr, uid, res, context=context)
@@ -297,18 +238,12 @@ class res_partner(osv.osv):
     def write(self, cr, uid, ids, vals, context=None):
         if context is None:
             context = {}
-        name = vals.get('name',False)
-        company_registry = vals.get('company_registry',False)
-        if not vals.get('allow_creation',False):
-            self.test_partners(cr, uid, name, company_registry, context=context)
         if isinstance(ids, list):
             ids = ids
         else:
             ids = [int(ids)]
         partner_ids = self.search(cr, uid, [('id','in',ids)], context=context)
         for record in self.browse(cr, uid, partner_ids, context=context):
-            if (('allow_creation' not in vals) and (record.allow_creation == False)) or (('allow_creation' in vals) and (vals['allow_creation'] == False)):
-                self.test_partners(cr, uid, name, company_registry, context=context)
             if not context.get('no_update_partner',False):
                 self._create_address(cr, uid, record, vals, context=context)
         return super(res_partner, self).write(cr, uid, ids, vals, context=context)
@@ -316,43 +251,9 @@ class res_partner(osv.osv):
     def copy(self, cr, uid, id, default=None, context=None):
         if default is None:
             default = {}
-        default.update({'allow_creation': True, 'office_address': False, 'delivery_address': False})
+        default.update({'office_address': False, 'delivery_address': False})
         return super(res_partner, self).copy(cr, uid, id, default, context)
 
 res_partner()
-
-class res_users(osv.osv):
-    _inherit = "res.users"
-
-    def copy(self, cr, uid, id, default=None, context=None):
-        if default is None:
-            default = {}
-        default.update({'allow_creation': True})
-        return super(res_users, self).copy(cr, uid, id, default, context)
-
-    def create(self, cr, uid, vals, context=None):
-        if context is None:
-            context = {}
-        context.update({'default_allow_creation': True})
-        return super(res_users, self).create(cr, uid, vals, context=context)
-
-res_users()
-
-class res_company(osv.osv):
-    _inherit = "res.company"
-
-    def copy(self, cr, uid, id, default=None, context=None):
-        if default is None:
-            default = {}
-        default.update({'allow_creation': True})
-        return super(res_company, self).copy(cr, uid, id, default, context)
-
-    def create(self, cr, uid, vals, context=None):
-        if context is None:
-            context = {}
-        context.update({'default_allow_creation': True})
-        return super(res_company, self).create(cr, uid, vals, context=context)
-
-res_company()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
