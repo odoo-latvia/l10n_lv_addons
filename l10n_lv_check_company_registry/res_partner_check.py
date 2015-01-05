@@ -183,9 +183,15 @@ class res_partner(osv.osv):
     def write(self, cr, uid, ids, vals, context=None):
         if context is None:
             context = {}
+        allow = True
+        partner_obj = self.pool.get('res.partner')
+        for rec in ids:            
+            if partner_obj.browse(cr, uid, rec, context).allow_creation == False:
+                allow = False
+                break
         name = vals.get('name',False)
         company_registry = vals.get('company_registry',False)
-        if 'allow_creation' not in vals or vals['allow_creation'] == False:
+        if ('allow_creation' in vals and vals['allow_creation'] == False) or ('allow_creation' not in vals and allow == False):
             self.test_partners(cr, uid, name, company_registry, context=context)
         return super(res_partner, self).write(cr, uid, ids, vals, context=context)
 
