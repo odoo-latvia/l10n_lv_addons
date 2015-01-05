@@ -46,7 +46,6 @@ class res_partner(osv.osv):
 
     _columns = {
         'company_registry': fields.char('Company Registry'),
-        'identification_id': fields.char('Identification ID'),
         'load_from_registry': fields.boolean('Load data from LV company registry'),
         'allow_creation': fields.boolean('Allow similar Partner creation')
     }
