@@ -171,12 +171,14 @@ class res_partner(osv.osv):
             doc = ET.XML(res['arch'])
             office_type = self.pool.get('ir.model.data').get_object(cr, uid, 'l10n_lv_partner_address', 'res_partner_address_type_office').id
             node_office = doc.find(".//field[@name='office_address']")
-            node_office.set('domain', "[('partner_id','=',id), ('type','=',%s)]" %(office_type))
-            node_office.set('context', "{'default_partner_id': id, 'default_type': %s}" %(office_type))
+            if node_office:
+                node_office.set('domain', "[('partner_id','=',id), ('type','=',%s)]" %(office_type))
+                node_office.set('context', "{'default_partner_id': id, 'default_type': %s}" %(office_type))
             delivery_type = self.pool.get('ir.model.data').get_object(cr, uid, 'l10n_lv_partner_address', 'res_partner_address_type_delivery').id
             node_delivery = doc.find(".//field[@name='delivery_address']")
-            node_delivery.set('domain', "[('partner_id','=',id), ('type','=',%s)]" %(delivery_type))
-            node_delivery.set('context', "{'default_partner_id': id, 'default_type': %s}" %(delivery_type))
+            if node_delivery:
+                node_delivery.set('domain', "[('partner_id','=',id), ('type','=',%s)]" %(delivery_type))
+                node_delivery.set('context', "{'default_partner_id': id, 'default_type': %s}" %(delivery_type))
             res['arch'] = ET.tostring(doc, encoding='utf8', method='xml')
         return res
 
