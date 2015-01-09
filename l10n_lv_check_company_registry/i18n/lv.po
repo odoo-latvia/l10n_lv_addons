@@ -25,3 +25,17 @@ msgstr "Partneris"
 msgid "Load data from LV company registry"
 msgstr "Ielādēt datus no LV uzņēmumu reģistra"
 
+#. module: l10n_lv_check_company_registry
+#: field:res.partner,allow_creation:0
+msgid "Allow similar Partner creation"
+msgstr "Atļaut līdzīgu partneru izveidi"
+
+#. module: l10n_lv_check_company_registry
+#: field:res.partner,company_registry:0
+msgid "Company Registry"
+msgstr "Reģistrācijas Nr."
+
+#. module: l10n_lv_check_company_registry
+#: field:res.partner,identification_id:0
+msgid "Identification ID"
+msgstr "Personas Kods"
