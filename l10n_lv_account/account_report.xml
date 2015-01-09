@@ -65,7 +65,7 @@
                 webkit_header="l10n_lv_report_webkit.ir_header_webkit_pi"/> -->
 
         <!-- Replacer -->
-        <report 
+<!--        <report 
             auto="False"
             id="account.account_invoices"
             model="account.invoice"
@@ -76,7 +76,7 @@
             attachment_use="True"
             usage="default"
             report_type="webkit" 
-            />
+            /> -->
 
         <!-- New Reports -->
 
