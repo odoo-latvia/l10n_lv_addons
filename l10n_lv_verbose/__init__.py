@@ -25,6 +25,10 @@
 #Functions used to express money amounts in words
 #Use functions convert(amount) or convert_currency(amount, currency)
 
+from openerp.osv import osv, orm, fields
+from openerp.tools.amount_to_text_en import amount_to_text as amount_to_text_en
+from openerp.tools.amount_to_text import amount_to_text
+
 class verbose_converter(object):
 
     currencies = {
@@ -172,7 +176,9 @@ class verbose_converter(object):
         oneRest = str(rest).endswith('1') and not str(rest).endswith('11')        
         numStr = self.verbose_num(intNum)
 
-        res = numStr + ' ' + unicode(oneIntNum and curr[0] or curr[1], 'utf-8') + ' un %0*d ' % (2, rest) + \
+        rest = self.verbose_num(rest).lower()
+
+        res = numStr + ' ' + unicode(oneIntNum and curr[0] or curr[1], 'utf-8') + ' un ' + rest + ' ' + \
             unicode(oneRest and curr[2] or curr[3], 'utf-8')
         return res
                 
@@ -186,3 +192,22 @@ def convert(num):
 def convert_currency(num, currency):
     global vc
     return vc.verbose_currency(num, currency)
+
+class QwebWidgetVerbose(osv.AbstractModel):
+    _name = 'ir.qweb.widget.verbose'
+    _inherit = 'ir.qweb.widget'
+
+    def _format(self, inner, options, qwebcontext):
+        inner = self.pool['ir.qweb'].eval(inner, qwebcontext)
+        display = self.pool['ir.qweb'].eval_object(options['display_currency'], qwebcontext)
+        lang_code = qwebcontext.context.get('lang') or 'en_US'
+        currency = display.name
+        if display.name == 'EUR':
+            currency = 'euro'
+        if lang_code == 'lv_LV':
+            verb = convert_currency(inner, display.name)
+        elif lang_code.split('_')[0] == 'en':
+            verb = amount_to_text_en(inner, currency=currency)
+        else:
+            verb = amount_to_text(inner, lang=lang_code.split('_')[0], currency=currency)
+        return verb

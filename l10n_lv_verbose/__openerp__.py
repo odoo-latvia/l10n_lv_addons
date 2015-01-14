@@ -39,5 +39,5 @@ Atsakišu palīgfunkcijas Latvijas lokalizācijai
 	
     ],
     'auto_install': False,
-    'installable': False,
+    'installable': True,
 } 
