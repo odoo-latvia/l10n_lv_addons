@@ -102,6 +102,20 @@ class res_partner_address(osv.osv):
             res.append((r.id, addr or '/'))
         return res
 
+    def name_search(self, cr, user, name='', args=None, operator='ilike', context=None, limit=100):
+        if not args:
+            args = []
+        if context is None:
+            context = {}
+        if name:
+            country_ids = self.pool.get('res.country').search(cr, user, [('name',operator,name)])
+            state_ids = self.pool.get('res.country.state').search(cr, user, [('name',operator,name)])
+            search_args = ['|', ('street',operator,name), '|', ('street2',operator,name), '|', ('city',operator,name), '|', ('zip',operator,name), '|', ('country_id','in',country_ids), ('state_id','in',state_ids)]
+            ids = self.search(cr, user, args + search_args)
+        else:
+            ids = self.search(cr, user, args, limit=limit, context=context)
+        return self.name_get(cr, user, ids, context=context)
+
     def _update_partner(self, cr, uid, record, vals, context=None):
         if context is None:
             context = {}
