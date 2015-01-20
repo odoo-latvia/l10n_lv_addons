@@ -144,14 +144,17 @@ class res_partner(osv.osv):
             new_name = new_name.strip().strip(",").replace('"',"").replace("'","")
         return new_name
 
-    def test_partners(self, cr, uid, name, company_registry, context=None):
+    def test_partners(self, cr, uid, name, company_registry, parent_id, context=None):
         if context is None:
             context = {}
 
         test_name = False
         if name:
             test_name = self._form_name(cr, uid, name, context=context)
-        partner_ids = self.search(cr, uid, [], context=context)
+        partner_domain = []
+        if parent_id:
+            partner_domain.append(('parent_id','=',parent_id))
+        partner_ids = self.search(cr, uid, partner_domain, context=context)
         partner_count = 0
         partner_names = ""
         partner_count_reg = 0
@@ -168,7 +171,17 @@ class res_partner(osv.osv):
                 if partner_count_reg <= 6:
                     partner_names_reg += self._add_partner_name(cr, uid, partner, partner_count_reg, context=context)
         if (partner_count > 0) or (partner_count_reg > 0):
-            raise osv.except_osv(_("%s partners found with similar name%s. %s partners found with the same company registry%s.") % (str(partner_count), partner_names, str(partner_count_reg), partner_names_reg), _("Check the 'Allow similar Partner creation' box and try again if you want to save the Partner anyway."))
+            if parent_id:
+                parent = self.browse(cr, uid, parent_id, context=context)
+                first_text = _("%s contacts found with similar name%s") % (str(partner_count), partner_names)
+                if partner_count > 0 and partner_count_reg > 0:
+                    first_text += ", "
+                if partner_count_reg > 0:
+                    first_text += _("%s contacts found with the same company registry%s") % (str(partner_count_reg), partner_names_reg)
+                first_text += _(" for partner %s.") % parent.name
+                raise osv.except_osv(first_text, _("Check the 'Allow similar Partner creation' box and try again if you want to save the contact anyway."))
+            else:
+                raise osv.except_osv(_("%s partners found with similar name%s. %s partners found with the same company registry%s.") % (str(partner_count), partner_names, str(partner_count_reg), partner_names_reg), _("Check the 'Allow similar Partner creation' box and try again if you want to save the Partner anyway."))
         return False
 
     def create(self, cr, uid, vals, context=None):
@@ -177,7 +190,8 @@ class res_partner(osv.osv):
         if 'allow_creation' not in vals or vals['allow_creation'] == False:
             name = vals.get('name',False)
             company_registry = vals.get('company_registry',False)
-            self.test_partners(cr, uid, name, company_registry, context=context)
+            parent_id = vals.get('parent_id',False)
+            self.test_partners(cr, uid, name, company_registry, parent_id, context=context)
         return super(res_partner, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
@@ -191,8 +205,10 @@ class res_partner(osv.osv):
                 break
         name = vals.get('name',False)
         company_registry = vals.get('company_registry',False)
+        parent_id = vals.get('parent_id',False)
         if ('allow_creation' in vals and vals['allow_creation'] == False) or ('allow_creation' not in vals and allow == False):
-            self.test_partners(cr, uid, name, company_registry, context=context)
+            if name or company_registry or parent_id:
+                self.test_partners(cr, uid, name, company_registry, parent_id, context=context)
         return super(res_partner, self).write(cr, uid, ids, vals, context=context)
 
     def copy(self, cr, uid, id, default=None, context=None):

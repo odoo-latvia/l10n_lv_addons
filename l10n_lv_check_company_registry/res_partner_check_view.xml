@@ -22,6 +22,22 @@
                     <field name="allow_creation" class="oe_edit_only"/>
                     <label for="allow_creation" class="oe_inline oe_edit_only"/>
                 </xpath>
+                <xpath expr="//notebook/page[@string='Contacts']/field[@name='child_ids']/form[@string='Contact']/sheet/div[@class='oe_title']/h1" position="after">
+                    <field name="allow_creation" class="oe_edit_only"/>
+                    <label for="allow_creation" class="oe_inline oe_edit_only"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_partner_simple_form_inherit_check" model="ir.ui.view">
+            <field name="name">res.partner.simplified.form.inherit.check</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_simple_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/div[@class='oe_title']/h1" position="after">
+                    <field name="allow_creation" class="oe_edit_only"/>
+                    <label for="allow_creation" class="oe_inline oe_edit_only"/>
+                </xpath>
             </field>
         </record>
 

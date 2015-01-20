@@ -39,3 +39,39 @@ msgstr "Reģistrācijas Nr."
 #: field:res.partner,identification_id:0
 msgid "Identification ID"
 msgstr "Personas Kods"
+
+#. module: l10n_lv_check_company_registry
+#: code:addons/l10n_lv_check_company_registry/res_partner_check.py:184
+#, python-format
+msgid "%s partners found with similar name%s. %s partners found with the same company registry%s."
+msgstr "Atrasti %s partneri ar līdzīgu nosaukumu:%s. Atrasti %s partneri ar tādu pašu reģistrācijas numuru%s."
+
+#. module: l10n_lv_check_company_registry
+#: code:addons/l10n_lv_check_company_registry/res_partner_check.py:184
+#, python-format
+msgid "Check the 'Allow similar Partner creation' box and try again if you want to save the Partner anyway."
+msgstr "Ja tik un tā vēlaties saglabāt partneri, atķeksējiet 'Atļaut līdzīga partnera ievadi' un mēģiniet vēlreiz."
+
+#. module: l10n_lv_check_company_registry
+#: code:addons/l10n_lv_check_company_registry/res_partner_check.py:184
+#, python-format
+msgid "%s contacts found with similar name%s"
+msgstr "Atrasti %s kontakti ar līdzīgu nosaukumu:%s"
+
+#. module: l10n_lv_check_company_registry
+#: code:addons/l10n_lv_check_company_registry/res_partner_check.py:184
+#, python-format
+msgid "%s contacts found with the same company registry%s"
+msgstr "atrasti %s kontakti ar tādu pašu reģistrācijas numuru:%s"
+
+#. module: l10n_lv_check_company_registry
+#: code:addons/l10n_lv_check_company_registry/res_partner_check.py:184
+#, python-format
+msgid " for partner %s."
+msgstr " partnerim %s."
+
+#. module: l10n_lv_check_company_registry
+#: code:addons/l10n_lv_check_company_registry/res_partner_check.py:184
+#, python-format
+msgid "Check the 'Allow similar Partner creation' box and try again if you want to save the contact anyway."
+msgstr "Ja tik un tā vēlaties saglabāt kontaktu, atķeksējiet 'Atļaut līdzīga partnera ievadi' un mēģiniet vēlreiz."
