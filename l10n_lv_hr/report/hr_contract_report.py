@@ -54,6 +54,10 @@ class hr_contract_report(report_sxw.rml_parse):
             return False
         return self.getLongDate(zz)        
 
-report_sxw.report_sxw('report.hr.employee.contract', 'hr.contract', 'addons/l10n_lv_hr/report/hr_contract_report.html', parser=hr_contract_report)
+class hc_report(osv.AbstractModel):
+    _name = 'report.l10n_lv_hr.employee_contract_report'
+    _inherit = 'report.abstract_report'
+    _template = 'l10n_lv_hr.employee_contract_report'
+    _wrapped_report_class = hr_contract_report
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

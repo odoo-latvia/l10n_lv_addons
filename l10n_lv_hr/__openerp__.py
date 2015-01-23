@@ -77,7 +77,8 @@ Company field visible in Job form view; Job menu in HR Configuration.
         'security/ir.model.access.csv',
         'res_company_view.xml',
         'hr_view.xml',
-#        'hr_report.xml',
+        'views/employee_contract_report.xml',
+        'hr_report.xml',
         'res_config_view.xml'
     ],
     'auto_install': False,
