@@ -796,7 +796,7 @@ msgid "Print a list of Assets"
 msgstr "Pamatlīdzekļu saraksta drukāšana"
 
 #. module: l10n_lv_account_asset
-#: model:ir.actions.report.xml,name:l10n_lv_account_asset.report_account_asset_card_l10n_lv_html
+#: model:ir.actions.report.xml,name:l10n_lv_account_asset.report_account_asset_card
 msgid "Asset Card"
 msgstr "Pamatlīdzekļa kartiņa"
 

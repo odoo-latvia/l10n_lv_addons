@@ -32,7 +32,7 @@ Latvian localization for hr_expense_account module.
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
-    'depends': ['hr_expense_account', 'l10n_lv_report_webkit', 'account_sequence'],
+    'depends': ['hr_expense_account', 'account_sequence'],
     'init_xml': [],
     'demo_xml': [],
     'update_xml': [

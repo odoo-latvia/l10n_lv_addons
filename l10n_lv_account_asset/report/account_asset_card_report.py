@@ -36,9 +36,10 @@ class account_asset_card_report(report_sxw.rml_parse):
             'uid': uid,
         })
         
-report_sxw.report_sxw('report.l10n_lv_account_asset.card',
-                       'account.asset.asset', 
-                       'addons/l10n_lv_account_asset/report/account_asset_card_report_html.mako',
-                       parser=account_asset_card_report)
+class ac_report(osv.AbstractModel):
+    _name = 'report.l10n_lv_account_asset.asset_card_report'
+    _inherit = 'report.abstract_report'
+    _template = 'l10n_lv_account_asset.asset_card_report'
+    _wrapped_report_class = account_asset_card_report
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
