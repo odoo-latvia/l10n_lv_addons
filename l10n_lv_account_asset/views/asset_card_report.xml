@@ -53,40 +53,45 @@
 				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;">1</td>
 				        <td colspan="2"></td>
 			        </tr>
+                    <t t-set="amort_percent" t-value="((o.purchase_value/((o.method_period*o.method_number)/12))*100)/o.purchase_value"></t>
 			        <tr>
 				        <td colspan="2" style="border:thin solid; background-color: #F2F2F2;"></td>
 				        <td style="border-right: 1px solid black;" colspan="2"></td>
 				        <td>Amortizācijas likme gadā, %</td>
-				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="'%0.2f' % (((o.purchase_value/((o.method_period*o.method_number)/12))*100)/o.purchase_value) or ''"/>
+				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="amort_percent and formatLang(amort_percent) or ''"/>
 			        </tr>
+                    <t t-set="amort_val" t-value="o.purchase_value/((o.method_period*o.method_number)/12)"></t>
 			        <tr>
 				        <td>Nodošanas ekspluatācijā datums</td>
-				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="o.purchase_date"/>
+				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="formatLang(o.purchase_date, date=True)"/>
 				        <td>
                             <span>Sākotnējā uzskaites vērtība</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol or ''"/>)
                         </td>
-				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="o.purchase_value"/>
+				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="formatLang(o.purchase_value)"/>
 				        <td style="text-align:right">
                             <span>summā</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol or ''"/>)
                         </td>
-				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="'%0.2f' % (o.purchase_value/((o.method_period*o.method_number)/12)) or ''"/>
+				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="amort_val and formatLang(amort_val) or ''"/>
 			        </tr>
+                    <t t-set="usage_years" t-value="(o.method_period*o.method_number)/12"></t>
+                    <t t-set="amort_month_perc" t-value="((o.purchase_value/(o.method_period*o.method_number))*100)/o.purchase_value"></t>
 			        <tr>
 				        <td>Derīgās lietošanas laiks (gados)</td>
-				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="'%0.2f' % ((o.method_period*o.method_number)/12) or ''"/>
+				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="usage_years and formatLang(usage_years) or ''"/>
 				        <td>
                             <span>Likvidācijas (lūžņu) vērtība</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol or ''"/>)
                         </td>
-				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="o.salvage_value"/>
+				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="formatLang(o.salvage_value)"/>
 				        <td>Tas pats mēnesī, %</td>
-				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="'%0.2f' % (((o.purchase_value/(o.method_period*o.method_number))*100)/o.purchase_value) or ''"/>
+				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="amort_month_perc and formatLang(amort_month_perc) or ''"/>
 			        </tr>
+                    <t t-set="amort_month_val" t-value="o.purchase_value/(o.method_period*o.method_number)"></t>
 			        <tr>
 				        <td>Tas pats mēnešos</td>
-				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="o.method_period*o.method_number or ''"/>
+				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="int(o.method_period*o.method_number) or ''"/>
 				        <td>
                             <span>Viena mēneša nolietojuma summa</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol"/>)
@@ -96,7 +101,7 @@
                             <span>summā</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol"/>)
                         </td>
-				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="'%0.2f' % (o.purchase_value/(o.method_period*o.method_number)) or ''"/>
+				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="amort_month_val and formatLang(amort_month_val) or ''"/>
 			        </tr>
 			        <tr>
 				        <td colspan="2"></td>
@@ -141,27 +146,27 @@
 		        </thead>
 		        <tbody>
 			        <tr style="background-color: #F2F2F2;">
-				        <td t-esc="o.purchase_date"/>
+				        <td t-esc="formatLang(o.purchase_date, date=True)"/>
 				        <td>Pamatlīdzekļa pieņemšana ekspluatācijā</td>
-				        <td style="text-align:right" t-esc="o.purchase_value"/>
+				        <td style="text-align:right" t-esc="formatLang(o.purchase_value)"/>
 				        <td style="color: #F2F2F2;">...</td>
 				        <td style="color: #F2F2F2;">...</td>
 				        <td style="color: #F2F2F2;">...</td>
-				        <td style="text-align:right" t-esc="o.purchase_value"/>
+				        <td style="text-align:right" t-esc="formatLang(o.purchase_value)"/>
 				        <td style="color: #F2F2F2;">...</td>
-				        <td style="text-align:right" t-esc="o.purchase_value"/>
+				        <td style="text-align:right" t-esc="formatLang(o.purchase_value)"/>
 			        </tr>
 			        <tr t-foreach="o.depreciation_line_ids" t-as="line" style="background-color: #F2F2F2;">
                         <t t-if="line.move_check">
-				            <td t-esc="line.depreciation_date"/>
+				            <td t-esc="formatLang(line.depreciation_date, date=True)"/>
 				            <td>Nolietojums</td>
-				            <td style="text-align:right" t-esc="line.asset_id.purchase_value"/>
+				            <td style="text-align:right" t-esc="formatLang(line.asset_id.purchase_value)"/>
 				            <td style="color: #F2F2F2;">...</td>
 				            <td style="color: #F2F2F2;">...</td>
 				            <td style="color: #F2F2F2;">...</td>
-				            <td style="text-align:right" t-esc="'%0.2f' % (line.remaining_value + line.amount)"/>
-				            <td style="text-align:right" t-esc="line.amount"/>
-				            <td style="text-align:right" t-esc="line.remaining_value"/>
+				            <td style="text-align:right" t-esc="formatLang(float('%0.2f' % (line.remaining_value + line.amount)))"/>
+				            <td style="text-align:right" t-esc="formatLang(line.amount)"/>
+				            <td style="text-align:right" t-esc="formatLang(line.remaining_value)"/>
                         </t>
 			        </tr>
 		        </tbody>
