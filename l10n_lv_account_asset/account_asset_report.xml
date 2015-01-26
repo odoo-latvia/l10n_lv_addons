@@ -37,6 +37,18 @@
                 report_type="webkit"
                 webkit_header="l10n_lv_report_webkit.ir_header_webkit_pi"/> -->
 
+        <!-- Asset Card -->
+
+        <record id="report_paperformat_asset_card" model="report.paperformat">
+            <field name="name">Asset Card</field>
+            <field name="margin_top" eval="30"/>
+            <field name="margin_left" eval="20"/>
+            <field name="margin_bottom" eval="20"/>
+            <field name="margin_right" eval="20"/>
+            <field name="format">A4</field>
+            <field name="orientation">Landscape</field>
+        </record>
+
         <report 
             id="report_account_asset_card"
             string="Asset Card"
@@ -45,6 +57,10 @@
             file="l10n_lv_account_asset.asset_card_report" 
             name="l10n_lv_account_asset.asset_card_report"
         />
+
+        <record id="l10n_lv_account_asset.report_account_asset_card" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="l10n_lv_account_asset.report_paperformat_asset_card"/>
+        </record>
 
     </data>
 </openerp>
