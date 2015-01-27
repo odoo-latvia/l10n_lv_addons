@@ -1057,3 +1057,118 @@ msgstr "samazinājums"
 msgid "Asset commissioning"
 msgstr "Pamatlīdzekļa pieņemšana ekspluatācijā"
 
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "CONFIRMATION:"
+msgstr "APSTIPRINU:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Manager"
+msgstr "Vadītājs"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Date:"
+msgstr "Datums:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "STATEMENT"
+msgstr "AKTS"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "On asset commissioning and putting into service."
+msgstr "Par pamatlīdzekļu pieņemšanu un ieviešanu ekspluatācijā."
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Brief description of material asset:"
+msgstr "Materiālās vērtības īss raksturojums:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Name"
+msgstr "Nosaukums"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Purchase value"
+msgstr "Iegādes vērtība"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Depreciation deduction norm per year (%)"
+msgstr "Nolietojuma atskaitījuma norma gadā (%)"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "per month"
+msgstr "mēnesī"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Putting into service (date)"
+msgstr "Ieviešana ekspluatācijā (datums)"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Full depreciation period (months)"
+msgstr "Pilna nolietojuma termiņš (mēnešos)"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Notes"
+msgstr "Piezīmes"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Inspection participants in the following composition:"
+msgstr "Apskates dalībnieku sekojošā sastāvā:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Commission chairman"
+msgstr "Komisijas priekšsēdētājs"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Commission members:"
+msgstr "Komisijas locekļi:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Inspection participants detected the following:"
+msgstr "Apskates dalībnieki konstatēja sekojošo:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Material asset in the delivery - acceptance moment is located in"
+msgstr "Materiālā vērtība pieņemšanas - nodošanas brīdī atrodas"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Material asset complies with the technical regulations"
+msgstr "Materiālā vērtība tehniskiem noteikumiem atbilst"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Running-in is or not required; what exactly:"
+msgstr "Piestrāde ir vai nav vajadzīga; kas tieši:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Inspection participants conclusion:"
+msgstr "Apskates dalībnieku slēdziens:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Material asset additions"
+msgstr "Materiālās vērtības papildinājumi"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_confirmation_report_document
+msgid "Accounting mark on the object introduction (movement)"
+msgstr "Grāmatvedības atzīme par objekta ieviešanu (pārvietošanu)"
+

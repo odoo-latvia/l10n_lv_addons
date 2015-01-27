@@ -46,40 +46,40 @@
             <table width="35%" class="signature">
                 <tbody>
                     <tr>
-                        <td colspan="2" style="font-weight: bold;">APSTIPRINU:</td>
+                        <td colspan="2" style="font-weight: bold;">CONFIRMATION:</td>
                     </tr>
                     <tr>
-                        <td width="10%">Vadītājs</td>
+                        <td width="10%">Manager</td>
                         <td style="border-bottom:thin solid"></td>
                     </tr>
                     <tr>
-                        <td>Datums:</td>
+                        <td>Date:</td>
                         <td style="border-bottom:thin solid; text-align: center;" t-esc="formatLang(time.strftime('%Y-%m-%d'), date=True)"/>
                     </tr>
                 </tbody>
             </table>
 	        <br/>
-	        <div class="title">AKTS</div>
-	        <div class="title">Par pamatlīdzekļu pieņemšanu un ieviešanu ekspluatācijā.</div>
+	        <div class="title">STATEMENT</div>
+	        <div class="title">On asset commissioning and putting into service.</div>
 	        <br/>
 	        <br/>
-	        <span class="subtitle">Materiālās vērtības īss raksturojums:</span>
+	        <span class="subtitle">Brief description of material asset:</span>
 	        <br/>
 	        <br/>
 	        <table width="100%" class="descr">
 		        <thead>
 			        <tr>
-				        <th width="20%">Nosaukums</th>
-				        <th width="10%">Iegādes vērtība</th>
+				        <th width="20%">Name</th>
+				        <th width="10%">Purchase value</th>
 				        <th width="15%">
-                            <span>Nolietojuma atskaitījuma norma gadā (%)</span>
+                            <span>Depreciation deduction norm per year (%)</span>
                             <span>/</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol or ''"/>)
-                            <span>mēnesī</span>
+                            <span>per month</span>
                         </th>
-				        <th width="15%">Ieviešana ekspluatācijā (datums)</th>
-				        <th width="15%">Pilna nolietojuma termiņš (mēnešos)</th>
-				        <th width="25%">Piezīmes</th>
+				        <th width="15%">Putting into service (date)</th>
+				        <th width="15%">Full depreciation period (months)</th>
+				        <th width="25%">Notes</th>
 			        </tr>
 		        </thead>
 		        <tbody>
@@ -101,15 +101,15 @@
 	        </table>
 	        <br/>
 	        <br/>
-	        <span class="subtitle">Apskates dalībnieku sekojošā sastāvā:</span>
+	        <span class="subtitle">Inspection participants in the following composition:</span>
 	        <br/>
 	        <br/>
 	        <table width="100%">
 		        <tr>
-			        <td style="border-bottom:2px solid"><b>Komisijas priekšsēdētājs</b></td>
+			        <td style="border-bottom:2px solid"><b>Commission chairman</b></td>
 		        </tr>
 		        <tr>
-			        <td style="border-bottom:thin solid">Komisijas locekļi:</td>
+			        <td style="border-bottom:thin solid">Commission members:</td>
 		        </tr>
 		        <tr>
 			        <td style="border-bottom:thin solid"><font color="white">...</font></td>
@@ -123,29 +123,29 @@
 	        </table>
 	        <br/>
 	        <br/>
-	        <span class="subtitle">Apskates dalībnieki konstatēja sekojošo:</span>
+	        <span class="subtitle">Inspection participants detected the following:</span>
 	        <br/>
 	        <br/>
 	        <table width="100%" class="descr">
 		        <tbody>
 			        <tr>
-				        <td width="53%">Materiālā vērtība pieņemšanas - nodošanas brīdī atrodas</td>
+				        <td width="53%">Material asset in the delivery - acceptance moment is located in</td>
 				        <td width="47%"></td>
 			        </tr>
 			        <tr>
-				        <td width="53%">Materiālā vērtība tehniskiem noteikumiem atbilst</td>
+				        <td width="53%">Material asset complies with the technical regulations</td>
 				        <td width="47%"></td>
 			        </tr>
 			        <tr>
-				        <td width="53%">Piestrāde ir vai nav vajadzīga; kas tieši:</td>
+				        <td width="53%">Running-in is or not required; what exactly:</td>
 				        <td width="47%"></td>
 			        </tr>
 			        <tr>
-				        <td width="53%">Apskates dalībnieku slēdziens:</td>
+				        <td width="53%">Inspection participants conclusion:</td>
 				        <td width="47%"></td>
 			        </tr>
 			        <tr>
-				        <td width="53%">Materiālās vērtības papildinājumi</td>
+				        <td width="53%">Material asset additions</td>
 				        <td width="47%"></td>
 			        </tr>
 		        </tbody>
@@ -158,7 +158,7 @@
 	        <table width="100%">
 		        <tbody>
 			        <tr>
-				        <td width="55%">Grāmatvedības atzīme par objekta ieviešanu (pārvietošanu)</td>
+				        <td width="55%">Accounting mark on the object introduction (movement)</td>
 				        <td width="45%" style="border-bottom:thin solid"></td>
 			        </tr>
 		        </tbody>
