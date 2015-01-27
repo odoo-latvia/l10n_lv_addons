@@ -902,3 +902,158 @@ msgstr "Izvēlieties datumu."
 msgid "Asset"
 msgstr "Pamatlīdzeklis"
 
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Company name, company registry"
+msgstr "Firmas nosaukums, reģistrācijas Nr."
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "ASSET TRACKING CARD No"
+msgstr "PAMATLĪDZEKĻU UZSKAITES KARTĪTE NR."
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Asset object name"
+msgstr "Pamatlīdzekļu objekta nosaukums"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Code"
+msgstr "Kods"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Depreciation norm code"
+msgstr "Nolietojuma normas kods"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Location"
+msgstr "Atrašanās vieta"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Count"
+msgstr "Skaits"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Amortization rate per year, %"
+msgstr "Amortizācijas likme gadā, %"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Put into service date"
+msgstr "Nodošanas ekspluatācijā datums"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Initial book value"
+msgstr "Sākotnējā uzskaites vērtība"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "amount"
+msgstr "summā"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Time of valid usage (years)"
+msgstr "Derīgās lietošanas laiks (gados)"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Liquidation (scrap) value"
+msgstr "Likvidācijas (lūžņu) vērtība"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "The same per month, %"
+msgstr "Tas pats mēnesī, %"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "The same in months"
+msgstr "Tas pats mēnešos"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Depreciation amount for one month"
+msgstr "Viena mēneša nolietojuma summa"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Notes"
+msgstr "Piezīmes"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Disposal date"
+msgstr "Izslēgšanas datums"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "and justification"
+msgstr "un pamatojums"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "just."
+msgstr "pamat."
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Date"
+msgstr "Datums"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Description of business transaction and document number and date"
+msgstr "Saimnieciskā darījuma apraksts un dokumenta numurs un datums"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Purchase or production cost"
+msgstr "Iegādes vai ražošanas pašizmaksa"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Reconstruction"
+msgstr "Rekonstrukcija"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Revaluation"
+msgstr "Pārvērtēšana"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Book value"
+msgstr "Uzskaites vērtība"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Depreciation"
+msgstr "Nolietojums"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Residual value"
+msgstr "Atlikusī vērtība"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "increase"
+msgstr "pieaugums"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "decrease"
+msgstr "samazinājums"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_card_report_document
+msgid "Asset commissioning"
+msgstr "Pamatlīdzekļa pieņemšana ekspluatācijā"
+

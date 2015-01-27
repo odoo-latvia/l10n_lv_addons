@@ -26,20 +26,20 @@
             </style>
             <h2>
                 <div width="100%">
-                    <span style="font-weight: bold; font-size: 16px;">Firmas nosaukums, reģistrācijas Nr.</span><span t-if="o.company_id and o.company_id.company_registry">,</span>
+                    <span style="font-weight: bold; font-size: 16px;">Company name, company registry</span><span t-if="o.company_id and o.company_id.company_registry">,</span>
                     <span style="font-size: 16px;" t-esc="o.company_id and o.company_id.name or ''"/>
                     <span style="font-size: 16px;" r-esc="o.company_id and o.company_id.company_registry or ''"/>
                 </div>
-                <span style="font-weight: bold; font-size: 18px;">PAMATLĪDZEKĻU UZSKAITES KARTĪTE NR.</span>
+                <span style="font-weight: bold; font-size: 18px;">ASSET TRACKING CARD No</span>
                 <span style="font-weight: bold; font-size: 18px;" t-esc="o.code"/>
             </h2>
 	        <table width="100%">
 		        <tbody>
 			        <tr>
-				        <td colspan="2">Pamatlīdzekļu objekta nosaukums</td>
-				        <td style="border-left: 1px solid black;">Kods</td>
+				        <td colspan="2">Asset object name</td>
+				        <td style="border-left: 1px solid black;">Code</td>
 				        <td style="text-align:center; border:thin solid; background-color: #F2F2F2;" t-esc="o.code"/>
-				        <td>Nolietojuma normas kods</td>
+				        <td>Depreciation norm code</td>
 				        <td style="text-align:center; border:thin solid; background-color: #F2F2F2;" t-esc="o.category_id.name"/>
 			        </tr>
 			        <tr>
@@ -48,8 +48,8 @@
 				        <td colspan="2"></td>
 			        </tr>
 			        <tr>
-				        <td colspan="2">Atrašanās vieta</td>
-				        <td style="border-left: 1px solid black;">Skaits</td>
+				        <td colspan="2">Location</td>
+				        <td style="border-left: 1px solid black;">Count</td>
 				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;">1</td>
 				        <td colspan="2"></td>
 			        </tr>
@@ -57,20 +57,20 @@
 			        <tr>
 				        <td colspan="2" style="border:thin solid; background-color: #F2F2F2;"></td>
 				        <td style="border-right: 1px solid black;" colspan="2"></td>
-				        <td>Amortizācijas likme gadā, %</td>
+				        <td>Amortization rate per year, %</td>
 				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="amort_percent and formatLang(amort_percent) or ''"/>
 			        </tr>
                     <t t-set="amort_val" t-value="o.purchase_value/((o.method_period*o.method_number)/12)"></t>
 			        <tr>
-				        <td>Nodošanas ekspluatācijā datums</td>
+				        <td>Put into service date</td>
 				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="formatLang(o.purchase_date, date=True)"/>
 				        <td>
-                            <span>Sākotnējā uzskaites vērtība</span>
+                            <span>Initial book value</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol or ''"/>)
                         </td>
 				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="formatLang(o.purchase_value)"/>
 				        <td style="text-align:right">
-                            <span>summā</span>
+                            <span>amount</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol or ''"/>)
                         </td>
 				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="amort_val and formatLang(amort_val) or ''"/>
@@ -78,27 +78,27 @@
                     <t t-set="usage_years" t-value="(o.method_period*o.method_number)/12"></t>
                     <t t-set="amort_month_perc" t-value="((o.purchase_value/(o.method_period*o.method_number))*100)/o.purchase_value"></t>
 			        <tr>
-				        <td>Derīgās lietošanas laiks (gados)</td>
+				        <td>Time of valid usage (years)</td>
 				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="usage_years and formatLang(usage_years) or ''"/>
 				        <td>
-                            <span>Likvidācijas (lūžņu) vērtība</span>
+                            <span>Liquidation (scrap) value</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol or ''"/>)
                         </td>
 				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="formatLang(o.salvage_value)"/>
-				        <td>Tas pats mēnesī, %</td>
+				        <td>The same per month, %</td>
 				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="amort_month_perc and formatLang(amort_month_perc) or ''"/>
 			        </tr>
                     <t t-set="amort_month_val" t-value="o.purchase_value/(o.method_period*o.method_number)"></t>
 			        <tr>
-				        <td>Tas pats mēnešos</td>
+				        <td>The same in months</td>
 				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="int(o.method_period*o.method_number) or ''"/>
 				        <td>
-                            <span>Viena mēneša nolietojuma summa</span>
+                            <span>Depreciation amount for one month</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol"/>)
                         </td>
 				        <td style="border:thin solid; background-color: #F2F2F2;"></td>
 				        <td style="text-align:right">
-                            <span>summā</span>
+                            <span>amount</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol"/>)
                         </td>
 				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="amort_month_val and formatLang(amort_month_val) or ''"/>
@@ -106,21 +106,21 @@
 			        <tr>
 				        <td colspan="2"></td>
 				        <td style="border-left: 1px solid black; border-right: 1px solid black;" colspan="2"></td>
-				        <td colspan="2">Piezīmes</td>
+				        <td colspan="2">Notes</td>
 			        </tr>
 			        <tr>
-				        <td>Izslēgšanas datums</td>
+				        <td>Disposal date</td>
 				        <td style="border:thin solid; background-color: #F2F2F2;"></td>
 				        <td colspan="2"></td>
 				        <td colspan="2" style="border:thin solid; background-color: #F2F2F2;"></td>
 			        </tr>
 			        <tr>
-				        <td colspan="2">un pamatojums</td>
+				        <td colspan="2">and justification</td>
 				        <td style="border-left: 1px solid black; border-right: 1px solid black;" colspan="2"></td>
 				        <td colspan="2" style="border:thin solid; background-color: #F2F2F2;"></td>
 			        </tr>
 			        <tr>
-				        <td colspan="2" style="border:thin solid; background-color: #F2F2F2;"><font color="#F2F2F2">pamat.</font></td>
+				        <td colspan="2" style="border:thin solid; background-color: #F2F2F2;"><font color="#F2F2F2">just.</font></td>
 				        <td colspan="2"></td>
 				        <td colspan="2" style="border:thin solid; background-color: #F2F2F2;"></td>
 			        </tr>
@@ -130,24 +130,24 @@
 	        <table class="depr" width="100%" t-if="o.state != 'draft'">
 		        <thead>
 			        <tr>
-				        <th rowspan="2" width="10%">Datums</th>
-				        <th rowspan="2">Saimnieciskā darījuma apraksts un dokumenta numurs un datums</th>
-				        <th rowspan="2">Iegādes vai ražošanas pašizmaksa</th>
-				        <th rowspan="2">Rekonstrukcija</th>
-				        <th colspan="2">Pārvērtēšana</th>
-				        <th rowspan="2">Uzskaites vērtība</th>
-				        <th rowspan="2">Nolietojums</th>
-				        <th rowspan="2">Atlikusī vērtība</th>
+				        <th rowspan="2" width="10%">Date</th>
+				        <th rowspan="2">Description of business transaction and document number and date</th>
+				        <th rowspan="2">Purchase or production cost</th>
+				        <th rowspan="2">Reconstruction</th>
+				        <th colspan="2">Revaluation</th>
+				        <th rowspan="2">Book value</th>
+				        <th rowspan="2">Depreciation</th>
+				        <th rowspan="2">Residual value</th>
 			        </tr>
 			        <tr>
-				        <th width="10%">pieaugums</th>
-				        <th width="10%">samazinājums</th>
+				        <th width="10%">increase</th>
+				        <th width="10%">decrease</th>
 			        </tr>
 		        </thead>
 		        <tbody>
 			        <tr style="background-color: #F2F2F2;">
 				        <td t-esc="formatLang(o.purchase_date, date=True)"/>
-				        <td>Pamatlīdzekļa pieņemšana ekspluatācijā</td>
+				        <td>Asset commissioning</td>
 				        <td style="text-align:right" t-esc="formatLang(o.purchase_value)"/>
 				        <td style="color: #F2F2F2;">...</td>
 				        <td style="color: #F2F2F2;">...</td>
@@ -159,7 +159,7 @@
 			        <tr t-foreach="o.depreciation_line_ids" t-as="line" style="background-color: #F2F2F2;">
                         <t t-if="line.move_check">
 				            <td t-esc="formatLang(line.depreciation_date, date=True)"/>
-				            <td>Nolietojums</td>
+				            <td>Depreciation</td>
 				            <td style="text-align:right" t-esc="formatLang(line.asset_id.purchase_value)"/>
 				            <td style="color: #F2F2F2;">...</td>
 				            <td style="color: #F2F2F2;">...</td>
