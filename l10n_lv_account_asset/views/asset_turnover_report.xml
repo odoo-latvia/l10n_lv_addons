@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+<template id="asset_turnover_report_document">
+    <t>
+        <div class="page">
+            <style type="text/css">
+                span.title {
+                    font-size: 18px;
+                }
+                table.list_table thead {
+                    border: 1px solid black;
+                }
+                table.list_table th {
+                    font-weight: normal;
+                }
+            </style>
+	        <span class="title">Pamatlīdzekļu apgrozījums</span>
+	        <span t-if="data">
+                <span>no</span>
+                <span t-esc="formatLang(data['form']['from_date'], date=True)"/>
+            </span>
+	        <span t-if="data">
+                <span>līdz</span>
+                <span t-esc="formatLang(data['form']['to_date'], date=True)"/>
+            </span>
+	        <br/>
+	        <br/>
+	        <table class="list_table" width="100%">
+		        <thead>
+			        <tr>
+				        <th colspan="3">Operācija</th>
+				        <th>Uzskaites vērtība</th>
+				        <th>Nolietojums</th>
+				        <th>Atlikusī vērtība</th>
+			        </tr>
+		        </thead>
+                <t t-set="purchase_total_amount_1" t-value="0.0"></t>
+                <t t-set="purchase_total_amount_2" t-value="0.0"></t>
+                <t t-set="purchase_total_amount_3" t-value="0.0"></t>
+                <t t-set="depr_total_amount_1" t-value="0.0"></t>
+                <t t-set="depr_total_amount_2" t-value="0.0"></t>
+                <t t-set="depr_total_amount_3" t-value="0.0"></t>
+                <t t-set="left_total_amount_1" t-value="0.0"></t>
+                <t t-set="left_total_amount_2" t-value="0.0"></t>
+                <t t-set="left_total_amount_3" t-value="0.0"></t>
+                <t t-set="count" t-value="0"></t>
+                <t t-set="form" t-value="data and data['form'] or {}"></t>
+                <t t-set="asset_list" t-value="lines(form)"></t>
+		        <tbody>
+                    <t t-foreach="asset_list" t-as="asset">
+                        <t t-set="count" t-value="count + 1"></t>
+			            <tr>
+				            <td style="border-top:none; font-weight: bold;">
+                                <span t-esc="asset['account_code']"/>
+                            </td>
+				            <td style="border-top:none; font-weight: bold;">
+                                <span t-esc="asset['account_name']"/>
+                            </td>
+			            </tr>
+			            <tr>
+				            <td></td>
+				            <td colspan="2">
+                                <span>Sākuma atlikumi</span>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['purchase1'])"/>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['depr1'])"/>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['left1'])"/>
+                            </td>
+			            </tr>
+			            <tr>
+				            <td></td>
+				            <td colspan="2">
+                                <span>Iegāde</span>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['purchase2'])"/>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['depr2'])"/>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['left2'])"/>
+                            </td>
+			            </tr>
+			            <tr>
+				            <td></td>
+				            <td colspan="2">
+                                <span>Pamatlīdzekļu nolietojums</span>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['purchase3'])"/>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['depr3'])"/>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['left3'])"/>
+                            </td>
+			            </tr>
+			            <tr>
+				            <td></td>
+				            <td colspan="2">
+                                <span>Likvidācija</span>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['purchase4'])"/>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['depr4'])"/>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['left4'])"/>
+                            </td>
+			            </tr>
+			            <tr>
+				            <td>
+                                <span>Kopā:</span>
+                            </td>
+				            <td>
+                                <span t-esc="asset['account_code']"/>
+                            </td>
+				            <td>
+                                <span>Kopējā izmaiņa:</span>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['purchase_total1'])"/>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['depr_total1'])"/>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['left_total1'])"/>
+                            </td>
+			            </tr>
+			            <tr>
+				            <td style="border-style:none" colspan="2"></td>
+				            <td style="border-style:none">
+                                <span>Perioda beigās:</span>
+                            </td>
+				            <td style="border-style:none;text-align:right">
+                                <span t-esc="formatLang(asset['purchase_total2'])"/>
+                            </td>
+				            <td style="border-style:none;text-align:right">
+                                <span t-esc="formatLang(asset['depr_total2'])"/>
+                            </td>
+				            <td style="border-style:none;text-align:right">
+                                <span t-esc="formatLang(asset['left_total2'])"/>
+                            </td>
+			            </tr>
+                        <t t-set="purchase_total_amount_1" t-value="purchase_total_amount_1 + asset['purchase1']"></t>
+                        <t t-set="depr_total_amount_1" t-value="depr_total_amount_1 + asset['depr1']"></t>
+                        <t t-set="left_total_amount_1" t-value="left_total_amount_1 + asset['left1']"></t>
+                        <t t-set="purchase_total_amount_2" t-value="purchase_total_amount_2 + asset['purchase_total1']"></t>
+                        <t t-set="depr_total_amount_2" t-value="depr_total_amount_2 + asset['depr_total1']"></t>
+                        <t t-set="left_total_amount_2" t-value="left_total_amount_2 + asset['left_total1']"></t>
+                        <t t-set="purchase_total_amount_3" t-value="purchase_total_amount_3 + asset['purchase_total2']"></t>
+                        <t t-set="depr_total_amount_3" t-value="depr_total_amount_3 + asset['depr_total2']"></t>
+                        <t t-set="left_total_amount_3" t-value="left_total_amount_3 + asset['left_total2']"></t>
+                        <t t-if="count == len(asset_list)">
+			                <tr>
+				                <td style="border-top:2px solid"></td>
+				                <td style="border-top:2px solid; text-align:right; font-weight: bold;">
+                                    <span>Kopā par atskaiti:</span>
+                                </td>
+				                <td style="border-top:2px solid; font-weight: bold;">
+                                    <span>Perioda sākumā:</span>
+                                </td>
+				                <td style="border-top:2px solid; text-align:right; font-weight: bold;">
+                                    <span t-esc="formatLang(purchase_total_amount_1)"/>
+                                </td>
+				                <td style="border-top:2px solid; text-align:right; font-weight: bold;">
+                                    <span t-esc="formatLang(depr_total_amount_1)"/>
+                                </td>
+				                <td style="border-top:2px solid; text-align:right; font-weight: bold;">
+                                    <span t-esc="formatLang(left_total_amount_1)"/>
+                                </td>
+			                </tr>
+			                <tr>
+				                <td colspan="2" style="border-style:none"></td>
+				                <td style="border-style:none; font-weight: bold;">
+                                    <span>Izmaiņa:</span>
+                                </td>
+				                <td style="border-style:none; text-align:right; font-weight: bold;">
+                                    <span t-esc="formatLang(purchase_total_amount_2)"/>
+                                </td>
+				                <td style="border-style:none; text-align:right; font-weight: bold;">
+                                    <span t-esc="formatLang(depr_total_amount_2)"/>
+                                </td>
+				                <td style="border-style:none; text-align:right; font-weight: bold;">
+                                    <span t-esc="formatLang(left_total_amount_2)"/>
+                                </td>
+			                </tr>
+			                <tr>
+				                <td colspan="2" style="border-style:none"></td>
+				                <td style="border-style:none; font-weight: bold;">
+                                    <span>Perioda beigās:</span>
+                                </td>
+				                <td style="border-style:none; text-align:right; font-weight: bold;">
+                                    <span t-esc="formatLang(purchase_total_amount_3)"/>
+                                </td>
+				                <td style="border-style:none; text-align:right; font-weight: bold;">
+                                    <span t-esc="formatLang(depr_total_amount_3)"/>
+                                </td>
+				                <td style="border-style:none; text-align:right; font-weight: bold;">
+                                    <span t-esc="formatLang(left_total_amount_3)"/>
+                                </td>
+			                </tr>
+                        </t>
+                    </t>
+		        </tbody>
+	        </table>
+        </div>
+    </t>
+</template>
+
+<template id="asset_turnover_report">
+    <t t-call="report.html_container">
+        <t t-foreach="doc_ids" t-as="doc_id">
+            <t t-raw="translate_doc(doc_id, doc_model, 'company_id.partner_id.lang', 'l10n_lv_account_asset.asset_turnover_report_document')"/>
+        </t>
+    </t>
+</template>
+
+</data>
+</openerp>

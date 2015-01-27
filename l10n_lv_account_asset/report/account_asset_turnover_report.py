@@ -41,7 +41,9 @@ class account_asset_turnover(report_sxw.rml_parse):
 
     def lines(self, form, ids=[]):
         asset_obj = self.pool.get('account.asset.asset')
-        asset_ids = asset_obj.search(self.cr, self.uid, [('confirmation_date','<=',form['to_date']),('confirmation_date','!=',False),'|',('close_date','=',False),('close_date','>=',form['from_date'])], order='category_id')
+        asset_ids = self.localcontext.get('active_ids',[])
+        if form:
+            asset_ids = asset_obj.search(self.cr, self.uid, [('confirmation_date','<=',form['to_date']),('confirmation_date','!=',False),'|',('close_date','=',False),('close_date','>=',form['from_date']), '|', ('company_id','=',False), ('company_id','child_of',[form['company_id']])], order='category_id')
         assets = asset_obj.browse(self.cr, self.uid, asset_ids)
 
         datas1 = {}
@@ -72,16 +74,16 @@ class account_asset_turnover(report_sxw.rml_parse):
             account_name = asset.category_id.account_asset_id.name
             depr_1 = 0.0
             for line in asset.depreciation_line_ids:
-                if line.move_check == True and line.depreciation_date < form['from_date']:
+                if line.move_check == True and ((not form) or line.depreciation_date < form['from_date']):
                     depr_1 += line.amount
             depr1 = depr_1
-            if asset.confirmation_date < form['from_date']:
+            if (not form) or asset.confirmation_date < form['from_date']:
                 purchase1 = asset.purchase_value
                 left1 = asset.purchase_value - depr1
             else:
                 purchase1 = 0.0
                 left1 = 0.0
-            if asset.confirmation_date >= form['from_date']:
+            if (not form) or asset.confirmation_date >= form['from_date']:
                 purchase2 = asset.purchase_value
                 left2 = asset.purchase_value
             else:
@@ -89,11 +91,11 @@ class account_asset_turnover(report_sxw.rml_parse):
                 left2 = 0.0
             depr_3 = 0.0
             for line in asset.depreciation_line_ids:
-                if line.move_check == True and line.depreciation_date >= form['from_date'] and line.depreciation_date <= form['to_date']:
+                if line.move_check == True and ((not form) or (line.depreciation_date >= form['from_date'] and line.depreciation_date <= form['to_date'])):
                     depr_3 += line.amount
             depr3 = depr_3
             left3 = purchase3 - depr3
-            if asset.close_date <= form['to_date'] and asset.close_date != False:
+            if ((not form) or asset.close_date <= form['to_date']) and asset.close_date != False:
                 depr = 0.0
                 for line in asset.depreciation_line_ids:
                     if line.move_check == True:
@@ -139,9 +141,10 @@ class account_asset_turnover(report_sxw.rml_parse):
 
         return self.result_asset
         
-report_sxw.report_sxw('report.l10n_lv_account_asset.turnover',
-                       'account.asset.asset', 
-                       'addons/l10n_lv_account_asset/report/account_asset_turnover_report_html.mako',
-                       parser=account_asset_turnover)
+class at_report(osv.AbstractModel):
+    _name = 'report.l10n_lv_account_asset.asset_turnover_report'
+    _inherit = 'report.abstract_report'
+    _template = 'l10n_lv_account_asset.asset_turnover_report'
+    _wrapped_report_class = account_asset_turnover
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -38,7 +38,13 @@ class account_asset_turnover_report(osv.osv_memory):
     _columns = {
         'from_date': fields.date('Date From', required=True),
         'to_date': fields.date('Date To', required=True),
-        }
+        'company_id': fields.many2one('res.company', 'Company', required=True)
+    }
+
+    _defaults = {
+        'to_date': fields.date.context_today,
+        'company_id': lambda self, cr, uid, ctx=None: self.pool.get('res.company')._company_default_get(cr, uid, 'account.asset.turnover.report', context=ctx)
+    }
 
     def _build_contexts(self, cr, uid, ids, data, context=None):
         if context is None:
@@ -46,6 +52,7 @@ class account_asset_turnover_report(osv.osv_memory):
         result = {}
         result['from_date'] = 'from_date' in data['form'] and data['form']['from_date'] or False
         result['to_date'] = 'to_date' in data['form'] and data['form']['to_date'] or False
+        result['company_id'] = 'company_id' in data['form'] and data['form']['company_id'] or False
         return result
 
     def print_report(self, cr, uid, ids, context=None):
@@ -54,13 +61,17 @@ class account_asset_turnover_report(osv.osv_memory):
         data = {}
         data['ids'] = context.get('active_ids', [])
         data['model'] = context.get('active_model', 'ir.ui.menu')
-        data['form'] = self.read(cr, uid, ids, ['from_date', 'to_date'], context=context)[0]
-        for field in ['from_date', 'to_date']:
+        data['form'] = self.read(cr, uid, ids, ['from_date', 'to_date', 'company_id'], context=context)[0]
+        for field in ['from_date', 'to_date', 'company_id']:
             if isinstance(data['form'][field], tuple):
                 data['form'][field] = data['form'][field][0]
         used_context = self._build_contexts(cr, uid, ids, data, context=context)
         data['form']['used_context'] = used_context
-        return {'type': 'ir.actions.report.xml', 'report_name': 'l10n_lv_account_asset.turnover', 'datas': data}
+        return {
+            'type': 'ir.actions.report.xml',
+            'report_name': 'l10n_lv_account_asset.asset_turnover_report',
+            'datas': data
+        }
 
 account_asset_turnover_report()
 

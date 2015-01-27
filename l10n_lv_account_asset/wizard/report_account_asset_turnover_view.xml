@@ -9,9 +9,14 @@
                 <form string="Print a Turnover report from Account Asset" version="7.0">
                     <label string="Choose period." colspan="4"/>
                     <separator string="" colspan="4"/>
-					<group col="2">
-                    	<field name="from_date"/>
-						<field name="to_date"/>
+					<group>
+                        <group>
+                    	    <field name="from_date"/>
+						    <field name="to_date"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
 					</group>
                     <separator string="" colspan="4"/>
                     <footer>

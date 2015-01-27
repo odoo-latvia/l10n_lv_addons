@@ -823,7 +823,7 @@ msgid "List of Assets"
 msgstr "Pamatlīdzekļu saraksts"
 
 #. module: l10n_lv_account_asset
-#: model:ir.actions.report.xml,name:l10n_lv_account_asset.report_account_asset_turnover_l10n_lv_html
+#: model:ir.actions.report.xml,name:l10n_lv_account_asset.report_account_asset_turnover
 msgid "Asset Turnover"
 msgstr "Pamatlīdzekļu apgrozījums"
 
@@ -831,6 +831,11 @@ msgstr "Pamatlīdzekļu apgrozījums"
 #: field:account.asset.turnover.report,to_date:0
 msgid "Date To"
 msgstr "Datums līdz"
+
+#. module: l10n_lv_account_asset
+#: field:account.asset.turnover.report,company_id:0
+msgid "Company"
+msgstr "Uzņēmums"
 
 #. module: l10n_lv_account_asset
 #: model:ir.model,name:l10n_lv_account_asset.model_account_asset_depreciation_line
