@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+<template id="asset_confirmation_report_document">
+    <t>
+        <div class="page">
+            <style type="text/css">
+                div.title {
+                    font-size: 18px;
+                    font-weight: bold;
+                    text-align:center;
+                }
+                span.subtitle {
+                    font-weight: bold;
+                    text-decoration: underline;
+                    padding-left: 8px;
+                    padding-right: 8px;
+                    padding-top: 8px;
+                    padding-bottom: 8px;
+                    vertical-align: middle;
+                    font-size: 14px;
+                }
+                td, th {
+                    padding-left: 8px;
+                    padding-right: 8px;
+                    padding-top: 6px;
+                    padding-bottom: 6px;
+                    vertical-align: middle;
+                    font-size: 14px;
+                }
+                table.signature {
+                    padding-top: 6px;
+                    padding-bottom: 6px;
+                    padding-left: 0px;
+                    padding-right: 0px;
+                }
+                table.descr td, th {
+                    border: 1px solid black;
+                    font-weight: normal;
+                }
+                table.descr th {
+                    text-align: center;
+                }
+            </style>
+            <table width="35%" class="signature">
+                <tbody>
+                    <tr>
+                        <td colspan="2" style="font-weight: bold;">APSTIPRINU:</td>
+                    </tr>
+                    <tr>
+                        <td width="10%">Vadītājs</td>
+                        <td style="border-bottom:thin solid"></td>
+                    </tr>
+                    <tr>
+                        <td>Datums:</td>
+                        <td style="border-bottom:thin solid; text-align: center;" t-esc="formatLang(time.strftime('%Y-%m-%d'), date=True)"/>
+                    </tr>
+                </tbody>
+            </table>
+	        <br/>
+	        <div class="title">AKTS</div>
+	        <div class="title">Par pamatlīdzekļu pieņemšanu un ieviešanu ekspluatācijā.</div>
+	        <br/>
+	        <br/>
+	        <span class="subtitle">Materiālās vērtības īss raksturojums:</span>
+	        <br/>
+	        <br/>
+	        <table width="100%" class="descr">
+		        <thead>
+			        <tr>
+				        <th width="20%">Nosaukums</th>
+				        <th width="10%">Iegādes vērtība</th>
+				        <th width="15%">
+                            <span>Nolietojuma atskaitījuma norma gadā (%)</span>
+                            <span>/</span>
+                            (<span t-esc="o.currency_id and o.currency_id.symbol or ''"/>)
+                            <span>mēnesī</span>
+                        </th>
+				        <th width="15%">Ieviešana ekspluatācijā (datums)</th>
+				        <th width="15%">Pilna nolietojuma termiņš (mēnešos)</th>
+				        <th width="25%">Piezīmes</th>
+			        </tr>
+		        </thead>
+		        <tbody>
+                    <t t-set="depr_norm" t-value="(o.purchase_value != 0.0 and o.method_period != 0.0 and o.method_number != 0.0) and (((o.purchase_value/((o.method_period*o.method_number)/12))*100)/o.purchase_value) or 0.0"></t>
+                    <t t-set="depr_norm_val" t-value="(o.method_period != 0 and o.method_number != 0) and (o.purchase_value/(o.method_period*o.method_number)) or 0.0"></t>
+			        <tr>
+				        <td t-esc="o.name"/>
+				        <td style="text-align:center" t-esc="o.purchase_value"/>
+				        <td style="text-align:center">
+                            <span t-esc="formatLang(depr_norm)"/>
+                            <span>/</span>
+                            <span t-esc="formatLang(depr_norm_val)"/>
+                        </td>
+				        <td style="text-align:center" t-esc="formatLang(o.purchase_date, date=True)"/>
+				        <td style="text-align:center" t-esc="o.method_period*o.method_number"/>
+				        <td t-esc="o.note or ''"/>
+			        </tr>
+		        </tbody>
+	        </table>
+	        <br/>
+	        <br/>
+	        <span class="subtitle">Apskates dalībnieku sekojošā sastāvā:</span>
+	        <br/>
+	        <br/>
+	        <table width="100%">
+		        <tr>
+			        <td style="border-bottom:2px solid"><b>Komisijas priekšsēdētājs</b></td>
+		        </tr>
+		        <tr>
+			        <td style="border-bottom:thin solid">Komisijas locekļi:</td>
+		        </tr>
+		        <tr>
+			        <td style="border-bottom:thin solid"><font color="white">...</font></td>
+		        </tr>
+		        <tr>
+			        <td style="border-bottom:thin solid"><font color="white">...</font></td>
+		        </tr>
+		        <tr>
+			        <td style="border-bottom:2px solid"><font color="white">...</font></td>
+		        </tr>
+	        </table>
+	        <br/>
+	        <br/>
+	        <span class="subtitle">Apskates dalībnieki konstatēja sekojošo:</span>
+	        <br/>
+	        <br/>
+	        <table width="100%" class="descr">
+		        <tbody>
+			        <tr>
+				        <td width="53%">Materiālā vērtība pieņemšanas - nodošanas brīdī atrodas</td>
+				        <td width="47%"></td>
+			        </tr>
+			        <tr>
+				        <td width="53%">Materiālā vērtība tehniskiem noteikumiem atbilst</td>
+				        <td width="47%"></td>
+			        </tr>
+			        <tr>
+				        <td width="53%">Piestrāde ir vai nav vajadzīga; kas tieši:</td>
+				        <td width="47%"></td>
+			        </tr>
+			        <tr>
+				        <td width="53%">Apskates dalībnieku slēdziens:</td>
+				        <td width="47%"></td>
+			        </tr>
+			        <tr>
+				        <td width="53%">Materiālās vērtības papildinājumi</td>
+				        <td width="47%"></td>
+			        </tr>
+		        </tbody>
+	        </table>
+	        <br/>
+	        <br/>
+	        <br/>
+	        <br/>
+	        <br/>
+	        <table width="100%">
+		        <tbody>
+			        <tr>
+				        <td width="55%">Grāmatvedības atzīme par objekta ieviešanu (pārvietošanu)</td>
+				        <td width="45%" style="border-bottom:thin solid"></td>
+			        </tr>
+		        </tbody>
+	        </table>
+        </div>
+    </t>
+</template>
+
+<template id="asset_confirmation_report">
+    <t t-call="report.html_container">
+        <t t-foreach="doc_ids" t-as="doc_id">
+            <t t-raw="translate_doc(doc_id, doc_model, 'company_id.partner_id.lang', 'l10n_lv_account_asset.asset_confirmation_report_document')"/>
+        </t>
+    </t>
+</template>
+
+</data>
+</openerp>

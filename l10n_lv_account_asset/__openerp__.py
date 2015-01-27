@@ -54,6 +54,7 @@ My Company filter for Assets.
     'update_xml': [
         'account_asset_view.xml',
         'views/asset_card_report.xml',
+        'views/asset_confirmation_report.xml',
         'account_asset_report.xml',
         'wizard/account_asset_set_close_date_view.xml',
         'wizard/report_account_asset_turnover_view.xml',

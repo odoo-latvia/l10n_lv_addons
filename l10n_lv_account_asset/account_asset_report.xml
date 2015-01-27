@@ -2,15 +2,7 @@
 <openerp>
     <data>
 <!-- Old Reports: -->
-<!--        <report auto="False"
-                id="report_account_asset_card_l10n_lv_html"
-                model="account.asset.asset"
-                name="l10n_lv_account_asset.card"
-                file="l10n_lv_account_asset/report/account_asset_card_report_html.mako"
-                string="Asset Card"
-                report_type="webkit"
-                webkit_header="l10n_lv_report_webkit.ir_header_webkit_li"/>
-        <report auto="False"
+<!-- <report auto="False"
                 id="report_account_asset_confirmation_l10n_lv_html"
                 model="account.asset.asset"
                 name="l10n_lv_account_asset.confirmation"
@@ -49,7 +41,7 @@
             <field name="orientation">Landscape</field>
         </record>
 
-        <report 
+        <report
             id="report_account_asset_card"
             string="Asset Card"
             model="account.asset.asset" 
@@ -60,6 +52,33 @@
 
         <record id="l10n_lv_account_asset.report_account_asset_card" model="ir.actions.report.xml">
             <field name="paperformat_id" ref="l10n_lv_account_asset.report_paperformat_asset_card"/>
+        </record>
+
+        <!-- Asset Paperformat Portrait -->
+
+        <record id="report_paperformat_asset_portrait" model="report.paperformat">
+            <field name="name">Asset Portrait</field>
+            <field name="margin_top" eval="10"/>
+            <field name="margin_left" eval="20"/>
+            <field name="margin_bottom" eval="10"/>
+            <field name="margin_right" eval="10"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+        </record>
+
+        <!-- Asset Confirmation -->
+
+        <report
+            id="report_account_asset_confirmation"
+            string="Asset Confirmation"
+            model="account.asset.asset" 
+            report_type="qweb-pdf"
+            file="l10n_lv_account_asset.asset_confirmation_report" 
+            name="l10n_lv_account_asset.asset_confirmation_report"
+        />
+
+        <record id="l10n_lv_account_asset.report_account_asset_confirmation" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="l10n_lv_account_asset.report_paperformat_asset_portrait"/>
         </record>
 
     </data>

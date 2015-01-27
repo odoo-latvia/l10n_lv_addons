@@ -759,7 +759,7 @@ msgid "onchange_prorata(prorata)"
 msgstr "onchange_prorata(prorata)"
 
 #. module: l10n_lv_account_asset
-#: model:ir.actions.report.xml,name:l10n_lv_account_asset.report_account_asset_confirmation_l10n_lv_html
+#: model:ir.actions.report.xml,name:l10n_lv_account_asset.report_account_asset_confirmation
 msgid "Asset Confirmation"
 msgstr "Pamatlīdzekļu apstiprināšana"
 
