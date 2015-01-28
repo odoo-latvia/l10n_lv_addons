@@ -41,14 +41,14 @@
                     <span t-esc="company.name"/>
                     <span t-esc="title"/>
                 </div>
-	            <div class="title">Pamatlīdzekļu apgrozījums</div>
+	            <div class="title">Asset Turnover</div>
                 <div style="float: right; text-align: right; display: inline; vertical-align: middle; margin-top: 20px; margin-bottom: 20px;">
 	                <span t-if="data">
-                        <span>no</span>
+                        <span>from</span>
                         <span t-esc="formatLang(data['form']['from_date'], date=True)"/>
                     </span>
 	                <span t-if="data">
-                        <span>līdz</span>
+                        <span>to</span>
                         <span t-esc="formatLang(data['form']['to_date'], date=True)"/>
                     </span>
                 </div>
@@ -61,10 +61,10 @@
 		        <thead>
 			        <tr>
                         <th></th>
-				        <th colspan="2">Operācija</th>
-				        <th>Uzskaites vērtība</th>
-				        <th>Nolietojums</th>
-				        <th>Atlikusī vērtība</th>
+				        <th colspan="2">Transaction</th>
+				        <th>Book value</th>
+				        <th>Depreciation</th>
+				        <th>Residual value</th>
 			        </tr>
 		        </thead>
                 <t t-set="purchase_total_amount_1" t-value="0.0"></t>
@@ -93,7 +93,7 @@
 			            <tr>
 				            <td></td>
 				            <td colspan="2">
-                                <span>Sākuma atlikumi</span>
+                                <span>Opening balances</span>
                             </td>
 				            <td style="text-align:right">
                                 <span t-esc="formatLang(asset['purchase1'])"/>
@@ -108,7 +108,7 @@
 			            <tr>
 				            <td></td>
 				            <td colspan="2">
-                                <span>Iegāde</span>
+                                <span>Purchase</span>
                             </td>
 				            <td style="text-align:right">
                                 <span t-esc="formatLang(asset['purchase2'])"/>
@@ -123,7 +123,7 @@
 			            <tr>
 				            <td></td>
 				            <td colspan="2">
-                                <span>Pamatlīdzekļu nolietojums</span>
+                                <span>Asset depreciation</span>
                             </td>
 				            <td style="text-align:right">
                                 <span t-esc="formatLang(asset['purchase3'])"/>
@@ -138,7 +138,7 @@
 			            <tr>
 				            <td></td>
 				            <td colspan="2">
-                                <span>Likvidācija</span>
+                                <span>Liquidation</span>
                             </td>
 				            <td style="text-align:right">
                                 <span t-esc="formatLang(asset['purchase4'])"/>
@@ -152,13 +152,13 @@
 			            </tr>
 			            <tr>
 				            <td>
-                                <span>Kopā:</span>
+                                <span>Total:</span>
                             </td>
 				            <td>
                                 <span t-esc="asset['account_code']"/>
                             </td>
 				            <td>
-                                <span>Kopējā izmaiņa:</span>
+                                <span>Total change:</span>
                             </td>
 				            <td style="text-align:right; border-top: 1px solid black;">
                                 <span t-esc="formatLang(asset['purchase_total1'])"/>
@@ -173,7 +173,7 @@
 			            <tr style="border-bottom: 1px solid black;">
 				            <td style="border-style:none" colspan="2"></td>
 				            <td style="border-style:none">
-                                <span>Perioda beigās:</span>
+                                <span>End of period:</span>
                             </td>
 				            <td style="border-style:none;text-align:right">
                                 <span t-esc="formatLang(asset['purchase_total2'])"/>
@@ -198,10 +198,10 @@
 			                <tr>
 				                <td style="border-top:1px solid"></td>
 				                <td style="border-top:1px solid; text-align:right; font-weight: bold; padding-right: 20px !important;">
-                                    <span>Kopā par atskaiti:</span>
+                                    <span>Total for the report:</span>
                                 </td>
 				                <td style="border-top:1px solid; font-weight: bold;">
-                                    <span>Perioda sākumā:</span>
+                                    <span>Beginning of period:</span>
                                 </td>
 				                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
                                     <span t-esc="formatLang(purchase_total_amount_1)"/>
@@ -216,7 +216,7 @@
 			                <tr>
 				                <td colspan="2" style="border-style:none"></td>
 				                <td style="border-style:none; font-weight: bold;">
-                                    <span>Izmaiņa:</span>
+                                    <span>Change:</span>
                                 </td>
 				                <td style="border-style:none; text-align:right; font-weight: bold;">
                                     <span t-esc="formatLang(purchase_total_amount_2)"/>
@@ -231,7 +231,7 @@
 			                <tr>
 				                <td colspan="2" style="border-style:none"></td>
 				                <td style="border-style:none; font-weight: bold;">
-                                    <span>Perioda beigās:</span>
+                                    <span>End of period:</span>
                                 </td>
 				                <td style="border-style:none; text-align:right; font-weight: bold;">
                                     <span t-esc="formatLang(purchase_total_amount_3)"/>

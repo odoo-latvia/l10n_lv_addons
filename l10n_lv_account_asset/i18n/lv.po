@@ -824,6 +824,7 @@ msgstr "Pamatlīdzekļu saraksts"
 
 #. module: l10n_lv_account_asset
 #: model:ir.actions.report.xml,name:l10n_lv_account_asset.report_account_asset_turnover
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
 msgid "Asset Turnover"
 msgstr "Pamatlīdzekļu apgrozījums"
 
@@ -1176,4 +1177,84 @@ msgstr "Materiālās vērtības papildinājumi"
 #: view:website:l10n_lv_account_asset.asset_confirmation_report_document
 msgid "Accounting mark on the object introduction (movement)"
 msgstr "Grāmatvedības atzīme par objekta ieviešanu (pārvietošanu)"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "from"
+msgstr "no"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "to"
+msgstr "līdz"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "Transaction"
+msgstr "Operācija"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "Book value"
+msgstr "Uzskaites vērtība"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "Depreciation"
+msgstr "Nolietojums"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "Residual value"
+msgstr "Atlikusī vērtība"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "Opening balances"
+msgstr "Sākuma atlikumi"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "Purchase"
+msgstr "Iegāde"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "Asset depreciation"
+msgstr "Pamatlīdzekļu nolietojums"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "Liquidation"
+msgstr "Likvidācija"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "Total:"
+msgstr "Kopā:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "Total change:"
+msgstr "Kopējā izmaiņa:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "End of period:"
+msgstr "Perioda beigās:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "Total for the report:"
+msgstr "Kopā pa atskaiti:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "Beginning of period:"
+msgstr "Perioda sākumā:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+msgid "Change:"
+msgstr "Izmaiņa:"
 

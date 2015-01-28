@@ -74,10 +74,10 @@ class account_asset_turnover(report_sxw.rml_parse):
             account_name = asset.category_id.account_asset_id.name
             depr_1 = 0.0
             for line in asset.depreciation_line_ids:
-                if line.move_check == True and ((not form) or line.depreciation_date < form['from_date']):
+                if line.move_check == True and (form and line.depreciation_date < form['from_date']):
                     depr_1 += line.amount
             depr1 = depr_1
-            if (not form) or asset.confirmation_date < form['from_date']:
+            if form and asset.confirmation_date < form['from_date']:
                 purchase1 = asset.purchase_value
                 left1 = asset.purchase_value - depr1
             else:
