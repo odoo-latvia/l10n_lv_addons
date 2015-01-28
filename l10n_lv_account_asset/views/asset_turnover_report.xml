@@ -4,10 +4,23 @@
 
 <template id="asset_turnover_report_document">
     <t>
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"></t>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"></t>
+        </t>
         <div class="page">
             <style type="text/css">
-                span.title {
+                div.title {
                     font-size: 18px;
+                    display: inline;
+                    text-align: center;
+                    vertical-align: middle;
+                    position: fixed;
+                    left: 35%;
+                    margin-top: 20px; 
+                    margin-bottom: 20px;
                 }
                 table.list_table thead {
                     border: 1px solid black;
@@ -15,22 +28,40 @@
                 table.list_table th {
                     font-weight: normal;
                 }
+                table.list_table td, th {
+                    padding-top: 2px;
+                    padding-bottom: 2px;
+                    padding-left: 4px;
+                    padding-right: 4px;
+                }
             </style>
-	        <span class="title">Pamatlīdzekļu apgrozījums</span>
-	        <span t-if="data">
-                <span>no</span>
-                <span t-esc="formatLang(data['form']['from_date'], date=True)"/>
-            </span>
-	        <span t-if="data">
-                <span>līdz</span>
-                <span t-esc="formatLang(data['form']['to_date'], date=True)"/>
-            </span>
+            <t t-set="title" t-value="(company.partner_id.title and (company.partner_id.title.shortcut and company.partner_id.title.shortcut.upper()) or company.partner_id.title.name) or ''"></t>
+            <div width="100%">
+                <div style="float: left; text-align: left; display: inline; vertical-align: middle; margin-top: 20px; margin-bottom: 20px;">
+                    <span t-esc="company.name"/>
+                    <span t-esc="title"/>
+                </div>
+	            <div class="title">Pamatlīdzekļu apgrozījums</div>
+                <div style="float: right; text-align: right; display: inline; vertical-align: middle; margin-top: 20px; margin-bottom: 20px;">
+	                <span t-if="data">
+                        <span>no</span>
+                        <span t-esc="formatLang(data['form']['from_date'], date=True)"/>
+                    </span>
+	                <span t-if="data">
+                        <span>līdz</span>
+                        <span t-esc="formatLang(data['form']['to_date'], date=True)"/>
+                    </span>
+                </div>
+            </div>
+	        <br/>
+	        <br/>
 	        <br/>
 	        <br/>
 	        <table class="list_table" width="100%">
 		        <thead>
 			        <tr>
-				        <th colspan="3">Operācija</th>
+                        <th></th>
+				        <th colspan="2">Operācija</th>
 				        <th>Uzskaites vērtība</th>
 				        <th>Nolietojums</th>
 				        <th>Atlikusī vērtība</th>
@@ -52,10 +83,10 @@
                     <t t-foreach="asset_list" t-as="asset">
                         <t t-set="count" t-value="count + 1"></t>
 			            <tr>
-				            <td style="border-top:none; font-weight: bold;">
+				            <td style="border-top:none; font-weight: bold; padding-top: 4px !important; padding-bottom: 4px !important;">
                                 <span t-esc="asset['account_code']"/>
                             </td>
-				            <td style="border-top:none; font-weight: bold;">
+				            <td style="border-top:none; font-weight: bold; text-align: center; padding-top: 4px !important; padding-bottom: 4px !important;">
                                 <span t-esc="asset['account_name']"/>
                             </td>
 			            </tr>
@@ -129,17 +160,17 @@
 				            <td>
                                 <span>Kopējā izmaiņa:</span>
                             </td>
-				            <td style="text-align:right">
+				            <td style="text-align:right; border-top: 1px solid black;">
                                 <span t-esc="formatLang(asset['purchase_total1'])"/>
                             </td>
-				            <td style="text-align:right">
+				            <td style="text-align:right; border-top: 1px solid black;">
                                 <span t-esc="formatLang(asset['depr_total1'])"/>
                             </td>
-				            <td style="text-align:right">
+				            <td style="text-align:right; border-top: 1px solid black;">
                                 <span t-esc="formatLang(asset['left_total1'])"/>
                             </td>
 			            </tr>
-			            <tr>
+			            <tr style="border-bottom: 1px solid black;">
 				            <td style="border-style:none" colspan="2"></td>
 				            <td style="border-style:none">
                                 <span>Perioda beigās:</span>
@@ -165,20 +196,20 @@
                         <t t-set="left_total_amount_3" t-value="left_total_amount_3 + asset['left_total2']"></t>
                         <t t-if="count == len(asset_list)">
 			                <tr>
-				                <td style="border-top:2px solid"></td>
-				                <td style="border-top:2px solid; text-align:right; font-weight: bold;">
+				                <td style="border-top:1px solid"></td>
+				                <td style="border-top:1px solid; text-align:right; font-weight: bold; padding-right: 20px !important;">
                                     <span>Kopā par atskaiti:</span>
                                 </td>
-				                <td style="border-top:2px solid; font-weight: bold;">
+				                <td style="border-top:1px solid; font-weight: bold;">
                                     <span>Perioda sākumā:</span>
                                 </td>
-				                <td style="border-top:2px solid; text-align:right; font-weight: bold;">
+				                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
                                     <span t-esc="formatLang(purchase_total_amount_1)"/>
                                 </td>
-				                <td style="border-top:2px solid; text-align:right; font-weight: bold;">
+				                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
                                     <span t-esc="formatLang(depr_total_amount_1)"/>
                                 </td>
-				                <td style="border-top:2px solid; text-align:right; font-weight: bold;">
+				                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
                                     <span t-esc="formatLang(left_total_amount_1)"/>
                                 </td>
 			                </tr>
