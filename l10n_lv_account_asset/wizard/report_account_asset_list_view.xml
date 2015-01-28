@@ -9,8 +9,13 @@
                 <form string="Print a list of Assets" version="7.0">
                     <label string="Choose date." colspan="4"/>
                     <separator string="" colspan="4"/>
-					<group col="2">
-                    	<field name="date"/>
+					<group>
+                        <group>
+                    	    <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
 					</group>
                     <separator string="" colspan="4"/>
                     <footer>

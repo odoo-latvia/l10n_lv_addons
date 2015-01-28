@@ -36,18 +36,29 @@ class account_asset_list(report_sxw.rml_parse):
             'cr':cr,
             'uid': uid,
             'lines': self.lines,
+            'depr_sum': self.depr_sum
         })
         self.context = context
 
     def lines(self, form, ids=[]):
         asset_obj = self.pool.get('account.asset.asset')
-        asset_ids = asset_obj.search(self.cr, self.uid, [('confirmation_date','<=',form['date']),('confirmation_date','!=',False),'|',('close_date','=',False),('close_date','>=',form['date'])], order='category_id')
+        asset_ids = self.localcontext.get('active_ids',[])
+        if form:
+            asset_ids = asset_obj.search(self.cr, self.uid, [('confirmation_date','<=',form['date']),('confirmation_date','!=',False),'|',('close_date','=',False),('close_date','>=',form['date']), '|', ('company_id','=',False), ('company_id','child_of',[form['company_id']])], order='category_id')
         self.result_asset = asset_obj.browse(self.cr, self.uid, asset_ids)
         return self.result_asset
 
-report_sxw.report_sxw('report.l10n_lv_account_asset.list',
-                       'account.asset.asset', 
-                       'addons/l10n_lv_account_asset/report/account_asset_list_report_html.mako',
-                       parser=account_asset_list)
+    def depr_sum(self, d_lines, form):
+        depr = 0.0
+        for l in d_lines:
+            if l.move_check == True and ((not form) or l.depreciation_date <= form['date']):
+                depr += l.amount
+        return depr
+
+class al_report(osv.AbstractModel):
+    _name = 'report.l10n_lv_account_asset.asset_list_report'
+    _inherit = 'report.abstract_report'
+    _template = 'l10n_lv_account_asset.asset_list_report'
+    _wrapped_report_class = account_asset_list
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

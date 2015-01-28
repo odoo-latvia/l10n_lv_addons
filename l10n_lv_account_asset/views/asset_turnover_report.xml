@@ -45,11 +45,11 @@
                 <div style="float: right; text-align: right; display: inline; vertical-align: middle; margin-top: 20px; margin-bottom: 20px;">
 	                <span t-if="data">
                         <span>from</span>
-                        <span t-esc="formatLang(data['form']['from_date'], date=True)"/>
+                        <span style="font-weight: bold;" t-esc="formatLang(data['form']['from_date'], date=True)"/>
                     </span>
 	                <span t-if="data">
                         <span>to</span>
-                        <span t-esc="formatLang(data['form']['to_date'], date=True)"/>
+                        <span style="font-weight: bold;" t-esc="formatLang(data['form']['to_date'], date=True)"/>
                     </span>
                 </div>
             </div>

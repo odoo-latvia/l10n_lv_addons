@@ -37,13 +37,20 @@ class account_asset_list_report(osv.osv_memory):
 
     _columns = {
         'date': fields.date('Date', required=True),
-        }
+        'company_id': fields.many2one('res.company', 'Company', required=True)
+    }
+
+    _defaults = {
+        'date': fields.date.context_today,
+        'company_id': lambda self, cr, uid, ctx=None: self.pool.get('res.company')._company_default_get(cr, uid, 'account.asset.list.report', context=ctx)
+    }
 
     def _build_contexts(self, cr, uid, ids, data, context=None):
         if context is None:
             context = {}
         result = {}
         result['date'] = 'date' in data['form'] and data['form']['date'] or False
+        result['company_id'] = 'company_id' in data['form'] and data['form']['company_id'] or False
         return result
 
     def print_report(self, cr, uid, ids, context=None):
@@ -52,13 +59,17 @@ class account_asset_list_report(osv.osv_memory):
         data = {}
         data['ids'] = context.get('active_ids', [])
         data['model'] = context.get('active_model', 'ir.ui.menu')
-        data['form'] = self.read(cr, uid, ids, ['date'], context=context)[0]
-        for field in ['date']:
+        data['form'] = self.read(cr, uid, ids, ['date', 'company_id'], context=context)[0]
+        for field in ['date', 'company_id']:
             if isinstance(data['form'][field], tuple):
                 data['form'][field] = data['form'][field][0]
         used_context = self._build_contexts(cr, uid, ids, data, context=context)
         data['form']['used_context'] = used_context
-        return {'type': 'ir.actions.report.xml', 'report_name': 'l10n_lv_account_asset.list', 'datas': data}
+        return {
+            'type': 'ir.actions.report.xml',
+            'report_name': 'l10n_lv_account_asset.asset_list_report',
+            'datas': data
+        }
 
 account_asset_list_report()
 

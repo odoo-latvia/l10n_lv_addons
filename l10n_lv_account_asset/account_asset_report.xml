@@ -79,5 +79,20 @@
             <field name="paperformat_id" ref="l10n_lv_account_asset.report_paperformat_asset_portrait"/>
         </record>
 
+        <!-- Asset List -->
+
+        <report
+            id="report_account_asset_list"
+            string="List of Assets"
+            model="account.asset.asset" 
+            report_type="qweb-pdf"
+            file="l10n_lv_account_asset.asset_list_report" 
+            name="l10n_lv_account_asset.asset_list_report"
+        />
+
+        <record id="l10n_lv_account_asset.report_account_asset_list" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="l10n_lv_account_asset.report_paperformat_asset_portrait"/>
+        </record>
+
     </data>
 </openerp>
