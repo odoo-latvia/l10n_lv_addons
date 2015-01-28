@@ -59,9 +59,9 @@
                 <thead>
 			        <tr>
 				        <th colspan="3"></th>
-				        <th>Uzskaites vērtība</th>
-				        <th>Nolietojums</th>
-				        <th>Atlikusī vērtība</th>
+				        <th>Book value</th>
+				        <th>Depreciation</th>
+				        <th>Residual value</th>
 			        </tr>
 		        </thead>
                 <t t-set="curr_acc" t-value="None"></t>
@@ -80,7 +80,7 @@
                         <t t-set="test_count" t-value="test_count + 1"></t>
         	            <tr t-if="curr_acc != asset.category_id.account_asset_id and curr_acc != None" style="border-bottom: 1px solid black;">
 				            <td colspan="3">
-					            <span>Kopā kontā:</span>
+					            <span>Total in account:</span>
 				            </td>
 				            <td style="border-top:1px solid; text-align:right;">
 					            <span t-esc="formatLang(account_total_purchase)"/>
@@ -94,7 +94,7 @@
 			            </tr>
 			            <tr t-if="curr_acc != asset.category_id.account_asset_id">
 				            <td style="border-top:none; text-align:left; font-weight: bold; padding-top: 4px !important; padding-bottom: 4px !important;">
-                                <span>Konts:</span>
+                                <span>Account:</span>
                             </td>
 				            <td style="border-top:none; text-align:left; font-weight: bold; padding-top: 4px !important; padding-bottom: 4px !important;">
                                 <span t-esc="asset.category_id.account_asset_id.code"/>
@@ -142,7 +142,7 @@
                         <t t-if="test_count == len(asset_list)">
         	                <tr style="border-bottom: 1px solid black;">
 				                <td colspan="3">
-					                <span>Kopā kontā:</span>
+					                <span>Total in account:</span>
 				                </td>
 				                <td style="border-top:1px solid; text-align:right;">
 					                <span t-esc="formatLang(account_total_purchase)"/>
@@ -156,7 +156,7 @@
 			                </tr>
         	                <tr>
 				                <td colspan="3" style="border-top:1px solid; font-weight: bold;">
-					                <span>Kopā pavisam:</span>
+					                <span>Total:</span>
 				                </td>
 				                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
 					                <span t-esc="formatLang(total_purchase)"/>

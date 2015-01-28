@@ -1197,16 +1197,19 @@ msgstr "Operācija"
 
 #. module: l10n_lv_account_asset
 #: view:website:l10n_lv_account_asset.asset_turnover_report_document
+#: view:website:l10n_lv_account_asset.asset_list_report_document
 msgid "Book value"
 msgstr "Uzskaites vērtība"
 
 #. module: l10n_lv_account_asset
 #: view:website:l10n_lv_account_asset.asset_turnover_report_document
+#: view:website:l10n_lv_account_asset.asset_list_report_document
 msgid "Depreciation"
 msgstr "Nolietojums"
 
 #. module: l10n_lv_account_asset
 #: view:website:l10n_lv_account_asset.asset_turnover_report_document
+#: view:website:l10n_lv_account_asset.asset_list_report_document
 msgid "Residual value"
 msgstr "Atlikusī vērtība"
 
@@ -1259,4 +1262,24 @@ msgstr "Perioda sākumā:"
 #: view:website:l10n_lv_account_asset.asset_turnover_report_document
 msgid "Change:"
 msgstr "Izmaiņa:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_list_report_document
+msgid "on"
+msgstr "uz"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_list_report_document
+msgid "Total in account:"
+msgstr "Kopā kontā:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_list_report_document
+msgid "Account:"
+msgstr "Konts:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_list_report_document
+msgid "Total:"
+msgstr "Kopā pavisam:"
 
