@@ -36,7 +36,6 @@ class account_asset_list(report_sxw.rml_parse):
             'cr':cr,
             'uid': uid,
             'lines': self.lines,
-            'depr_sum': self.depr_sum
         })
         self.context = context
 
@@ -45,15 +44,48 @@ class account_asset_list(report_sxw.rml_parse):
         asset_ids = self.localcontext.get('active_ids',[])
         if form:
             asset_ids = asset_obj.search(self.cr, self.uid, [('confirmation_date','<=',form['date']),('confirmation_date','!=',False),'|',('close_date','=',False),('close_date','>=',form['date']), '|', ('company_id','=',False), ('company_id','child_of',[form['company_id']])], order='category_id')
-        self.result_asset = asset_obj.browse(self.cr, self.uid, asset_ids)
+        assets = asset_obj.browse(self.cr, self.uid, asset_ids)
+        result = []
+        datas = {}
+        for asset in assets:
+            account_id = asset.category_id.account_asset_id.id
+            account_code = asset.category_id.account_asset_id.code
+            account_name = asset.category_id.account_asset_id.name
+            book = asset.purchase_value
+            depr = 0.0
+            for l in asset.depreciation_line_ids:
+                if l.move_check == True and ((not form) or l.depreciation_date <= form['date']):
+                    depr += l.amount
+            left = book - depr
+            acc_book = book
+            acc_depr = depr
+            acc_res = left
+            asset_list = [{
+                'name': asset.name,
+                'book': book,
+                'depr': depr,
+                'left': left
+            }]
+            if datas.get((account_id)):
+                acc_book += datas[(account_id)]['acc_book']
+                acc_depr += datas[(account_id)]['acc_depr']
+                acc_res += datas[(account_id)]['acc_res']
+                asset_list += datas[(account_id)]['asset_list']
+                datas[(account_id)].clear()
+            if not datas.get((account_id)):
+                datas[(account_id)] = {
+                    'account_code': account_code,
+                    'account_name': account_name,
+                    'acc_book': acc_book,
+                    'acc_depr': acc_depr,
+                    'acc_res': acc_res,
+                    'asset_list': asset_list
+                }
+            result.append(datas[(account_id)])
+        for object in result:
+            if object != {}:
+                self.result_asset.append(object)
         return self.result_asset
-
-    def depr_sum(self, d_lines, form):
-        depr = 0.0
-        for l in d_lines:
-            if l.move_check == True and ((not form) or l.depreciation_date <= form['date']):
-                depr += l.amount
-        return depr
 
 class al_report(osv.AbstractModel):
     _name = 'report.l10n_lv_account_asset.asset_list_report'

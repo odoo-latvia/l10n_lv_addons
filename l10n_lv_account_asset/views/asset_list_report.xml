@@ -64,111 +64,77 @@
 				        <th>Residual value</th>
 			        </tr>
 		        </thead>
-                <t t-set="curr_acc" t-value="None"></t>
-                <t t-set="account_total_purchase" t-value="0.0"></t>
-                <t t-set="account_total_depr" t-value="0.0"></t>
-                <t t-set="account_total_left" t-value="0.0"></t>
                 <t t-set="total_purchase" t-value="0.0"></t>
                 <t t-set="total_depr" t-value="0.0"></t>
                 <t t-set="total_left" t-value="0.0"></t>
-                <t t-set="count" t-value="1"></t>
                 <t t-set="form" t-value="data and data['form'] or {}"></t>
-                <t t-set="asset_list" t-value="lines(form)"></t>
+                <t t-set="account_list" t-value="lines(form)"></t>
                 <t t-set="test_count" t-value="0"></t>
 		        <tbody>
-                    <t t-foreach="asset_list" t-as="asset">
+                    <t t-foreach="account_list" t-as="account">
                         <t t-set="test_count" t-value="test_count + 1"></t>
-        	            <tr t-if="curr_acc != asset.category_id.account_asset_id and curr_acc != None" style="border-bottom: 1px solid black;">
-				            <td colspan="3">
-					            <span>Total in account:</span>
-				            </td>
-				            <td style="border-top:1px solid; text-align:right;">
-					            <span t-esc="formatLang(account_total_purchase)"/>
-				            </td>
-				            <td style="border-top:1px solid; text-align:right;">
-					            <span t-esc="formatLang(account_total_depr)"/>
-				            </td>
-				            <td style="border-top:1px solid; text-align:right;">
-					            <span t-esc="formatLang(account_total_left)"/>
-				            </td>
-			            </tr>
-			            <tr t-if="curr_acc != asset.category_id.account_asset_id">
+			            <tr>
 				            <td style="border-top:none; text-align:left; font-weight: bold; padding-top: 4px !important; padding-bottom: 4px !important;">
                                 <span>Account:</span>
                             </td>
 				            <td style="border-top:none; text-align:left; font-weight: bold; padding-top: 4px !important; padding-bottom: 4px !important;">
-                                <span t-esc="asset.category_id.account_asset_id.code"/>
+                                <span t-esc="account['account_code']"/>
                             </td>
 				            <td style="border-top:none; text-align:center; font-weight: bold; padding-top: 4px !important; padding-bottom: 4px !important;">
-                                <span t-esc="asset.category_id.account_asset_id.name"/>
+                                <span t-esc="account['account_name']"/>
                             </td>
 				            <td colspan="3"/>
 			            </tr>
-                        <t t-if="curr_acc != asset.category_id.account_asset_id">
-                            <t t-set="account_total_purchase" t-value="0.0"></t>
-                            <t t-set="account_total_depr" t-value="0.0"></t>
-                            <t t-set="account_total_left" t-value="0.0"></t>
-                            <t t-set="count" t-value="1"></t>
-                            <t t-set="curr_acc" t-value="asset.category_id.account_asset_id"></t>
-                        </t>
-			            <tr>
+                        <t t-set="count" t-value="0"></t>
+			            <tr t-foreach="account['asset_list']" t-as="asset">
+                            <t t-set="count" t-value="count + 1"></t>
 				            <td>
                                 <span t-esc="'%02d' % count"/>
                             </td>
 				            <td colspan="2">
-                                <span t-esc="asset.name"/>
+                                <span t-esc="asset['name']"/>
                             </td>
 				            <td style="text-align:right">
-                                <span t-esc="formatLang(asset.purchase_value)"/>
-                            </td>
-                            <t t-set="depr" t-value="depr_sum(asset.depreciation_line_ids, form)"></t>
-                            <t t-set="left" t-value="asset.purchase_value - depr"></t>
-			                <td style="text-align:right">
-                                <span t-esc="formatLang(depr)"/>
+                                <span t-esc="formatLang(asset['book'])"/>
                             </td>
 			                <td style="text-align:right">
-                                <span t-esc="formatLang(left)"/>
+                                <span t-esc="formatLang(asset['depr'])"/>
+                            </td>
+			                <td style="text-align:right">
+                                <span t-esc="formatLang(asset['left'])"/>
                             </td>
 			            </tr>
-                        <t t-if="curr_acc == asset.category_id.account_asset_id">
-                            <t t-set="account_total_purchase" t-value="account_total_purchase + asset.purchase_value"></t>
-                            <t t-set="account_total_depr" t-value="account_total_depr + depr"></t>
-                            <t t-set="account_total_left" t-value="account_total_left + left"></t>
-                            <t t-set="count" t-value="count + 1"></t>
-                        </t>
-                        <t t-set="total_purchase" t-value="total_purchase + asset.purchase_value"></t>
-                        <t t-set="total_depr" t-value="total_depr + depr"></t>
-                        <t t-set="total_left" t-value="total_left + left"></t>
-                        <t t-if="test_count == len(asset_list)">
-        	                <tr style="border-bottom: 1px solid black;">
-				                <td colspan="3">
-					                <span>Total in account:</span>
-				                </td>
-				                <td style="border-top:1px solid; text-align:right;">
-					                <span t-esc="formatLang(account_total_purchase)"/>
-				                </td>
-				                <td style="border-top:1px solid; text-align:right;">
-					                <span t-esc="formatLang(account_total_depr)"/>
-				                </td>
-				                <td style="border-top:1px solid; text-align:right;">
-					                <span t-esc="formatLang(account_total_left)"/>
-				                </td>
-			                </tr>
-        	                <tr>
-				                <td colspan="3" style="border-top:1px solid; font-weight: bold;">
-					                <span>Total:</span>
-				                </td>
-				                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
-					                <span t-esc="formatLang(total_purchase)"/>
-				                </td>
-				                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
-					                <span t-esc="formatLang(total_depr)"/>
-				                </td>
-				                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
-					                <span t-esc="formatLang(total_left)"/>
-				                </td>
-			                </tr>
-                        </t>
+    	                <tr style="border-bottom: 1px solid black;">
+			                <td colspan="3">
+				                <span>Total in account:</span>
+			                </td>
+			                <td style="border-top:1px solid; text-align:right;">
+				                <span t-esc="formatLang(account['acc_book'])"/>
+			                </td>
+			                <td style="border-top:1px solid; text-align:right;">
+				                <span t-esc="formatLang(account['acc_depr'])"/>
+			                </td>
+			                <td style="border-top:1px solid; text-align:right;">
+				                <span t-esc="formatLang(account['acc_res'])"/>
+			                </td>
+		                </tr>
+                        <t t-set="total_purchase" t-value="total_purchase + account['acc_book']"></t>
+                        <t t-set="total_depr" t-value="total_depr + account['acc_depr']"></t>
+                        <t t-set="total_left" t-value="total_left + account['acc_res']"></t>
+    	                <tr t-if="test_count == len(account_list)">
+			                <td colspan="3" style="border-top:1px solid; font-weight: bold;">
+				                <span>Total:</span>
+			                </td>
+			                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
+				                <span t-esc="formatLang(total_purchase)"/>
+			                </td>
+			                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
+				                <span t-esc="formatLang(total_depr)"/>
+			                </td>
+			                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
+				                <span t-esc="formatLang(total_left)"/>
+			                </td>
+		                </tr>
 				    </t>
 		        </tbody>
 	        </table>
