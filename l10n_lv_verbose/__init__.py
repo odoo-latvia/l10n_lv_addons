@@ -199,15 +199,20 @@ class QwebWidgetVerbose(osv.AbstractModel):
 
     def _format(self, inner, options, qwebcontext):
         inner = self.pool['ir.qweb'].eval(inner, qwebcontext)
-        display = self.pool['ir.qweb'].eval_object(options['display_currency'], qwebcontext)
+        verb = inner
         lang_code = qwebcontext.context.get('lang') or 'en_US'
-        currency = display.name
-        if display.name == 'EUR':
-            currency = 'euro'
-        if lang_code == 'lv_LV':
-            verb = convert_currency(inner, display.name)
-        elif lang_code.split('_')[0] == 'en':
-            verb = amount_to_text_en(inner, currency=currency)
-        else:
-            verb = amount_to_text(inner, lang=lang_code.split('_')[0], currency=currency)
+        dsp_cur = options.get('display_currency', False)
+        if dsp_cur:
+            display = self.pool['ir.qweb'].eval_object(options['display_currency'], qwebcontext)
+            currency = display.name
+            if display.name == 'EUR':
+                currency = 'euro'
+            if lang_code == 'lv_LV':
+                verb = convert_currency(inner, display.name)
+            elif lang_code.split('_')[0] == 'en':
+                verb = amount_to_text_en(inner, currency=currency)
+            else:
+                verb = amount_to_text(inner, lang=lang_code.split('_')[0], currency=currency)
+        if not dsp_cur and lang_code == 'lv_LV':
+            verb = convert(inner)
         return verb

@@ -46,7 +46,7 @@ Invoicing (Accounting) -> Reporting -> Legal Reports -> Accounting Reports -> Jo
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
     'category': 'Localization',
-    'depends': ['account_sequence', 'l10n_lv_partner_address'],
+    'depends': ['account_sequence', 'l10n_lv_verbose', 'l10n_lv_partner_address'],
     'init_xml': [],
     'demo_xml': [],
     'data': [

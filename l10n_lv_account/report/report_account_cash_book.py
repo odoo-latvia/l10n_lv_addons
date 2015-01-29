@@ -25,6 +25,7 @@
 import time
 from openerp.osv import osv
 from openerp.report import report_sxw
+from openerp.addons.l10n_lv_verbose import convert as convert
 
 class report_account_cash_book(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
@@ -43,6 +44,8 @@ class report_account_cash_book(report_sxw.rml_parse):
                 i_count += 1
             if line.amount < 0:
                 e_count += 1
+        i_count = convert(i_count).lower()
+        e_count = convert(e_count).lower()
         return {'income': i_count, 'expense': e_count}
 
 class cash_book(osv.AbstractModel):

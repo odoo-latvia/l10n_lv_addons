@@ -3,64 +3,99 @@
 <data>
 
 <template id="cash_book_document">
-    <t t-call="report.external_layout">
+    <t>
         <div class="page">
-            <div class="oe_structure"/>
-
-            <h2>
-                <span>Kases slēgums: </span><span t-field="o.name"/>
-            </h2>
-            <h2>
-                <span t-field="o.date"/>
-            </h2>
-            <h2>
-                <span>Kase: </span><span t-field="o.journal_id.name"/>
-            </h2>
-
-            <div class="row mt32 mb32">
+            <style type="text/css">
+                div.title {
+                    font-size: 18px;
+                    font-weight: bold;
+                    text-align: center;
+                    margin-top: 20px;
+                    margin-bottom: 20px;
+                }
+                div.balance {
+                    font-weight: bold;
+                    text-align: right;
+                    float: right;
+                    font-size: 16px;
+                }
+                table.list td, th {
+                    padding-top: 2px;
+                    padding-bottom: 2px;
+                    padding-left: 4px;
+                    padding-right: 4px;
+                }
+                table.list th {
+                    font-weight: normal;
+                }
+            </style>
+            <div class="title">
                 <div>
-                    <span><strong>Altikums dienas sākumā: </strong></span><span t-field="o.balance_start"/>
+                    <span>Kases slēgums:</span>
+                    <span t-field="o.name"/>
+                </div>
+                <div>
+                    <span t-field="o.date"/>
+                </div>
+                <div>
+                    <span>Kase:</span>
+                    <span t-field="o.journal_id.name"/>
                 </div>
             </div>
-
-            <table class="table table-condensed">
+            <div class="balance">
+                <span>Altikums dienas sākumā:</span>
+                <span t-esc="formatLang(o.balance_start)"/>
+            </div>
+            <br/>
+            <br/>
+            <table width="100%" class="list">
                 <thead>
-                    <tr>
-                        <th>Ordera Nr.</th>
-                        <th>No kā saņemts vai kam izsniegts</th>
-                        <th>Ieņēmumi, EUR</th>
+                    <tr style="border: 1px solid black;">
+                        <th style="border-right: 1px solid black;">Ordera Nr.</th>
+                        <th style="border-right: 1px solid black;">No kā saņemts vai kam izsniegts</th>
+                        <th style="border-right: 1px solid black;">Ieņēmumi, EUR</th>
                         <th>Izdevumi, EUR</th>
                     </tr>
+                    <tr>
+                        <th style="color: white; font-size: 10px; padding-top: 0px !important; padding-bottom: 0px !important;">...</th>
+                        <th style="color: white; font-size: 10px; padding-top: 0px !important; padding-bottom: 0px !important;">...</th>
+                        <th style="color: white; font-size: 10px; padding-top: 0px !important; padding-bottom: 0px !important;">...</th>
+                        <th style="color: white; font-size: 10px; padding-top: 0px !important; padding-bottom: 0px !important;">...</th>
+                    </tr>
                 </thead>
-                <tbody>
+                <tbody style="border: 1px solid black;">
                     <tr t-foreach="o.line_ids" t-as="l">
-                        <td>
+                        <td style="border-right: 1px solid black;">
                             <span t-field="l.ref"/>
                         </td>
-                        <td>
+                        <td style="border-right: 1px solid black;">
                             <span t-field="l.partner_id.name"/>
                         </td>
-                        <td class="text-right">
-                            <span t-if="l.amount >= 0"><span t-field="l.amount"/></span>
+                        <td style="border-right: 1px solid black; text-align: right;">
+                            <span t-esc="(l.amount >= 0) and formatLang(l.amount) or ''"/>
                         </td>
-                        <td class="text-right">
-                            <span t-if="l.amount &lt; 0"><span t-field="l.amount"/></span>
+                        <td style="text-align: right;">
+                            <span t-esc="(l.amount &lt; 0) and formatLang(l.amount) or ''"/>
                         </td>
                     </tr>
                 </tbody>
             </table>
-
-            <div class="row mt32 mb32">
+            <br/>
+            <div class="balance">
                 <div>
-                    <span><strong>Apgrozījums: </strong></span><span t-field="o.total_entry_encoding"/>
+                    <span>Apgrozījums:</span>
+                    <span t-esc="formatLang(o.total_entry_encoding)"/>
+                </div>
+                <div>
+                    <span>Atlikums dienas beigās:</span>
+                    <span t-esc="formatLang(o.balance_end)"/>
                 </div>
             </div>
-            <div class="row mt32 mb32">
-                <div>
-                    <span><strong>Atlikums dienas beigās: </strong></span><span t-field="o.balance_end"/>
-                </div>
-            </div>
-            <table>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <table width="100%">
                 <tbody>
                     <tr>
                         <td width="50%"></td>
@@ -73,12 +108,20 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td><span>ieņēmumu orderi - </span><span t-esc="line_count(o.line_ids)['income']"/></td>
+                        <td>
+                            <span>ieņēmumu orderi</span>
+                            <span>-</span>
+                            <span t-esc="line_count(o.line_ids)['income']"/>
+                        </td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td><span>izdevumu orderi - </span><span t-esc="line_count(o.line_ids)['expense']"/></td>
+                        <td>
+                            <span>izdevumu orderi</span>
+                            <span>-</span>
+                            <span t-esc="line_count(o.line_ids)['expense']"/>
+                        </td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -89,7 +132,6 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="oe_structure"/>
         </div>
     </t>
 </template>
