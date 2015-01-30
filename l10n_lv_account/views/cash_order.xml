@@ -3,69 +3,156 @@
 <data>
 
 <template id="cash_order_document">
-    <t t-call="report.external_layout">
-            <div class="page">
-                <div class="oe_structure"/>
-                <h2>
-                    <span t-if="o.amount >= 0"><span> Kases ieņēmumu orderis: </span></span>
-                    <span t-if="o.amount &lt; 0"><span> Kases izdevumu orderis: </span></span>
+    <t>
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"></t>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"></t>
+        </t>
+        <div class="page">
+            <style type="text/css">
+                div.title {
+                    font-size: 16px;
+                    text-align: center;
+                    margin-top: 80px;
+                    margin-bottom: 40px;
+                }
+                table.classic td, th {
+                    font-weight: normal;
+                    border: 1px solid black;
+                    padding-top: 8px;
+                    padding-bottom: 8px;
+                    padding-left: 8px;
+                    padding-right: 8px;
+                    vertical-align: middle;
+                    text-align: center;
+                }
+                table.classic, table.signature {
+                    margin-top: 20px;
+                    margin-bottom: 20px;
+                }
+                table.signature td {
+                    padding-top: 8px;
+                    padding-bottom: 8px;
+                    padding-left: 8px;
+                    padding-right: 8px;
+                }
+            </style>
+            <div class="title">
+                <div>
+                    <span t-if="o.amount >= 0">Cash income order No.</span>
+                    <span t-if="o.amount &lt; 0">Cash expense order No.</span>
                     <span t-field="o.ref"/>
-                </h2>
-                <h3>
-                    <span t-field="o.date"/>
-                </h3>
-                             
-                <table class="table table-condensed">
+                </div>
+                <div style="font-weight: bold; font-size: 14px;">
+                    <span t-esc="formatLang(o.date, date=True)"/>
+                </div>
+            </div>
+            <t t-set="title" t-value="(company.partner_id.title and (company.partner_id.title.shortcut and company.partner_id.title.shortcut.upper()) or company.partner_id.title.name) or ''"></t>
+            <table width="100%">
+                <tr>
+                    <td width="60%" style="text-align: center; padding: 4px;">
+                        <span t-esc="company.name"/><span t-if="title">,</span>
+                        <span t-esc="title"/>
+                    </td>
+                    <td width="10%" style="color: white;">...</td>
+                    <td width="30%" style="text-align: center; padding: 4px;">
+                        <span t-esc="company.vat"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="margin-top: 0px; text-align: center; font-size: 10px; border-top: 1px solid black;">
+                        <span>company name</span>
+                    </td>
+                    <td width="10%" style="color: white;">...</td>
+                    <td style="margin-top: 0px; text-align: center; font-size: 10px; border-top: 1px solid black;">
+                        <span>registration No.</span>
+                    </td>
+                </tr>
+            </table>
+            <table width="100%" class="classic">
                 <thead>
                     <tr>
-                        <th class="text-center">Korespondējošā konta nr.</th>     
-                        <th class="text-center">Naudas vienība</th>
-                        <th class="text-center">Summa</th>
+                        <th>Corresponding account No.</th>
+                        <th>Analytic tracking account No.</th>
+                        <th>Monetary unit</th>
+                        <th>Amount</th>
                     </tr>
                 </thead>
                 <tbody>                   
-                        <td class="text-center">
-                           <span t-if="o.partner_id"><span t-field=" o.partner_id.property_account_receivable.code"/></span>                           
-                        </td>
-                        <td class="text-center">
-                            <span t-field="o.company_id.currency_id.symbol"/>
-                        </td>
-                        <td class="text-right">
-                            <span t-esc="abs_amount(o.amount)"/> 
-                        </td>              
+                    <td>
+                       <span t-esc="o.account_id and o.account_id.code or ''"/>                          
+                    </td>
+                    <td>
+                        <span t-esc="get_analytic_account(o)"/>
+                    </td>
+                    <td>
+                        <span t-esc="(o.currency_id and currency_id.symbol) or o.statement_id.currency.symbol or ''"/>
+                    </td>
+                    <td>
+                        <span t-esc="formatLang(abs(o.amount))"/> 
+                    </td>              
                 </tbody> 
             </table>
-            
-             <div class="row mt32 mb32">
-                <div>
-                    <span>Summa vārdiem: </span><span t-esc="verbose_currency(abs_amount(o.amount), o.company_id.currency_id.name)" />
-                </div>
+            <table width="100%" class="signature" style="margin-bottom: 40px !important;">
+                <tr>
+                    <td>
+                        <span>Amount in words:</span>
+                    </td>
+                    <td colspan="3" style="border-bottom: 1px solid black;">
+                        <span t-esc="abs(o.amount)" t-esc-options='{"widget": "verbose", "display_currency": "o.currency_id or o.statement_id.currency"}'/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span t-if="o.amount >= 0">Received from</span>
+                        <span t-if="o.amount &lt; 0">Handed out to</span>
+                    </td>
+                    <td width="45%" style="border-bottom: 1px solid black;">
+                        <span t-esc="o.partner_id and o.partner_id.name or ''"/>
+                    </td>
+                    <td style="border-bottom: 1px solid black;">
+                        <span t-if="(not o.partner_id) or (o.partner_id and (not o.partner_id.is_company))">ID</span>
+                        <span t-if="o.partner_id and o.partner_id.is_company">reg. No.</span>
+                    </td>
+                    <td width="30%" style="border-bottom: 1px solid black;">
+                        <span t-esc="o.partner_id and get_id(o.partner_id) or ''"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Justification:</span>
+                    </td>
+                    <td colspan="3" style="border-bottom: 1px solid black;">
+                        <span t-field="o.name"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="color: white;">...</td>
+                    <td colspan="3" style="border-bottom: 1px solid black;"></td>
+                </tr>
+            </table>
+            <div t-if="o.amount &lt; 0" style="display: inline; font-weight: bold;">
+                <span style="margin-left: 10px;">Manager</span>
             </div>
-             <div class="row mt32 mb32">
-                <div>
-                    <span t-if="o.amount >= 0"><span> Pieņemts no: </span></span>
-                    <span t-if="o.amount &lt; 0"><span> Izsniegts: </span></span>
-                    <span t-if="o.partner_id"><span t-field="o.partner_id.name"/></span>
-                    <span t-if="not o.partner_id"><span>__________________________________________</span></span>
-                    <span> p.k. </span>
-                    <span t-if="o.partner_id.ref"><span t-field="o.partner_id.ref"/></span>
-                    <span t-if="not o.partner_id or not o.partner_id.ref"><span>_______________________________</span></span>
-                </div>                   
-                </div> 
-            
-            <div class="row mt32 mb32">
-                <div>
-                    <span>Pamatojums: </span><span t-field="o.name"/>
-                </div>
+            <div t-if="o.amount &lt; 0" style="display: inline; border-bottom: 1px solid black; width: 10%; color: white; font-weight: bold;">
+                <span>________________</span>
             </div>
-            <div class="row mt32 mb32">
-                <div>
-                    <span t-if="o.amount >= 0"><span> Grāmatvedis: _______________________________ Kasieris: _______________________________ </span></span>
-                    <span t-if="o.amount &lt; 0"><span> Vadītājs: ___________________________ Grāmatvedis: ___________________________ Izsniedza kasieris: ___________________________ </span></span>
-                </div>
+            <div style="display: inline; font-weight: bold;">
+                <span style="margin-left: 10px;">Accountant</span>
             </div>
-                <div class="oe_structure"/>
-           </div>
+            <div style="display: inline; border-bottom: 1px solid black; width: 10%; color: white; font-weight: bold;">
+                <span>________________</span>
+            </div>
+            <div style="display: inline; font-weight: bold;">
+                <span style="margin-left: 10px;" t-if="o.amount >= 0">Cashier</span>
+                <span style="margin-left: 10px;" t-if="o.amount &lt; 0">Handed out by cashier</span>
+            </div>
+            <div style="display: inline; border-bottom: 1px solid black; width: 10%; color: white; font-weight: bold;">
+                <span>________________</span>
+            </div>
+       </div>
     </t>
 </template>
 
@@ -73,7 +160,7 @@
     <t t-call="report.html_container">
         <t t-foreach="docs" t-as="o">
             <t t-foreach="o.report_line_ids" t-as="line">
-                <t t-raw="translate_doc(line.id, 'account.bank.statement.line', 'partner_id.lang', 'l10n_lv_account.cash_order_document')"/>
+                <t t-raw="translate_doc(line.id, 'account.bank.statement.line', 'statement_id.user_id.lang', 'l10n_lv_account.cash_order_document')"/>
             </t>
         </t>
     </t>

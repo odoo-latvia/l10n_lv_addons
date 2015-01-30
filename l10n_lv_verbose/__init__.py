@@ -209,9 +209,9 @@ class QwebWidgetVerbose(osv.AbstractModel):
                 currency = 'euro'
             if lang_code == 'lv_LV':
                 verb = convert_currency(inner, display.name)
-            elif lang_code.split('_')[0] == 'en':
+            if lang_code.split('_')[0] == 'en':
                 verb = amount_to_text_en(inner, currency=currency)
-            else:
+            if lang_code != 'lv_LV' and lang_code.split('_')[0] != 'en':
                 verb = amount_to_text(inner, lang=lang_code.split('_')[0], currency=currency)
         if not dsp_cur and lang_code == 'lv_LV':
             verb = convert(inner)

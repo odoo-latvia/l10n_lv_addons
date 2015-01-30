@@ -43,17 +43,7 @@
 		        header="False"
                 webkit_header="l10n_lv_report_webkit.ir_header_webkit_inv"/> -->
                 
-<!--////////////////////////////////////////////////////////////////////////////////////////////-->              
-  
-<!--      <report auto="False"
-                id="report_account_cash_order_l10n_lv_html"
-                model="account.cash.order.report"
-                name="l10n_lv_account.cash_order"
-                file="l10n_lv_account/report/report_account_cash_order_html.mako"
-                string="Order from Cash Register"
-                report_type="webkit"
-				menu="False"
-                webkit_header="l10n_lv_report_webkit.ir_header_webkit_pi"/> -->
+<!--////////////////////////////////////////////////////////////////////////////////////////////-->
 
         <!-- Replacer -->
 <!--        <report 
@@ -105,10 +95,9 @@
                 model="account.cash.order.report"
                 name="l10n_lv_account.cash_order"
                 file="l10n_lv_account.cash_order"
-                report_type="qweb-pdf"
-                menu="False"/>
+                report_type="qweb-pdf"/>
 
-        <record id="l10n_lv_account.report_account_cash_book_l10n_lv" model="ir.actions.report.xml">
+        <record id="l10n_lv_account.report_account_cash_order_l10n_lv" model="ir.actions.report.xml">
             <field name="paperformat_id" ref="l10n_lv_account.report_paperformat_account_portrait"/>
         </record>
 

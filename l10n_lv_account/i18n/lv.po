@@ -381,3 +381,93 @@ msgstr "izdevumu orderi"
 #: view:website:l10n_lv_account.cash_book_document
 msgid "Accountant:"
 msgstr "Grāmatvedis:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "Cash income order No."
+msgstr "Kases ieņēmumu orderis Nr."
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "Cash expense order No."
+msgstr "Kases izdevumu orderis Nr."
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "company name"
+msgstr "uzņēmuma nosaukums"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "registration No."
+msgstr "reģistrācijas Nr."
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "Corresponding account No."
+msgstr "Korespondējošā konta Nr."
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "Analytic tracking account No."
+msgstr "Analītiskā uzskaites konta Nr."
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "Monetary unit"
+msgstr "Naudas vienība"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "Amount"
+msgstr "Summa"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "Amount in words:"
+msgstr "Summa vārdiem:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "Received from"
+msgstr "Pieņemts no"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "Handed out to"
+msgstr "Izsniegts"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "ID"
+msgstr "p. k."
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "reg. No."
+msgstr "reģ. Nr."
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "Justification:"
+msgstr "Pamatojums:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "Manager"
+msgstr "Vadītājs"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "Accountant"
+msgstr "Grāmatvedis"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "Cashier"
+msgstr "Kasieris"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_order_document
+msgid "Handed out by cashier"
+msgstr "Izsniedza kasieris"

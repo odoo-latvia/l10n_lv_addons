@@ -23,7 +23,6 @@
 ##############################################################################
 
 import time
-import openerp.addons.l10n_lv_verbose as verb
 from openerp.osv import osv
 from openerp.report import report_sxw
 from openerp import pooler
@@ -32,16 +31,32 @@ class report_account_cash_order(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         super(report_account_cash_order, self).__init__(cr, uid, name, context=context)
         self.localcontext.update({
-            'abs_amount': self.abs_amount,
-            'verbose_currency': self.verbose_currency,           
+            'get_analytic_account': self.get_analytic_account,
+            'get_id': self.get_id
         })
-        self.context = context
-        
-    def abs_amount(self, amount):
-        return abs(amount)
-        
-    def verbose_currency(self, amount, currency):
-        return verb.convert_currency(amount, currency)      
+        self.context = context  
+
+    def get_analytic_account(self, line):
+        account = ''
+        acc_list = []
+        if line.journal_entry_id:
+            for l in line.journal_entry_id.line_id:
+                if l.analytic_account_id and l.analytic_account_id not in acc_list:
+                    acc_list.append(l.analytic_account_id)
+        if acc_list:
+            account = acc_list.join(', ')
+        return account
+
+    def get_id(self, partner):
+        res = False
+        if partner.is_company:
+            if hasattr(partner, 'company_registry'):
+                res = partner.company_registry
+            if not res:
+                res = partner.vat
+        if (not partner.is_company) and hasattr(partner, 'identification_id'):
+            res = partner.identification_id
+        return res
 
 class cash_order(osv.AbstractModel):
     _name = 'report.l10n_lv_account.cash_order'
