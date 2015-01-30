@@ -35,7 +35,12 @@ class account_invoice_list_report(osv.osv_memory):
             ('in_invoice','Supplier Invoice'),
             ('out_refund','Customer Refund'),
             ('in_refund','Supplier Refund'),
-            ],'Type', select=True, required=True)
+            ],'Type', select=True, required=True),
+        'company_id': fields.many2one('res.company', 'Company', required=True)
+    }
+
+    _defaults = {
+        'company_id': lambda self, cr, uid, ctx=None: self.pool.get('res.company')._company_default_get(cr, uid, 'account.asset.list.report', context=ctx)
     }
 
     def _build_contexts(self, cr, uid, ids, data, context=None):
@@ -57,7 +62,11 @@ class account_invoice_list_report(osv.osv_memory):
                 data['form'][field] = data['form'][field][0]
         used_context = self._build_contexts(cr, uid, ids, data, context=context)
         data['form']['used_context'] = used_context
-        return {'type': 'ir.actions.report.xml', 'report_name': 'l10n_lv_account.invoice_list', 'datas': data}
+        return {
+            'type': 'ir.actions.report.xml',
+            'report_name': 'l10n_lv_account.invoice_list',
+            'datas': data
+        }
 
 account_invoice_list_report()
 

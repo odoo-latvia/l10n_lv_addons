@@ -57,8 +57,9 @@ Invoicing (Accounting) -> Reporting -> Legal Reports -> Accounting Reports -> Jo
         'wizard/account_cash_order_report_view.xml',
         'wizard/account_move_line_export_view.xml',
         'account_invoice_view.xml',
-        'views/cash_book.xml',
-        'views/cash_order.xml'
+        'views/cash_book_report.xml',
+        'views/cash_order_report.xml',
+        'views/invoice_list_report.xml'
         ],
     'auto_install': False,
     'installable': True,

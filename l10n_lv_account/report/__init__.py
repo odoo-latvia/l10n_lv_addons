@@ -22,7 +22,7 @@
 #
 ##############################################################################
 
-import report_account_invoice_list_html
+import report_account_invoice_list
 import report_account_chart_html
 import report_account_cash_order
 import report_account_cash_book

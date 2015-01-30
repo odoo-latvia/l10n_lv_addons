@@ -26,7 +26,7 @@ msgid "Contact Address"
 msgstr "Kontaktadrese"
 
 #. module: l10n_lv_account
-#: model:ir.actions.report.xml,name:l10n_lv_account.report_account_invoice_list_l10n_lv_html
+#: model:ir.actions.report.xml,name:l10n_lv_account.report_account_invoice_list_l10n_lv
 #: model:ir.ui.menu,name:l10n_lv_account.menu_account_invoice_list_report_l10n_lv
 msgid "List of Invoices"
 msgstr "Rēķinu saraksts"
@@ -96,6 +96,7 @@ msgstr "Tips"
 
 #. module: l10n_lv_account
 #: field:account.move.line.export,company_id:0
+#: field:account.invoice.list.report,company_id:0
 msgid "Company"
 msgstr "Uzņēmums"
 
