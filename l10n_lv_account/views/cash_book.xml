@@ -4,22 +4,24 @@
 
 <template id="cash_book_document">
     <t>
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"></t>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"></t>
+        </t>
         <div class="page">
             <style type="text/css">
+                div.company {
+                    text-align: left;
+                }
                 div.title {
-                    font-size: 18px;
                     font-weight: bold;
                     text-align: center;
                     margin-top: 20px;
                     margin-bottom: 20px;
                 }
-                div.balance {
-                    font-weight: bold;
-                    text-align: right;
-                    float: right;
-                    font-size: 16px;
-                }
-                table.list td, th {
+                table.list td {
                     padding-top: 2px;
                     padding-bottom: 2px;
                     padding-left: 4px;
@@ -27,108 +29,126 @@
                 }
                 table.list th {
                     font-weight: normal;
+                    border: 1px solid black;
+                    padding-top: 8px;
+                    padding-bottom: 8px;
+                    padding-left: 8px;
+                    padding-right: 8px;
                 }
             </style>
+            <t t-set="title" t-value="(company.partner_id.title and (company.partner_id.title.shortcut and company.partner_id.title.shortcut.upper()) or company.partner_id.title.name) or ''"></t>
+            <div class="company">
+                <div style="font-weight: bold; font-size: 16px;">
+                    <span t-esc="company.name"/>
+                    <span t-esc="title"/>
+                </div>
+                <div style="font-size: 14px;">
+                    <span t-esc="company.vat"/>
+                </div>
+            </div>
             <div class="title">
                 <div>
-                    <span>Kases slēgums:</span>
+                    <span>Cash desk closing:</span>
                     <span t-field="o.name"/>
                 </div>
                 <div>
                     <span t-field="o.date"/>
                 </div>
                 <div>
-                    <span>Kase:</span>
+                    <span>Cash desk:</span>
                     <span t-field="o.journal_id.name"/>
                 </div>
             </div>
-            <div class="balance">
-                <span>Altikums dienas sākumā:</span>
-                <span t-esc="formatLang(o.balance_start)"/>
-            </div>
-            <br/>
-            <br/>
             <table width="100%" class="list">
                 <thead>
-                    <tr style="border: 1px solid black;">
-                        <th style="border-right: 1px solid black;">Ordera Nr.</th>
-                        <th style="border-right: 1px solid black;">No kā saņemts vai kam izsniegts</th>
-                        <th style="border-right: 1px solid black;">Ieņēmumi, EUR</th>
-                        <th>Izdevumi, EUR</th>
-                    </tr>
                     <tr>
-                        <th style="color: white; font-size: 10px; padding-top: 0px !important; padding-bottom: 0px !important;">...</th>
-                        <th style="color: white; font-size: 10px; padding-top: 0px !important; padding-bottom: 0px !important;">...</th>
-                        <th style="color: white; font-size: 10px; padding-top: 0px !important; padding-bottom: 0px !important;">...</th>
-                        <th style="color: white; font-size: 10px; padding-top: 0px !important; padding-bottom: 0px !important;">...</th>
+                        <th>Order No.</th>
+                        <th>Received from or handed out to</th>
+                        <th>
+                            <span>Income</span><span t-if="o.currency">,</span>
+                            <span t-esc="o.currency and o.currency.name or ''"/>
+                        </th>
+                        <th>
+                            <span>Expense</span><span t-if="o.currency">,</span>
+                            <span t-esc="o.currency and o.currency.name or ''"/>
+                        </th>
                     </tr>
                 </thead>
-                <tbody style="border: 1px solid black;">
-                    <tr t-foreach="o.line_ids" t-as="l">
-                        <td style="border-right: 1px solid black;">
-                            <span t-field="l.ref"/>
-                        </td>
-                        <td style="border-right: 1px solid black;">
-                            <span t-field="l.partner_id.name"/>
-                        </td>
-                        <td style="border-right: 1px solid black; text-align: right;">
-                            <span t-esc="(l.amount >= 0) and formatLang(l.amount) or ''"/>
-                        </td>
-                        <td style="text-align: right;">
-                            <span t-esc="(l.amount &lt; 0) and formatLang(l.amount) or ''"/>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <br/>
-            <div class="balance">
-                <div>
-                    <span>Apgrozījums:</span>
-                    <span t-esc="formatLang(o.total_entry_encoding)"/>
-                </div>
-                <div>
-                    <span>Atlikums dienas beigās:</span>
-                    <span t-esc="formatLang(o.balance_end)"/>
-                </div>
-            </div>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <table width="100%">
                 <tbody>
                     <tr>
-                        <td width="50%"></td>
-                        <td width="30%" class="text-right">Kasieris:</td>
-                        <td width="20%"></td>
-                    </tr>
-                    <tr>
-                        <td>Ieraksti kases grāmatā tika pārbaudīti un saņemti:</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span>ieņēmumu orderi</span>
-                            <span>-</span>
-                            <span t-esc="line_count(o.line_ids)['income']"/>
+                        <td colspan="2" style="text-align: right; font-weight: bold;">
+                            <span>Balance at the beginning of the day:</span>
                         </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span>izdevumu orderi</span>
-                            <span>-</span>
-                            <span t-esc="line_count(o.line_ids)['expense']"/>
+                        <td style="text-align: right; font-weight: bold;">
+                            <span t-esc="(o.balance_start >= 0.0) and formatLang(o.balance_start) or formatLang(0.0)"/>
                         </td>
-                        <td></td>
-                        <td></td>
+                        <td style="text-align: right; font-weight: bold;">
+                            <span t-esc="(o.balance_start &lt; 0.0) and formatLang((o.balance_start * (-1.0))) or formatLang(0.0)"/>
+                        </td>
+                    </tr>
+                    <tr t-foreach="o.line_ids" t-as="l">
+                        <td>
+                            <span t-field="l.ref"/>
+                        </td>
+                        <td>
+                            <span t-field="l.partner_id.name"/>
+                        </td>
+                        <td style="text-align: right;">
+                            <span t-esc="(l.amount >= 0.0) and formatLang(l.amount) or '.'"/>
+                        </td>
+                        <td style="text-align: right;">
+                            <span t-esc="(l.amount &lt; 0.0) and formatLang((l.amount * (-1.0))) or '.'"/>
+                        </td>
+                    </tr>
+                    <t t-set="turn" t-value="turnover(o.line_ids)"></t>
+                    <tr style="border-top: 1px solid black;">
+                        <td colspan="2" style="text-align: right; font-weight: bold;">
+                            <span>Turnover:</span>
+                        </td>
+                        <td style="text-align: right; font-weight: bold;">
+                            <span t-esc="formatLang(turn['income'])"/>
+                        </td>
+                        <td style="text-align: right; font-weight: bold;">
+                            <span t-esc="formatLang(turn['expense'])"/>
+                        </td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td class="text-right">Grāmatvedis:</td>
-                        <td></td>
+                        <td colspan="2" style="text-align: right; font-weight: bold;">
+                            <span>Balance at end of the day:</span>
+                        </td>
+                        <td style="text-align: right; font-weight: bold;">
+                            <span t-esc="(o.balance_end >= 0.0) and formatLang(o.balance_end) or formatLang(0.0)"/>
+                        </td>
+                        <td style="text-align: right; font-weight: bold;">
+                            <span t-esc="(o.balance_end &lt; 0.0) and formatLang(o.balance_end) or formatLang(0.0)"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: right; font-weight: bold; padding-top: 10px;">
+                            <span>Cashier:</span>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="padding-left: 20px; font-weight: bold;">
+                            <div>The entries in the cash book were checked and received:</div>
+                            <div>
+                                <span>income orders</span>
+                                <span>-</span>
+                                <span t-esc="line_count(o.line_ids)['income']"/>
+                            </div>
+                            <div>
+                                <span>expense orders</span>
+                                <span>-</span>
+                                <span t-esc="line_count(o.line_ids)['expense']"/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: right; font-weight: bold;">
+                            <span>Accountant:</span>
+                        </td>
+                        <td colspan="2"></td>
                     </tr>
                 </tbody>
             </table>

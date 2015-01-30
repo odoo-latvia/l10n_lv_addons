@@ -31,18 +31,29 @@ class report_account_cash_book(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         super(report_account_cash_book, self).__init__(cr, uid, name, context=context)
         self.localcontext.update({
+            'turnover': self.turnover,
             'line_count': self.line_count,
             'time': time,
         })
         self.context = context
 
+    def turnover(self, lines):
+        inc = 0.0
+        exp = 0.0
+        for l in lines:
+            if l.amount >= 0.0:
+                inc += l.amount
+            if l.amount < 0.0:
+                exp += (l.amount * (-1.0))
+        return {'income': inc, 'expense': exp}
+
     def line_count(self, lines):
         i_count = 0
         e_count = 0
         for line in lines:
-            if line.amount >= 0:
+            if line.amount >= 0.0:
                 i_count += 1
-            if line.amount < 0:
+            if line.amount < 0.0:
                 e_count += 1
         i_count = convert(i_count).lower()
         e_count = convert(e_count).lower()

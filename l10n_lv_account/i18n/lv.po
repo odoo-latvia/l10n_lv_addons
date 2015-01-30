@@ -166,7 +166,7 @@ msgid "Start Period"
 msgstr "Sākuma Periods"
 
 #. module: l10n_lv_account
-#: model:ir.actions.report.xml,name:l10n_lv_account.report_account_cash_book_l10n_lv_html
+#: model:ir.actions.report.xml,name:l10n_lv_account.report_account_cash_book_l10n_lv
 msgid "Cash Book"
 msgstr "Kases Grāmata"
 
@@ -312,4 +312,72 @@ msgstr "Saglabāt dokumentu"
 msgid "Invoice ITS-1"
 msgstr "Rēķins ITS-1"
 
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_book_document
+msgid "Cash desk closing:"
+msgstr "Kases slēgums:"
 
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_book_document
+msgid "Cash desk:"
+msgstr "Kase:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_book_document
+msgid "Order No."
+msgstr "Ordera Nr."
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_book_document
+msgid "Received from or handed out to"
+msgstr "No kā saņemts vai kam izsniegts"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_book_document
+msgid "Income"
+msgstr "Ieņēmumi"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_book_document
+msgid "Expense"
+msgstr "Izdevumi"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_book_document
+msgid "Balance at the beginning of the day:"
+msgstr "Atlikums dienas sākumā:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_book_document
+msgid "Turnover:"
+msgstr "Apgrozījums:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_book_document
+msgid "Balance at end of the day:"
+msgstr "Atlikums dienas beigās:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_book_document
+msgid "Cashier:"
+msgstr "Kasieris:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_book_document
+msgid "The entries in the cash book were checked and received:"
+msgstr "Ieraksti kases grāmatā tika pārbaudīti un saņemti:"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_book_document
+msgid "income orders"
+msgstr "ieņēmumu orderi"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_book_document
+msgid "expense orders"
+msgstr "izdevumu orderi"
+
+#. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account.cash_book_document
+msgid "Accountant:"
+msgstr "Grāmatvedis:"
