@@ -35,8 +35,12 @@ class report_account_invoice_list(report_sxw.rml_parse):
             'cr':cr,
             'uid': uid,
             'lines': self.lines,
+            'set_company': self.set_company
         })
         self.context = context
+
+    def set_company(self, form):
+        return self.pool.get('res.company').browse(self.cr, self.uid, form['company_id'])
 
     def lines(self, form, ids=[]):
         invoice_obj = self.pool.get('account.invoice')

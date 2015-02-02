@@ -313,162 +313,247 @@ msgstr "Saglabāt dokumentu"
 msgid "Invoice ITS-1"
 msgstr "Rēķins ITS-1"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
 msgid "Cash desk closing:"
 msgstr "Kases slēgums:"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
 msgid "Cash desk:"
 msgstr "Kase:"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
 msgid "Order No."
 msgstr "Ordera Nr."
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
 msgid "Received from or handed out to"
 msgstr "No kā saņemts vai kam izsniegts"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
 msgid "Income"
 msgstr "Ieņēmumi"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
 msgid "Expense"
 msgstr "Izdevumi"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
 msgid "Balance at the beginning of the day:"
 msgstr "Atlikums dienas sākumā:"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
 msgid "Turnover:"
 msgstr "Apgrozījums:"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
 msgid "Balance at end of the day:"
 msgstr "Atlikums dienas beigās:"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
 msgid "Cashier:"
 msgstr "Kasieris:"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
 msgid "The entries in the cash book were checked and received:"
 msgstr "Ieraksti kases grāmatā tika pārbaudīti un saņemti:"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
 msgid "income orders"
 msgstr "ieņēmumu orderi"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
 msgid "expense orders"
 msgstr "izdevumu orderi"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
 msgid "Accountant:"
 msgstr "Grāmatvedis:"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "Cash income order No."
 msgstr "Kases ieņēmumu orderis Nr."
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "Cash expense order No."
 msgstr "Kases izdevumu orderis Nr."
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "company name"
 msgstr "uzņēmuma nosaukums"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "registration No."
 msgstr "reģistrācijas Nr."
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "Corresponding account No."
 msgstr "Korespondējošā konta Nr."
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "Analytic tracking account No."
 msgstr "Analītiskā uzskaites konta Nr."
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "Monetary unit"
 msgstr "Naudas vienība"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "Amount"
 msgstr "Summa"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "Amount in words:"
 msgstr "Summa vārdiem:"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "Received from"
 msgstr "Pieņemts no"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "Handed out to"
 msgstr "Izsniegts"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "ID"
 msgstr "p. k."
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "reg. No."
 msgstr "reģ. Nr."
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "Justification:"
 msgstr "Pamatojums:"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "Manager"
 msgstr "Vadītājs"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "Accountant"
 msgstr "Grāmatvedis"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "Cashier"
 msgstr "Kasieris"
 
-#. module: l10n_lv_account_asset
+#. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 msgid "Handed out by cashier"
 msgstr "Izsniedza kasieris"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "Reg. No.:"
+msgstr "Reģ. Nr.:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "List of Invoices"
+msgstr "Rēķinu saraksts"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "List of Supplier Invoices"
+msgstr "Ienākošo rēķinu saraksts"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "List of Refunds"
+msgstr "Kredītrēķinu saraksts"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "List of Supplier Refunds"
+msgstr "Ienākošo kredītrēķinu saraksts"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "Invoice Date"
+msgstr "Izrakst. datums"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "Number"
+msgstr "Rēķina numurs"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "Internal Number"
+msgstr "Reģ. Nr."
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "Customer"
+msgstr "Klienta nosaukums"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "Supplier"
+msgstr "Piegādātāja nosaukums"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "Partner"
+msgstr "Partnera nosaukums"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "Amount"
+msgstr "Apmaksai"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "Tax"
+msgstr "Nodoklis"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "Due Date"
+msgstr "Apmaksas termiņš"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "Total"
+msgstr "ar nodokli"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "Untaxed"
+msgstr "bez nodokļa"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_list_document
+msgid "Total:"
+msgstr "Kopā:"

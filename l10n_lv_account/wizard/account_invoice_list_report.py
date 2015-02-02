@@ -48,6 +48,7 @@ class account_invoice_list_report(osv.osv_memory):
             context = {}
         result = {}
         result['invoice_type'] = 'invoice_type' in data['form'] and data['form']['invoice_type'] or False
+        result['company_id'] = 'company_id' in data['form'] and data['form']['company_id'] or False
         return result
 
     def print_report(self, cr, uid, ids, context=None):
@@ -56,8 +57,8 @@ class account_invoice_list_report(osv.osv_memory):
         data = {}
         data['ids'] = context.get('active_ids', [])
         data['model'] = context.get('active_model', 'ir.ui.menu')
-        data['form'] = self.read(cr, uid, ids, ['invoice_type'], context=context)[0]
-        for field in ['invoice_type']:
+        data['form'] = self.read(cr, uid, ids, ['invoice_type', 'company_id'], context=context)[0]
+        for field in ['invoice_type', 'company_id']:
             if isinstance(data['form'][field], tuple):
                 data['form'][field] = data['form'][field][0]
         used_context = self._build_contexts(cr, uid, ids, data, context=context)

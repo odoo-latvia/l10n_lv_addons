@@ -4,16 +4,133 @@
 
 <template id="invoice_list_document">
     <t>
-        <t t-if="o and 'company_id' in o">
-            <t t-set="company" t-value="o.company_id"></t>
-        </t>
-        <t t-if="not o or not 'company_id' in o">
-            <t t-set="company" t-value="res_company"></t>
-        </t>
         <div class="page">
             <style type="text/css">
+                div.title {
+                    font-size: 18px;
+                    display: inline;
+                    text-align: center;
+                    vertical-align: middle;
+                    position: fixed;
+                    left: 35%;
+                    margin-top: 20px; 
+                    margin-bottom: 20px;
+                }
+                table.list_table th {
+                    border: 1px solid black;
+                    font-weight: normal;
+                    text-align: center;
+                    vertical-align: middle;
+                }
+                table.list_table td, th {
+                    padding-top: 2px;
+                    padding-bottom: 2px;
+                    padding-left: 4px;
+                    padding-right: 4px;
+                }
+                div.signature {
+                    margin-top: 100px;
+                    margin-left: 400px;
+                    margin-right: 150px;
+                    border-bottom: 1px solid black;
+                    color: white;
+                }
             </style>
-
+            <t t-set="inv_type" t-value="data and data['form']['invoice_type'] or o.type"></t>
+            <t t-set="company" t-value="data and set_company(data['form']) or o.company_id or res_company"></t>
+            <t t-set="title" t-value="(company.partner_id.title and (company.partner_id.title.shortcut and company.partner_id.title.shortcut.upper()) or company.partner_id.title.name) or ''"></t>
+            <t t-set="cr" t-value="company.company_registry or company_vat"></t>
+            <div>
+                <span t-esc="company.name"/><span t-if="(not title) and cr">,</span>
+                <span t-esc="title"/><span t-if="title and cr">,</span>
+                <span t-if="cr">Reg. No.:</span>
+                <span t-esc="cr"/>
+            </div>
+            <div class="title">
+                <div t-if="(inv_type == 'out_invoice') or (not inv_type)">List of Invoices</div>
+                <div t-if="inv_type == 'in_invoice'">List of Supplier Invoices</div>
+                <div t-if="inv_type == 'out_refund'">List of Refunds</div>
+                <div t-if="inv_type == 'in_refund'">List of Supplier Refunds</div>
+            </div>
+	        <br/>
+	        <br/>
+	        <br/>
+	        <br/>
+            <table class="list_table"  width="100%">
+                <thead>
+			        <tr>
+				        <th rowspan="2">Invoice Date</th>
+				        <th rowspan="2">Number</th>
+				        <th rowspan="2">Internal Number</th>
+				        <th rowspan="2">
+                            <span t-if="inv_type in ['out_invoice', 'out_refund']">Customer</span>
+                            <span t-if="inv_type in ['in_invoice', 'in_refund']">Supplier</span>
+                            <span t-if="not inv_type">Partner</span>
+                        </th>
+				        <th colspan="2">Amount</th>
+				        <th rowspan="2">Tax</th>
+				        <th rowspan="2">Due Date</th>
+			        </tr>
+                    <tr>
+                        <th>Total</th>
+                        <th>Untaxed</th>
+                    </tr>
+		        </thead>
+                <t t-set="lines" t-value="lines(data and data['form'] or False)"></t>
+                <tbody>
+                    <t t-foreach="lines" t-as="l">
+			            <tr>
+				            <td style="font-weight: bold;" colspan="8">
+                                <span t-esc="l['currency_name']"/>
+                            </td>
+			            </tr>
+        	            <tr t-foreach="l['invoice_list']" t-as="inv">
+				            <td>
+                                <span t-esc="inv.date_invoice and formatLang(inv.date_invoice, date=True) or ''"/>
+                            </td>
+				            <td>
+                                <span t-esc="inv.number or ''"/>
+                            </td>
+				            <td style="text-align:center;">
+                                <span t-esc="inv.move_id and inv.move_id.internal_sequence_number or ''"/>
+                            </td>
+				            <td>
+                                <span t-esc="inv.partner_id and inv.partner_id.name or ''"/>
+                                <span t-esc="(inv.partner_id.title and (inv.partner_id.title.shortcut and inv.partner_id.title.shortcut.upper()) or inv.partner_id.title.name) or ''"/>
+                            </td>
+				            <td style="text-align:right;">
+                                <span t-esc="formatLang(inv.amount_total)"/>
+                            </td>
+				            <td style="text-align:right;">
+                                <span t-esc="formatLang(inv.amount_untaxed)"/>
+                            </td>
+				            <td style="text-align:right;">
+                                <span t-esc="formatLang(inv.amount_tax)"/>
+                            </td>
+				            <td style="text-align:right;">
+                                <span t-esc="inv.date_due and formatLang(inv.date_due, date=True) or ''"/>
+                            </td>
+			            </tr>
+        	            <tr>
+				            <td colspan="3"></td>
+				            <td style="border-top: 1px solid black; font-weight: bold;">
+					            <span>Total:</span>
+				            </td>
+				            <td style="border-top: 1px solid black; text-align: right; font-weight: bold;">
+					            <span t-esc="formatLang(l['amount_total'])"/>
+				            </td>
+				            <td style="border-top: 1px solid black; text-align: right; font-weight: bold;">
+					            <span t-esc="formatLang(l['amount_untaxed'])"/>
+				            </td>
+				            <td style="border-top: 1px solid black; text-align: right; font-weight: bold;">
+					            <span t-esc="formatLang(l['amount_tax'])"/>
+				            </td>
+				            <td></td>
+			            </tr>
+                    </t>
+                </tbody>
+            </table>
+            <div class="signature"></div>
         </div>
     </t>
 </template>
