@@ -64,7 +64,7 @@ msgid "Print"
 msgstr "Drukāt"
 
 #. module: l10n_lv_account
-#: model:ir.actions.report.xml,name:l10n_lv_account.report_account_chart_l10n_lv_html
+#: model:ir.actions.report.xml,name:l10n_lv_account.report_account_chart_l10n_lv
 #: model:ir.ui.menu,name:l10n_lv_account.menu_account_chart_report_l10n_lv
 msgid "Chart of Accounts"
 msgstr "Kontu Plāns"
@@ -97,6 +97,7 @@ msgstr "Tips"
 #. module: l10n_lv_account
 #: field:account.move.line.export,company_id:0
 #: field:account.invoice.list.report,company_id:0
+#: field:account.chart.report,company_id:0
 msgid "Company"
 msgstr "Uzņēmums"
 
@@ -557,3 +558,63 @@ msgstr "bez nodokļa"
 #: view:website:l10n_lv_account.invoice_list_document
 msgid "Total:"
 msgstr "Kopā:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.account_chart_document
+msgid "Confirmed"
+msgstr "Apstiprināts"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.account_chart_document
+msgid "Manager"
+msgstr "Vadītājs"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.account_chart_document
+msgid "Name, Surname"
+msgstr "Vārds, uzvārds"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.account_chart_document
+msgid "Reg. No.:"
+msgstr "Reģ. Nr.:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.account_chart_document
+msgid "Chart of Accounts"
+msgstr "Kontu plāns"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.account_chart_document
+msgid "Code"
+msgstr "Kods"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.account_chart_document
+msgid "Name"
+msgstr "Nosaukums"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.account_chart_document
+msgid "Internal Type"
+msgstr "Slēgums"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.account_chart_document
+msgid "Currency"
+msgstr "Valūta"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.account_chart_document
+msgid "State"
+msgstr "Statuss"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.account_chart_document
+msgid "Open"
+msgstr "Atvērts"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.account_chart_document
+msgid "Closed"
+msgstr "Slēgts"

@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-      <!--  <report auto="False"
-                id="report_account_chart_l10n_lv_html"
-                model="account.account"
-                name="l10n_lv_account.chart"
-                file="l10n_lv_account/report/report_account_chart_html.mako"
-                string="Chart of Accounts"
-                report_type="webkit"
-				menu="False"
-                webkit_header="l10n_lv_report_webkit.ir_header_webkit_pi"/>
-
-	<report auto="False"
+      <!-- <report auto="False"
                 id="report_account_invoice_l10n_lv"
                 model="account.invoice"
                 name="l10n_lv_account.invoice"
@@ -102,6 +92,20 @@
                 report_type="qweb-pdf"/>
 
         <record id="l10n_lv_account.report_account_invoice_list_l10n_lv" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="l10n_lv_account.report_paperformat_account_portrait"/>
+        </record>
+
+        <!-- Account Chart -->
+
+        <report auto="False"
+                id="report_account_chart_l10n_lv"
+                string="Chart of Accounts"
+                model="account.account"
+                name="l10n_lv_account.account_chart"
+                file="l10n_lv_account.account_chart"
+                report_type="qweb-pdf"/>
+
+        <record id="l10n_lv_account.report_account_chart_l10n_lv" model="ir.actions.report.xml">
             <field name="paperformat_id" ref="l10n_lv_account.report_paperformat_account_portrait"/>
         </record>
 

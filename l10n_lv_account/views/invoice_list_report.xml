@@ -7,14 +7,12 @@
         <div class="page">
             <style type="text/css">
                 div.title {
-                    font-size: 18px;
-                    display: inline;
+                    font-size: 16px;
                     text-align: center;
                     vertical-align: middle;
-                    position: fixed;
-                    left: 35%;
                     margin-top: 20px; 
                     margin-bottom: 20px;
+                    font-weight: bold;
                 }
                 table.list_table th {
                     border: 1px solid black;
@@ -52,10 +50,6 @@
                 <div t-if="inv_type == 'out_refund'">List of Refunds</div>
                 <div t-if="inv_type == 'in_refund'">List of Supplier Refunds</div>
             </div>
-	        <br/>
-	        <br/>
-	        <br/>
-	        <br/>
             <table class="list_table"  width="100%">
                 <thead>
 			        <tr>

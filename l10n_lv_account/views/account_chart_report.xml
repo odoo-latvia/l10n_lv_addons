@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+<template id="account_chart_document">
+    <t>
+        <div class="page">
+            <style type="text/css">
+                div.title {
+                    font-size: 16px;
+                    text-align: center;
+                    vertical-align: middle;
+                    margin-top: 60px; 
+                    margin-bottom: 20px;
+                    font-weight: bold;
+                }
+                table.list_table th {
+                    border: 1px solid black;
+                    font-weight: normal;
+                    text-align: center;
+                    vertical-align: middle;
+                }
+                table.list_table td, th {
+                    padding-top: 2px;
+                    padding-bottom: 2px;
+                    padding-left: 8px;
+                    padding-right: 8px;
+                }
+            </style>
+            <t t-set="company" t-value="data and set_company(data['form']) or o.company_id or res_company"></t>
+            <t t-set="title" t-value="(company.partner_id.title and (company.partner_id.title.shortcut and company.partner_id.title.shortcut.upper()) or company.partner_id.title.name) or ''"></t>
+            <t t-set="cr" t-value="company.company_registry or company_vat"></t>
+            <div style="float: right;">
+                <table>
+                    <tr>
+                        <td colspan="2">Confirmed</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-right: 4px;">Manager</td>
+                        <td style="color: white; border-bottom: 1px solid black; text-align: right;">________________</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-right: 4px;">Name, Surname</td>
+                        <td style="color: white; border-bottom: 1px solid black; text-align: right;">________________</td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <span t-esc="company.name"/><span t-if="(not title) and cr">,</span>
+                <span t-esc="title"/><span t-if="title and cr">,</span>
+                <span t-if="cr">Reg. No.:</span>
+                <span t-esc="cr"/>
+            </div>
+            <div class="title">Chart of Accounts</div>
+            <table class="list_table"  width="100%">
+                <thead>
+			        <tr>
+				        <th>Code</th>
+				        <th>Name</th>
+				        <th>Internal Type</th>
+				        <th>Currency</th>
+				        <th>State</th>
+			        </tr>
+		        </thead>
+                <t t-set="lines" t-value="lines(data and data['form'] or False)"></t>
+                <tbody>
+        	        <tr t-foreach="lines" t-as="a">
+				        <td style="padding-right: 40px !important;">
+                            <span t-esc="a['code']"/>
+                        </td>
+				        <td>
+                            <span t-esc="a['name']"/>
+                        </td>
+				        <td style="text-align: center;">
+                            <span t-esc="a['type']"/>
+                        </td>
+				        <td style="text-align: center;">
+                            <span t-esc="a['currency']"/>
+                        </td>
+				        <td style="text-align: center;">
+                            <span t-if="a['active'] == True">Open</span>
+                            <span t-if="a['active'] == False">Closed</span>
+                        </td>
+			        </tr>
+                </tbody>
+            </table>
+        </div>
+    </t>
+</template>
+
+<template id="account_chart">
+    <t t-call="report.html_container">
+        <t t-foreach="doc_ids" t-as="doc_id">
+            <t t-raw="translate_doc(doc_id, doc_model, 'company_id.partner_id.lang', 'l10n_lv_account.account_chart_document')"/>
+        </t>
+    </t>
+</template>
+
+</data>
+</openerp>

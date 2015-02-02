@@ -28,7 +28,8 @@ class account_chart_report(osv.osv_memory):
     _name = "account.chart.report"
     _description = "Chart of Accounts Report"
     _columns = {
-        'chart_account_id': fields.many2one('account.account', 'Chart of Account', help='Select Charts of Accounts', required=True, domain = [('parent_id','=',False)])
+        'chart_account_id': fields.many2one('account.account', 'Chart of Account', help='Select Charts of Accounts', required=True, domain = [('parent_id','=',False)]),
+        'company_id': fields.related('chart_account_id', 'company_id', type='many2one', relation='res.company', string='Company')
     }
 
     def _get_account(self, cr, uid, context=None):
@@ -63,7 +64,11 @@ class account_chart_report(osv.osv_memory):
                 data['form'][field] = data['form'][field][0]
         used_context = self._build_contexts(cr, uid, ids, data, context=context)
         data['form']['used_context'] = used_context
-        return {'type': 'ir.actions.report.xml', 'report_name': 'l10n_lv_account.chart', 'datas': data}
+        return {
+            'type': 'ir.actions.report.xml',
+            'report_name': 'l10n_lv_account.account_chart',
+            'datas': data
+        }
 
 account_chart_report()
 
