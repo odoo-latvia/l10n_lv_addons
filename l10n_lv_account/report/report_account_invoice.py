@@ -1,34 +1,45 @@
+# -*- encoding: utf-8 -*-
+##############################################################################
+#
+#    OpenERP, Open Source Management Solution
+#    Copyright (C) 2012 ITS-1 (<http://www.its1.lv/>)
+#                       E-mail: <info@its1.lv>
+#                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
+#                       Phone: +371 66116534
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+##############################################################################
+
 import time
 from openerp import netsvc
 from openerp.report import report_sxw
 from openerp.osv import osv
 
-class custom_parser(report_sxw.rml_parse):
+class invoice_lv_report(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
-        super(custom_parser, self).__init__(cr, uid, name, context=context)
+        super(invoice_lv_report, self).__init__(cr, uid, name, context=context)
         self.localcontext.update({
             'time': time,
             'cr':cr,
             'uid': uid,
         })
 
-# class test(osv):
-#     pass
-#     print '\n\n\n%r' % 'this is it'
+class ilv_report(osv.AbstractModel):
+    _name = 'report.l10n_lv_account.invoice_lv'
+    _inherit = 'report.abstract_report'
+    _template = 'l10n_lv_account.invoice_lv'
+    _wrapped_report_class = invoice_lv_report
 
-# netsvc.Service._services['report.account.invoice'].parser = custom_parser
-# netsvc.Service._services['report.account.invoice'].tmpl = 'addons/l10_lv_account/report/report_account_invoice.html'
-
-# print 'I am not loaded'
-        
-# report_sxw.report_sxw('report.l10n_lv_account.invoice',
-#                        'account.invoice', 
-#                        'addons/l10n_lv_account/report/report_account_invoice.html',
-#                        parser=custom_parser)
-report_sxw.report_sxw(
-    'report.account.invoice.webkit',
-    'account.invoice',
-    'l10n_lv_account/report/report_account_invoice_out_html.mako',
-    parser=custom_parser
-)
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

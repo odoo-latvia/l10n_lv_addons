@@ -109,5 +109,19 @@
             <field name="paperformat_id" ref="l10n_lv_account.report_paperformat_account_portrait"/>
         </record>
 
+        <!-- Invoice LV -->
+
+        <report auto="False"
+                id="report_account_invoice_l10n_lv"
+                string="Invoice LV"
+                model="account.invoice"
+                name="l10n_lv_account.invoice_lv"
+                file="l10n_lv_account.invoice_lv"
+                report_type="qweb-pdf"/>
+
+        <record id="l10n_lv_account.report_account_invoice_l10n_lv" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="l10n_lv_account.report_paperformat_account_portrait"/>
+        </record>
+
     </data>
 </openerp>

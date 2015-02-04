@@ -60,7 +60,8 @@ Invoicing (Accounting) -> Reporting -> Legal Reports -> Accounting Reports -> Jo
         'views/cash_book_report.xml',
         'views/cash_order_report.xml',
         'views/invoice_list_report.xml',
-        'views/account_chart_report.xml'
+        'views/account_chart_report.xml',
+        'views/invoice_lv_report.xml'
         ],
     'auto_install': False,
     'installable': True,

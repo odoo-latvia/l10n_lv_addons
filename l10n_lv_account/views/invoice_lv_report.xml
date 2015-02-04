@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+<template id="invoice_lv_document">
+    <t>
+        <div class="page">
+            <style type="text/css">
+            </style>
+...
+        </div>
+    </t>
+</template>
+
+<template id="invoice_lv">
+    <t t-call="report.html_container">
+        <t t-foreach="doc_ids" t-as="doc_id">
+            <t t-raw="translate_doc(doc_id, doc_model, 'company_id.partner_id.lang', 'l10n_lv_account.invoice_lv_document')"/>
+        </t>
+    </t>
+</template>
+
+</data>
+</openerp>

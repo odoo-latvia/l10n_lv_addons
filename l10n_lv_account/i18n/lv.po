@@ -241,8 +241,8 @@ msgstr "Kases Grāmatas Rindiņas"
 
 #. module: l10n_lv_account
 #: model:ir.actions.report.xml,name:l10n_lv_account.report_account_invoice_l10n_lv
-msgid "Invoice html"
-msgstr "Rēķins (html)"
+msgid "Invoice LV"
+msgstr "Rēķins LV"
 
 #. module: l10n_lv_account
 #: field:account.move.line.export,name:0
