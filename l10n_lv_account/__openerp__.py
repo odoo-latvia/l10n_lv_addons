@@ -46,7 +46,7 @@ Invoicing (Accounting) -> Reporting -> Legal Reports -> Accounting Reports -> Jo
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
     'category': 'Localization',
-    'depends': ['account_sequence', 'l10n_lv_verbose', 'l10n_lv_partner_address'],
+    'depends': ['account_sequence', 'l10n_lv_verbose'],
     'init_xml': [],
     'demo_xml': [],
     'data': [
@@ -56,7 +56,6 @@ Invoicing (Accounting) -> Reporting -> Legal Reports -> Accounting Reports -> Jo
         'wizard/account_invoice_list_report_view.xml',
         'wizard/account_cash_order_report_view.xml',
         'wizard/account_move_line_export_view.xml',
-        'account_invoice_view.xml',
         'views/cash_book_report.xml',
         'views/cash_order_report.xml',
         'views/invoice_list_report.xml',
