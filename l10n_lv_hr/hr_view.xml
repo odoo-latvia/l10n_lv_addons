@@ -60,17 +60,13 @@
 
 	            <!-- Working Address, Declared Address, Residence Address -->
 
-                <field name="address_id" position="replace">
+                <field name="address_id" position="after">
                     <field name="address_work_id" domain="[('type.id','=',3)]" context="{'default_type': 3}"/>
                 </field>
 
                 <field name="address_home_id" position="after">
                     <field name="address_declared_id" domain="[('type.id','=',1)]" context="{'default_type': 1}"/>
                     <field name="address_residence_id" domain="[('type.id','in',[1,2])]" context="{'default_type': 2}"/>
-                </field>
-
-                <field name="address_home_id" position="attributes">
-                    <attribute name="invisible">1</attribute>
                 </field>
 
 	            <!-- Name, Surname -->

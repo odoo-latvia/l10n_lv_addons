@@ -149,11 +149,11 @@
                 </div>
                 <div class='para'>
                     <span>Dzīvo:</span>
-                    <span t-esc="emp.address_declared_id and emp.address_declared_id.street or ''"/>
-                    <span t-esc="emp.address_declared_id and emp.address_declared_id.city or ''"/>
-                    <span t-esc="emp.address_declared_id and emp.address_declared_id.state_id.name or ''"/>
-                    <span t-esc="emp.address_declared_id and emp.address_declared_id.zip or ''"/>
-                    <span t-esc="emp.address_declared_id and emp.address_declared_id.country_id.name or ''"/>
+                    <span t-esc="emp.address_home_id and emp.address_home_id.street or ''"/>
+                    <span t-esc="emp.address_home_id and emp.address_home_id.city or ''"/>
+                    <span t-esc="emp.address_home_id and emp.address_home_id.state_id.name or ''"/>
+                    <span t-esc="emp.address_home_id and emp.address_home_id.zip or ''"/>
+                    <span t-esc="emp.address_home_id and emp.address_home_id.country_id.name or ''"/>
                 </div>
                 <div class='para'>
                     <span>Turpmāk saukts “Darbinieks”, no otras puses, noslēdz līgumu:</span>
