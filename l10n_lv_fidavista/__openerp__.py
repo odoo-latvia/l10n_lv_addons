@@ -41,7 +41,7 @@ Adds a menu to Accounting (Invoicing) -> Configuration: Finances -> Banks, where
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
     'category': 'Localization',
-    'depends': ['l10n_lv_account', 'l10n_lv', 'account_payment'],
+    'depends': ['l10n_lv_check_company_registry', 'l10n_lv', 'account_payment'],
     'init_xml': [],
     'demo_xml': [],
     'update_xml': [

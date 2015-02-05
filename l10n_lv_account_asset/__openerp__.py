@@ -48,7 +48,7 @@ My Company filter for Assets.
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
     'category': 'Localization',
-    'depends': ['account_asset', 'l10n_lv_account'],
+    'depends': ['account_asset'],
     'init_xml': [],
     'demo_xml': [],
     'update_xml': [
