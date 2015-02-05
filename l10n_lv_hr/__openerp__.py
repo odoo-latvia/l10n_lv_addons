@@ -70,7 +70,7 @@ Company field visible in Job form view; Job menu in HR Configuration.
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
     'category': 'Localization/Human Resources',
-    'depends': ['hr_contract', 'l10n_lv_partner_address'],
+    'depends': ['hr_contract'],
     'demo_xml': [],
     'update_xml': [
         'security/hr_security.xml',

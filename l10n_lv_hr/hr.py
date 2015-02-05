@@ -92,9 +92,6 @@ class hr_employee(osv.osv):
         return {}
 
     _columns = {
-        'address_work_id': fields.many2one('res.partner.address', 'Working Address'),
-        'address_declared_id': fields.many2one('res.partner.address', 'Declared Address'),
-        'address_residence_id': fields.many2one('res.partner.address', 'Residence Address'),
         'employee_name': fields.char('Name', size=32),
         'employee_surname': fields.char('Surname', size=32),
         'cv_text': fields.text('CV'),

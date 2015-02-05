@@ -58,17 +58,6 @@
             <field name="inherit_id" ref="hr_contract.hr_hr_employee_view_form2"/>
             <field name="arch" type="xml">
 
-	            <!-- Working Address, Declared Address, Residence Address -->
-
-                <field name="address_id" position="after">
-                    <field name="address_work_id" domain="[('type.id','=',3)]" context="{'default_type': 3}"/>
-                </field>
-
-                <field name="address_home_id" position="after">
-                    <field name="address_declared_id" domain="[('type.id','=',1)]" context="{'default_type': 1}"/>
-                    <field name="address_residence_id" domain="[('type.id','in',[1,2])]" context="{'default_type': 2}"/>
-                </field>
-
 	            <!-- Name, Surname -->
 
                 <xpath expr="/form/sheet/div[@class='oe_title']" position="attributes">
