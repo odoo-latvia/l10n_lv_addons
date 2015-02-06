@@ -34,7 +34,37 @@ class invoice_lv_report(report_sxw.rml_parse):
             'time': time,
             'cr':cr,
             'uid': uid,
+            'form_title': self.form_title,
+            'form_address': self.form_address
         })
+
+    def form_title(self, partner):
+        title = False
+        if partner and partner.title:
+            if partner.title.shortcut:
+                title = partner.title.shortcut.upper()
+            else:
+                title = partner.title.name
+        return title
+
+    def form_address(self, src):
+        addr_list = []
+        if src.street:
+            addr_list.append(src.street)
+        if src.street2:
+            addr_list.append(src.street2)
+        if src.city:
+            addr_list.append(src.city)
+        if src.state_id:
+            addr_list.append(src.state_id.name)
+        if src.zip:
+            addr_list.append(src.zip)
+        if src.country_id:
+            addr_list.append(src.country_id.name)
+        address = ''
+        if addr_list:
+            address = ', '.join(addr_list)
+        return address
 
 class ilv_report(osv.AbstractModel):
     _name = 'report.l10n_lv_account.invoice_lv'

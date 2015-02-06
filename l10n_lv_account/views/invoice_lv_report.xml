@@ -12,24 +12,282 @@
         </t>
         <div class="page">
             <style type="text/css">
+                div.title {
+                    font-size: 16px;
+                    text-align: center;
+                    vertical-align: middle;
+                    margin-top: 20px; 
+                    margin-bottom: 20px;
+                    font-weight: bold;
+                }
+                table.list_table th {
+                    border: 1px solid black;
+                    font-weight: normal;
+                    text-align: center;
+                    vertical-align: middle;
+                }
+                table.list_table td, th {
+                    padding-top: 2px;
+                    padding-bottom: 2px;
+                    padding-left: 4px;
+                    padding-right: 4px;
+                }
+                table.date_table td {
+                    padding-top: 2px;
+                    padding-bottom: 2px;
+                    padding-left: 4px;
+                    padding-right: 4px;
+                    font-size: 11px;
+                }
+                table.partners td, div {
+                    padding-top: 2px;
+                    padding-bottom: 2px;
+                    padding-left: 4px;
+                    padding-right: 4px;
+                }
+                table.partners tr {
+                    margin-top: 4px;
+                    margin-bottom: 4px;
+                }
             </style>
             <t t-set="receiver" t-value="o.partner_id"></t>
+            <t t-set="rec_title" t-value="form_title(o.partner_id)"></t>
             <t t-if="o.type in ['in_invoice', 'in_refund']">
                 <t t-set="receiver" t-value="company"></t>
+                <t t-set="rec_title" t-value="form_title(company.partner_id)"></t>
             </t>
             <t t-set="supplier" t-value="company"></t>
-            <t t-if="o.type in ['out_invoice', 'out_refund']">
-                <t t-set="supplier" t-value="company"></t>
+            <t t-set="sup_title" t-value="form_title(company.partner_id)"></t>
+            <t t-if="o.type in ['in_invoice', 'in_refund']">
+                <t t-set="supplier" t-value="o.partner_id"></t>
+                <t t-set="sup_title" t-value="form_title(o.partner_id)"></t>
             </t>
-	        <table width="100%">
+            <div class="title">
+                <span t-if="o.type == 'out_invoice'">Invoice</span>
+                <span t-if="o.type == 'in_invoice'">Supplier Invoice</span>
+                <span t-if="o.type == 'out_refund'">Refund</span>
+                <span t-if="o.type == 'in_refund'">Supplier Refund</span>
+                <span t-esc="o.number or ''"/>
+                <span t-esc="formatLang(o.date_invoice, date=True)"/>
+            </div>
+	        <table width="100%" class="partners">
 		        <tr>
                     <td>
-                        <span>Saņēmējs</span>
+                        <span>Saņēmējs:</span>
+                        <span style="font-weight: bold;" t-esc="receiver.name"/><span style="font-weight: bold;" t-if="rec_title">,</span>
+                        <span style="font-weight: bold;" t-esc="rec_title or ''"/>
                     </td>
                     <td>
+                        <div t-if="receiver.company_registry">
+                            <span>Reģ.Nr.:</span>
+                            <span t-esc="receiver.company_registry"/>
+                        </div>
+                        <div t-if="receiver.vat">
+                            <span>PVN reģ.Nr.:</span>
+                            <span t-esc="receiver.vat"/>
+                        </div>
+                        <div t-if="form_address(receiver)">
+                            <span>Juridiskā adrese:</span>
+                            <span t-esc="form_address(receiver)"/>
+                        </div>
+                        <div t-if="receiver.bank_ids">
+                            <div>
+                                <span t-if="len(receiver.bank_ids) == 1">Norēķinu konts:</span>
+                                <span t-if="len(receiver.bank_ids) != 1">Norēķinu konti:</span>
+                                <t t-if="len(receiver.bank_ids) == 1">
+                                    <t t-foreach="receiver.bank_ids" t-as="b">
+                                        <span t-esc="b.bank_name"/>
+                                        <span t-esc="b.bank_bic"/>
+                                        <span t-esc="b.acc_number"/>
+                                    </t>
+                                </t>
+                            </div>
+                            <t t-if="len(receiver.bank_ids) != 1">
+                                <t t-foreach="receiver.bank_ids" t-as="b">
+                                    <div>
+                                        <span t-esc="b.bank_name"/>
+                                        <span t-esc="b.bank_bic"/>
+                                        <span t-esc="b.acc_number"/>
+                                    </div>
+                                </t>
+                            </t>
+                        </div>
+                    </td>
+                </tr>
+		        <tr>
+                    <td>
+                        <span>Piegādātājs:</span>
+                        <span style="font-weight: bold;" t-esc="supplier.name"/><span style="font-weight: bold;" t-if="sup_title">,</span>
+                        <span style="font-weight: bold;" t-esc="sup_title or ''"/>
+                    </td>
+                    <td>
+                        <div t-if="supplier.company_registry">
+                            <span>Reģ.Nr.:</span>
+                            <span t-esc="supplier.company_registry"/>
+                        </div>
+                        <div t-if="supplier.vat">
+                            <span>PVN reģ.Nr.:</span>
+                            <span t-esc="supplier.vat"/>
+                        </div>
+                        <div t-if="form_address(supplier)">
+                            <span>Juridiskā adrese:</span>
+                            <span t-esc="form_address(supplier)"/>
+                        </div>
+                        <div t-if="supplier.bank_ids">
+                            <div>
+                                <span t-if="len(supplier.bank_ids) == 1">Norēķinu konts:</span>
+                                <span t-if="len(supplier.bank_ids) != 1">Norēķinu konti:</span>
+                                <t t-if="len(supplier.bank_ids) == 1">
+                                    <t t-foreach="supplier.bank_ids" t-as="b">
+                                        <span t-esc="b.bank_name"/>
+                                        <span t-esc="b.bank_bic"/>
+                                        <span t-esc="b.acc_number"/>
+                                    </t>
+                                </t>
+                            </div>
+                            <t t-if="len(supplier.bank_ids) != 1">
+                                <t t-foreach="supplier.bank_ids" t-as="b">
+                                    <div>
+                                        <span t-esc="b.bank_name"/>
+                                        <span t-esc="b.bank_bic"/>
+                                        <span t-esc="b.acc_number"/>
+                                    </div>
+                                </t>
+                            </t>
+                        </div>
                     </td>
                 </tr>
             </table>
+            <br/>
+            <table class="date_table">
+                <tr>
+                    <td style="border-right: 1px solid grey;">
+                        <span>Datums</span>
+                    </td>
+                    <td>
+                        <span t-esc="formatLang(o.date_invoice, date=True)"/>
+                    </td>
+                    <td>
+                        <span t-esc="o.name or ''"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right: 1px solid grey;">
+                        <span>Apmaksas termiņš</span>
+                    </td>
+                    <td colspan="2">
+                        <span t-esc="formatLang(o.date_due, date=True)"/>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+	        <table width="100%" class="list_table">
+		        <thead>
+			        <tr>
+				        <th>Description</th>
+				        <th>Taxes</th>
+				        <th>QTY</th>
+				        <th>UOM</th>
+				        <th>Unit Price</th>
+				        <th>Disc.(%)</th>
+				        <th>Price</th>
+			        </tr>
+		        </thead>
+		        <tbody>
+			        <tr t-foreach="o.invoice_line" t-as="line">
+                        <td>
+                            <span t-esc="line.name"/>
+                        </td>
+                        <td style="text-align: center;">
+                            <span t-esc="', '.join([tax.description or tax.name or '' for tax in line.invoice_line_tax_id])"/>
+                        </td>
+                        <td style="text-align: center;">
+                            <span t-esc="formatLang(line.quantity)"/>
+                        </td>
+                        <td style="text-align: center;">
+                            <span t-esc="line.uos_id.name"/>
+                        </td>
+                        <td style="text-align: right;">
+                            <span t-esc="formatLang(line.price_unit)"/>
+                        </td>
+                        <td style="text-align: center;">
+                            <span t-esc="line.discount or ''"/>
+                        </td>
+                        <td style="text-align: right;">
+                            <span t-esc="formatLang(line.price_subtotal)"/>
+                        </td>
+                    </tr>
+			        <tr>
+				        <td colspan="4" style="border-style:none"></td>
+				        <td colspan="2" style="text-align:left; border-top:1px solid black;">
+                            <span>Summa kopā:</span>
+                        </td>
+				        <td style="border-top: 1px solid black; text-align: right;">
+                            <span t-esc="formatLang(o.amount_untaxed)"/>
+                        </td>
+			        </tr>
+			        <tr>
+				        <td colspan="4" style="border-style:none"></td>
+				        <td colspan="2" style="text-align:left;">
+                            <span>Nodokļi:</span>
+                        </td>
+				        <td style="text-align: right; border-top: 1px solid grey;">
+                            <span t-esc="formatLang(o.amount_tax)"/>
+                        </td>
+			        </tr>
+			        <tr>
+				        <td colspan="4" style="border-style:none"></td>
+				        <td colspan="2" style="text-align: left; font-weight: bold; border-top:1px solid black;">
+                            <span>Summa apmaksai:</span>
+                        </td>
+				        <td style="font-weight: bold; text-align: right; border-top:1px solid black;">
+                            <span t-esc="formatLang(o.amount_total)"/>
+                        </td>
+			        </tr>
+		        </tbody>
+	        </table>
+            <br/>
+	        <table width="100%">
+                <thead>
+                    <tr>
+				        <th style="border: 1px solid black; font-weight: normal; text-align: center; vertical-align: middle; padding-top: 2px; padding-bottom: 2px; padding-left: 4px; padding-right: 4px;" t-if="o.tax_line">
+                            <span>Nodoklis</span>
+                        </th>
+				        <th style="border: 1px solid black; font-weight: normal; text-align: center; vertical-align: middle; padding-top: 2px; padding-bottom: 2px; padding-left: 4px; padding-right: 4px;" t-if="o.tax_line">
+                            <span>Base</span>
+                        </th>
+				        <th style="border: 1px solid black; font-weight: normal; text-align: center; vertical-align: middle; padding-top: 2px; padding-bottom: 2px; padding-left: 4px; padding-right: 4px;" t-if="o.tax_line">
+                            <span>Amount</span>
+                        </th>
+                        <th width="5%" style="color: white;" t-if="o.tax_line">...</th>
+                        <th width="60%" style="padding-top: 2px; padding-bottom: 2px; padding-left: 4px; padding-right: 4px; text-align: center;">
+                            <span>Summa vārdiem:</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+			        <tr t-foreach="o.tax_line" t-as="t">
+				        <td style="padding-top: 2px; padding-bottom: 2px; padding-left: 4px; padding-right: 4px;">
+                            <span t-esc="t.name"/>
+                        </td>
+				        <td style="padding-top: 2px; padding-bottom: 2px; padding-left: 4px; padding-right: 4px; text-align: right;">
+                            <span t-esc="formatLang(t.base)"/>
+                        </td>
+				        <td style="padding-top: 2px; padding-bottom: 2px; padding-left: 4px; padding-right: 4px; text-align: right;">
+                            <span t-esc="formatLang(t.amount)"/>
+                        </td>
+                        <td></td>
+                        <td rowspan="len(o.tax_line)" t-if="t.id == o.tax_line[0].id" style="padding-top: 2px; padding-bottom: 2px; padding-left: 4px; padding-right: 4px; text-align: right; text-align: center;">
+                            <span t-esc="o.amount_total" t-esc-options='{"widget": "verbose", "display_currency": "o.currency_id"}'/>
+                        </td>
+			        </tr>
+                    <tr t-if="not o.tax_line">
+                        <td style="padding-top: 2px; padding-bottom: 2px; padding-left: 4px; padding-right: 4px; text-align: right; text-align: center;">
+                            <span t-esc="o.amount_total" t-esc-options='{"widget": "verbose", "display_currency": "o.currency_id"}'/>
+                        </td>
+                    </tr>
+                </tbody>
+	        </table>
         </div>
     </t>
 </template>
