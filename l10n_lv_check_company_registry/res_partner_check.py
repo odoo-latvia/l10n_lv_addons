@@ -199,6 +199,8 @@ class res_partner(osv.osv):
             context = {}
         allow = True
         partner_obj = self.pool.get('res.partner')
+        if not isinstance(ids, list):
+            ids = [ids]
         for rec in ids:            
             if partner_obj.browse(cr, uid, rec, context).allow_creation == False:
                 allow = False
