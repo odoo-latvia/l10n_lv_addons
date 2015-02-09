@@ -2,17 +2,6 @@
 <openerp>
     <data>
       <!-- <report auto="False"
-                id="report_account_invoice_l10n_lv"
-                model="account.invoice"
-                name="l10n_lv_account.invoice"
-                file="l10n_lv_account/report/report_account_invoice.html"
-                string="Invoice html"
-                report_type="webkit"
-				menu="True"
-                header="False"
-                webkit_header="l10n_lv_report_webkit.ir_header_webkit_inv"/>
-
-    <report auto="False"
                 id="report_account_invoice_out"
                 model="account.invoice"
                 name="account.invoice.out"

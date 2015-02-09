@@ -39,15 +39,18 @@
                     padding-right: 4px;
                     font-size: 11px;
                 }
-                table.partners td, div {
-                    padding-top: 2px;
-                    padding-bottom: 2px;
+                table.date_table {
+                    margin-bottom: 30px;
+                }
+                table.partners td {
+                    padding-top: 6px;
+                    padding-bottom: 6px;
                     padding-left: 4px;
                     padding-right: 4px;
                 }
-                table.partners tr {
-                    margin-top: 4px;
-                    margin-bottom: 4px;
+                table.partners div {
+                    padding-top: 2px;
+                    padding-bottom: 2px;
                 }
             </style>
             <t t-set="receiver" t-value="o.partner_id"></t>
@@ -68,32 +71,33 @@
                 <span t-if="o.type == 'out_refund'">Refund</span>
                 <span t-if="o.type == 'in_refund'">Supplier Refund</span>
                 <span t-esc="o.number or ''"/>
-                <span t-esc="formatLang(o.date_invoice, date=True)"/>
             </div>
 	        <table width="100%" class="partners">
 		        <tr>
                     <td>
-                        <span>Saņēmējs:</span>
-                        <span style="font-weight: bold;" t-esc="receiver.name"/><span style="font-weight: bold;" t-if="rec_title">,</span>
-                        <span style="font-weight: bold;" t-esc="rec_title or ''"/>
+                        <div>
+                            <span>Customer:</span>
+                            <span style="font-weight: bold;" t-esc="receiver.name"/><span style="font-weight: bold;" t-if="rec_title">,</span>
+                            <span style="font-weight: bold;" t-esc="rec_title or ''"/>
+                        </div>
                     </td>
                     <td>
                         <div t-if="receiver.company_registry">
-                            <span>Reģ.Nr.:</span>
+                            <span>Reg. No.:</span>
                             <span t-esc="receiver.company_registry"/>
                         </div>
                         <div t-if="receiver.vat">
-                            <span>PVN reģ.Nr.:</span>
+                            <span>VAT reg. No.:</span>
                             <span t-esc="receiver.vat"/>
                         </div>
                         <div t-if="form_address(receiver)">
-                            <span>Juridiskā adrese:</span>
+                            <span>Legal address:</span>
                             <span t-esc="form_address(receiver)"/>
                         </div>
                         <div t-if="receiver.bank_ids">
                             <div>
-                                <span t-if="len(receiver.bank_ids) == 1">Norēķinu konts:</span>
-                                <span t-if="len(receiver.bank_ids) != 1">Norēķinu konti:</span>
+                                <span t-if="len(receiver.bank_ids) == 1">Billing account:</span>
+                                <span t-if="len(receiver.bank_ids) != 1">Billing accounts:</span>
                                 <t t-if="len(receiver.bank_ids) == 1">
                                     <t t-foreach="receiver.bank_ids" t-as="b">
                                         <span t-esc="b.bank_name"/>
@@ -116,27 +120,29 @@
                 </tr>
 		        <tr>
                     <td>
-                        <span>Piegādātājs:</span>
-                        <span style="font-weight: bold;" t-esc="supplier.name"/><span style="font-weight: bold;" t-if="sup_title">,</span>
-                        <span style="font-weight: bold;" t-esc="sup_title or ''"/>
+                        <div>
+                            <span>Supplier:</span>
+                            <span style="font-weight: bold;" t-esc="supplier.name"/><span style="font-weight: bold;" t-if="sup_title">,</span>
+                            <span style="font-weight: bold;" t-esc="sup_title or ''"/>
+                        </div>
                     </td>
                     <td>
                         <div t-if="supplier.company_registry">
-                            <span>Reģ.Nr.:</span>
+                            <span>Reg. No.:</span>
                             <span t-esc="supplier.company_registry"/>
                         </div>
                         <div t-if="supplier.vat">
-                            <span>PVN reģ.Nr.:</span>
+                            <span>VAT reg. No.:</span>
                             <span t-esc="supplier.vat"/>
                         </div>
                         <div t-if="form_address(supplier)">
-                            <span>Juridiskā adrese:</span>
+                            <span>Legal address:</span>
                             <span t-esc="form_address(supplier)"/>
                         </div>
                         <div t-if="supplier.bank_ids">
                             <div>
-                                <span t-if="len(supplier.bank_ids) == 1">Norēķinu konts:</span>
-                                <span t-if="len(supplier.bank_ids) != 1">Norēķinu konti:</span>
+                                <span t-if="len(supplier.bank_ids) == 1">Billing account:</span>
+                                <span t-if="len(supplier.bank_ids) != 1">Billing accounts:</span>
                                 <t t-if="len(supplier.bank_ids) == 1">
                                     <t t-foreach="supplier.bank_ids" t-as="b">
                                         <span t-esc="b.bank_name"/>
@@ -162,7 +168,7 @@
             <table class="date_table">
                 <tr>
                     <td style="border-right: 1px solid grey;">
-                        <span>Datums</span>
+                        <span>Date</span>
                     </td>
                     <td>
                         <span t-esc="formatLang(o.date_invoice, date=True)"/>
@@ -173,14 +179,13 @@
                 </tr>
                 <tr>
                     <td style="border-right: 1px solid grey;">
-                        <span>Apmaksas termiņš</span>
+                        <span>Due Date</span>
                     </td>
                     <td colspan="2">
                         <span t-esc="formatLang(o.date_due, date=True)"/>
                     </td>
                 </tr>
             </table>
-            <br/>
 	        <table width="100%" class="list_table">
 		        <thead>
 			        <tr>
@@ -211,7 +216,7 @@
                             <span t-esc="formatLang(line.price_unit)"/>
                         </td>
                         <td style="text-align: center;">
-                            <span t-esc="line.discount or ''"/>
+                            <span t-esc="line.discount and formatLang(line.discount) or '-'"/>
                         </td>
                         <td style="text-align: right;">
                             <span t-esc="formatLang(line.price_subtotal)"/>
@@ -220,7 +225,7 @@
 			        <tr>
 				        <td colspan="4" style="border-style:none"></td>
 				        <td colspan="2" style="text-align:left; border-top:1px solid black;">
-                            <span>Summa kopā:</span>
+                            <span>Amount Total:</span>
                         </td>
 				        <td style="border-top: 1px solid black; text-align: right;">
                             <span t-esc="formatLang(o.amount_untaxed)"/>
@@ -229,7 +234,7 @@
 			        <tr>
 				        <td colspan="4" style="border-style:none"></td>
 				        <td colspan="2" style="text-align:left;">
-                            <span>Nodokļi:</span>
+                            <span>Taxes:</span>
                         </td>
 				        <td style="text-align: right; border-top: 1px solid grey;">
                             <span t-esc="formatLang(o.amount_tax)"/>
@@ -238,7 +243,7 @@
 			        <tr>
 				        <td colspan="4" style="border-style:none"></td>
 				        <td colspan="2" style="text-align: left; font-weight: bold; border-top:1px solid black;">
-                            <span>Summa apmaksai:</span>
+                            <span>Payment Amount:</span>
                         </td>
 				        <td style="font-weight: bold; text-align: right; border-top:1px solid black;">
                             <span t-esc="formatLang(o.amount_total)"/>
@@ -251,7 +256,7 @@
                 <thead>
                     <tr>
 				        <th style="border: 1px solid black; font-weight: normal; text-align: center; vertical-align: middle; padding-top: 2px; padding-bottom: 2px; padding-left: 4px; padding-right: 4px;" t-if="o.tax_line">
-                            <span>Nodoklis</span>
+                            <span>Tax</span>
                         </th>
 				        <th style="border: 1px solid black; font-weight: normal; text-align: center; vertical-align: middle; padding-top: 2px; padding-bottom: 2px; padding-left: 4px; padding-right: 4px;" t-if="o.tax_line">
                             <span>Base</span>
@@ -261,7 +266,7 @@
                         </th>
                         <th width="5%" style="color: white;" t-if="o.tax_line">...</th>
                         <th width="60%" style="padding-top: 2px; padding-bottom: 2px; padding-left: 4px; padding-right: 4px; text-align: center;">
-                            <span>Summa vārdiem:</span>
+                            <span>Amount in words:</span>
                         </th>
                     </tr>
                 </thead>
@@ -295,7 +300,7 @@
 <template id="invoice_lv">
     <t t-call="report.html_container">
         <t t-foreach="doc_ids" t-as="doc_id">
-            <t t-raw="translate_doc(doc_id, doc_model, 'company_id.partner_id.lang', 'l10n_lv_account.invoice_lv_document')"/>
+            <t t-raw="translate_doc(doc_id, doc_model, 'partner_id.lang', 'l10n_lv_account.invoice_lv_document')"/>
         </t>
     </t>
 </template>

@@ -48,6 +48,7 @@ msgstr "Drukāt Kontu Plāna atskaiti"
 
 #. module: l10n_lv_account
 #: selection:account.invoice.list.report,invoice_type:0
+#: view:website:l10n_lv_account.invoice_lv_document
 msgid "Supplier Invoice"
 msgstr "Ienākošais Rēķins"
 
@@ -134,6 +135,7 @@ msgstr "Kases Orderis"
 #. module: l10n_lv_account
 #: view:account.bank.statement.line:0
 #: selection:account.move.line.export,sort_selection:0
+#: view:website:l10n_lv_account.invoice_lv_document
 msgid "Date"
 msgstr "Datums"
 
@@ -267,6 +269,7 @@ msgstr "Periodi"
 
 #. module: l10n_lv_account
 #: model:ir.model,name:l10n_lv_account.model_account_invoice
+#: view:website:l10n_lv_account.invoice_lv_document
 msgid "Invoice"
 msgstr "Rēķins"
 
@@ -280,6 +283,7 @@ msgstr "Atcelt"
 
 #. module: l10n_lv_account
 #: selection:account.invoice.list.report,invoice_type:0
+#: view:website:l10n_lv_account.invoice_lv_document
 msgid "Supplier Refund"
 msgstr "Ienākošais Kredītrēķins"
 
@@ -426,6 +430,7 @@ msgstr "Summa"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
+#: view:website:l10n_lv_account.invoice_lv_document
 msgid "Amount in words:"
 msgstr "Summa vārdiem:"
 
@@ -476,6 +481,7 @@ msgstr "Izsniedza kasieris"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.invoice_list_document
+#: view:website:l10n_lv_account.invoice_lv_document
 msgid "Reg. No.:"
 msgstr "Reģ. Nr.:"
 
@@ -541,6 +547,7 @@ msgstr "Nodoklis"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.invoice_list_document
+#: view:website:l10n_lv_account.invoice_lv_document
 msgid "Due Date"
 msgstr "Apmaksas termiņš"
 
@@ -618,3 +625,103 @@ msgstr "Atvērts"
 #: view:website:l10n_lv_account.account_chart_document
 msgid "Closed"
 msgstr "Slēgts"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Refund"
+msgstr "Kredītrēķins"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Customer:"
+msgstr "Saņēmējs:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "VAT reg. No."
+msgstr "PVN reģ. Nr.:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Legal address:"
+msgstr "Juridiskā adrese:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Billing account:"
+msgstr "Norēķinu konts:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Billing accounts:"
+msgstr "Norēķinu konti:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Supplier:"
+msgstr "Piegādātājs:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Description"
+msgstr "Apraksts"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Taxes"
+msgstr "Nodokļi"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "QTY"
+msgstr "Daudz."
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "UOM"
+msgstr "Mērv."
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Unit Price"
+msgstr "Vienības cena"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Disc.(%)"
+msgstr "Atl. (%)"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Price"
+msgstr "Cena"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Amount Total:"
+msgstr "Summa kopā:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Taxes:"
+msgstr "Nodokļi:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Payment Amount:"
+msgstr "Summa apmaksai:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Tax"
+msgstr "Nodoklis"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Base"
+msgstr "Bāze"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Amount"
+msgstr "Summa"
