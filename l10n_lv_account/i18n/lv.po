@@ -430,12 +430,15 @@ msgstr "Naudas vienība"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
+#: view:website:l10n_lv_account.invoice_lv_document
+#: view:website:l10n_lv_account.invoice_out_document
 msgid "Amount"
 msgstr "Summa"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
 #: view:website:l10n_lv_account.invoice_lv_document
+#: view:website:l10n_lv_account.invoice_out_document
 msgid "Amount in words:"
 msgstr "Summa vārdiem:"
 
@@ -568,6 +571,7 @@ msgstr "bez nodokļa"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.invoice_list_document
+#: view:website:l10n_lv_account.invoice_out_document
 msgid "Total:"
 msgstr "Kopā:"
 
@@ -603,6 +607,7 @@ msgstr "Kods"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.account_chart_document
+#: view:website:l10n_lv_account.invoice_out_document
 msgid "Name"
 msgstr "Nosaukums"
 
@@ -653,11 +658,13 @@ msgstr "Juridiskā adrese:"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.invoice_lv_document
+#: view:website:l10n_lv_account.invoice_out_document
 msgid "Billing account:"
 msgstr "Norēķinu konts:"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.invoice_lv_document
+#: view:website:l10n_lv_account.invoice_out_document
 msgid "Billing accounts:"
 msgstr "Norēķinu konti:"
 
@@ -698,6 +705,7 @@ msgstr "Atl. (%)"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.invoice_lv_document
+#: view:website:l10n_lv_account.invoice_out_document
 msgid "Price"
 msgstr "Cena"
 
@@ -708,6 +716,7 @@ msgstr "Summa kopā:"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.invoice_lv_document
+#: view:website:l10n_lv_account.invoice_out_document
 msgid "Taxes:"
 msgstr "Nodokļi:"
 
@@ -727,6 +736,82 @@ msgid "Base"
 msgstr "Bāze"
 
 #. module: l10n_lv_account
-#: view:website:l10n_lv_account.invoice_lv_document
-msgid "Amount"
-msgstr "Summa"
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "Invoice No."
+msgstr "Rēķins Nr."
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "Recipient requisites:"
+msgstr "Saņēmēja rekvizīti:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "Name:"
+msgstr "Nosaukums:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "VAT registration No.:"
+msgstr "PVN reģistrācijas Nr.:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "Address:"
+msgstr "Adrese:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "Payment term:"
+msgstr "Apmaksas termiņš:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "No."
+msgstr "Nr."
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "UoM"
+msgstr "Mērv."
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "Quantity"
+msgstr "Daudzums"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "Invoice total:"
+msgstr "Rēķina summa:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "Supplier requisites:"
+msgstr "Piegādātāja rekvizīti:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "Unified registration number:"
+msgstr "Vienotais reģistrācijas numurs:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "Bank Identifier Code"
+msgstr "bankas kods"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "For payment the invoice amount has to be transferred to the supplier billing account mentioned in this document."
+msgstr "Apmaksai rēķina summa jāpārskaita uz šajā dokumentā minēto piegādātāja norēķinu kontu."
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "Please indicate invoice number in purpose of payment."
+msgstr "Maksājuma mērķī lūdzam norādīt rēķina numuru."
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "In accordance with Law &quot;On Accounting&quot; article 7.1 this invoice is prepared electronically and is valid without signature and stamp."
+msgstr "Saskaņā ar Likuma &quot;Par grāmatvedību&quot; 7.1 pantu šis rēķins ir sagatavots elektroniski un ir derīgs bez paraksta un zīmoga."
+

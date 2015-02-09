@@ -67,7 +67,7 @@
                 </div>
                 <div style="float: right;">
                     <div>
-                        <span class="label-out">Rēķins Nr.</span>
+                        <span class="label-out">Invoice No.</span>
                         <span t-if="o.number" class="label-out" t-esc="o.number or ''"/>
                         <span t-if="not o.number" class="label-out" style="color: white; border-bottom: 1px solid black;">________________</span>
                     </div>
@@ -80,26 +80,29 @@
             <section style="margin-top: 4.5cm;">
     	        <table class="address">
     	            <tr>
-        		        <td style="color: black !important;">Saņēmēja rekvizīti:</td>
+        		        <td style="color: black !important;">Recipient requisites:</td>
         		        <td></td>
     	            </tr>
     	            <tr>
-        		        <td>Nosaukums:</td>
+        		        <td>Name:</td>
         		        <td style="font-weight: bold;">
         	                <span t-esc="o.partner_id.name"/><span t-if="p_title">,</span>
                             <span t-esc="p_title or ''"/>
                         </td>
     	            </tr>
     	            <tr t-if="o.partner_id.vat">
-        		        <td>PVN reģistrācijas Nr.:</td>
+        		        <td>VAT registration No.:</td>
         		        <td t-esc="o.partner_id.vat or ''"/>
     	            </tr>
     	            <tr t-if="form_address(o.partner_id)">
-        		        <td>Adrese:</td>
+        		        <td>Address:</td>
         		        <td t-esc="form_address(o.partner_id)"/>
     	            </tr>
     	            <tr t-if="o.partner_id.bank_ids">
-        		        <td>Norēķinu konts:</td>
+        		        <td>
+                            <span t-if="len(o.partner_id.bank_ids) == 1">Billing account:</span>
+                            <span t-if="len(o.partner_id.bank_ids) > 1">Billing accounts:</span>
+                        </td>
                         <td>
                             <div t-foreach="o.partner_id.bank_ids" t-as="b">
                                 <span t-esc="b.acc_number"/><span t-if="b.acc_number and b.bank_name">,</span>
@@ -112,7 +115,7 @@
                         <td style="color: white;">...</td>
                     </tr>
     	            <tr>
-        		        <td style="color: black !important;">Apmaksas termiņš:</td>
+        		        <td style="color: black !important;">Payment term:</td>
         		        <td>
                             <span t-if="o.date_due or o.date_invoice" t-esc="(o.date_due and formatLang(o.date_due, date=True)) or (o.date_invoice and formatLang(o.date_invoice, date=True)) or ''"/>
                             <span t-if="not (o.date_due and o.date_invoice)" style="color: white; border-bottom: 1px solid black;">________________</span>
@@ -124,16 +127,16 @@
 	            <table class="list_table" width="100%">
 	                <thead>
                         <tr>
-                            <th>Nr.</th>
-                            <th>Nosaukums</th>
-                            <th>Mērv.</th>
-                            <th class="align-right">Daudzums</th>
+                            <th>No.</th>
+                            <th>Name</th>
+                            <th>UoM</th>
+                            <th class="align-right">Quantity</th>
                             <th class="align-right">
-                                <span>Cena</span><span t-if="o.currency_id">,</span>
+                                <span>Price</span><span t-if="o.currency_id">,</span>
                                 <span t-esc="o.currency_id and o.currency_id.name or ''"/>
                             </th>
                             <th class="align-right">
-                                <span>Summa</span><span t-if="o.currency_id">,</span>
+                                <span>Amount</span><span t-if="o.currency_id">,</span>
                                 <span t-esc="o.currency_id and o.currency_id.name or ''"/>
                             </th>
                         </tr>
@@ -162,7 +165,7 @@
                             </td>
                         </tr>
                         <tr style="border-top: 1px solid black;">
-                            <td colspan="2" class="align-left">Kopā:</td>
+                            <td colspan="2" class="align-left">Total:</td>
                             <td colspan="3" class="align-left"></td>
                             <td class="align-right">
                                 <span t-esc="formatLang(o.amount_untaxed)"/>
@@ -178,7 +181,7 @@
                             </td>
                         </tr>
                         <tr t-if="not o.tax_line">
-                            <td colspan="2" class="align-left">Nodokļi:</td>
+                            <td colspan="2" class="align-left">Taxes:</td>
                             <td colspan="3" class="align-right"></td>
                             <td class="align-right">
                                 <span t-esc="formatLang(o.amount_tax)"/>
@@ -186,7 +189,7 @@
                         </tr>
                         <tr>
                             <td colspan="2" class="align-left" style="font-weight: bold;">
-                                <span>Rēķina summa:</span>
+                                <span>Invoice total:</span>
                             </td>
                             <td colspan="3" class="align-right"></td>
                             <td class="align-right" style="font-weight: bold;">
@@ -195,7 +198,7 @@
                         </tr>
                         <tr>
                             <td colspan="6" class="align-right">
-                                <span>Summa vārdiem:</span>
+                                <span>Amount in words:</span>
                                 <span t-esc="o.amount_total" t-esc-options='{"widget": "verbose", "display_currency": "o.currency_id"}'/>
                             </td>
                         </tr>
@@ -206,7 +209,7 @@
     	        <table class="address">
     	            <tr>
         		        <td colspan="2" style="color: black !important;">
-                            <span>Piegādātāja rekvizīti:</span>
+                            <span>Supplier requisites:</span>
                         </td>
     	            </tr>
     	            <tr>
@@ -215,7 +218,7 @@
                         </td>
     	            </tr>
     	            <tr>
-        		        <td>Vienotais reģistrācijas numurs:</td>
+        		        <td>Unified registration number:</td>
         		        <td style="font-weight: bold;">
                             <div t-if="company.company_registry" t-esc="company.company_registry"/>
                             <div t-if="not company.company_registry">
@@ -224,7 +227,7 @@
                         </td>
     	            </tr>
     	            <tr>
-        		        <td>PVN reģistrācijas Nr.:</td>
+        		        <td>VAT registration No.:</td>
         		        <td style="font-weight: bold;">
                             <div t-if="company.vat" t-esc="company.vat"/>
                             <div t-if="not company.vat">
@@ -233,24 +236,24 @@
                         </td>
     	            </tr>
     	            <tr t-if="form_address(company)">
-        		        <td>Adrese:</td>
+        		        <td>Address:</td>
         		        <td t-esc="form_address(company)"/>
     	            </tr>
     	            <tr>
         		        <td>
-                            <span t-if="len(company.bank_ids) &lt;= 1">Norēķinu konts:</span>
-                            <span t-if="len(company.bank_ids) > 1">Norēķinu konti:</span>
+                            <span t-if="len(company.bank_ids) &lt;= 1">Billing account:</span>
+                            <span t-if="len(company.bank_ids) > 1">Billing accounts:</span>
                         </td>
                         <td>
                             <div t-foreach="company.bank_ids" t-as="b">
                                 <span style="font-weight: bold;" t-esc="b.acc_number"/><span t-if="b.acc_number and b.bank_name">,</span>
                                 <span t-esc="b.bank_name"/><span t-if="(b.acc_number or b.bank_name) and b.bank_bic">,</span>
-                                <span t-if="b.bank_bic">bankas kods</span>
+                                <span t-if="b.bank_bic">Bank Identifier Code</span>
                                 <span t-esc="b.bank_bic"/>
                             </div>
                             <div t-if="not company.bank_ids">
                                 <span style="color: white; border-bottom: 1px solid black;">__________________________________________</span>
-                                <span>bankas kods</span>
+                                <span>Bank Identifier Code</span>
                                 <span style="color: white; border-bottom: 1px solid black;">______________</span>
                             </div>
                         </td>
@@ -258,11 +261,11 @@
     	        </table>
             </section>
 	        <p>
-                <div>Apmaksai rēķina summa jāpārskaita uz šajā dokumentā minēto piegādātāja norēķinu kontu.</div>
-                <div>Maksājuma mērķī lūdzam norādīt rēķina numuru.</div>
+                <div>For payment the invoice amount has to be transferred to the supplier billing account mentioned in this document.</div>
+                <div>Please indicate invoice number in purpose of payment.</div>
             </p>
 	        <p>
-                <div>Saskaņā ar Likuma "Par grāmatvedību" 7.1 pantu šis rēķins ir sagatavots elektroniski un ir derigs bez paraksta un zīmoga.</div>
+                <div>In accordance with Law &quot;On Accounting&quot; article 7.1 this invoice is prepared electronically and is valid without signature and stamp.</div>
             </p>
         </div>
     </t>
