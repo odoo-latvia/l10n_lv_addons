@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+<template id="invoice_out_document">
+    <t>
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"></t>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"></t>
+        </t>
+        <div class="page">
+            <style type="text/css">
+                img.logo {
+                    width: auto;
+                    height: 2cm;
+                }
+                section {
+                    margin-bottom: 2em;
+                }
+                .label-out {
+                    font-weight: bold;
+                    font-size: 1.4em;
+                }
+                .address {
+                    font-size: 1em;
+                }
+                .address tr td:first-child{
+                    color: #585858;
+                }
+                td {
+                    padding-top: 2px;
+                    padding-bottom: 2px;
+                    padding-left: 4px;
+                    padding-right: 4px;
+                }
+                tbody {
+                    vertical-align: text-top;
+                }
+                thead {
+                    border-top: 2pt solid black;
+                    border-bottom: 2pt solid black;
+                    background-color: #F8F8F8;
+                }
+            </style>
+            <section>
+                <img t-att-src="'data:image/png;base64,%s' % company.logo" class="logo"/>
+            </section>
+            <t t-set="p_title" t-value="form_title(o.partner_id)"></t>
+            <section>
+                <div style="float: left;">
+                    <div>
+        	            <span class="label-out" t-esc="o.partner_id.name"/><span class="label-out" t-if="p_title">,</span>
+                        <span class="label-out" t-esc="p_title or ''"/>
+                    </div>
+                    <div>
+                        <span t-esc="form_address(o.partner_id)"/>
+                    </div>
+                </div>
+                <div style="float: right;">
+                    <div>
+                        <span class="label-out">Rēķins Nr.</span>
+                        <span class="label-out" t-esc="o.number"/>
+                    </div>
+                    <div>
+                        <span style="float: right;" t-esc="o.date_invoice"/>
+                    </div>
+                </div>
+            </section>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <section>
+    	        <table class="address">
+    	            <tr>
+        		        <td>Saņēmēja rekvizīti:</td>
+        		        <td></td>
+    	            </tr>
+    	            <tr>
+        		        <td>Nosaukums:</td>
+        		        <td t-esc="o.partner_id.name"/>
+    	            </tr>
+    	            <tr t-if="o.partner_id.vat">
+        		        <td>PVN reģistrācijas Nr.:</td>
+        		        <td t-esc="o.partner_id.vat or ''"/>
+    	            </tr>
+    	            <tr t-if="form_address(o.partner_id)">
+        		        <td>Adrese:</td>
+        		        <td t-esc="form_address(o.partner_id)"/>
+    	            </tr>
+    	            <tr t-if="o.partner_id.bank_ids">
+        		        <td>Norēķinu konts:</td>
+                        <td>
+                            <div t-foreach="o.partner_id.bank_ids" t-as="b">
+                                <span t-esc="b.acc_number"/><span t-if="b.acc_number and b.bank_name">,</span>
+                                <span t-esc="b.bank_name"/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: white;">...</td>
+                        <td style="color: white;">...</td>
+                    </tr>
+    	            <tr>
+        		        <td>Apmaksas termiņš:</td>
+        		        <td t-esc="o.date_due or o.date_invoice or ''"/>
+    	            </tr>
+    	        </table>
+            </section>
+        </div>
+    </t>
+</template>
+
+<template id="invoice_out">
+    <t t-call="report.html_container">
+        <t t-foreach="doc_ids" t-as="doc_id">
+            <t t-raw="translate_doc(doc_id, doc_model, 'partner_id.lang', 'l10n_lv_account.invoice_out_document')"/>
+        </t>
+    </t>
+</template>
+
+</data>
+</openerp>

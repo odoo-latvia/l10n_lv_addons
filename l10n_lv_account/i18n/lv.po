@@ -247,6 +247,11 @@ msgid "Invoice LV"
 msgstr "Rēķins LV"
 
 #. module: l10n_lv_account
+#: model:ir.actions.report.xml,name:l10n_lv_account.report_account_invoice_out
+msgid "Invoice for Sending"
+msgstr "Rēķins sūtīšanai"
+
+#. module: l10n_lv_account
 #: field:account.move.line.export,name:0
 msgid "File Name"
 msgstr "Faila Nosaukums"

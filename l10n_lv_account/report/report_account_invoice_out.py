@@ -33,11 +33,42 @@ class report_account_invoice_out(report_sxw.rml_parse):
             'time': time,
             'cr':cr,
             'uid': uid,
+            'form_title': self.form_title,
+            'form_address': self.form_address
         })
-        
-report_sxw.report_sxw('report.l10n_lv_account.invoice.out',
-                       'account.invoice', 
-                       'addons/l10n_lv_account/report/report_account_invoice_out_html.mako',
-                       parser=report_account_invoice_out)
+
+    def form_title(self, partner):
+        title = False
+        if partner and partner.title:
+            if partner.title.shortcut:
+                title = partner.title.shortcut.upper()
+            else:
+                title = partner.title.name
+        return title
+
+    def form_address(self, src):
+        addr_list = []
+        if src.street:
+            addr_list.append(src.street)
+        if src.street2:
+            addr_list.append(src.street2)
+        if src.city:
+            addr_list.append(src.city)
+        if src.state_id:
+            addr_list.append(src.state_id.name)
+        if src.zip:
+            addr_list.append(src.zip)
+        if src.country_id:
+            addr_list.append(src.country_id.name)
+        address = ''
+        if addr_list:
+            address = ', '.join(addr_list)
+        return address
+
+class iout_report(osv.AbstractModel):
+    _name = 'report.l10n_lv_account.invoice_out'
+    _inherit = 'report.abstract_report'
+    _template = 'l10n_lv_account.invoice_out'
+    _wrapped_report_class = report_account_invoice_out
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
