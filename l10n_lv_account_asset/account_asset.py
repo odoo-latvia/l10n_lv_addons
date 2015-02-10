@@ -30,6 +30,7 @@ from openerp import SUPERUSER_ID
 
 class account_asset_category(osv.osv):
     _inherit = 'account.asset.category'
+    _order = 'name'
 
     _columns = {
         'next_month': fields.boolean('Compute from Next Month', help='Indicates that the first depreciation entry for this asset has to be done from the start of the next month following the month of the purchase date.'),
