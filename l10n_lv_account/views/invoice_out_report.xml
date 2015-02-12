@@ -51,18 +51,31 @@
                     margin-right: 0cm;
                 }
             </style>
+            <t t-set="receiver" t-value="o.partner_id"></t>
+            <t t-set="rec_title" t-value="form_title(o.partner_id)"></t>
+            <t t-if="o.type in ['in_invoice', 'in_refund']">
+                <t t-set="receiver" t-value="company"></t>
+                <t t-set="rec_title" t-value="form_title(company.partner_id)"></t>
+            </t>
+            <t t-set="supplier" t-value="company"></t>
+            <t t-set="sup_title" t-value="form_title(company.partner_id)"></t>
+            <t t-set="sup_logo" t-value="company.logo"></t>
+            <t t-if="o.type in ['in_invoice', 'in_refund']">
+                <t t-set="supplier" t-value="o.partner_id"></t>
+                <t t-set="sup_title" t-value="form_title(o.partner_id)"></t>
+                <t t-set="sup_logo" t-value="o.partner_id.image"></t>
+            </t>
             <section>
-                <img t-att-src="'data:image/png;base64,%s' % company.logo" class="logo"/>
+                <img t-att-src="'data:image/png;base64,%s' % sup_logo" class="logo"/>
             </section>
-            <t t-set="p_title" t-value="form_title(o.partner_id)"></t>
             <section class="title">
                 <div style="float: left; max-width: 90mm;">
                     <div>
-        	            <span class="label-out" t-esc="o.partner_id.name"/><span class="label-out" t-if="p_title">,</span>
-                        <span class="label-out" t-esc="p_title or ''"/>
+        	            <span class="label-out" t-esc="receiver.name"/><span class="label-out" t-if="rec_title">,</span>
+                        <span class="label-out" t-esc="rec_title or ''"/>
                     </div>
                     <div>
-                        <span t-esc="form_address(o.partner_id)"/>
+                        <span t-esc="form_address(receiver)"/>
                     </div>
                 </div>
                 <div style="float: right;">
@@ -86,25 +99,25 @@
     	            <tr>
         		        <td>Name:</td>
         		        <td style="font-weight: bold;">
-        	                <span t-esc="o.partner_id.name"/><span t-if="p_title">,</span>
-                            <span t-esc="p_title or ''"/>
+        	                <span t-esc="receiver.name"/><span t-if="rec_title">,</span>
+                            <span t-esc="rec_title or ''"/>
                         </td>
     	            </tr>
-    	            <tr t-if="o.partner_id.vat">
+    	            <tr t-if="receiver.vat">
         		        <td>VAT registration No.:</td>
-        		        <td t-esc="o.partner_id.vat or ''"/>
+        		        <td t-esc="receiver.vat or ''"/>
     	            </tr>
-    	            <tr t-if="form_address(o.partner_id)">
+    	            <tr t-if="form_address(receiver)">
         		        <td>Address:</td>
-        		        <td t-esc="form_address(o.partner_id)"/>
+        		        <td t-esc="form_address(receiver)"/>
     	            </tr>
-    	            <tr t-if="o.partner_id.bank_ids">
+    	            <tr t-if="receiver.bank_ids">
         		        <td>
-                            <span t-if="len(o.partner_id.bank_ids) == 1">Billing account:</span>
-                            <span t-if="len(o.partner_id.bank_ids) > 1">Billing accounts:</span>
+                            <span t-if="len(receiver.bank_ids) == 1">Billing account:</span>
+                            <span t-if="len(receiver.bank_ids) > 1">Billing accounts:</span>
                         </td>
                         <td>
-                            <div t-foreach="o.partner_id.bank_ids" t-as="b">
+                            <div t-foreach="receiver.bank_ids" t-as="b">
                                 <span t-esc="b.acc_number"/><span t-if="b.acc_number and b.bank_name">,</span>
                                 <span t-esc="b.bank_name"/>
                             </div>
@@ -214,14 +227,15 @@
     	            </tr>
     	            <tr>
         		        <td colspan="2" class="label-out" style="color: black !important;">
-                            <span t-esc="company.name"/>
+                            <span t-esc="supplier.name"/><span t-if="sup_title">,</span>
+                            <span t-esc="sup_title"/>
                         </td>
     	            </tr>
     	            <tr>
         		        <td>Unified registration number:</td>
         		        <td style="font-weight: bold;">
-                            <div t-if="company.company_registry" t-esc="company.company_registry"/>
-                            <div t-if="not company.company_registry">
+                            <div t-if="supplier.company_registry" t-esc="supplier.company_registry"/>
+                            <div t-if="not supplier.company_registry">
                                 <span style="color: white; border-bottom: 1px solid black;">____________________________</span>
                             </div>
                         </td>
@@ -229,29 +243,29 @@
     	            <tr>
         		        <td>VAT registration No.:</td>
         		        <td style="font-weight: bold;">
-                            <div t-if="company.vat" t-esc="company.vat"/>
-                            <div t-if="not company.vat">
+                            <div t-if="supplier.vat" t-esc="supplier.vat"/>
+                            <div t-if="not supplier.vat">
                                 <span style="color: white; border-bottom: 1px solid black;">____________________________</span>
                             </div>
                         </td>
     	            </tr>
-    	            <tr t-if="form_address(company)">
+    	            <tr t-if="form_address(supplier)">
         		        <td>Address:</td>
-        		        <td t-esc="form_address(company)"/>
+        		        <td t-esc="form_address(supplier)"/>
     	            </tr>
     	            <tr>
         		        <td>
-                            <span t-if="len(company.bank_ids) &lt;= 1">Billing account:</span>
-                            <span t-if="len(company.bank_ids) > 1">Billing accounts:</span>
+                            <span t-if="len(supplier.bank_ids) &lt;= 1">Billing account:</span>
+                            <span t-if="len(supplier.bank_ids) > 1">Billing accounts:</span>
                         </td>
                         <td>
-                            <div t-foreach="company.bank_ids" t-as="b">
+                            <div t-foreach="supplier.bank_ids" t-as="b">
                                 <span style="font-weight: bold;" t-esc="b.acc_number"/><span t-if="b.acc_number and b.bank_name">,</span>
                                 <span t-esc="b.bank_name"/><span t-if="(b.acc_number or b.bank_name) and b.bank_bic">,</span>
                                 <span t-if="b.bank_bic">Bank Identifier Code</span>
                                 <span t-esc="b.bank_bic"/>
                             </div>
-                            <div t-if="not company.bank_ids">
+                            <div t-if="not supplier.bank_ids">
                                 <span style="color: white; border-bottom: 1px solid black;">__________________________________________</span>
                                 <span>Bank Identifier Code</span>
                                 <span style="color: white; border-bottom: 1px solid black;">______________</span>

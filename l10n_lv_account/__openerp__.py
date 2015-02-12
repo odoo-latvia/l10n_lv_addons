@@ -29,9 +29,9 @@
 Latvian localization for account module.
 =====================================
 
-Adds Invoice Address and Contact Address to all the invoices.
+Report named "Invoice LV" added to all Invoices and Refunds.
 
-Report named "Invoice html" added to all Invoices and Refunds. 
+Report named "Invoice for Sending" added to all Invoices and Refunds.
 
 Report named "Cash Book" added to Invoicing (Accounting) -> Bank and Cash -> Cash Registers, which prints out the information about the Cash Register and all its Orders.
 
