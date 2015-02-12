@@ -57,7 +57,7 @@ class account_move_line_export(osv.osv_memory):
         'amount_currency': fields.boolean("With Currency", help="Export data with the currency column if the currency differs from the company currency."),
         'period_from': fields.many2one('account.period', 'Start Period'),
         'period_to': fields.many2one('account.period', 'End Period'),
-        'file_save': fields.binary('Save File')
+        'file_save': fields.binary('Save File', readonly=True)
     }
 
     def _get_account(self, cr, uid, context=None):
@@ -105,13 +105,6 @@ class account_move_line_export(osv.osv_memory):
                     break
         return period_id
 
-    def _get_data(self, cr, uid, context=None):
-        if context.get('file_save', False):
-            return base64.encodestring(context['file_save'].encode('utf8'))
-        if context.get('file_save_xls', False):
-            return base64.encodestring(context['file_save_xls'].encode('iso8859-4'))
-        return ''
-
     _defaults = {
         'name': 'Journal_Items.csv',
         'format': 'csv',
@@ -122,7 +115,6 @@ class account_move_line_export(osv.osv_memory):
         'period_to': _get_end_period,
         'sort_selection': 'am.name',
         'target_move': 'posted',
-        'file_save': _get_data
     }
 
     def onchange_format(self, cr, uid, ids, format, context=None):
@@ -138,10 +130,10 @@ class account_move_line_export(osv.osv_memory):
         if context is None:
             context = {}
         account_move_line_obj = self.pool.get('account.move.line')
-        data_of_file = "Izpildes datums,Periods,Grāmatojuma numurs,Atsauce,Nr.,Partneris,Reģistrācijas Nr.,Konts,Debets,Kredīts,"
+        data_of_file = u"Izpildes datums,Periods,Grāmatojuma numurs,Atsauce,Nr.,Partneris,Reģistrācijas Nr.,Konts,Debets,Kredīts,"
         if data['amount_currency'] == True:
-            data_of_file += "Summa valūtā,Valūta,"
-        data_of_file += "Nosaukums\n"
+            data_of_file += u"Summa valūtā,Valūta,"
+        data_of_file += u"Nosaukums\n"
         for item in account_move_line_obj.browse(cr, uid, account_move_line_ids):
             date = item.date or ""
             period = item.period_id.name or ""
@@ -160,10 +152,10 @@ class account_move_line_export(osv.osv_memory):
                 amount_cur = '"' + (amount_cur.replace(".",",")) + '"'
             cur = item.currency_id.name or item.journal_id.company_id.currency_id.name
             name = item.name
-            data_of_file += (date + "," + period + "," + int_seq_nr + "," + ref + "," + move + "," + partner + "," + partner_vat + "," + account + "," + debit + "," + credit + ",").encode('UTF-8')
+            data_of_file += (date + "," + period + "," + int_seq_nr + "," + ref + "," + move + "," + partner + "," + partner_vat + "," + account + "," + debit + "," + credit + ",")
             if data['amount_currency'] == True:
-                data_of_file += (amount_cur + "," + cur + ",").encode('UTF-8')
-            data_of_file += (name + "\n").encode('UTF-8')
+                data_of_file += (amount_cur + "," + cur + ",")
+            data_of_file += (name + "\n")
         return data_of_file
 
     def make_xls_data(self, cr, uid, account_move_line_ids, data, context=None):
@@ -172,22 +164,22 @@ class account_move_line_export(osv.osv_memory):
         account_move_line_obj = self.pool.get('account.move.line')
         wbk = xlwt.Workbook(encoding='iso8859-4')
         sheet = wbk.add_sheet('Sheet 1')
-        sheet.write(0,0,("Izpildes datums").decode('utf-8').encode('iso8859-4'))
-        sheet.write(0,1,("Periods").decode('utf-8').encode('iso8859-4'))
-        sheet.write(0,2,("Grāmatojuma numurs").decode('utf-8').encode('iso8859-4'))
-        sheet.write(0,3,("Atsauce").decode('utf-8').encode('iso8859-4'))
-        sheet.write(0,4,("Nr.").decode('utf-8').encode('iso8859-4'))
-        sheet.write(0,5,("Partneris").decode('utf-8').encode('iso8859-4'))
-        sheet.write(0,6,("Reģistrācijas Nr.").decode('utf-8').encode('iso8859-4'))
-        sheet.write(0,7,("Konts").decode('utf-8').encode('iso8859-4'))
-        sheet.write(0,8,("Debets").decode('utf-8').encode('iso8859-4'))
-        sheet.write(0,9,("Kredīts").decode('utf-8').encode('iso8859-4'))
+        sheet.write(0,0,(u"Izpildes datums"))
+        sheet.write(0,1,(u"Periods"))
+        sheet.write(0,2,(u"Grāmatojuma numurs"))
+        sheet.write(0,3,(u"Atsauce"))
+        sheet.write(0,4,(u"Nr."))
+        sheet.write(0,5,(u"Partneris"))
+        sheet.write(0,6,(u"Reģistrācijas Nr."))
+        sheet.write(0,7,(u"Konts"))
+        sheet.write(0,8,(u"Debets"))
+        sheet.write(0,9,(u"Kredīts"))
         if data['amount_currency'] == True:
-            sheet.write(0,10,("Summa valūtā").decode('utf-8').encode('iso8859-4'))
-            sheet.write(0,11,("Valūta").decode('utf-8').encode('iso8859-4'))
-            sheet.write(0,12,("Nosaukums").decode('utf-8').encode('iso8859-4'))
+            sheet.write(0,10,(u"Summa valūtā"))
+            sheet.write(0,11,(u"Valūta"))
+            sheet.write(0,12,(u"Nosaukums"))
         if data['amount_currency'] == False:
-            sheet.write(0,10,("Nosaukums").decode('utf-8').encode('iso8859-4'))
+            sheet.write(0,10,(u"Nosaukums"))
         row = 0
         for item in account_move_line_obj.browse(cr, uid, account_move_line_ids):
             row += 1
@@ -223,7 +215,7 @@ class account_move_line_export(osv.osv_memory):
         file_data = StringIO.StringIO()
         wbk.save(file_data)
         file_data.seek(0)
-        return file_data.read().decode('iso8859-4').encode('utf-8')
+        return file_data.read().decode('iso8859-4')
 
     def create_file(self, cr, uid, ids, context=None):
         if context is None:
@@ -242,24 +234,44 @@ class account_move_line_export(osv.osv_memory):
         account_move_line_obj = self.pool.get('account.move.line')
         account_move_line_ids = account_move_line_obj.search(cr, uid, [('account_id','child_of',data['chart_account_id'][0]), ('company_id','=',data['company_id'][0]), ('move_id.state','in',move_states), ('period_id','in',periods_list)], order=sort, context=context)
 
-        mod_obj = self.pool.get('ir.model.data')
-        model_data_ids = mod_obj.search(cr, uid,[('model','=','ir.ui.view'),('name','=','view_account_move_line_export_save')], context=context)
-        resource_id = mod_obj.read(cr, uid, model_data_ids, fields=['res_id'], context=context)[0]['res_id']
-
         if data['format'] == 'csv':
-            context['file_save'] = self.make_csv_data(cr, uid, account_move_line_ids, data, context=context)
-            context['default_name'] = 'Journal_Items.csv'
+            file_save = self.make_csv_data(cr, uid, account_move_line_ids, data, context=context)
+            file_save_data = base64.encodestring(file_save.encode('utf8'))
+            if data['name']:
+                file_name_list = data['name'].split('.')
+                format = file_name_list[-1]
+                if format != 'csv':
+                    if len(file_name_list) == 1:
+                        file_name_list.append('csv')
+                    else:
+                        file_name_list[-1] = 'csv'
+                file_name = '.'.join(file_name_list)
+            else:
+                file_name = 'Journal_Items.csv'
+            self.write(cr, uid, ids[0], {'name': file_name, 'file_save': file_save_data}, context=context)
         if data['format'] == 'xls':
-            context['file_save_xls'] = self.make_xls_data(cr, uid, account_move_line_ids, data, context=context)
-            context['default_name'] = 'Journal_Items.xls'
+            file_save = self.make_xls_data(cr, uid, account_move_line_ids, data, context=context)
+            file_save_data = base64.encodestring(file_save.encode('iso8859-4'))
+            if data['name']:
+                file_name_list = data['name'].split('.')
+                format = file_name_list[-1]
+                if format != 'xls':
+                    if len(file_name_list) == 1:
+                        file_name_list.append('xls')
+                    else:
+                        file_name_list[-1] = 'xls'
+                file_name = '.'.join(file_name_list)
+            else:
+                file_name = 'Journal_Items.xls'
+            self.write(cr, uid, ids[0], {'name': file_name, 'file_save': file_save_data}, context=context)
         return {
             'name': _('Save document For Journal Items Export'),
+            'res_id': ids[0],
             'context': context,
             'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'account.move.line.export',
-            'views': [(resource_id,'form')],
-            'view_id': 'view_account_move_line_export_save',
+            'views': [(False,'form')],
             'type': 'ir.actions.act_window',
             'target': 'new',
         }

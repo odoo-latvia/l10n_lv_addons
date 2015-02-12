@@ -7,20 +7,25 @@
             <field name="model">account.move.line.export</field>
             <field name="arch" type="xml">
             	<form string="Report Options" version="7.0">
-                    <group col="4">
+                    <group col="1">
+                        <label string="Save the File with the required extension." attrs="{'invisible': [('file_save','=',False)]}"/>
+                        <field name="name" nolabel="1" attrs="{'invisible': [('file_save','!=',False)]}"/>
+                        <field name="file_save" filename="name" nolabel="1" attrs="{'invisible': [('file_save','=',False)]}"/>
+                    </group>
+                    <group col="4" attrs="{'invisible': [('file_save','!=',False)]}">
                         <field name="chart_account_id" widget='selection' on_change="onchange_chart_id(chart_account_id, context)"/>
                         <field name="company_id" invisible="1"/>
                         <field name="fiscalyear_id" domain="[('company_id','=',company_id)]"/>
                         <field name="target_move"/>
                         <field name="sort_selection"/>
                         <field name="amount_currency"/>
-			<field name="format" on_change="onchange_format(format)"/>
+			            <field name="format" on_change="onchange_format(format)"/>
                         <newline/>
                         <separator string="Periods"  colspan="4"/>
                         <field name="period_from" domain="[('fiscalyear_id', '=', fiscalyear_id)]" colspan="4" required="1"/>
                         <field name="period_to" domain="[('fiscalyear_id', '=', fiscalyear_id)]" colspan="4" required="1"/>
                     </group>
-                    <footer>
+                    <footer attrs="{'invisible': [('file_save','!=',False)]}">
                         <button name="create_file" string="Create File" type="object" default_focus="1" class="oe_highlight"  />
                         or
                         <button string="Cancel" class="oe_link" special="cancel" />
@@ -43,18 +48,6 @@
             parent="account.final_accounting_reports"
             action="action_account_move_line_export_menu"
             id="menu_account_move_line_export"/>
-
-        <record id="view_account_move_line_export_save" model="ir.ui.view">
-            <field name="name">Save document</field>
-            <field name="model">account.move.line.export</field>
-            <field name="arch" type="xml">
-                <form string="Save document" version="7.0">
-                    <label string="Save the File with the required extension."/>
-                    <field name="name"/>
-                    <field name="file_save" readonly="True" filename="name"/>
-                </form>
-            </field>
-        </record>
 
     </data>
 </openerp>
