@@ -27,9 +27,9 @@ from openerp.report import report_sxw
 from openerp.osv import osv
 from openerp.tools.translate import _
 
-class report_hr_expense_account_html(report_sxw.rml_parse):
+class report_hr_expense_account(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
-        super(report_hr_expense_account_html, self).__init__(cr, uid, name, context=context)
+        super(report_hr_expense_account, self).__init__(cr, uid, name, context=context)
         self.result_exp = []
         self.result_bank = []
         self.localcontext.update({
@@ -43,18 +43,34 @@ class report_hr_expense_account_html(report_sxw.rml_parse):
 
     def bank_lines(self, form, ids=[]):
         bank_obj = self.pool.get('account.bank.statement.line')
-        self.result_bank = bank_obj.browse(self.cr, self.uid, form['bank_statement_line_ids'])
+        if form:
+            self.result_bank = bank_obj.browse(self.cr, self.uid, form['bank_statement_line_ids'])
+        else:
+            expense_obj = self.pool.get('hr.expense.expense')
+            exp_ids = self.localcontext.get('active_ids',[])
+            partners = []
+            accounts = []
+            for exp in expense_obj.browse(self.cr, self.uid, exp_ids):
+                if exp.employee_id.address_home_id:
+                    partners.append(exp.employee_id.address_home_id.id)
+                    if exp.employee_id.address_home_id.property_account_receivable:
+                        accounts.append(exp.employee_id.address_home_id.property_account_receivable.id)
+            bst_ids = bank_obj.search(self.cr, self.uid, [('partner_id','in',partners), ('account_id','in',accounts)])
+            self.result_bank = bank_obj.browse(self.cr, self.uid, bst_ids)
         return self.result_bank
 
     def lines(self, form, ids=[]):
         expense_obj = self.pool.get('hr.expense.expense')
-        exp_ids = expense_obj.search(self.cr, self.uid, [('date','>=',form['date_from']),('date','<=',form['date_to']),('employee_id','=',form['employee_id']),('account_move_id','!=',False)])
+        exp_ids = self.localcontext.get('active_ids',[])
+        if form:
+            exp_ids = expense_obj.search(self.cr, self.uid, [('date','>=',form['date_from']),('date','<=',form['date_to']),('employee_id','=',form['employee_id']),('account_move_id','!=',False)])
         self.result_exp = expense_obj.browse(self.cr, self.uid, exp_ids)
         return self.result_exp
 
-report_sxw.report_sxw('report.l10n_lv_hr_expense_account.report1',
-                       'hr.expense.expense', 
-                       'addons/l10n_lv_hr_expense_account/report/report_hr_expense_account.mako',
-                       parser=report_hr_expense_account_html)
+class hrea_report(osv.AbstractModel):
+    _name = 'report.l10n_lv_hr_expense_account.hr_expense'
+    _inherit = 'report.abstract_report'
+    _template = 'l10n_lv_hr_expense_account.hr_expense'
+    _wrapped_report_class = report_hr_expense_account
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+<template id="hr_expense_document">
+    <t>
+        <div class="page">
+            <style type="text/css">
+                div.title {
+                    font-size: 16px;
+                    text-align: center;
+                    vertical-align: middle;
+                    margin-top: 20px; 
+                    margin-bottom: 20px;
+                    font-weight: bold;
+                }
+                div.dates {
+                    text-align: center;
+                }
+                table.list_table th {
+                    border: 1px solid black;
+                    font-weight: normal;
+                    text-align: center;
+                    vertical-align: middle;
+                }
+                table.list_table td, th {
+                    padding-top: 2px;
+                    padding-bottom: 2px;
+                    padding-left: 4px;
+                    padding-right: 4px;
+                }
+            </style>
+            <div>
+                <span>Name Surname:</span>
+                <span t-esc="o.employee_id.name"/>
+            </div>
+            <div>
+                <span>Identification No:</span>
+                <span t-esc="o.employee_id.identification_id or ''"/>
+            </div>
+            <div>
+                <span>Department:</span>
+                <span t-esc="o.employee_id.department_id.name or ''"/>
+            </div>
+            <div>
+                <span>Bank Account:</span>
+                <span t-esc="o.employee_id.bank_account_id.acc_number or ''"/>
+            </div>
+            <div>
+                <span>Currency:</span>
+                <span t-esc="o.employee_id.company_id.currency_id.name or ''"/>
+            </div>
+            <div class="title">
+                <span>EXPENSE No</span>
+                <span t-esc="o.name"/>
+            </div>
+            <div t-if="data" class="dates">
+                <span t-esc="formatLang(data['form']['date_from'], date=True)"/>
+                <span>-</span>
+                <span t-esc="formatLang(data['form']['date_to'], date=True)"/>
+            </div>
+            <br/>
+            <br/>
+            <div>Received:</div>
+            <table class="list_table" width="100%">
+                <tr>
+		            <th width="9%">Doc. No</th>
+		            <th width="15%">Journal Entry No</th>
+		            <th width="11%">Doc. Date</th>
+		            <th width="40%">Justification</th>
+		            <th width="10%">Account</th>
+		            <th width="15%">Amount</th>
+                </tr>
+                <t t-set="total_received" t-value="0.0"></t>
+                <t t-set="bank_statement_lines" t-value="bank_lines(data and data['form'] or False)"></t>
+                <t t-foreach="bank_statement_lines" t-as="bank_line">
+                <t t-foreach="bank_line.move_ids" t-as="move">
+                <t t-foreach="move.line_id" t-as="move_line">
+                <tr t-if="move_line.account_id.id == o.employee_id.address_home_id.property_account_receivable.id">
+                    <td>
+                        <span t-esc="move_line.invoice_code or ''"/>
+                    </td>
+                    <td style="text-align: center;">
+                        <span t-esc="move_line.move_id.internal_sequence_number or ''"/>
+                    </td>
+                    <td style="text-align: center;">
+                        <span t-esc="formatLang(move_line.date, date=True)"/>
+                    </td>
+                    <td>
+                        <span t-esc="move_line.name"/>
+                    </td>
+                    <td style="text-align: center;">
+                        <span t-esc="move_line.account_id.code"/>
+                    </td>
+                    <td style="text-align: right;">
+                        <span t-esc="formatLang(move_line.credit)"/>
+                    </td>
+                    <t t-set="total_received" t-value="total_received + move_line.credit"></t>
+                </tr>
+                <tr t-if="bank_line == bank_statement_lines[-1] and move == bank_line.move_ids[-1] and move_line == move.line_id[-1]">
+                    <td colspan="4"/>
+                    <td style="border-top: 1px solid black; font-weight: bold;">
+                        <span>Total:</span>
+                    </td>
+                    <td style="border-top: 1px solid black; font-weight: bold; text-align:right">
+                        <span t-esc="formatLang(total_received)"/>
+                    </td>
+                </tr>
+                </t>
+                </t>
+                </t>
+            </table>
+            <br/>
+            <div>Spent:</div>
+            <table class="list_table" width="100%">
+                <tr>
+		            <th width="9%">Doc. No</th>
+		            <th width="15%">Journal Entry No</th>
+		            <th width="11%">Doc. Date</th>
+		            <th width="40%">Justification</th>
+		            <th width="10%">Account</th>
+		            <th width="15%">Amount</th>
+                </tr>
+                <t t-set="total_spent" t-value="0.0"></t>
+                <t t-foreach="o.account_move_id.line_id" t-as="line">
+                <tr t-if="line.tax_code_id">
+                    <td>
+                        <span t-esc="line.invoice_code or ''"/>
+                    </td>
+                    <td style="text-align: center;">
+                        <span t-esc="line.move_id.internal_sequence_number or ''"/>
+                    </td>
+                    <td style="text-align: center;">
+                        <span t-esc="formatLang(line.date, date=True)"/>
+                    </td>
+                    <td>
+                        <span t-esc="line.partner_id and line.partner_id.name or ''"/><span t-if="line.partner_id">, </span>
+                        <span t-if="line.partner_id and line.partner_id.vat">TIN</span>
+                        <span t-esc="line.partner_id and line.partner_id.vat or ''"/><span t-if="line.partner_id and line.partner_id.vat">, </span>
+                        <span t-esc="line.name"/>
+                    </td>
+                    <td style="text-align: center;">
+                        <span t-esc="line.account_id.code"/>
+                    </td>
+                    <td style="text-align: right;">
+                        <span t-esc="formatLang(line.debit)"/>
+                    </td>
+                    <t t-set="total_spent" t-value="total_spent + line.debit"></t>
+                </tr>
+                <tr t-if="line == o.account_move_id.line_id[-1]">
+                    <td colspan="4"/>
+                    <td style="border-top: 1px solid black; font-weight: bold;">
+                        <span>Total:</span>
+                    </td>
+                    <td style="border-top: 1px solid black; font-weight: bold; text-align:right;">
+                        <span t-esc="formatLang(total_spent)"/>
+                    </td>
+                </tr>
+                <tr t-if="line == o.account_move_id.line_id[-1]">
+                    <td colspan="3"/>
+                    <td colspan="3">
+                        <span t-esc="total_spent" t-esc-options='{"widget": "verbose", "display_currency": "o.currency_id"}'/>
+                    </td>
+                </tr>
+                </t>
+            </table>
+            <br/>
+            <table width="100%" class="list_table">
+                <tr>
+                    <td width="50%"></td>
+                    <td width="50%">Expense Person:</td>
+                </tr>
+                <tr>
+                    <td width="50%"></td>
+                    <td width="50%">Accountant:</td>
+                </tr>
+                <tr>
+                    <td width="50%"></td>
+                    <td width="50%">Manager:</td>
+                </tr>
+            </table>
+        </div>
+    </t>
+</template>
+
+<template id="hr_expense">
+    <t t-call="report.html_container">
+        <t t-set="expenses" t-value="lines(data and data['form'] or False)"></t>
+        <t t-set="doc_ids" t-value="[e.id for e in expenses]"></t>
+        <t t-foreach="doc_ids" t-as="doc_id">
+            <t t-raw="translate_doc(doc_id, 'hr.expense.expense', 'employee_id.company_id.partner_id.lang', 'l10n_lv_hr_expense_account.hr_expense_document')"/>
+        </t>
+    </t>
+</template>
+
+</data>
+</openerp>

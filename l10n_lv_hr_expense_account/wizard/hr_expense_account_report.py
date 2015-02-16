@@ -38,6 +38,10 @@ class hr_expense_account_report(osv.osv_memory):
         'bank_statement_line_ids': fields.many2many('account.bank.statement.line', 'bank_statement_line_rel', 'report_id', 'statement_line_id', 'Bank Statement Lines')
     }
 
+    _defaults = {
+        'date_to': fields.date.context_today
+    }
+
     def onchange_data(self, cr, uid, ids, employee_id, account_id, date_from, date_to, context=None):
         if context is None:
             context = {}
@@ -68,6 +72,10 @@ class hr_expense_account_report(osv.osv_memory):
                 data['form'][field] = data['form'][field][0]
         used_context = self._build_contexts(cr, uid, ids, data, context=context)
         data['form']['used_context'] = used_context
-        return {'type': 'ir.actions.report.xml', 'report_name': 'l10n_lv_hr_expense_account.report1', 'datas': data}
+        return {
+            'type': 'ir.actions.report.xml',
+            'report_name': 'l10n_lv_hr_expense_account.hr_expense',
+            'datas': data
+        }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

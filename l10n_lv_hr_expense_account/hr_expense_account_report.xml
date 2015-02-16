@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <report auto="False"
+<!--        <report auto="False"
                 id="report_hr_expense_account_l10n_lv_html"
                 model="hr.expense.expense"
                 name="l10n_lv_hr_expense_account.report1"
@@ -10,7 +10,33 @@
                 string="HR Expense"
                 report_type="webkit"
 				menu="False"
-                webkit_header="l10n_lv_report_webkit.ir_header_webkit_pi"/>
+                webkit_header="l10n_lv_report_webkit.ir_header_webkit_pi"/> -->
+
+        <!-- HR Expense Account Paperformat Portrait -->
+
+        <record id="report_paperformat_hr_expense_account_portrait" model="report.paperformat">
+            <field name="name">HR Expense Account Portrait</field>
+            <field name="margin_top" eval="10"/>
+            <field name="margin_left" eval="20"/>
+            <field name="margin_bottom" eval="10"/>
+            <field name="margin_right" eval="10"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+        </record>
+
+        <!-- HR Expense in Accounting -->
+
+        <report auto="False"
+                id="report_hr_expense_account_l10n_lv"
+                string="HR Expense"
+                model="hr.expense.expense"
+                name="l10n_lv_hr_expense_account.hr_expense"
+                file="l10n_lv_hr_expense_account.hr_expense"
+                report_type="qweb-pdf"/>
+
+        <record id="l10n_lv_hr_expense_account.report_hr_expense_account_l10n_lv" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="l10n_lv_hr_expense_account.report_paperformat_hr_expense_account_portrait"/>
+        </record>
 
     </data>
 </openerp>
