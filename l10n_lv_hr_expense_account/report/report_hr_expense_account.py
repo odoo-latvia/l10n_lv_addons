@@ -37,9 +37,18 @@ class report_hr_expense_account(report_sxw.rml_parse):
             'cr':cr,
             'uid': uid,
             'lines': self.lines,
-            'bank_lines': self.bank_lines
+            'bank_lines': self.bank_lines,
+            'move_lines': self.move_lines
         })
         self.context = context
+
+    def move_lines(self, bank_statement_lines):
+        line_list = []
+        for bsl in bank_statement_lines:
+            for ml in bsl.journal_entry_id.line_id:
+                if ml not in line_list:
+                    line_list.append(ml)
+        return line_list
 
     def bank_lines(self, form, ids=[]):
         bank_obj = self.pool.get('account.bank.statement.line')
@@ -49,13 +58,10 @@ class report_hr_expense_account(report_sxw.rml_parse):
             expense_obj = self.pool.get('hr.expense.expense')
             exp_ids = self.localcontext.get('active_ids',[])
             partners = []
-            accounts = []
             for exp in expense_obj.browse(self.cr, self.uid, exp_ids):
                 if exp.employee_id.address_home_id:
                     partners.append(exp.employee_id.address_home_id.id)
-                    if exp.employee_id.address_home_id.property_account_receivable:
-                        accounts.append(exp.employee_id.address_home_id.property_account_receivable.id)
-            bst_ids = bank_obj.search(self.cr, self.uid, [('partner_id','in',partners), ('account_id','in',accounts)])
+            bst_ids = bank_obj.search(self.cr, self.uid, [('partner_id','in',partners)])
             self.result_bank = bank_obj.browse(self.cr, self.uid, bst_ids)
         return self.result_bank
 

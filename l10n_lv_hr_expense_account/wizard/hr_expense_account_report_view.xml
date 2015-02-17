@@ -11,15 +11,14 @@
 					<separator string="" colspan="4"/>
                     <group>
                         <group>
-						    <field name="employee_id" on_change="onchange_data(employee_id, account_id, date_from, date_to)"/>
-                            <field name="account_id" on_change="onchange_data(employee_id, account_id, date_from, date_to)"/>
+						    <field name="employee_id" on_change="onchange_data(employee_id, date_from, date_to)"/>
                         </group>
 					    <group>
                             <div>
                                 <label for="date_from" string="Period" class="oe_inline"/>
-                                <field name="date_from" class="oe_inline" on_change="onchange_data(employee_id, account_id, date_from, date_to)"/>
+                                <field name="date_from" class="oe_inline" on_change="onchange_data(employee_id, date_from, date_to)"/>
                                 <label for="date_to" string="-" class="oe_inline"/>
-                                <field name="date_to" class="oe_inline" on_change="onchange_data(employee_id, account_id, date_from, date_to)"/>
+                                <field name="date_to" class="oe_inline" on_change="onchange_data(employee_id, date_from, date_to)"/>
                             </div>
 					    </group>
                         <group colspan="4" invisible="1">

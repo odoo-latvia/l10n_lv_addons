@@ -32,7 +32,6 @@ class hr_expense_account_report(osv.osv_memory):
 
     _columns = {
         'employee_id': fields.many2one('hr.employee', 'Employee', required=True),
-        'account_id': fields.many2one('account.account', 'Account', domain="[('type','=','payable')]"),
         'date_from': fields.date('Date From', required=True),
         'date_to': fields.date('Date To', required=True),
         'bank_statement_line_ids': fields.many2many('account.bank.statement.line', 'bank_statement_line_rel', 'report_id', 'statement_line_id', 'Bank Statement Lines')
@@ -42,11 +41,11 @@ class hr_expense_account_report(osv.osv_memory):
         'date_to': fields.date.context_today
     }
 
-    def onchange_data(self, cr, uid, ids, employee_id, account_id, date_from, date_to, context=None):
+    def onchange_data(self, cr, uid, ids, employee_id, date_from, date_to, context=None):
         if context is None:
             context = {}
         employee = self.pool.get('hr.employee').browse(cr, uid, employee_id, context=context)
-        bank_statement_line_ids = self.pool.get('account.bank.statement.line').search(cr, uid, [('partner_id','=',employee.address_home_id.id),('account_id','=',employee.address_home_id.property_account_receivable.id),('date','>=',date_from),('date','<=',date_to)], context=context)
+        bank_statement_line_ids = self.pool.get('account.bank.statement.line').search(cr, uid, [('partner_id','=',employee.address_home_id.id), ('date','>=',date_from), ('date','<=',date_to)], context=context)
         return {'value': {'bank_statement_line_ids': bank_statement_line_ids}}
 
     def _build_contexts(self, cr, uid, ids, data, context=None):
@@ -54,7 +53,6 @@ class hr_expense_account_report(osv.osv_memory):
             context = {}
         result = {}
         result['employee_id'] = 'employee_id' in data['form'] and data['form']['employee_id'] or False
-        result['account_id'] = 'account_id' in data['form'] and data['form']['account_id'] or False
         result['date_from'] = 'date_from' in data['form'] and data['form']['date_from'] or False
         result['date_to'] = 'date_to' in data['form'] and data['form']['date_to'] or False
         result['bank_statement_line_ids'] = 'bank_statement_line_ids' in data['form'] and data['form']['bank_statement_line_ids'] or False
@@ -66,8 +64,8 @@ class hr_expense_account_report(osv.osv_memory):
         data = {}
         data['ids'] = context.get('active_ids', [])
         data['model'] = context.get('active_model', 'ir.ui.menu')
-        data['form'] = self.read(cr, uid, ids, ['employee_id','account_id','date_from','date_to', 'bank_statement_line_ids'], context=context)[0]
-        for field in ['employee_id','account_id','date_from','date_to','bank_statement_line_ids']:
+        data['form'] = self.read(cr, uid, ids, ['employee_id','date_from','date_to', 'bank_statement_line_ids'], context=context)[0]
+        for field in ['employee_id','date_from','date_to','bank_statement_line_ids']:
             if isinstance(data['form'][field], tuple):
                 data['form'][field] = data['form'][field][0]
         used_context = self._build_contexts(cr, uid, ids, data, context=context)

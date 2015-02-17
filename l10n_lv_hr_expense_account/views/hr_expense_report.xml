@@ -29,26 +29,32 @@
                     padding-left: 4px;
                     padding-right: 4px;
                 }
+                table.signatures td {
+                    padding-top: 6px;
+                    padding-bottom: 6px;
+                    padding-left: 4px;
+                    padding-right: 4px;
+                }
             </style>
             <div>
                 <span>Name Surname:</span>
-                <span t-esc="o.employee_id.name"/>
+                <span style="font-weight: bold;" t-esc="o.employee_id.name"/>
             </div>
-            <div>
+            <div t-if="o.employee_id.identification_id">
                 <span>Identification No:</span>
                 <span t-esc="o.employee_id.identification_id or ''"/>
             </div>
-            <div>
+            <div t-if="o.employee_id.department_id">
                 <span>Department:</span>
                 <span t-esc="o.employee_id.department_id.name or ''"/>
             </div>
-            <div>
+            <div t-if="o.employee_id.bank_account_id">
                 <span>Bank Account:</span>
                 <span t-esc="o.employee_id.bank_account_id.acc_number or ''"/>
             </div>
             <div>
                 <span>Currency:</span>
-                <span t-esc="o.employee_id.company_id.currency_id.name or ''"/>
+                <span t-esc="o.currency_id.name or ''"/>
             </div>
             <div class="title">
                 <span>EXPENSE No</span>
@@ -61,21 +67,23 @@
             </div>
             <br/>
             <br/>
-            <div>Received:</div>
-            <table class="list_table" width="100%">
+            <t t-set="bank_statement_lines" t-value="bank_lines(data and data['form'] or False)"></t>
+            <t t-set="bank_move_lines" t-value="move_lines(bank_statement_lines)"></t>
+            <div>
+                <span>Received:</span>
+                <span t-esc="((not bank_move_lines) and formatLang(0.0)) or ''"/>
+            </div>
+            <table class="list_table" width="100%" t-if="bank_move_lines">
                 <tr>
-		            <th width="9%">Doc. No</th>
+		            <th width="10%">Doc. No</th>
 		            <th width="15%">Journal Entry No</th>
 		            <th width="11%">Doc. Date</th>
 		            <th width="40%">Justification</th>
 		            <th width="10%">Account</th>
-		            <th width="15%">Amount</th>
+		            <th width="14%">Amount</th>
                 </tr>
                 <t t-set="total_received" t-value="0.0"></t>
-                <t t-set="bank_statement_lines" t-value="bank_lines(data and data['form'] or False)"></t>
-                <t t-foreach="bank_statement_lines" t-as="bank_line">
-                <t t-foreach="bank_line.move_ids" t-as="move">
-                <t t-foreach="move.line_id" t-as="move_line">
+                <t t-foreach="bank_move_lines" t-as="move_line">
                 <tr t-if="move_line.account_id.id == o.employee_id.address_home_id.property_account_receivable.id">
                     <td>
                         <span t-esc="move_line.invoice_code or ''"/>
@@ -97,7 +105,7 @@
                     </td>
                     <t t-set="total_received" t-value="total_received + move_line.credit"></t>
                 </tr>
-                <tr t-if="bank_line == bank_statement_lines[-1] and move == bank_line.move_ids[-1] and move_line == move.line_id[-1]">
+                <tr t-if="move_line == bank_move_lines[-1]">
                     <td colspan="4"/>
                     <td style="border-top: 1px solid black; font-weight: bold;">
                         <span>Total:</span>
@@ -107,19 +115,20 @@
                     </td>
                 </tr>
                 </t>
-                </t>
-                </t>
             </table>
             <br/>
-            <div>Spent:</div>
-            <table class="list_table" width="100%">
+            <div>
+                <span>Spent:</span>
+                <span t-esc="(((not o.account_move_id) or (not o.account_move_id.line_id)) and formatLang(0.0)) or ''"/>
+            </div>
+            <table class="list_table" width="100%" t-if="o.account_move_id and o.account_move_id.line_id">
                 <tr>
-		            <th width="9%">Doc. No</th>
+		            <th width="10%">Doc. No</th>
 		            <th width="15%">Journal Entry No</th>
 		            <th width="11%">Doc. Date</th>
 		            <th width="40%">Justification</th>
 		            <th width="10%">Account</th>
-		            <th width="15%">Amount</th>
+		            <th width="14%">Amount</th>
                 </tr>
                 <t t-set="total_spent" t-value="0.0"></t>
                 <t t-foreach="o.account_move_id.line_id" t-as="line">
@@ -165,18 +174,24 @@
                 </t>
             </table>
             <br/>
-            <table width="100%" class="list_table">
+            <table width="100%" class="signatures">
                 <tr>
-                    <td width="50%"></td>
-                    <td width="50%">Expense Person:</td>
+                    <td width="70%" style="text-align: right; vertical-align: middle;">
+                        <span>Expense Person:</span>
+                    </td>
+                    <td width="30%" style="border-bottom: 1px solid black; color: white;">...</td>
                 </tr>
                 <tr>
-                    <td width="50%"></td>
-                    <td width="50%">Accountant:</td>
+                    <td style="text-align: right; vertical-align: middle;">
+                        <span>Accountant:</span>
+                    </td>
+                    <td style="border-bottom: 1px solid black; color: white;">...</td>
                 </tr>
                 <tr>
-                    <td width="50%"></td>
-                    <td width="50%">Manager:</td>
+                    <td style="text-align: right; vertical-align: middle;">
+                        <span>Manager:</span>
+                    </td>
+                    <td style="border-bottom: 1px solid black; color: white;">...</td>
                 </tr>
             </table>
         </div>
