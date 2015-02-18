@@ -253,6 +253,7 @@
 
 <template id="asset_turnover_report">
     <t t-call="report.html_container">
+        <t t-set="doc_ids" t-value="[doc_ids[0]]"></t>
         <t t-foreach="doc_ids" t-as="doc_id">
             <t t-raw="translate_doc(doc_id, doc_model, 'company_id.partner_id.lang', 'l10n_lv_account_asset.asset_turnover_report_document')"/>
         </t>
