@@ -85,81 +85,82 @@ class account_fidavista_import(osv.osv_memory):
         except:
             raise osv.except_osv(_('Error'), _('Wizard in incorrect state. Please hit the Cancel button'))
             return False
+        if fidavistafile:
+            # decoding and encoding for string parsing; parseString() method:
+            record = unicode(base64.decodestring(fidavistafile), 'iso8859-4', 'strict').encode('iso8859-4','strict')
+            dom = parseString(record)
 
-        # decoding and encoding for string parsing; parseString() method:
-        record = unicode(base64.decodestring(fidavistafile), 'iso8859-4', 'strict').encode('iso8859-4','strict')
-        dom = parseString(record)
+            # getting date values:
+            prep_date = dom.getElementsByTagName('PrepDate')[0].toxml().replace('<PrepDate>','').replace('</PrepDate>','')
+            start_date = dom.getElementsByTagName('StartDate')[0].toxml().replace('<StartDate>','').replace('</StartDate>','')
+            end_date = dom.getElementsByTagName('EndDate')[0].toxml().replace('<EndDate>','').replace('</EndDate>','')
 
-        # getting date values:
-        prep_date = dom.getElementsByTagName('PrepDate')[0].toxml().replace('<PrepDate>','').replace('</PrepDate>','')
-        start_date = dom.getElementsByTagName('StartDate')[0].toxml().replace('<StartDate>','').replace('</StartDate>','')
-        end_date = dom.getElementsByTagName('EndDate')[0].toxml().replace('<EndDate>','').replace('</EndDate>','')
+            # getting the accountsets to browse through and giving start values for fields:
+            accountsets = dom.getElementsByTagName('AccountSet')
+            wrong_balance = False
+            test_date = False
+            period_id = False
+            line_date_list = []
+            latest_bank_statement_name = False
+            latest_bank_statement_balance_end = False
+            result_imported = []
+            datas_imported = {}
+            result_importing = []
+            datas_importing = {}
+            for company_account in accountsets:
+                # testing, whether the Company's bank account is defined in the system:
+                company_acc_no = company_account.getElementsByTagName('AccNo')[0].toxml().replace('<AccNo>','').replace('</AccNo>','')
+                company_acc_no_list = list(company_acc_no)
+                company_acc_no_list.insert(4,' ')
+                company_acc_no_list.insert(9,' ')
+                company_acc_no_list.insert(14,' ')
+                company_acc_no_list.insert(19,' ')
+                company_acc_no_list.insert(24,' ')
+                company_acc_no_2 = "".join(company_acc_no_list)
+                test_acc_no = self.pool.get('res.partner.bank').search(cr, uid, [('acc_number','=',company_acc_no)])
+                if not test_acc_no:
+                    test_acc_no = self.pool.get('res.partner.bank').search(cr, uid, [('acc_number','=',company_acc_no_2)])
 
-        # getting the accountsets to browse through and giving start values for fields:
-        accountsets = dom.getElementsByTagName('AccountSet')
-        wrong_balance = False
-        test_date = False
-        period_id = False
-        line_date_list = []
-        latest_bank_statement_name = False
-        latest_bank_statement_balance_end = False
-        result_imported = []
-        datas_imported = {}
-        result_importing = []
-        datas_importing = {}
-        for company_account in accountsets:
-            # testing, whether the Company's bank account is defined in the system:
-            company_acc_no = company_account.getElementsByTagName('AccNo')[0].toxml().replace('<AccNo>','').replace('</AccNo>','')
-            company_acc_no_list = list(company_acc_no)
-            company_acc_no_list.insert(4,' ')
-            company_acc_no_list.insert(9,' ')
-            company_acc_no_list.insert(14,' ')
-            company_acc_no_list.insert(19,' ')
-            company_acc_no_list.insert(24,' ')
-            company_acc_no_2 = "".join(company_acc_no_list)
-            test_acc_no = self.pool.get('res.partner.bank').search(cr, uid, [('acc_number','=',company_acc_no)])
-            if not test_acc_no:
-                test_acc_no = self.pool.get('res.partner.bank').search(cr, uid, [('acc_number','=',company_acc_no_2)])
+                # getting Statement Reference:
+                statement_name = company_acc_no + ' ' + start_date+ ':' + end_date
 
-            # getting Statement Reference:
-            statement_name = company_acc_no + ' ' + start_date+ ':' + end_date
+                # getting and checking balances:
+                balance_start = company_account.getElementsByTagName('OpenBal')[0].toxml().replace('<OpenBal>','').replace('</OpenBal>','')
+                if test_acc_no:
+                    bank_statement_ids = self.pool.get('account.bank.statement').search(cr, uid, [('bank_account_id', '=', test_acc_no[0])], order='date', context=context)
+                    if bank_statement_ids:
+                        latest_bank_statement = self.pool.get('account.bank.statement').browse(cr, uid, bank_statement_ids[-1], context=context)
+                        latest_bank_statement_name = latest_bank_statement.name
+                        latest_bank_statement_balance_end = latest_bank_statement.balance_end_real
 
-            # getting and checking balances:
-            balance_start = company_account.getElementsByTagName('OpenBal')[0].toxml().replace('<OpenBal>','').replace('</OpenBal>','')
-            if test_acc_no:
-                bank_statement_ids = self.pool.get('account.bank.statement').search(cr, uid, [('bank_account_id', '=', test_acc_no[0])], order='date', context=context)
-                if bank_statement_ids:
-                    latest_bank_statement = self.pool.get('account.bank.statement').browse(cr, uid, bank_statement_ids[-1], context=context)
-                    latest_bank_statement_name = latest_bank_statement.name
-                    latest_bank_statement_balance_end = latest_bank_statement.balance_end_real
+                        if latest_bank_statement.balance_end_real != float(balance_start):
+                            wrong_balance = True
 
-                    if latest_bank_statement.balance_end_real != float(balance_start):
-                        wrong_balance = True
+                # creating values for fields:
+                datas_imported = {'last_statement': latest_bank_statement_name, 'last_balance_end': latest_bank_statement_balance_end, 'wrong_balance': wrong_balance}
+                result_imported.append(datas_imported)
 
-            # creating values for fields:
-            datas_imported = {'last_statement': latest_bank_statement_name, 'last_balance_end': latest_bank_statement_balance_end, 'wrong_balance': wrong_balance}
-            result_imported.append(datas_imported)
+                datas_importing = {'current_statement': statement_name, 'current_balance_start': float(balance_start), 'wrong_balance': wrong_balance}
+                result_importing.append(datas_importing)
 
-            datas_importing = {'current_statement': statement_name, 'current_balance_start': float(balance_start), 'wrong_balance': wrong_balance}
-            result_importing.append(datas_importing)
+                # checking statement lines for period dates:
+                statement_lines = company_account.getElementsByTagName('TrxSet')
+                for line in statement_lines:
+                    line_date = line.getElementsByTagName('BookDate')[0].toxml().replace('<BookDate>','').replace('</BookDate>','')
+                    if line_date:
+                        line_date_list.append(line_date)
+                        break
+            if line_date_list != []:
+                test_date = line_date_list[0]
+            period = self.pool.get('account.period').search(cr, uid, [('date_start','<=',test_date),('date_stop','>=',test_date)], context=context)
+            if period:
+                if len(period) > 1:
+                    period_id = period[1]
+                else:
+                    period_id = period[0]
 
-            # checking statement lines for period dates:
-            statement_lines = company_account.getElementsByTagName('TrxSet')
-            for line in statement_lines:
-                line_date = line.getElementsByTagName('BookDate')[0].toxml().replace('<BookDate>','').replace('</BookDate>','')
-                if line_date:
-                    line_date_list.append(line_date)
-                    break
-        if line_date_list != []:
-            test_date = line_date_list[0]
-        period = self.pool.get('account.period').search(cr, uid, [('date_start','<=',test_date),('date_stop','>=',test_date)], context=context)
-        if period:
-            if len(period) > 1:
-                period_id = period[1]
-            else:
-                period_id = period[0]
-
-        return {'value': {'period_id': period_id, 'imported_statements': result_imported, 'importing_statements': result_importing, 'wrong_balance': wrong_balance}}
+            return {'value': {'period_id': period_id, 'imported_statements': result_imported, 'importing_statements': result_importing, 'wrong_balance': wrong_balance}}
+        return {}
 
 
     def fidavista_parsing(self, cr, uid, ids, context=None, fidavistafile=None, fidavistafilename=None, flag=False):
