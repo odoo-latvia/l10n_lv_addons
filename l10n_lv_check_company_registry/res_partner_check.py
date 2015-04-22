@@ -58,7 +58,10 @@ class res_partner(osv.osv):
         if company_registry and (load_from_registry == True):
             reg_num = re.sub("\D", "", company_registry)
             url = 'http://services.ozols.lv/misc/company_info.aspx?type=1&rnum=%s' % reg_num
-            pyPage = urllib.urlopen(url)
+            try:
+                pyPage = urllib.urlopen(url)
+            except:
+                raise osv.except_osv(_("Unable to connect to service!"), _("There is a problem with data loading, so you may have to enter data manually."))
             content = pyPage.read()
 #            encoding = pyPage.headers['content-type'].split('charset=')[-1]
             record = content.decode('utf-8').encode('cp1257')

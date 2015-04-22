@@ -75,3 +75,16 @@ msgstr " partnerim %s."
 #, python-format
 msgid "Check the 'Allow similar Partner creation' box and try again if you want to save the contact anyway."
 msgstr "Ja tik un tā vēlaties saglabāt kontaktu, atķeksējiet 'Atļaut līdzīga partnera ievadi' un mēģiniet vēlreiz."
+
+#. module: l10n_lv_check_company_registry
+#: code:addons/l10n_lv_check_company_registry/res_partner_check.py:64
+#, python-format
+msgid "Unable to connect to service!"
+msgstr "Nav iespējams pieslēgties servisam!"
+
+#. module: l10n_lv_check_company_registry
+#: code:addons/l10n_lv_check_company_registry/res_partner_check.py:64
+#, python-format
+msgid "There is a problem with data loading, so you may have to enter data manually."
+msgstr "Datu ielādē radusies problēma, tādēļ datus nāksies ievadīt manuāli."
+
