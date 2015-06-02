@@ -34,7 +34,9 @@ Upgrades Payslip Details report.
     'website': 'http://www.its1.lv/',
     'category': 'Human Resources',
     'depends': ['hr_payroll'],
-    'data': [],
+    'data': [
+        'hr_payroll_view.xml'
+    ],
     'auto_install': False,
     'installable': True,
 }
