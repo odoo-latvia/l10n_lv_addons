@@ -82,7 +82,7 @@ class hr_payslip(osv.osv):
                     worked_days += prev_wd
                     total_salary += prev_ts
             # get current worked days:
-            wd_lines = res['value']['worked_days_line_ids']
+            wd_lines = self.get_worked_day_lines(cr, uid, [contract_id], date_from, date_to, context=context)
             curr_wd = 0.0
             total_days = 0.0
             for wd in wd_lines:
@@ -110,8 +110,9 @@ class hr_payslip(osv.osv):
             # if no current payslip ids, compute the value:
             if (not curr_ps_ids) and total_days != 0.0:
                 curr_ts += contract.wage * curr_wd / total_days
-                if res['value']['input_line_ids']:
-                    for cil in res['value']['input_line_ids']:
+                ip_lines = self.get_inputs(cr, uid, [contract_id], date_from, date_to, context=context)
+                if ip_lines:
+                    for cil in ip_lines:
                         if cil['code'] in ['PIEM', 'PIEMV']:
                             curr_ts += cil['amount']
             total_salary += curr_ts
