@@ -29,6 +29,14 @@
 Latvian Payroll
 -------------------------
 Upgrades Payslip Details report.
+Adds Disability group in Employee form.
+Adds Code field to Leave types.
+Upgrades Employee on_change function, so that it:
+* computes average salary for last 6 months (VDA6M) in Other Inputs;
+* uses Leave Type Code in Worked Days;
+* puts number of dependent persons (APG) in Other Inputs (from Employee children);
+* computes number of calendar days absent (KAL) in Other Inputs.
+Adds button "Reload Inputs" in Payslip form, which calls the Employee on_change function, so that, in case of data change, you don't have to edit the payslip and change employee again to see it.
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',

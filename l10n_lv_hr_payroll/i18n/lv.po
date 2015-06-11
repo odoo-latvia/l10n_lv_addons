@@ -1,0 +1,80 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* l10n_lv_hr_payroll
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-06-11 13:50+0000\n"
+"PO-Revision-Date: 2015-06-11 13:50+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_lv_hr_payroll
+#: view:hr.payslip:l10n_lv_hr_payroll.view_hr_payslip_form_inherit_lv
+msgid "Are you sure, you want to change Worked Days and Other Inputs? The data will be changed irreversibly."
+msgstr "Vai esat pārliecināti, ka vēlaties mainīt nostrādāto dienu un papildus ievadītos datus? Dati tiks mainīti neatgriezeniski."
+
+#. module: l10n_lv_hr_payroll
+#: field:hr.employee,disability_group:0
+msgid "Disability group"
+msgstr "Invaliditātes grupa"
+
+#. module: l10n_lv_hr_payroll
+#: model:ir.model,name:l10n_lv_hr_payroll.model_hr_employee
+msgid "Employee"
+msgstr "Darbinieks"
+
+#. module: l10n_lv_hr_payroll
+#: selection:hr.employee,disability_group:0
+msgid "II"
+msgstr "II"
+
+#. module: l10n_lv_hr_payroll
+#: selection:hr.employee,disability_group:0
+msgid "III"
+msgstr "III"
+
+#. module: l10n_lv_hr_payroll
+#: model:ir.model,name:l10n_lv_hr_payroll.model_hr_holidays_status
+msgid "Leave Type"
+msgstr "Prombūtnes veids"
+
+#. module: l10n_lv_hr_payroll
+#: field:hr.holidays.status,code:0
+msgid "Leave Type Code"
+msgstr "Prombūtnes veida kods"
+
+#. module: l10n_lv_hr_payroll
+#: model:ir.model,name:l10n_lv_hr_payroll.model_hr_payslip
+msgid "Pay Slip"
+msgstr "Algas Lapa"
+
+#. module: l10n_lv_hr_payroll
+#: view:hr.payslip:l10n_lv_hr_payroll.view_hr_payslip_form_inherit_lv
+msgid "Reload Inputs"
+msgstr "Pārlādēt ievadīto"
+
+#. module: l10n_lv_hr_payroll
+#: code:addons/l10n_lv_hr_payroll/hr_payroll.py:141
+#, python-format
+msgid "Average day salary for last 6 months"
+msgstr "Pēdējo 6 mēnešu vidējā dienas alga"
+
+#. module: l10n_lv_hr_payroll
+#: code:addons/l10n_lv_hr_payroll/hr_payroll.py:172
+#, python-format
+msgid "Dependent persons"
+msgstr "Apgādībā esošās personas"
+
+#. module: l10n_lv_hr_payroll
+#: code:addons/l10n_lv_hr_payroll/hr_payroll.py:200
+#, python-format
+msgid "Number of calendar days absent"
+msgstr "Kavēto kalendāro dienu skaits"
+
