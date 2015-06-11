@@ -27,12 +27,29 @@ from openerp.osv import fields, osv
 from openerp.tools.translate import _
 import datetime
 from dateutil.relativedelta import relativedelta
+from datetime import timedelta
+
+class hr_holidays_status(osv.osv):
+    _inherit = "hr.holidays.status"
+
+    _columns = {
+        'code': fields.char('Leave Type Code')
+    }
+
+class hr_employee(osv.osv):
+    _inherit = "hr.employee"
+
+    _columns = {
+        'disability_group': fields.selection([('I','I'), ('II','II'), ('III','III')], 'Disability group')
+    }
 
 class hr_payslip(osv.osv):
     _inherit = 'hr.payslip'
 
     def onchange_employee_id(self, cr, uid, ids, date_from, date_to, employee_id=False, contract_id=False, context=None):
         res = super(hr_payslip, self).onchange_employee_id(cr, uid, ids, date_from, date_to, employee_id=employee_id, contract_id=contract_id, context=context)
+
+        # Average salary for last 6 months computation:
         avg_salary = 0.0
         contract = self.pool.get('hr.contract').browse(cr, uid, contract_id, context=context)
         if date_from and date_to and employee_id:
@@ -126,6 +143,64 @@ class hr_payslip(osv.osv):
                 'amount': avg_salary,
                 'contract_id': contract_id
             })
+
+        # Use Leave Type Code instead od Leave Type name in code field:
+        if res['value']['worked_days_line_ids']:
+            hd_type_obj = self.pool.get('hr.holidays.status')
+            for wdl_val in res['value']['worked_days_line_ids']:
+                hd_type_ids = hd_type_obj.search(cr, uid, [('name','=',wdl_val['name'])], context=context)
+                if hd_type_ids:
+                    hd_type = hd_type_obj.browse(cr, uid, hd_type_ids, context=context)
+                    if hd_type.code and hd_type.code != wdl_val['code']:
+                        ind = res['value']['worked_days_line_ids'].index(wdl_val)
+                        res['value']['worked_days_line_ids'][ind]['code'] = hd_type.code
+
+        # Put number of dependents in Other Inputs:
+        if res['value']['input_line_ids']:
+            emp_obj = self.pool.get('hr.employee')
+            employee = emp_obj.browse(cr, uid, employee_id, context=context)
+            found = False
+            for inp_val in res['value']['input_line_ids']:
+                if inp_val['code'] == 'APG':
+                    found = True
+                    if inp_val.get('amount',0.0) != float(employee.children):
+                        ind = res['value']['input_line_ids'].index(inp_val)
+                        res['value']['input_line_ids'][ind].update({'amount': float(employee.children)})
+            if not found:
+                res['value']['input_line_ids'].append({
+                    'code': 'APG',
+                    'name': _("Dependent persons"),
+                    'amount': float(employee.children),
+                    'contract_id': contract_id
+                })
+
+        # Compute number of calendar days absent:
+        if res['value']['input_line_ids']:
+            day_from = datetime.datetime.strptime(date_from,"%Y-%m-%d")
+            day_to = datetime.datetime.strptime(date_to,"%Y-%m-%d")
+            nb_of_days = (day_to - day_from).days + 1
+            holiday_obj = self.pool.get('hr.holidays')
+            abs_days = 0.0
+            for day in range(0, nb_of_days):
+                comp_date = day_from + timedelta(days=day)
+                comp_day = comp_date.strftime("%Y-%m-%d")
+                holiday_ids = holiday_obj.search(cr, uid, [('state','=','validate'),('employee_id','=',employee_id),('type','=','remove'),('date_from','<=',comp_day),('date_to','>=',comp_day)])
+                if holiday_ids:
+                    abs_days += 1.0
+            found = False
+            for inp_val in res['value']['input_line_ids']:
+                if inp_val['code'] == 'KAL':
+                    found = True
+                    if inp_val.get('amount',0.0) != abs_days:
+                        ind = res['value']['input_line_ids'].index(inp_val)
+                        res['value']['input_line_ids'][ind].update({'amount': abs_days})
+            if not found:
+                res['value']['input_line_ids'].append({
+                    'code': 'KAL',
+                    'name': _("Number of calendar days absent"),
+                    'amount': abs_days,
+                    'contract_id': contract_id
+                })
         return res
 
     def reload_inputs(self, cr, uid, ids, context=None):

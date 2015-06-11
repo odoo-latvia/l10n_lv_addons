@@ -2,13 +2,85 @@
 <openerp>
     <data>
 
+        <!-- Holidays status: -->
+
+        <record id="view_holidays_status_filter_l10n_lv" model="ir.ui.view">
+            <field name="name">hr.holidays.status.filter.l10n.lv</field>
+            <field name="model">hr.holidays.status</field>
+            <field name="inherit_id" ref="hr_holidays.view_holidays_status_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="code"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="edit_holiday_status_form_l10n_lv">
+            <field name="name">hr.holidays.status.form.l10n.lv</field>
+            <field name="model">hr.holidays.status</field>
+            <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="code"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_holiday_status_tree_l10n_lv">
+            <field name="name">hr.holidays.status.tree.l10n.lv</field>
+            <field name="model">hr.holidays.status</field>
+            <field name="inherit_id" ref="hr_holidays.view_holiday_status_tree"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="code"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_holiday_status_normal_tree_l10n_lv">
+            <field name="name">hr.holidays.status.normal.tree.l10n.lv</field>
+            <field name="model">hr.holidays.status</field>
+            <field name="inherit_id" ref="hr_holidays.view_holiday_status_normal_tree"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="code"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_hr_holidays_status_search_l10n_lv" model="ir.ui.view">
+            <field name="name">hr.holidays.status.search.l10n.lv</field>
+            <field name="model">hr.holidays.status</field>
+            <field name="inherit_id" ref="hr_holidays.view_hr_holidays_status_search"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="code"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Employee: -->
+
+        <record id="hr_hr_employee_view_form2_l10n_lv" model="ir.ui.view">
+            <field name="name">hr.hr.employee.view.form2.l10n.lv</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_contract.hr_hr_employee_view_form2"/>
+            <field name="arch" type="xml">
+                <field name="children" position="after">
+                    <field name="disability_group"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Payslip: -->
+
         <record id="view_hr_payslip_form_inherit_lv" model="ir.ui.view">
             <field name="name">hr.payslip.form.inherit.lv</field>
             <field name="model">hr.payslip</field>
             <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//notebook/page[@string='Worked Days &amp; Inputs']/separator[@string='Worked Days']" position="before">
-                    <button name="reload_inputs" type="object" string="Reload Inputs"/>
+                    <button name="reload_inputs" type="object" string="Reload Inputs" attrs="{'invisible': [('state','!=','draft')]}" confirm="Are you sure, you want to change Worked Days and Other Inputs? The data will be changed irreversibly."/>
                 </xpath>
             </field>
         </record>
