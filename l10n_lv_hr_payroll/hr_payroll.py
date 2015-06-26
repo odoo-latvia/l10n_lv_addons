@@ -131,7 +131,7 @@ class hr_payslip(osv.osv):
                 if ip_lines:
                     for cil in ip_lines:
                         if cil['code'] in ['PIEM', 'PIEMV']:
-                            curr_ts += cil['amount']
+                            curr_ts += cil.get('amount',0.0)
             total_salary += curr_ts
             worked_days += curr_wd
             if worked_days != 0.0:

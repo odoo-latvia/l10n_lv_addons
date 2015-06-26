@@ -43,6 +43,8 @@ Adds button "Reload Inputs" in Payslip form, which calls the Employee on_change 
     'category': 'Human Resources',
     'depends': ['hr_payroll'],
     'data': [
+        'security/hr_payroll_security.xml',
+        'security/ir.model.access.csv',
         'hr_payroll_view.xml'
     ],
     'auto_install': False,
