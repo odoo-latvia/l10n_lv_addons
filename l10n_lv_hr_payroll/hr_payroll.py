@@ -137,12 +137,20 @@ class hr_payslip(osv.osv):
             if worked_days != 0.0:
                 avg_salary = total_salary / worked_days
         if avg_salary != 0.0:
-            res['value']['input_line_ids'].append({
-                'name': _("Average day salary for last 6 months"),
-                'code': 'VDA6M',
-                'amount': avg_salary,
-                'contract_id': contract_id
-            })
+            found = False
+            for inp_val in res['value']['input_line_ids']:
+                if inp_val['code'] == 'VDA6M':
+                    found = True
+                    if inp_val.get('amount',0.0) != avg_salary:
+                        ind = res['value']['input_line_ids'].index(inp_val)
+                        res['value']['input_line_ids'][ind].update({'amount': float(avg_salary)})
+            if not found:
+                res['value']['input_line_ids'].append({
+                    'name': _("Average day salary for last 6 months"),
+                    'code': 'VDA6M',
+                    'amount': avg_salary,
+                    'contract_id': contract_id
+                })
 
         # Use Leave Type Code instead od Leave Type name in code field:
         if res['value']['worked_days_line_ids']:
