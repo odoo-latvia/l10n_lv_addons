@@ -56,7 +56,7 @@ class hr_payslip(osv.osv):
             # get date 6 months earlier:
             date_to_6 = datetime.datetime.strftime((datetime.datetime.strptime(date_to, '%Y-%m-%d') + relativedelta(months=-6)), '%Y-%m-%d')
             # find all payslips within these 6 months:
-            prev_ps_ids = self.search(cr, uid, [('date_to','<=',date_to), ('date_to','>',date_to_6), ('employee_id','=',employee_id), ('contract_id','=',contract_id)], context=context)
+            prev_ps_ids = self.search(cr, uid, [('date_from','<=',date_to), ('date_to','>',date_to_6), ('employee_id','=',employee_id), ('contract_id','=',contract_id)], context=context)
             # find payslip for current date range and remove it from previous to avoid unsaved data change ignoring:
             curr_ps_ids = self.search(cr, uid, [('date_from','=',date_from), ('date_to','=',date_to), ('employee_id','=',employee_id), ('contract_id','=',contract_id)], context=context)
             if ids:
