@@ -78,3 +78,12 @@ msgstr "Apgādībā esošās personas"
 msgid "Number of calendar days absent"
 msgstr "Kavēto kalendāro dienu skaits"
 
+#. module: l10n_lv_hr_payroll
+#: field:hr.salary.rule,appears_on_summary:0
+msgid "Appears on Summary"
+msgstr "Tiek parādīts Algas Lapu kopsavilkuma izdrukā"
+
+#. module: l10n_lv_hr_payroll
+#: help:hr.salary.rule,appears_on_summary:0
+msgid "Used to display the salary rule on payslip summary report."
+msgstr "Tiek izmantots, lai attēlotu algas noteikumu algas lapiņu kopsavilkuma izdrukas formā."

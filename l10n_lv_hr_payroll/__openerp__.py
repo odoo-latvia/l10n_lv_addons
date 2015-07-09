@@ -37,6 +37,7 @@ Upgrades Employee on_change function, so that it:
 * puts number of dependent persons (APG) in Other Inputs (from Employee children);
 * computes number of calendar days absent (KAL) in Other Inputs.
 Adds button "Reload Inputs" in Payslip form, which calls the Employee on_change function, so that, in case of data change, you don't have to edit the payslip and change employee again to see it.
+Adds a new report - Payslip Summary.
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
@@ -45,7 +46,9 @@ Adds button "Reload Inputs" in Payslip form, which calls the Employee on_change 
     'data': [
         'security/hr_payroll_security.xml',
         'security/ir.model.access.csv',
-        'hr_payroll_view.xml'
+        'hr_payroll_view.xml',
+        'views/report_payslip_summary.xml',
+        'hr_payroll_report.xml'
     ],
     'auto_install': False,
     'installable': True,

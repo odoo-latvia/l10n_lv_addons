@@ -23,5 +23,6 @@
 ##############################################################################
 
 import report_payslip_details
+import report_payslip_summary
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

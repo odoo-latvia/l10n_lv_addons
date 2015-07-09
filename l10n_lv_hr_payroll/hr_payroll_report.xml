@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <!-- Paperformat Landscape -->
+
+        <record id="report_paperformat_payroll_landscape" model="report.paperformat">
+            <field name="name">Payroll Landscape</field>
+            <field name="margin_top" eval="10"/>
+            <field name="margin_left" eval="10"/>
+            <field name="margin_bottom" eval="10"/>
+            <field name="margin_right" eval="10"/>
+            <field name="format">A4</field>
+            <field name="orientation">Landscape</field>
+        </record>
+
+        <!-- Payslip Summary -->
+
+        <report
+            id="payslip_summary_report"
+            model="hr.payslip"
+            string="PaySlip Summary"
+            report_type="qweb-pdf"
+            name="l10n_lv_hr_payroll.report_payslip_summary" 
+            file="l10n_lv_hr_payroll.report_payslip_summary"
+        />
+
+        <record id="l10n_lv_hr_payroll.payslip_summary_report" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="l10n_lv_hr_payroll.report_paperformat_payroll_landscape"/>
+        </record>
+
+    </data>
+</openerp>

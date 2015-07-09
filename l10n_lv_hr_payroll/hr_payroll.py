@@ -246,4 +246,15 @@ class hr_payslip(osv.osv):
                             wd_line_obj.create(cr, uid, wd_vals, context=context)
         return True
 
+class hr_salary_rule(osv.osv):
+    _inherit = 'hr.salary.rule'
+
+    _columns = {
+        'appears_on_summary': fields.boolean('Appears on Summary', help="Used to display the salary rule on payslip summary report.")
+    }
+
+    _defaults = {
+        'appears_on_summary': True
+    }
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

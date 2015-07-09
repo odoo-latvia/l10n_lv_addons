@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+<template id="report_payslip_summary">
+    <t>
+        <div class="page">
+            <style type="text/css">
+                table.list_table td {
+                    border: 1px solid black;
+                    padding-top: 4px;
+                    padding-bottom: 4px;
+                    padding-left: 4px;
+                    padding-right: 4px;
+                    text-align: center;
+                    vertical-align: middle;
+                }
+            </style>
+            <t t-set="data_list" t-value="data_rep(doc_ids)"/>
+            <table class="list_table" width="100%">
+                <tr>
+                    <td style="font-weight: bold; color: #08088A;">
+                        <span>Name Surname</span>
+                    </td>
+                    <t t-set="c_list" t-value="data_list and data_list[0]['rules'] or []"/>
+                    <t t-foreach="c_list" t-as="c">
+                        <td style="font-weight: bold; color: #08088A;">
+                            <span t-esc="list(c.keys())[0]"/>
+                        </td>
+                    </t>
+                </tr>
+                <tr t-foreach="data_list" t-as="d">
+                    <td>
+                        <span t-esc="d['employee']"/>
+                    </td>
+                    <t t-foreach="d['rules']" t-as="r">
+                        <td style="text-align: right;">
+                            <span t-esc="formatLang(list(r.values())[0])"/>
+                        </td>
+                    </t>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold; color: #08088A; text-align: right; border-left: hidden; border-bottom: hidden;">
+                        <span>Total:</span>
+                    </td>
+                    <t t-foreach="sum_data_rep(data_list)" t-as="tot">
+                        <td style="text-align: right;">
+                            <span t-esc="formatLang(list(tot.values())[0])"/>
+                        </td>
+                    </t>
+                </tr>
+            </table>
+        </div>
+    </t>
+</template>
+
+</data>
+</openerp>
