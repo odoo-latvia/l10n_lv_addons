@@ -138,4 +138,7 @@ msgstr "(vārds, uzvārds)"
 msgid "Chief Accountant:"
 msgstr "Galvenais grāmatvedis:"
 
-
+#. module: l10n_lv_hr_payroll
+#: model:ir.actions.report.xml,name:l10n_lv_hr_payroll.payslip_summary_report
+msgid "PaySlip Summary"
+msgstr "Algas Lapu Kopsavilkums"
