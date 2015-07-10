@@ -25,8 +25,23 @@
                     text-align: center;
                     vertical-align: middle;
                 }
-                table.signature {
+                table.account {
                     margin-top: 30px;
+                }
+                table.account td {
+                    border: 1px solid black;
+                    color: #08088A;
+                    font-size: 14px;
+                    font-weight: bold;
+                    padding-top: 4px;
+                    padding-bottom: 4px;
+                    padding-left: 4px;
+                    padding-right: 4px;
+                    text-align: center;
+                    vertical-align: middle;
+                }
+                table.signature {
+                    margin-top: 60px;
                     border-collapse: separate;
                 }
                 table.signature td {
@@ -92,6 +107,33 @@
                         </td>
                     </t>
                 </tr>
+            </table>
+            <t t-set="accounts" t-value="data_accounts(doc_ids)"/> 
+            <table class="account" align="left" t-if="accounts">
+                <tr>
+                    <td>
+                        <span>DEBIT</span>
+                    </td>
+                    <td>
+                        <span>CREDIT</span>
+                    </td>
+                    <td style="border-top: hidden; border-right: hidden;"></td>
+                </tr>
+                <t t-foreach="accounts" t-as="a">
+                    <tr>
+                        <td>
+                            <span t-esc="a['debit_code']"/>
+                        </td>
+                        <td>
+                            <span t-esc="a['credit_code']"/>
+                        </td>
+                        <td style="text-align: right;">
+                            <t t-if="a['amount'] != 0.0">
+                                <span t-esc="formatLang(a['amount'])"/>
+                            </t>
+                        </td>
+                    </tr>
+                </t>
             </table>
             <table class="signature" width="50%" align="right">
                 <tr>

@@ -120,6 +120,16 @@ msgstr "Kopā:"
 
 #. module: l10n_lv_hr_payroll
 #: view:website:l10n_lv_hr_payroll.report_payslip_summary
+msgid "DEBIT"
+msgstr "DEBETS"
+
+#. module: l10n_lv_hr_payroll
+#: view:website:l10n_lv_hr_payroll.report_payslip_summary
+msgid "CREDIT"
+msgstr "KREDĪTS"
+
+#. module: l10n_lv_hr_payroll
+#: view:website:l10n_lv_hr_payroll.report_payslip_summary
 msgid "Chairman of the Board:"
 msgstr "Valdes priekšsēdētājs:"
 

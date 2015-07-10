@@ -37,7 +37,8 @@ class payslip_summary_report(report_sxw.rml_parse):
             'get_period': self.get_period,
             'get_address': self.get_address,
             'data_rep': self.data_rep,
-            'sum_data_rep': self.sum_data_rep
+            'sum_data_rep': self.sum_data_rep,
+            'data_accounts': self.data_accounts
         })
         self.context = context
 
@@ -161,6 +162,68 @@ class payslip_summary_report(report_sxw.rml_parse):
                         r_dict[list(r2.keys())[0]] += list(r2.values())[0]
             amt_list.append(r_dict)
         return amt_list
+
+    def data_accounts(self, doc_ids):
+        line_obj = self.pool.get('hr.payslip.line')
+        line_ids = line_obj.search(self.cr, self.uid, [('slip_id','in',doc_ids)], context=self.context)
+        result = []
+        datas = {}
+        for line in line_obj.browse(self.cr, self.uid, line_ids, context=self.context):
+            if hasattr(line.salary_rule_id, 'account_debit') and hasattr(line.salary_rule_id, 'account_credit') and (line.salary_rule_id.account_debit or line.salary_rule_id.account_credit):
+                rule_id = line.salary_rule_id.id
+                acd_id = line.salary_rule_id.account_debit and line.salary_rule_id.account_debit.id or 0
+                debit_code = line.salary_rule_id.account_debit and line.salary_rule_id.account_debit.code or ''
+                acc_id = line.salary_rule_id.account_credit and line.salary_rule_id.account_credit.code or 0
+                credit_code = line.salary_rule_id.account_credit and line.salary_rule_id.account_credit.code or ''
+                sequence = line.salary_rule_id.sequence
+                appears = line.salary_rule_id.appears_on_summary
+                amount = line.total
+                if datas.get((rule_id)):
+                    amount += datas[(rule_id)]['amount']
+                    datas[(rule_id)].clear()
+                if not datas.get((rule_id)):
+                    datas[(rule_id)] = {
+                        'rule_id': rule_id,
+                        'acd_id': acd_id,
+                        'debit_code': debit_code,
+                        'acc_id': acc_id,
+                        'credit_code': credit_code,
+                        'sequence': sequence,
+                        'appears': appears,
+                        'amount': amount
+                    }
+                result.append(datas[(rule_id)])
+        data_list = []
+        for object in result:
+            if object != {}:
+                data_list.append(object)
+        if data_list:
+            sorted_data_list = sorted(data_list, key=lambda k: k['sequence'])
+            res = []
+            d = {}
+            for sdl in sorted_data_list:
+                acd_id = sdl['acd_id']
+                acc_id = sdl['acc_id']
+                debit_code = sdl['debit_code']
+                credit_code = sdl['credit_code']
+                amount = sdl['appears'] and sdl['amount'] or 0.0
+                if d.get((acd_id,acc_id)):
+                    amount += d[(acd_id,acc_id)]['amount']
+                    d[(acd_id,acc_id)].clear()
+                if not d.get((acd_id,acc_id)):
+                    d[(acd_id,acc_id)] = {
+                        'debit_code': debit_code,
+                        'credit_code': credit_code,
+                        'amount': amount
+                    }
+                res.append(d[(acd_id,acc_id)])
+            res2 = []
+            for obj in res:
+                if obj != {}:
+                    res2.append(obj)
+            data_list = res2
+        return data_list
+
 
 class wrapped_report_payslip_summary(osv.AbstractModel):
     _name = 'report.l10n_lv_hr_payroll.report_payslip_summary'
