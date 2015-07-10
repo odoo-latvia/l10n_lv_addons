@@ -87,3 +87,55 @@ msgstr "Tiek parādīts Algas Lapu kopsavilkuma izdrukā"
 #: help:hr.salary.rule,appears_on_summary:0
 msgid "Used to display the salary rule on payslip summary report."
 msgstr "Tiek izmantots, lai attēlotu algas noteikumu algas lapiņu kopsavilkuma izdrukas formā."
+
+#. module: l10n_lv_hr_payroll
+#: view:website:l10n_lv_hr_payroll.report_payslip_summary
+msgid "Salary list"
+msgstr "Algu saraksts"
+
+#. module: l10n_lv_hr_payroll
+#: view:website:l10n_lv_hr_payroll.report_payslip_summary
+msgid "Reg. No.:"
+msgstr "Reģ. Nr.:"
+
+#. module: l10n_lv_hr_payroll
+#: view:website:l10n_lv_hr_payroll.report_payslip_summary
+msgid "Period:"
+msgstr "Periods:"
+
+#. module: l10n_lv_hr_payroll
+#: view:website:l10n_lv_hr_payroll.report_payslip_summary
+msgid "Address:"
+msgstr "Adrese:"
+
+#. module: l10n_lv_hr_payroll
+#: view:website:l10n_lv_hr_payroll.report_payslip_summary
+msgid "Name Surname"
+msgstr "Vārds Uzvārds"
+
+#. module: l10n_lv_hr_payroll
+#: view:website:l10n_lv_hr_payroll.report_payslip_summary
+msgid "Total:"
+msgstr "Kopā:"
+
+#. module: l10n_lv_hr_payroll
+#: view:website:l10n_lv_hr_payroll.report_payslip_summary
+msgid "Chairman of the Board:"
+msgstr "Valdes priekšsēdētājs:"
+
+#. module: l10n_lv_hr_payroll
+#: view:website:l10n_lv_hr_payroll.report_payslip_summary
+msgid "(signature)"
+msgstr "(paraksts)"
+
+#. module: l10n_lv_hr_payroll
+#: view:website:l10n_lv_hr_payroll.report_payslip_summary
+msgid "(name, surname)"
+msgstr "(vārds, uzvārds)"
+
+#. module: l10n_lv_hr_payroll
+#: view:website:l10n_lv_hr_payroll.report_payslip_summary
+msgid "Chief Accountant:"
+msgstr "Galvenais grāmatvedis:"
+
+

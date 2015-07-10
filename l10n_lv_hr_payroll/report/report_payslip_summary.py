@@ -24,6 +24,7 @@
 
 from openerp.osv import osv
 from openerp.report import report_sxw
+from datetime import datetime
 
 class payslip_summary_report(report_sxw.rml_parse):
 
@@ -32,10 +33,66 @@ class payslip_summary_report(report_sxw.rml_parse):
         self.localcontext.update({
             'cr':cr,
             'uid': uid,
+            'get_company': self.get_company,
+            'get_period': self.get_period,
+            'get_address': self.get_address,
             'data_rep': self.data_rep,
             'sum_data_rep': self.sum_data_rep
         })
         self.context = context
+
+    def get_company(self, doc_ids):
+        ps_obj = self.pool.get('hr.payslip')
+        def get_parent(company):
+            c = company
+            if company.parent_id:
+                c = get_parent(c)
+            return c
+        c_list = []
+        for p in ps_obj.browse(self.cr, self.uid, doc_ids, context=self.context):
+            if p.company_id:
+                mc = get_parent(p.company_id)
+                if mc not in c_list:
+                    c_list.append(mc)
+        cp = False
+        if c_list:
+            cp = c_list[0]
+        return cp
+
+    def get_period(self, doc_ids):
+        ps_obj = self.pool.get('hr.payslip')
+        date_from = False
+        date_to = False
+        for p in ps_obj.browse(self.cr, self.uid, doc_ids, context=self.context):
+            if date_from != False and datetime.strptime(p.date_from, '%Y-%m-%d') < datetime.strptime(date_from, '%Y-%m-%d'):
+                date_from = p.date_from
+            if date_from == False:
+                date_from = p.date_from
+            if date_to != False and datetime.strptime(p.date_to, '%Y-%m-%d') > datetime.strptime(date_to, '%Y-%m-%d'):
+                date_to = p.date_to
+            if date_to == False:
+                date_to = p.date_to
+        return {'from': date_from, 'to': date_to}
+
+    def get_address(self, company):
+        addr = False
+        if company:
+            addr_list = []
+            if company.street:
+                addr_list.append(company.street)
+            if company.street2:
+                addr_list.append(company.street2)
+            if company.city:
+                addr_list.append(company.city)
+            if company.state_id:
+                addr_list.append(company.state_id.name)
+            if company.zip:
+                addr_list.append(company.zip)
+            if company.country_id:
+                addr_list.append(company.country_id.name)
+            if addr_list:
+                addr = ", ".join(addr_list)
+        return addr
 
     def data_rep(self, doc_ids):
         line_obj = self.pool.get('hr.payslip.line')

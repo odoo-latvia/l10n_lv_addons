@@ -6,6 +6,16 @@
     <t>
         <div class="page">
             <style type="text/css">
+                div.title {
+                    font-weight: bold;
+                    font-style: italic;
+                    font-size: 20px;
+                    color: #08088A;
+                    text-align: center;
+                }
+                div.subtitle {
+                    font-size: 14px;
+                }
                 table.list_table td {
                     border: 1px solid black;
                     padding-top: 4px;
@@ -15,7 +25,40 @@
                     text-align: center;
                     vertical-align: middle;
                 }
+                table.signature {
+                    margin-top: 30px;
+                    border-collapse: separate;
+                }
+                table.signature td {
+                    font-size: 14px;
+                    color: #08088A;
+                    padding: 2px;
+                }
             </style>
+            <t t-set="ps_company" t-value="get_company(doc_ids)"/>
+            <div t-if="ps_company and ps_company.logo">
+                <img t-att-src='"data:image/gif;base64," + ps_company.logo'/>
+            </div>
+            <div class="title">
+                <span>Salary list</span>
+            </div>
+            <div class="subtitle" t-if="ps_company and ps_company.company_registry">
+                <span style="color: #08088A;">Reg. No.:</span>
+                <span t-esc="ps_company.company_registry"/>
+            </div>
+            <div class="subtitle" style="text-align: center; font-weight: bold; font-style: italic;">
+                <span style="color: #08088A;">Period:</span>
+                <t t-set="period" t-value="get_period(doc_ids)"/>
+                <span t-esc="formatLang(period['from'], date=True)"/>
+                <span>-</span>
+                <span t-esc="formatLang(period['to'], date=True)"/>
+            </div>
+            <t t-set="address" t-value="get_address(ps_company)"/>
+            <div class="subtitle" t-if="address">
+                <span style="color: #08088A;">Address:</span>
+                <span t-esc="address"/>
+            </div>
+            <div style="margin-bottom: 14px;"/>
             <t t-set="data_list" t-value="data_rep(doc_ids)"/>
             <table class="list_table" width="100%">
                 <tr>
@@ -44,10 +87,52 @@
                         <span>Total:</span>
                     </td>
                     <t t-foreach="sum_data_rep(data_list)" t-as="tot">
-                        <td style="text-align: right;">
+                        <td style="text-align: right; font-weight: bold;">
                             <span t-esc="formatLang(list(tot.values())[0])"/>
                         </td>
                     </t>
+                </tr>
+            </table>
+            <table class="signature" width="50%" align="right">
+                <tr>
+                    <td style="text-align: right;">
+                        <span>Chairman of the Board:</span>
+                    </td>
+                    <td style="border-bottom: 1px solid #08088A;">
+                        <span style="color: white;">____________________</span>
+                    </td>
+                    <td style="border-bottom: 1px solid #08088A;">
+                        <span style="color: white;">______________________________</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-bottom: 20px;"></td>
+                    <td style="font-size: 10px; text-align: center; vertical-align: top; padding-bottom: 20px;">
+                        <span>(signature)</span>
+                    </td>
+                    <td style="font-size: 10px; text-align: center; vertical-align: top; padding-bottom: 20px;">
+                        <span>(name, surname)</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">
+                        <span>Chief Accountant:</span>
+                    </td>
+                    <td style="border-bottom: 1px solid #08088A;">
+                        <span style="color: white;">____________________</span>
+                    </td>
+                    <td style="border-bottom: 1px solid #08088A;">
+                        <span style="color: white;">______________________________</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="font-size: 10px; text-align: center; vertical-align: top;">
+                        <span>(signature)</span>
+                    </td>
+                    <td style="font-size: 10px; text-align: center; vertical-align: top;">
+                        <span>(name, surname)</span>
+                    </td>
                 </tr>
             </table>
         </div>
