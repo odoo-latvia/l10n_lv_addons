@@ -46,6 +46,37 @@ class hr_employee(osv.osv):
 class hr_payslip(osv.osv):
     _inherit = 'hr.payslip'
 
+    def _get_month(self, cr, uid, date_from, date_to, context=None):
+        from_dt = datetime.datetime.strptime(date_from, '%Y-%m-%d')
+        month_from = tools.ustr(from_dt.strftime('%B-%Y'))
+        to_dt = datetime.datetime.strptime(date_to, '%Y-%m-%d')
+        month_to = tools.ustr(from_dt.strftime('%B-%Y'))
+        if month_from == month_to:
+            month = month_from
+        else:
+            month = month_from + '-' + month_to
+        return month
+
+    def _payslip_month(self, cr, uid, ids, field_name, args, context=None):
+        res = {}
+        for payslip in self.browse(cr, uid, ids, context=context):
+            month = self._get_month(cr, uid, payslip.date_from, payslip.date_to, context=context)
+            res[payslip.id] = month
+        return res
+
+    def _month_selection(self, cr, uid, context=None):
+        all_ps_ids = self.search(cr, uid, [], context=context)
+        month_list = []
+        for ps in self.browse(cr, uid, all_ps_ids, context=context):
+            month = self._get_month(cr, uid, ps.date_from, ps.date_to, context=context)
+            if (month,month) not in month_list:
+                month_list.append((month,month))
+        return month_list
+
+    _columns = {
+        'month': fields.function(_payslip_month, string='Month', type='selection', selection=_month_selection,  store={'hr.payslip': (lambda self, cr, uid, ids, c={}: ids, ['date_from','date_to'], 10)})
+    }
+
     def onchange_employee_id(self, cr, uid, ids, date_from, date_to, employee_id=False, contract_id=False, context=None):
         res = super(hr_payslip, self).onchange_employee_id(cr, uid, ids, date_from, date_to, employee_id=employee_id, contract_id=contract_id, context=context)
 

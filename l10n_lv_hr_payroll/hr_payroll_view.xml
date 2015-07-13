@@ -74,6 +74,28 @@
 
         <!-- Payslip: -->
 
+        <record id="view_hr_payslip_tree_inherit_lv" model="ir.ui.view">
+            <field name="name">hr.payslip.tree.inherit.lv</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_tree"/>
+            <field name="arch" type="xml">
+                <field name="date_to" position="after">
+                    <field name="month" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_hr_payslip_filter_inherit_lv" model="ir.ui.view">
+            <field name="name">hr.payslip.select.inherit.lv</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_filter"/>
+            <field name="arch" type="xml">
+                <filter name="state" position="after">
+                    <filter string="Month" name="month" icon="terp-go-month" context="{'group_by':'month'}"/>
+                </filter>
+            </field>
+        </record>
+
         <record id="view_hr_payslip_form_inherit_lv" model="ir.ui.view">
             <field name="name">hr.payslip.form.inherit.lv</field>
             <field name="model">hr.payslip</field>

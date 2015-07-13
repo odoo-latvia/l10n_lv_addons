@@ -152,3 +152,9 @@ msgstr "Galvenais grāmatvedis:"
 #: model:ir.actions.report.xml,name:l10n_lv_hr_payroll.payslip_summary_report
 msgid "PaySlip Summary"
 msgstr "Algas Lapu Kopsavilkums"
+
+#. module: l10n_lv_hr_payroll
+#: field:hr.payslip,month:0
+#: view:hr.payslip:l10n_lv_hr_payroll.view_hr_payslip_filter_inherit_lv
+msgid "Month"
+msgstr "Mēnesis"
