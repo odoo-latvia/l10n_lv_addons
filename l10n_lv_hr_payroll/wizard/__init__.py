@@ -22,8 +22,6 @@
 #
 ##############################################################################
 
-import report
-import hr_payroll
-import wizard
+import payslip_eds_export
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
