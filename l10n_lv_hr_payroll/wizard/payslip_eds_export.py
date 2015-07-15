@@ -111,28 +111,28 @@ class payslip_eds_export(osv.osv_memory):
                 if obj != {}:
                     res1.append(obj)
 
-            for r in res1:
-                r_list = []
-                r_data = {}
-                for l in r['lines']:
-                    rule_id = l.salary_rule_id.id
-                    code = l.code
-                    amount = l.total
-                    if r_data.get((rule_id)):
-                        amount += r_data[(rule_id)]['amount']
-                        r_data[(rule_id)].clear()
-                    if not r_data.get((rule_id)):
-                        r_data[(rule_id)] = {
-                            'code': code,
-                            'amount': amount
-                        }
-                    r_list.append(r_data[(rule_id)])
-                new_lines = []
-                for o in r_list:
-                    if o != {}:
-                        new_lines.append(o)
-                ind = res1.index(r)
-                res1[ind]['lines'] = new_lines
+#            for r in res1:
+#                r_list = []
+#                r_data = {}
+#                for l in r['lines']:
+#                    rule_id = l.salary_rule_id.id
+#                    code = l.code
+#                    amount = l.total
+#                    if r_data.get((rule_id)):
+#                        amount += r_data[(rule_id)]['amount']
+#                        r_data[(rule_id)].clear()
+#                    if not r_data.get((rule_id)):
+#                        r_data[(rule_id)] = {
+#                            'code': code,
+#                            'amount': amount
+#                        }
+#                    r_list.append(r_data[(rule_id)])
+#                new_lines = []
+#                for o in r_list:
+#                    if o != {}:
+#                        new_lines.append(o)
+#                ind = res1.index(r)
+#                res1[ind]['lines'] = new_lines
 
             ind_c = company_list.index(c)
             company_list[ind_c].update({'results': res1})
@@ -213,10 +213,18 @@ class payslip_eds_export(osv.osv_memory):
 
             # tab section:
             table_dict = make_table_dict(d)
+            tot_ienakumi = 0.0
+            tot_iemaksas = 0.0
+            tot_iin = 0.0
+            tot_rn = 0.0
             for key, value in table_dict.iteritems():
                 data_of_file += ("\n      <Tab%s>" % key)
                 data_of_file += "\n        <Rs>"
                 n = 0
+                tab_tot_ienakumi = 0.0
+                tab_tot_iemaksas = 0.0
+                tab_tot_iin = 0.0
+                tab_tot_rn = 0.0
                 for v in value:
                     data_of_file += "\n          <R>"
                     n += 1
@@ -227,10 +235,54 @@ class payslip_eds_export(osv.osv_memory):
                         data_of_file += "\n            <PersonasKods/>"
                     data_of_file += ("\n            <VardsUzvards>" + v['emp_name'] + "</VardsUzvards>")
                     data_of_file += ("\n            <SamStat>" + v['emp_stat'] + "</SamStat>")
+                    ienakumi = 0.0
+                    iemaksas = 0.0
+                    iin = 0.0
+                    rn = 0.0
+                    for l in v['lines']:
+                        if l.salary_rule_id.category_id.code == 'BRUTOnLV':
+                            ienakumi += l.total
+                        if l.salary_rule_id.category_id.code == 'VSAOILV':
+                            iemaksas += l.total
+                        if l.code == 'IIN':
+                            iin += l.total
+                        if l.code == 'RN':
+                            rn += l.total
+                    data_of_file += ("\n            <Ienakumi>" + str(ienakumi) + "</Ienakumi>")
+                    data_of_file += ("\n            <Iemaksas>" + str(iemaksas) + "</Iemaksas>")
+                    data_of_file += ("\n            <PrecizetieIenakumi/>")
+                    data_of_file += ("\n            <PrecizetasIemaksas/>")
+                    data_of_file += ("\n            <IetIedzNodoklis>" + str(iin) + "</IetIedzNodoklis>")
+                    wt = "1"
+                    data_of_file += ("\n            <DarbaVeids>" + wt + "</DarbaVeids>")
+                    data_of_file += ("\n            <RiskaNodPazime>" + (rn > 0.0 and "true" or "false") + "</RiskaNodPazime>")
+                    data_of_file += ("\n            <RiskaNod>" + str(rn) + "</RiskaNod>")
+                    data_of_file += ("\n            <IemaksuDatums/>")
+                    data_of_file += ("\n            <Stundas>" + str(v['hours']) + "</Stundas>")
                     data_of_file += "\n          </R>"
+                    tab_tot_ienakumi += ienakumi
+                    tab_tot_iemaksas += iemaksas
+                    tab_tot_iin += iin
+                    tab_tot_rn += rn
                 data_of_file += "\n        </Rs>"
+                data_of_file += ("\n          <Ienakumi>" + str(tab_tot_ienakumi) + "</Ienakumi>")
+                data_of_file += ("\n          <Iemaksas>" + str(tab_tot_iemaksas) + "</Iemaksas>")
+                data_of_file += ("\n          <PrecizetieIenakumi>" + str(0) + "</PrecizetieIenakumi>")
+                data_of_file += ("\n          <PrecizetasIemaksas>" + str(0) + "</PrecizetasIemaksas>")
+                data_of_file += ("\n          <IetIedzNodoklis>" + str(tab_tot_iin) + "</IetIedzNodoklis>")
+                data_of_file += ("\n          <RiskaNod>" + str(tab_tot_rn) + "</RiskaNod>")
                 data_of_file += ("\n      </Tab%s>" % key)
+                tot_ienakumi += tab_tot_ienakumi
+                tot_iemaksas += tab_tot_iemaksas
+                tot_iin += tab_tot_iin
+                tot_rn += tab_tot_rn
 
+            data_of_file += ("\n      <Ienakumi>" + str(tot_ienakumi) + "</Ienakumi>")
+            data_of_file += ("\n      <Iemaksas>" + str(tot_iemaksas) + "</Iemaksas>")
+            data_of_file += ("\n      <PrecizetieIenakumi>" + str(0) + "</PrecizetieIenakumi>")
+            data_of_file += ("\n      <PrecizetasIemaksas>" + str(0) + "</PrecizetasIemaksas>")
+            data_of_file += ("\n      <IetIedzNodoklis>" + str(tot_iin) + "</IetIedzNodoklis>")
+            data_of_file += ("\n      <RiskaNod>" + str(tot_rn) + "</RiskaNod>")
             data_of_file += "\n    </DokDDZv1>"
 
         data_of_file += "\n  </Declaration>"
