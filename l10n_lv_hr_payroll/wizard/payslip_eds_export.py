@@ -25,13 +25,21 @@
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
 import base64
+from datetime import date, datetime
+import pytz
 
 class payslip_eds_export(osv.osv_memory):
     _name = 'payslip.eds.export'
 
     _columns = {
         'name': fields.char('File Name', size=32),
-        'file_save': fields.binary('Save File', filters='*.xml', readonly=True)
+        'file_save': fields.binary('Save File', filters='*.xml', readonly=True),
+        'responsible_id': fields.many2one('hr.employee', 'Responsible', required=True),
+        'date_pay': fields.date('Payment Date', required=True)
+    }
+
+    _defaults = {
+        'date_pay': date.today().strftime('%Y-%m-%d')
     }
 
     def prepare_data(self, cr, uid, context=None):
@@ -70,6 +78,7 @@ class payslip_eds_export(osv.osv_memory):
                 emp_id = payslip.employee_id.id
                 emp_name = payslip.employee_id.name
                 emp_code = payslip.employee_id.identification_id
+                emp_stat = "DN"
                 lines = payslip.line_ids
                 hours = 0.0
                 for wd in payslip.worked_days_line_ids:
@@ -77,6 +86,8 @@ class payslip_eds_export(osv.osv_memory):
                         hours += wd.number_of_hours
                 if payslip.employee_id.disability_group:
                     tab = "2"
+                    if payslip.employee_id.disability_group in ["I", "II"]:
+                        emp_stat = "DI"
                 if tab == "1":
                     for pl in payslip.line_ids:
                         if pl.code in ['PABAN','PABBN'] and pl.amount != 0.0:
@@ -90,6 +101,7 @@ class payslip_eds_export(osv.osv_memory):
                         'tab': tab,
                         'emp_name': emp_name,
                         'emp_code': emp_code,
+                        'emp_stat': emp_stat,
                         'lines': lines,
                         'hours': hours
                     }
@@ -126,6 +138,29 @@ class payslip_eds_export(osv.osv_memory):
             company_list[ind_c].update({'results': res1})
         return company_list
 
+    def get_year_month(self, cr, uid, context=None):
+        if context is None:
+            context = {}
+        payslip_obj = self.pool.get('hr.payslip')
+        year_list = []
+        month_list = []
+        for payslip in payslip_obj.browse(cr, uid, context.get('active_ids',[]), context=context):
+            date_from = datetime.strptime(payslip.date_from, '%Y-%m-%d')
+            date_to = datetime.strptime(payslip.date_to, '%Y-%m-%d')
+            month_from = int(datetime.strftime(date_from, '%m'))
+            month_to = int(datetime.strftime(date_to, '%m'))
+            year_from = int(datetime.strftime(date_from, '%Y'))
+            year_to = int(datetime.strftime(date_to, '%Y'))
+            if month_from not in month_list:
+                month_list.append(month_from)
+            if month_to not in month_list:
+                month_list.append(month_to)
+            if year_from not in year_list:
+                year_list.append(year_from)
+            if year_to not in year_list:
+                year_list.append(year_to)
+        return year_list, month_list
+
     def create_xml(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
@@ -141,13 +176,63 @@ class payslip_eds_export(osv.osv_memory):
 
         data_exp = self.browse(cr, uid, ids[0])
         data_prep = self.prepare_data(cr, uid, context=context)
+        year, month = self.get_year_month(cr, uid, context=context)
         data_of_file = """<?xml version="1.0" encoding="utf-8"?>
 <DeclarationFile>
   <Declaration Id="DEC">"""
         for d in data_prep:
             data_of_file += """\n    <DokDDZv1 xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">"""
+
+            # top section:
+            if len(year) == 1:
+                data_of_file += ("\n      <TaksGads>" + str(year[0]) + "</TaksGads>")
+            if len(year) != 1:
+                data_of_file += "\n      <TaksGads/>"
+            if len(month) == 1:
+                data_of_file += ("\n      <TaksMenesis>" + str(month[0]) + "</TaksMenesis>")
+            if len(month) != 1:
+                data_of_file += "\n      <TaksMenesis/>"
+            if d['company_reg']:
+                data_of_file += ("\n      <NmrKods>" + d['company_reg'] + "</NmrKods>")
+            if not d['company_reg']:
+                data_of_file += ("\n      <NmrKods/>")
+            company_name = d['company_name'].replace('&','&amp;').replace('<','&lt;').replace('>','&gt;').replace("'","&apos;").replace('"','&quot;')
+            data_of_file += ("\n      <NmNosaukums>" + company_name + "</NmNosaukums>")
+            date_pay = str(int(datetime.strftime((datetime.strptime(data_exp.date_pay, '%Y-%m-%d')), '%d')))
+            data_of_file += ("\n      <IzmaksasDatums>" + date_pay + "</IzmaksasDatums>")
+            data_of_file += ("\n      <AtbildPers>" + data_exp.responsible_id.name + "</AtbildPers>")
+            if data_exp.responsible_id.work_phone:
+                data_of_file += ("\n      <Talrunis>" + data_exp.responsible_id.work_phone + "</Talrunis>")
+            if not data_exp.responsible_id.work_phone:
+                if data_exp.responsible_id.work_mobile:
+                    data_of_file += ("\n      <Talrunis>" + data_exp.responsible_id.work_mobile + "</Talrunis>")
+                if not data_exp.responsible_id.work_mobile:
+                    data_of_file += ("\n      <Talrunis/>")
+            date_prep = datetime.strftime(datetime.now(pytz.timezone(context.get('tz','Europe/Riga'))), '%Y-%m-%dT%H:%M:%S')
+            data_of_file += ("\n      <DatumsAizp>" + date_prep + "</DatumsAizp>")
+
+            # tab section:
             table_dict = make_table_dict(d)
+            for key, value in table_dict.iteritems():
+                data_of_file += ("\n      <Tab%s>" % key)
+                data_of_file += "\n        <Rs>"
+                n = 0
+                for v in value:
+                    data_of_file += "\n          <R>"
+                    n += 1
+                    data_of_file += ("\n            <Npk>" + str(n) + "</Npk>")
+                    if v['emp_code']:
+                        data_of_file += ("\n            <PersonasKods>" + v['emp_code'] + "</PersonasKods>")
+                    if not v['emp_code']:
+                        data_of_file += "\n            <PersonasKods/>"
+                    data_of_file += ("\n            <VardsUzvards>" + v['emp_name'] + "</VardsUzvards>")
+                    data_of_file += ("\n            <SamStat>" + v['emp_stat'] + "</SamStat>")
+                    data_of_file += "\n          </R>"
+                data_of_file += "\n        </Rs>"
+                data_of_file += ("\n      </Tab%s>" % key)
+
             data_of_file += "\n    </DokDDZv1>"
+
         data_of_file += "\n  </Declaration>"
         data_of_file += "\n</DeclarationFile>"
         data_of_file_real = base64.encodestring(data_of_file.encode('utf8'))

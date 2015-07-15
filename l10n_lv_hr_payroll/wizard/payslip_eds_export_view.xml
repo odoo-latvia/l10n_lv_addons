@@ -11,6 +11,8 @@
                     <group>
                         <field name="name" attrs="{'invisible': [('file_save','!=',False)]}"/>
                         <field name="file_save" filename="name" attrs="{'invisible': [('file_save','=',False)]}"/>
+                        <field name="responsible_id" attrs="{'invisible': [('file_save','!=',False)]}"/>
+                        <field name="date_pay" attrs="{'invisible': [('file_save','!=',False)]}"/>
                     </group>
                     <footer attrs="{'invisible': [('file_save','!=',False)]}">
                         <button name="create_xml" string="Create File" type="object" default_focus="1" class="oe_highlight"/>
