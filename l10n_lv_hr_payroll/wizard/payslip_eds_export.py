@@ -25,22 +25,41 @@
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
 import base64
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import pytz
 
 class payslip_eds_export(osv.osv_memory):
     _name = 'payslip.eds.export'
 
     _columns = {
-        'name': fields.char('File Name', size=32),
+        'name': fields.char('File Name', size=32, required=True),
         'file_save': fields.binary('Save File', filters='*.xml', readonly=True),
         'responsible_id': fields.many2one('hr.employee', 'Responsible', required=True),
         'date_pay': fields.date('Payment Date', required=True)
     }
 
-    _defaults = {
-        'date_pay': date.today().strftime('%Y-%m-%d')
-    }
+    def get_year_month(self, cr, uid, context=None):
+        if context is None:
+            context = {}
+        payslip_obj = self.pool.get('hr.payslip')
+        year_list = []
+        month_list = []
+        for payslip in payslip_obj.browse(cr, uid, context.get('active_ids',[]), context=context):
+            date_from = datetime.strptime(payslip.date_from, '%Y-%m-%d')
+            date_to = datetime.strptime(payslip.date_to, '%Y-%m-%d')
+            month_from = int(datetime.strftime(date_from, '%m'))
+            month_to = int(datetime.strftime(date_to, '%m'))
+            year_from = int(datetime.strftime(date_from, '%Y'))
+            year_to = int(datetime.strftime(date_to, '%Y'))
+            if month_from not in month_list:
+                month_list.append(month_from)
+            if month_to not in month_list:
+                month_list.append(month_to)
+            if year_from not in year_list:
+                year_list.append(year_from)
+            if year_to not in year_list:
+                year_list.append(year_to)
+        return year_list, month_list
 
     def prepare_data(self, cr, uid, context=None):
         if context is None:
@@ -111,55 +130,39 @@ class payslip_eds_export(osv.osv_memory):
                 if obj != {}:
                     res1.append(obj)
 
-#            for r in res1:
-#                r_list = []
-#                r_data = {}
-#                for l in r['lines']:
-#                    rule_id = l.salary_rule_id.id
-#                    code = l.code
-#                    amount = l.total
-#                    if r_data.get((rule_id)):
-#                        amount += r_data[(rule_id)]['amount']
-#                        r_data[(rule_id)].clear()
-#                    if not r_data.get((rule_id)):
-#                        r_data[(rule_id)] = {
-#                            'code': code,
-#                            'amount': amount
-#                        }
-#                    r_list.append(r_data[(rule_id)])
-#                new_lines = []
-#                for o in r_list:
-#                    if o != {}:
-#                        new_lines.append(o)
-#                ind = res1.index(r)
-#                res1[ind]['lines'] = new_lines
-
             ind_c = company_list.index(c)
             company_list[ind_c].update({'results': res1})
         return company_list
 
-    def get_year_month(self, cr, uid, context=None):
+    def _get_default_name(self, cr, uid, context=None):
         if context is None:
             context = {}
-        payslip_obj = self.pool.get('hr.payslip')
-        year_list = []
-        month_list = []
-        for payslip in payslip_obj.browse(cr, uid, context.get('active_ids',[]), context=context):
-            date_from = datetime.strptime(payslip.date_from, '%Y-%m-%d')
-            date_to = datetime.strptime(payslip.date_to, '%Y-%m-%d')
-            month_from = int(datetime.strftime(date_from, '%m'))
-            month_to = int(datetime.strftime(date_to, '%m'))
-            year_from = int(datetime.strftime(date_from, '%Y'))
-            year_to = int(datetime.strftime(date_to, '%Y'))
-            if month_from not in month_list:
-                month_list.append(month_from)
-            if month_to not in month_list:
-                month_list.append(month_to)
-            if year_from not in year_list:
-                year_list.append(year_from)
-            if year_to not in year_list:
-                year_list.append(year_to)
-        return year_list, month_list
+        company_list = self.prepare_data(cr, uid, context=context)
+        name = "_".join([c['company_name'] for c in company_list]).replace(' ','_').replace('"','').replace("'","")
+        year, month = self.get_year_month(cr, uid, context=context)
+        if len(year) == 1 and len(month) == 1:
+            name += ('_' + str(year[0]) + '-' + "%02d" % (month[0]))
+        name += '.xml'
+        return name
+
+    def _get_default_date_pay(self, cr, uid, context=None):
+        if context is None:
+            context = {}
+        date_pay = date.today().strftime('%Y-%m-%d')
+        year, month = self.get_year_month(cr, uid, context=context)
+        if len(year) == 1 and len(month) == 1:
+            day_def = self.pool.get('ir.values').get_default(cr, uid, 'payslip.eds.export', 'date_pay_day')
+            if day_def:
+                day = int(day_def)
+                date_pay = datetime.strftime(date(year[0], month[0], day), '%Y-%m-%d')
+            if not day_def:
+                date_pay = datetime.strftime((date(year[0], month[0]+1, 1) - timedelta(days=1)), '%Y-%m-%d')
+        return date_pay
+
+    _defaults = {
+        'name': _get_default_name,
+        'date_pay': _get_default_date_pay
+    }
 
     def create_xml(self, cr, uid, ids, context=None):
         if context is None:
@@ -289,6 +292,15 @@ class payslip_eds_export(osv.osv_memory):
         data_of_file += "\n</DeclarationFile>"
         data_of_file_real = base64.encodestring(data_of_file.encode('utf8'))
         self.write(cr, uid, ids, {'file_save': data_of_file_real, 'name': data_exp.name}, context=context)
+
+        vals_obj = self.pool.get('ir.values')
+        def_resp_id = vals_obj.get_default(cr, uid, 'payslip.eds.export', 'responsible_id')
+        if (not def_resp_id) or def_resp_id != data_exp.responsible_id.id:
+            vals_obj.set_default(cr, uid, 'payslip.eds.export', 'responsible_id', data_exp.responsible_id.id)
+        def_date_pay_day = vals_obj.get_default(cr, uid, 'payslip.eds.export', 'date_pay_day')
+        exp_date_pay_day = datetime.strftime(datetime.strptime(data_exp.date_pay, '%Y-%m-%d'), '%d')
+        if (not def_date_pay_day) or def_date_pay_day != exp_date_pay_day:
+            vals_obj.set_default(cr, uid, 'payslip.eds.export', 'date_pay_day', exp_date_pay_day)
 
         return {
             'type': 'ir.actions.act_window',

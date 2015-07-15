@@ -158,3 +158,48 @@ msgstr "Algas Lapu Kopsavilkums"
 #: view:hr.payslip:l10n_lv_hr_payroll.view_hr_payslip_filter_inherit_lv
 msgid "Month"
 msgstr "Mēnesis"
+
+#. module: l10n_lv_hr_payroll
+#: view:payslip.eds.export:l10n_lv_hr_payroll.payslip_eds_export_view
+msgid "Cancel"
+msgstr "Atcelt"
+
+#. module: l10n_lv_hr_payroll
+#: view:payslip.eds.export:l10n_lv_hr_payroll.payslip_eds_export_view
+msgid "Create File"
+msgstr "Veidot Failu"
+
+#. module: l10n_lv_hr_payroll
+#: view:payslip.eds.export:l10n_lv_hr_payroll.payslip_eds_export_view
+msgid "Export Payslip EDS File"
+msgstr "Algas lapu EDS faila eksports"
+
+#. module: l10n_lv_hr_payroll
+#: model:ir.actions.act_window,name:l10n_lv_hr_payroll.payslip_eds_export
+msgid "Export to XML for EDS"
+msgstr "Eksportēt EDS XML"
+
+#. module: l10n_lv_hr_payroll
+#: field:payslip.eds.export,name:0
+msgid "File Name"
+msgstr "Faila Nosaukums"
+
+#. module: l10n_lv_hr_payroll
+#: field:payslip.eds.export,date_pay:0
+msgid "Payment Date"
+msgstr "Izmaksas Datums"
+
+#. module: l10n_lv_hr_payroll
+#: field:payslip.eds.export,responsible_id:0
+msgid "Responsible"
+msgstr "Atbildīgā Persona"
+
+#. module: l10n_lv_hr_payroll
+#: field:payslip.eds.export,file_save:0
+msgid "Save File"
+msgstr "Saglabāt Failu"
+
+#. module: l10n_lv_hr_payroll
+#: view:payslip.eds.export:l10n_lv_hr_payroll.payslip_eds_export_view
+msgid "or"
+msgstr "vai"
