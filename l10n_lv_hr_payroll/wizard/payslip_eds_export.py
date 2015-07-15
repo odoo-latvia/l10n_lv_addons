@@ -156,7 +156,9 @@ class payslip_eds_export(osv.osv_memory):
                 day = int(day_def)
                 date_pay = datetime.strftime(date(year[0], month[0], day), '%Y-%m-%d')
             if not day_def:
-                date_pay = datetime.strftime((date(year[0], month[0]+1, 1) - timedelta(days=1)), '%Y-%m-%d')
+                m = (month[0] != 12) and (month[0] + 1) or month[0]
+                y = (month[0] == 12) and (year[0] + 1) or year[0]
+                date_pay = datetime.strftime((date(y, m, 1) - timedelta(days=1)), '%Y-%m-%d')
         return date_pay
 
     _defaults = {
