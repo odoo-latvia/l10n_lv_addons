@@ -171,18 +171,32 @@ class payslip_summary_report(report_sxw.rml_parse):
         for line in line_obj.browse(self.cr, self.uid, line_ids, context=self.context):
             if hasattr(line.salary_rule_id, 'account_debit') and hasattr(line.salary_rule_id, 'account_credit') and (line.salary_rule_id.account_debit or line.salary_rule_id.account_credit):
                 rule_id = line.salary_rule_id.id
-                acd_id = line.salary_rule_id.account_debit and line.salary_rule_id.account_debit.id or 0
-                debit_code = line.salary_rule_id.account_debit and line.salary_rule_id.account_debit.code or ''
-                acc_id = line.salary_rule_id.account_credit and line.salary_rule_id.account_credit.code or 0
-                credit_code = line.salary_rule_id.account_credit and line.salary_rule_id.account_credit.code or ''
+                acd_id = 0
+                debit_code = ''
+                acc_id = 0
+                credit_code = ''
+                if line.salary_rule_id.account_debit:
+                    acd_id = line.salary_rule_id.account_debit.id
+                    debit_code = line.salary_rule_id.account_debit.code
+                if line.salary_rule_id.account_credit:
+                    acc_id = line.salary_rule_id.account_credit.id
+                    credit_code = line.salary_rule_id.account_credit.code
+                if acd_id and (not acc_id):
+                    acc_id = line.slip_id.journal_id.default_credit_account_id and line.slip_id.journal_id.default_credit_account_id.id or 0
+                    if acc_id:
+                        credit_code = line.slip_id.journal_id.default_credit_account_id.code
+                if acc_id and (not acd_id):
+                    acd_id = line.slip_id.journal_id.default_debit_account_id and line.slip_id.journal_id.default_debit_account_id.id or 0
+                    if acd_id:
+                        debit_code = line.slip_id.journal_id.default_debit_account_id.code
                 sequence = line.salary_rule_id.sequence
                 appears = line.salary_rule_id.appears_on_summary
                 amount = line.total
-                if datas.get((rule_id)):
-                    amount += datas[(rule_id)]['amount']
-                    datas[(rule_id)].clear()
-                if not datas.get((rule_id)):
-                    datas[(rule_id)] = {
+                if datas.get((rule_id,acd_id,acc_id)):
+                    amount += datas[(rule_id,acd_id,acc_id)]['amount']
+                    datas[(rule_id,acd_id,acc_id)].clear()
+                if not datas.get((rule_id,acd_id,acc_id)):
+                    datas[(rule_id,acd_id,acc_id)] = {
                         'rule_id': rule_id,
                         'acd_id': acd_id,
                         'debit_code': debit_code,
@@ -192,7 +206,7 @@ class payslip_summary_report(report_sxw.rml_parse):
                         'appears': appears,
                         'amount': amount
                     }
-                result.append(datas[(rule_id)])
+                result.append(datas[(rule_id,acd_id,acc_id)])
         data_list = []
         for object in result:
             if object != {}:
