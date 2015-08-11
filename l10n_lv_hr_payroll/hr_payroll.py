@@ -45,6 +45,7 @@ class hr_employee(osv.osv):
 
 class hr_payslip(osv.osv):
     _inherit = 'hr.payslip'
+    _order = 'date_from desc, write_date desc'
 
     def _get_month(self, cr, uid, date_from, date_to, context=None):
         from_dt = datetime.datetime.strptime(date_from, '%Y-%m-%d')
