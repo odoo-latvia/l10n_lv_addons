@@ -203,3 +203,40 @@ msgstr "Saglabāt Failu"
 #: view:payslip.eds.export:l10n_lv_hr_payroll.payslip_eds_export_view
 msgid "or"
 msgstr "vai"
+
+#. module: l10n_lv_hr_payroll
+#: field:hr.contract,prem_deduct_ids:0
+#: view:hr.contract:l10n_lv_hr_payroll.hr_contract_view_form_inherit_lv_payroll
+msgid "Premiums/Deductions"
+msgstr "Piemaksas/Ieturējumi"
+
+#. module: l10n_lv_hr_payroll
+#: field:hr.contract.pd,contract_id:0
+msgid "Contract"
+msgstr "Līgums"
+
+#. module: l10n_lv_hr_payroll
+#: field:hr.contract.pd,name:0
+msgid "Name"
+msgstr "Nosaukums"
+
+#. module: l10n_lv_hr_payroll
+#: field:hr.contract.pd,code:0
+msgid "Code"
+msgstr "Kods"
+
+#. module: l10n_lv_hr_payroll
+#: field:hr.contract.pd,amount:0
+msgid "Amount"
+msgstr "Summa"
+
+#. module: l10n_lv_hr_payroll
+#: field:hr.contract.pd,date_from:0
+msgid "Active From"
+msgstr "Spēkā no"
+
+#. module: l10n_lv_hr_payroll
+#: field:hr.contract.pd,date_to:0
+msgid "Active To"
+msgstr "Spēkā līdz"
+

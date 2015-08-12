@@ -43,6 +43,25 @@ class hr_employee(osv.osv):
         'disability_group': fields.selection([('I','I'), ('II','II'), ('III','III')], 'Disability group')
     }
 
+class hr_contract(osv.osv):
+    _inherit = 'hr.contract'
+
+    _columns = {
+        'prem_deduct_ids': fields.one2many('hr.contract.pd', 'contract_id', 'Premiums/Deductions')
+    }
+
+class hr_contract_pd(osv.osv):
+    _name = 'hr.contract.pd'
+
+    _columns = {
+        'contract_id': fields.many2one('hr.contract', 'Contract', ondelete='cascade'),
+        'name': fields.char('Name', required=True),
+        'code': fields.char('Code', required=True),
+        'amount': fields.float('Amount'),
+        'date_from': fields.date('Active From'),
+        'date_to': fields.date('Active To')
+    }
+
 class hr_payslip(osv.osv):
     _inherit = 'hr.payslip'
     _order = 'date_from desc, write_date desc'
@@ -243,6 +262,28 @@ class hr_payslip(osv.osv):
                     'amount': abs_days,
                     'contract_id': contract_id
                 })
+
+        # Insert premium and deduction amounts:
+        if contract and contract.prem_deduct_ids:
+            for pd in contract.prem_deduct_ids:
+                if pd.date_from and pd.date_from > date_to:
+                    continue
+                if pd.date_to and pd.date_to < date_from:
+                    continue
+                found = False
+                for inp_val in res['value']['input_line_ids']:
+                    if inp_val['code'] == pd.code:
+                        found = True
+                        if inp_val.get('amount',0.0) != pd.amount:
+                            ind = res['value']['input_line_ids'].index(inp_val)
+                            res['value']['input_line_ids'][ind].update({'amount': pd.amount})
+                if not found:
+                    res['value']['input_line_ids'].append({
+                        'code': pd.code,
+                        'name': pd.name,
+                        'amount': pd.amount,
+                        'contract_id': contract_id
+                    })
         return res
 
     def reload_inputs(self, cr, uid, ids, context=None):
