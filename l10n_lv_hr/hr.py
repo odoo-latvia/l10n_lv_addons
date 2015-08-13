@@ -110,9 +110,13 @@ class hr_employee(osv.osv):
             context = {}
         name = vals.get('name',False)
         if name:
-            emp_name_ids = self.search(cr, uid, [('name','=',name)], context=context)
+            emp_name_domain = [('name','=',name)]
+            idn = vals.get('identification_id',False)
+            if idn:
+                emp_name_domain += ['|', ('identification_id','=',idn), ('identification_id','=',False)]
+            emp_name_ids = self.search(cr, uid, emp_name_domain, context=context)
             if emp_name_ids:
-                raise osv.except_osv(_("Cannot create employee !"), _("An employee with the given name already exists!"))
+                raise osv.except_osv(_("Cannot create employee !"), _("An employee with the given name %salready exists!") % (idn and _('and identification No (or without it) ') or ''))
         return super(hr_employee, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
@@ -120,9 +124,13 @@ class hr_employee(osv.osv):
             context = {}
         name = vals.get('name',False)
         if name:
-            emp_name_ids = self.search(cr, uid, [('name','=',name)], context=context)
+            emp_name_domain = [('name','=',name)]
+            idn = vals.get('identification_id',False)
+            if idn:
+                emp_name_domain += ['|', ('identification_id','=',idn), ('identification_id','=',False)]
+            emp_name_ids = self.search(cr, uid, emp_name_domain, context=context)
             if emp_name_ids:
-                raise osv.except_osv(_("Cannot update employee !"), _("An employee with the given name already exists!"))
+                raise osv.except_osv(_("Cannot update employee !"), _("An employee with the given name %salready exists!") % (idn and _('and identification No (or without it) ') or ''))
         return super(hr_employee, self).write(cr, uid, ids, vals, context=context)
 
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context=None, count=False):
