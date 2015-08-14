@@ -110,27 +110,37 @@ class hr_employee(osv.osv):
             context = {}
         name = vals.get('name',False)
         if name:
-            emp_name_domain = [('name','=',name)]
+            emp_name_ids = self.search(cr, uid, [('name','=',name)], context=context)
             idn = vals.get('identification_id',False)
-            if idn:
-                emp_name_domain += ['|', ('identification_id','=',idn), ('identification_id','=',False)]
-            emp_name_ids = self.search(cr, uid, emp_name_domain, context=context)
-            if emp_name_ids:
-                raise osv.except_osv(_("Cannot create employee !"), _("An employee with the given name %salready exists!") % (idn and _('and identification No (or without it) ') or ''))
+            emp_wid_ids = []
+            emp_woid_ids = []
+            if emp_name_ids and idn:
+                emp_wid_ids = self.search(cr, uid, [('id','in',emp_name_ids), ('identification_id','=',idn)], context=context)
+                emp_woid_ids = self.search(cr, uid, [('id','in',emp_name_ids), ('identification_id','=',False)], context=context)
+            if emp_name_ids and ((not idn) or (emp_wid_ids or emp_woid_ids)):
+                raise osv.except_osv(_("Cannot create employee !"), _('An employee with the name %s %shas been found in the database!') % (name, (emp_wid_ids and (_('and identification No ') + idn + ' ') or (emp_woid_ids and _('and without identification No ')) or '')))
         return super(hr_employee, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
         if context is None:
             context = {}
-        name = vals.get('name',False)
-        if name:
-            emp_name_domain = [('name','=',name)]
+        if 'name' in vals or 'identification_id' in vals:
+            name = vals.get('name',False)
             idn = vals.get('identification_id',False)
-            if idn:
-                emp_name_domain += ['|', ('identification_id','=',idn), ('identification_id','=',False)]
-            emp_name_ids = self.search(cr, uid, emp_name_domain, context=context)
-            if emp_name_ids:
-                raise osv.except_osv(_("Cannot update employee !"), _("An employee with the given name %salready exists!") % (idn and _('and identification No (or without it) ') or ''))
+            for data in self.read(cr, uid, ids, ['name', 'identification_id'], context=context):
+                if not name:
+                    name = data['name']
+                emp_name_ids = self.search(cr, uid, [('name','=',name)], context=context)
+                emp_name_ids.remove(data['id'])
+                emp_wid_ids = []
+                emp_woid_ids = []
+                if 'identification_id' not in vals:
+                    idn = data['identification_id']
+                if emp_name_ids and idn:
+                    emp_wid_ids = self.search(cr, uid, [('id','in',emp_name_ids), ('identification_id','=',idn)], context=context)
+                    emp_woid_ids = self.search(cr, uid, [('id','in',emp_name_ids), ('identification_id','=',False)], context=context)
+                if emp_name_ids and ((not idn) or (emp_wid_ids or emp_woid_ids)):
+                    raise osv.except_osv(_("Cannot update employee !"), _('An employee with the name %s %shas been found in the database!') % (name, (emp_wid_ids and (_('and identification No ') + idn + ' ') or (emp_woid_ids and _('and without identification No ')) or '')))
         return super(hr_employee, self).write(cr, uid, ids, vals, context=context)
 
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context=None, count=False):

@@ -427,15 +427,22 @@ msgstr "Nav iespējams atjaunot darbinieka datus !"
 #: code:addons/l10n_lv_hr/hr.py:101
 #: code:addons/l10n_lv_hr/hr.py:111
 #, python-format
-msgid "An employee with the given name %salready exists!"
-msgstr "Darbinieks ar doto vārdu %sjau eksistē!"
+msgid "An employee with the name %s %shas been found in the database!"
+msgstr "Datubāzē atrasts darbinieks ar vārdu %s %s!"
 
 #. module: l10n_lv_hr
 #: code:addons/l10n_lv_hr/hr.py:101
 #: code:addons/l10n_lv_hr/hr.py:111
 #, python-format
-msgid "and identification No (or without it) "
-msgstr "un personas kodu (vai bez tā) "
+msgid "and identification No "
+msgstr "un personas kodu "
+
+#. module: l10n_lv_hr
+#: code:addons/l10n_lv_hr/hr.py:101
+#: code:addons/l10n_lv_hr/hr.py:111
+#, python-format
+msgid "and without identification No "
+msgstr "un bez personas koda"
 
 #. module: l10n_lv_hr
 #: field:hr.contract,active:0
