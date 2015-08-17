@@ -7,12 +7,42 @@
             <field name="model">account.asset.category</field>
             <field name="inherit_id" ref="account_asset.view_account_asset_category_form"/>
             <field name="arch" type="xml">
-                <field name="open_asset" position="after">
+<!--                <field name="open_asset" position="after">
                     <field name="next_month" on_change="onchange_next_month(next_month)"/>
                 </field>
                 <field name="prorata" position="attributes">
 					<attribute name="on_change">onchange_prorata(prorata)</attribute>
+                </field> -->
+                <xpath expr="/form/group/group[@string='Depreciation Dates']" position="replace"/>
+                <xpath expr="/form/group/group[@string='Depreciation Method']" position="replace"/>
+                <xpath expr="/form/group/group[@string='Analytic Information']" position="replace"/>
+                <field name="account_depreciation_id" position="after">
+                    <field name="account_depreciation_tax_id"/>
                 </field>
+                <xpath expr="/form/group" position="inside">
+                    <group string="Depreciation Method">
+                        <field name="method"/>
+                        <field name="method_time"/>
+                        <field name="prorata" on_change="onchange_prorata(prorata)"/>
+                        <field name="next_month" on_change="onchange_next_month(next_month)"/>
+                        <field name="method_number" attrs="{'invisible':[('method_time','=','end')], 'required':[('method_time','=','number')]}"/>
+                        <field name="method_period"/>
+                        <field name="method_progress_factor" attrs="{'invisible':[('method','=','linear')], 'required':[('method','=','degressive')]}"/>
+                        <field name="method_end" attrs="{'required': [('method_time','=','end')], 'invisible':[('method_time','=','number')]}"/>
+                        <field name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
+                    </group>
+                    <group string="Depreciation Method for Taxes">
+                        <field name="method_tax"/>
+                        <field name="method_time_tax"/>
+                        <field name="prorata_tax" on_change="onchange_prorata(prorata)"/>
+                        <field name="next_month_tax" on_change="onchange_next_month(next_month)"/>
+                        <field name="method_number_tax" attrs="{'invisible':[('method_time_tax','=','end')], 'required':[('method_time_tax','=','number')]}"/>
+                        <field name="method_period_tax"/>
+                        <field name="method_progress_factor_tax" attrs="{'invisible':[('method_tax','=','linear')], 'required':[('method_tax','=','degressive')]}"/>
+                        <field name="method_end_tax" attrs="{'required': [('method_time_tax','=','end')], 'invisible':[('method_time_tax','=','number')]}"/>
+                        <field name="account_analytic_tax_id" groups="analytic.group_analytic_accounting"/>
+                    </group>
+                </xpath>
             </field>
         </record>
 

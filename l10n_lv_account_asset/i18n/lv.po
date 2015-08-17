@@ -28,6 +28,11 @@ msgstr "Pamatlīdzekļi neapstiprinātā un atvērtā stadijā"
 msgid "Ending date"
 msgstr "Beigu datums"
 
+#. module: l10n_lv_account_asset
+#: field:account.asset.category,method_end_tax:0
+msgid "Ending date"
+msgstr "Beigu datums"
+
 #. module: account_asset
 #: field:account.asset.asset,value_residual:0
 msgid "Residual Value"
@@ -65,9 +70,19 @@ msgstr "Pamatlīdzeklis"
 msgid "Indicates that the first depreciation entry for this asset have to be done from the purchase date instead of the first January"
 msgstr "Norāda, ka šim pamatlīdzeklim pirmais nolietojuma ieraksts jāveic iepirkuma datumā, nevis 1. Janvārī."
 
+#. module: l10n_lv_account_asset
+#: help:account.asset.category,prorata_tax:0
+msgid "Indicates that the first depreciation entry for this asset have to be done from the purchase date instead of the first January"
+msgstr "Norāda, ka šim pamatlīdzeklim pirmais nolietojuma ieraksts jāveic iepirkuma datumā, nevis 1. Janvārī."
+
 #. module: account_asset
 #: selection:account.asset.asset,method:0
 #: selection:account.asset.category,method:0
+msgid "Linear"
+msgstr "Lineārā"
+
+#. module: l10n_lv_account_asset
+#: selection:account.asset.category,method_tax:0
 msgid "Linear"
 msgstr "Lineārā"
 
@@ -112,6 +127,11 @@ msgstr "Pamatojums"
 #. module: account_asset
 #: field:account.asset.asset,method_progress_factor:0
 #: field:account.asset.category,method_progress_factor:0
+msgid "Degressive Factor"
+msgstr "Nolietojuma koeficients"
+
+#. module: l10n_lv_account_asset
+#: field:account.asset.category,method_progress_factor_tax:0
 msgid "Degressive Factor"
 msgstr "Nolietojuma koeficients"
 
@@ -177,6 +197,11 @@ msgstr "Pamatlīdzekļi"
 msgid "Depreciation Account"
 msgstr "Nolietojuma konts"
 
+#. module: l10n_lv_account_asset
+#: field:account.asset.category,account_depreciation_tax_id:0
+msgid "Depreciation Account for Taxes"
+msgstr "Nolietojuma konts nodokļu vajadzībām"
+
 #. module: account_asset
 #: view:account.asset.asset:0
 #: view:account.asset.category:0
@@ -221,6 +246,11 @@ msgstr "Pamatlīdzekļi neapstiprinātā stadijā"
 msgid "Ending Date"
 msgstr "Beigu datums"
 
+#. module: l10n_lv_account_asset
+#: selection:account.asset.category,method_time_tax:0
+msgid "Ending Date"
+msgstr "Beigu datums"
+
 #. module: account_asset
 #: field:account.asset.asset,code:0
 msgid "Reference"
@@ -241,6 +271,11 @@ msgstr "Aprēķināt pamatlīdzekļus"
 #: field:account.asset.category,method_period:0
 #: field:account.asset.history,method_period:0
 #: field:asset.modify,method_period:0
+msgid "Period Length"
+msgstr "Perioda garums"
+
+#. module: l10n_lv_account_asset
+#: field:account.asset.category,method_period_tax:0
 msgid "Period Length"
 msgstr "Perioda garums"
 
@@ -268,6 +303,11 @@ msgstr "Mainīt termiņu"
 msgid "The number of depreciations needed to depreciate your asset"
 msgstr "Nepieciešamais nolietojumu skaits pamatlīdzekļa nolietojumam"
 
+#. module: l10n_lv_account_asset
+#: help:account.asset.category,method_number_tax:0
+msgid "The number of depreciations needed to depreciate your asset"
+msgstr "Nepieciešamais nolietojumu skaits pamatlīdzekļa nolietojumam"
+
 #. module: account_asset
 #: view:account.asset.category:0
 msgid "Analytic Information"
@@ -278,9 +318,19 @@ msgstr "Analītiskā informācija"
 msgid "Analytic account"
 msgstr "Analītiskais konts"
 
+#. module: l10n_lv_account_asset
+#: field:account.asset.category,account_analytic_tax_id:0
+msgid "Analytic account"
+msgstr "Analītiskais konts"
+
 #. module: account_asset
 #: field:account.asset.asset,method:0
 #: field:account.asset.category,method:0
+msgid "Computation Method"
+msgstr "Aprēķina metode"
+
+#. module: l10n_lv_account_asset
+#: field:account.asset.category,method_tax:0
 msgid "Computation Method"
 msgstr "Aprēķina metode"
 
@@ -367,6 +417,11 @@ msgstr "Nenorakstītā vērtība"
 msgid "Time Method"
 msgstr "Laika metode"
 
+#. module: l10n_lv_account_asset
+#: field:account.asset.category,method_time_tax:0
+msgid "Time Method"
+msgstr "Laika metode"
+
 #. module: account_asset
 #: view:asset.depreciation.confirmation.wizard:0
 #: view:asset.modify:0
@@ -392,6 +447,15 @@ msgstr "Metode, kas izmantojama datumu un nolietojuma rindu aprēķinam.\n"
 #. module: account_asset
 #: help:account.asset.asset,method_time:0
 #: help:account.asset.category,method_time:0
+msgid "Choose the method to use to compute the dates and number of depreciation lines.\n"
+"  * Number of Depreciations: Fix the number of depreciation lines and the time between 2 depreciations.\n"
+"  * Ending Date: Choose the time between 2 depreciations and the date the depreciations won't go beyond."
+msgstr "Metodes izvēle datumu un nolietojuma rindu skaita aprēķinam.\n"
+"  * Nolietojumu skaits: labo nolietojuma rindu skaitu un laiku starp 2 nolietojumiem.\n"
+"  * Beigu datums: laika izvēle starp 2 nolietojumiem un datums, kuru nolietojumi nepārsniegs."
+
+#. module: l10n_lv_account_asset
+#: help:account.asset.category,method_time_tax:0
 msgid "Choose the method to use to compute the dates and number of depreciation lines.\n"
 "  * Number of Depreciations: Fix the number of depreciation lines and the time between 2 depreciations.\n"
 "  * Ending Date: Choose the time between 2 depreciations and the date the depreciations won't go beyond."
@@ -518,6 +582,11 @@ msgstr "Vispārējā informācija"
 msgid "Prorata Temporis"
 msgstr "Proporcionāli laikam"
 
+#. module: l10n_lv_account_asset
+#: field:account.asset.category,prorata_tax:0
+msgid "Prorata Temporis"
+msgstr "Proporcionāli laikam"
+
 #. module: account_asset
 #: model:ir.model,name:account_asset.model_account_invoice
 msgid "Invoice"
@@ -563,6 +632,11 @@ msgstr "Iepirkuma datums"
 msgid "Degressive"
 msgstr "Degresīvā"
 
+#. module: l10n_lv_account_asset
+#: selection:account.asset.category,method_tax:0
+msgid "Degressive"
+msgstr "Degresīvā"
+
 #. module: account_asset
 #: help:asset.depreciation.confirmation.wizard,period_id:0
 msgid "Choose the period for which you want to automatically post the depreciation lines of running assets"
@@ -583,6 +657,16 @@ msgstr "Nav iespējams dzēst pamatlīdzekli, kas satur publicētas nolietojuma 
 #: view:account.asset.category:0
 msgid "Depreciation Method"
 msgstr "Nolietojuma metode"
+
+#. module: l10_lv_account_asset
+#: view:account.asset.category:0
+msgid "Depreciation Method"
+msgstr "Nolietojuma metode"
+
+#. module: l10n_lv_account_asset
+#: view:account.asset.category:0
+msgid "Depreciation Method for Taxes"
+msgstr "Nolietojuma metode nodokļu vajadzībām"
 
 #. module: account_asset
 #: field:account.asset.depreciation.line,amount:0
@@ -627,6 +711,15 @@ msgstr "Jau nolietotā summa"
 #. module: account_asset
 #: help:account.asset.asset,method:0
 #: help:account.asset.category,method:0
+msgid "Choose the method to use to compute the amount of depreciation lines.\n"
+"  * Linear: Calculated on basis of: Gross Value / Number of Depreciations\n"
+"  * Degressive: Calculated on basis of: Residual Value * Degressive Factor"
+msgstr "Metodes izvēle nolietojuma rindu summu aprēķinam.\n"
+"  * Lineārā: aprēķina, pamatojoties uz: bruto vērtība / nolietojumu skaits\n"
+"  * Degresīvā: aprēķina, balstoties uz: atlikusī vērtība * nolietojuma koeficients"
+
+#. module: l10n_lv_account_asset
+#: help:account.asset.category,method_tax:0
 msgid "Choose the method to use to compute the amount of depreciation lines.\n"
 "  * Linear: Calculated on basis of: Gross Value / Number of Depreciations\n"
 "  * Degressive: Calculated on basis of: Residual Value * Degressive Factor"
@@ -715,6 +808,11 @@ msgstr "Secība"
 msgid "State here the time between 2 depreciations, in months"
 msgstr "Šeit norādiet laiku starp 2 nolietojumiem (mēnešos)"
 
+#. module: l10n_lv_account_asset
+#: help:account.asset.category,method_period_tax:0
+msgid "State here the time between 2 depreciations, in months"
+msgstr "Šeit norādiet laiku starp 2 nolietojumiem (mēnešos)"
+
 #. module: account_asset
 #: field:account.asset.history,date:0
 msgid "Date"
@@ -728,6 +826,12 @@ msgstr "Datums"
 #: field:account.asset.history,method_number:0
 #: selection:account.asset.history,method_time:0
 #: field:asset.modify,method_number:0
+msgid "Number of Depreciations"
+msgstr "Nolietojumu skaits"
+
+#. module: l10n_lv_account_asset
+#: field:account.asset.category,method_number_tax:0
+#: selection:account.asset.category,method_time_tax:0
 msgid "Number of Depreciations"
 msgstr "Nolietojumu skaits"
 
@@ -879,6 +983,7 @@ msgstr "Pamatlīdzekļu saraksts"
 #. module: l10n_lv_account_asset
 #: help:account.asset.asset,next_month:0
 #: help:account.asset.category,next_month:0
+#: help:account.asset.category,next_month_tax:0
 msgid "Indicates that the first depreciation entry for this asset has to be done from the start of the next month following the month of the purchase date."
 msgstr "Norāda, ka pirmais šī pamatlīdzekļa nolietojuma ieraksts jāveido nākamā mēneša (pēc iepirkuma datuma) sākumā."
 
@@ -890,6 +995,7 @@ msgstr "Pamatlīdzekļu apgrozījuma atskaites drukāšana"
 #. module: l10n_lv_account_asset
 #: field:account.asset.asset,next_month:0
 #: field:account.asset.category,next_month:0
+#: field:account.asset.category,next_month_tax:0
 msgid "Compute from Next Month"
 msgstr "Aprēķināt no nākamā mēneša"
 

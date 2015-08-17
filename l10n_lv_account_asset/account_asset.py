@@ -35,7 +35,7 @@ class account_asset_category(osv.osv):
     _columns = {
         'next_month': fields.boolean('Compute from Next Month', help='Indicates that the first depreciation entry for this asset has to be done from the start of the next month following the month of the purchase date.'),
         # depreciation for taxes:
-        'account_depreciation_tax_id': fields.many2one('account.account', 'Depreciation Account', required=True, domain=[('type','=','other')]),
+        'account_depreciation_tax_id': fields.many2one('account.account', 'Depreciation Account for Taxes', required=True, domain=[('type','=','other')]),
         'method_tax': fields.selection([('linear','Linear'),('degressive','Degressive')], 'Computation Method', required=True, help="Choose the method to use to compute the amount of depreciation lines.\n"\
             "  * Linear: Calculated on basis of: Gross Value / Number of Depreciations\n" \
             "  * Degressive: Calculated on basis of: Residual Value * Degressive Factor"),
@@ -52,6 +52,14 @@ class account_asset_category(osv.osv):
         'account_analytic_tax_id': fields.many2one('account.analytic.account', 'Analytic account'),
     }
 
+    _defaults = {
+        'method_tax': 'linear',
+        'method_number_tax': 5,
+        'method_time_tax': 'number',
+        'method_period_tax': 12,
+        'method_progress_factor_tax': 0.3,
+    }
+
     def onchange_next_month(self, cr, uid, ids, next_month, context=None):
         res = {'value': {}}
         if next_month == True:
@@ -62,6 +70,18 @@ class account_asset_category(osv.osv):
         res = {'value': {}}
         if prorata == True:
             res['value'] = {'next_month': False}
+        return res
+
+    def onchange_next_month_tax(self, cr, uid, ids, next_month_tax, context=None):
+        res = {'value': {}}
+        if next_month_tax == True:
+            res['value'] = {'prorata_tax': False}
+        return res
+
+    def onchange_prorata_tax(self, cr, uid, ids, prorata_tax, context=None):
+        res = {'value': {}}
+        if prorata_tax == True:
+            res['value'] = {'next_month_tax': False}
         return res
 
 class account_asset_asset(osv.osv):
