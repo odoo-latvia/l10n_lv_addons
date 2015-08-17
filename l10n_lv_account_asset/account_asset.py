@@ -34,6 +34,22 @@ class account_asset_category(osv.osv):
 
     _columns = {
         'next_month': fields.boolean('Compute from Next Month', help='Indicates that the first depreciation entry for this asset has to be done from the start of the next month following the month of the purchase date.'),
+        # depreciation for taxes:
+        'account_depreciation_tax_id': fields.many2one('account.account', 'Depreciation Account', required=True, domain=[('type','=','other')]),
+        'method_tax': fields.selection([('linear','Linear'),('degressive','Degressive')], 'Computation Method', required=True, help="Choose the method to use to compute the amount of depreciation lines.\n"\
+            "  * Linear: Calculated on basis of: Gross Value / Number of Depreciations\n" \
+            "  * Degressive: Calculated on basis of: Residual Value * Degressive Factor"),
+        'method_time_tax': fields.selection([('number','Number of Depreciations'),('end','Ending Date')], 'Time Method', required=True,
+                                  help="Choose the method to use to compute the dates and number of depreciation lines.\n"\
+                                       "  * Number of Depreciations: Fix the number of depreciation lines and the time between 2 depreciations.\n" \
+                                       "  * Ending Date: Choose the time between 2 depreciations and the date the depreciations won't go beyond."),
+        'prorata_tax':fields.boolean('Prorata Temporis', help='Indicates that the first depreciation entry for this asset have to be done from the purchase date instead of the first January'),
+        'next_month_tax': fields.boolean('Compute from Next Month', help='Indicates that the first depreciation entry for this asset has to be done from the start of the next month following the month of the purchase date.'),
+        'method_number_tax': fields.integer('Number of Depreciations', help="The number of depreciations needed to depreciate your asset"),
+        'method_period_tax': fields.integer('Period Length', help="State here the time between 2 depreciations, in months", required=True),
+        'method_progress_factor_tax': fields.float('Degressive Factor'),
+        'method_end_tax': fields.date('Ending date'),
+        'account_analytic_tax_id': fields.many2one('account.analytic.account', 'Analytic account'),
     }
 
     def onchange_next_month(self, cr, uid, ids, next_month, context=None):
