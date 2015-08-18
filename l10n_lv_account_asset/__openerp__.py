@@ -52,7 +52,6 @@ My Company filter for Assets.
     'init_xml': [],
     'demo_xml': [],
     'update_xml': [
-        'account_asset_view.xml',
         'views/asset_card_report.xml',
         'views/asset_confirmation_report.xml',
         'views/asset_turnover_report.xml',
@@ -60,7 +59,9 @@ My Company filter for Assets.
         'account_asset_report.xml',
         'wizard/account_asset_set_close_date_view.xml',
         'wizard/report_account_asset_turnover_view.xml',
-        'wizard/report_account_asset_list_view.xml'
+        'wizard/report_account_asset_list_view.xml',
+        'wizard/account_asset_change_duration_view.xml',
+        'account_asset_view.xml',
         ],
     'auto_install': False,
     'installable': True,

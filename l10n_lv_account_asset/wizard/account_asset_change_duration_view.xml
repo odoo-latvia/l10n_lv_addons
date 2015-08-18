@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="asset_modify_form_inherit_l10n_lv">
+            <field name="name">wizard.asset.modify.form.inherit.l10n.lv</field>
+            <field name="model">asset.modify</field>
+            <field name="inherit_id" ref="account_asset.asset_modify_form"/>
+            <field name="arch" type="xml">
+                <field name="asset_method_time" position="after">
+                    <field name="asset_method_time_tax" invisible="1"/>
+                </field>
+                <field name="method_number" position="after">
+                    <field name="method_number_tax" attrs="{'invisible': [('asset_method_time_tax', '=', 'end')]}"/>
+                </field>
+                <field name="method_end" position="after">
+                    <field name="method_end_tax" attrs="{'invisible': [('asset_method_time_tax', '=', 'number')]}"/>
+                </field>
+                <xpath expr="/form/group/group/div" position="after">
+                    <label for="method_period_tax"/>
+                    <div>
+                        <field name="method_period_tax" class="oe_inline"/> months
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_asset_modify_tax" model="ir.actions.act_window">
+            <field name="name">Modify Asset</field>
+            <field name="res_model">asset.modify</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="account_asset.asset_modify_form"/>
+            <field name="target">new</field>
+            <field name="context">{'tax': True}</field>
+        </record>
+
+    </data>
+</openerp>

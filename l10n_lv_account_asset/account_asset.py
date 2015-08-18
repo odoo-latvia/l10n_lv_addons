@@ -238,6 +238,28 @@ class account_asset_asset(osv.osv):
         'next_month': fields.boolean('Compute from Next Month', readonly=True, states={'draft':[('readonly',False)]}, help='Indicates that the first depreciation entry for this asset has to be done from the start of the next month following the month of the purchase date.'),
         'confirmation_date': fields.date('Date Confirmed'),
         'close_date': fields.date('Date Closed'),
+        # depreciation for taxes:
+        'method_tax': fields.selection([('linear','Linear'),('degressive','Degressive')], 'Computation Method', required=True, readonly=True, states={'draft':[('readonly',False)]}, help="Choose the method to use to compute the amount of depreciation lines.\n"\
+            "  * Linear: Calculated on basis of: Gross Value / Number of Depreciations\n" \
+            "  * Degressive: Calculated on basis of: Residual Value * Degressive Factor"),
+        'method_time_tax': fields.selection([('number','Number of Depreciations'),('end','Ending Date')], 'Time Method', required=True, readonly=True, states={'draft':[('readonly',False)]},
+                                  help="Choose the method to use to compute the dates and number of depreciation lines.\n"\
+                                       "  * Number of Depreciations: Fix the number of depreciation lines and the time between 2 depreciations.\n" \
+                                       "  * Ending Date: Choose the time between 2 depreciations and the date the depreciations won't go beyond."),
+        'prorata_tax':fields.boolean('Prorata Temporis', readonly=True, states={'draft':[('readonly',False)]}, help='Indicates that the first depreciation entry for this asset have to be done from the purchase date instead of the first January'),
+        'next_month_tax': fields.boolean('Compute from Next Month', readonly=True, states={'draft':[('readonly',False)]}, help='Indicates that the first depreciation entry for this asset has to be done from the start of the next month following the month of the purchase date.'),
+        'method_number_tax': fields.integer('Number of Depreciations', readonly=True, states={'draft':[('readonly',False)]}, help="The number of depreciations needed to depreciate your asset"),
+        'method_period_tax': fields.integer('Number of Months in a Period', required=True, readonly=True, states={'draft':[('readonly',False)]}, help="The amount of time between two depreciations, in months"),
+        'method_progress_factor_tax': fields.float('Degressive Factor', readonly=True, states={'draft':[('readonly',False)]}),
+        'method_end_tax': fields.date('Ending Date', readonly=True, states={'draft':[('readonly',False)]}),
+    }
+
+    _defaults = {
+        'method_tax': 'linear',
+        'method_number_tax': 5,
+        'method_time_tax': 'number',
+        'method_period_tax': 12,
+        'method_progress_factor_tax': 0.3,
     }
 
     def onchange_next_month(self, cr, uid, ids, next_month, context=None):
@@ -250,6 +272,24 @@ class account_asset_asset(osv.osv):
         res = {'value': {}}
         if prorata == True:
             res['value'] = {'next_month': False}
+        return res
+
+    def onchange_next_month_tax(self, cr, uid, ids, next_month_tax, context=None):
+        res = {'value': {}}
+        if next_month_tax == True:
+            res['value'] = {'prorata_tax': False}
+        return res
+
+    def onchange_prorata_tax(self, cr, uid, ids, prorata_tax, context=None):
+        res = {'value': {}}
+        if prorata_tax == True:
+            res['value'] = {'next_month_tax': False}
+        return res
+
+    def onchange_method_time_tax(self, cr, uid, ids, method_time_tax='number', context=None):
+        res = {'value': {}}
+        if method_time_tax != 'number':
+            res['value'] = {'prorata_tax': False}
         return res
 
     def onchange_category_id(self, cr, uid, ids, category_id, context=None):
@@ -359,5 +399,18 @@ class account_asset_asset_depreciation_line(osv.osv):
                 'context': ctx,
             }
         return created_move_ids
+
+class account_asset_history(osv.osv):
+    _inherit = 'account.asset.history'
+
+    _columns = {
+        'method_time_tax': fields.selection([('number','Number of Depreciations'),('end','Ending Date')], 'Time Method', required=True,
+                                  help="The method to use to compute the dates and number of depreciation lines.\n"\
+                                       "Number of Depreciations: Fix the number of depreciation lines and the time between 2 depreciations.\n" \
+                                       "Ending Date: Choose the time between 2 depreciations and the date the depreciations won't go beyond."),
+        'method_number_tax': fields.integer('Number of Depreciations', help="The number of depreciations needed to depreciate your asset"),
+        'method_period_tax': fields.integer('Period Length', help="Time in month between two depreciations"),
+        'method_end_tax': fields.date('Ending date'),
+    }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

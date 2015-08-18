@@ -25,5 +25,6 @@
 import account_asset_set_close_date
 import report_account_asset_turnover
 import report_account_asset_list
+import account_asset_change_duration
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

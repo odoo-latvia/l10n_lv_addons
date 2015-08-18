@@ -51,18 +51,61 @@
             <field name="model">account.asset.asset</field>
             <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
             <field name="arch" type="xml">
-                <field name="prorata"  position="after">
+<!--                <field name="prorata"  position="after">
                     <field name="next_month" on_change="onchange_next_month(next_month)"/>
                 </field>
                 <field name="prorata" position="attributes">
 					<attribute name="on_change">onchange_prorata(prorata)</attribute>
-                </field>
+                </field> -->
                 <field name="parent_id" position="after">
                     <group col="2">
 						<field name="confirmation_date"/>
                     	<field name="close_date"/>
 					</group>
                 </field>
+                <xpath expr="//notebook/page[@string='General']/group" position="replace"/>
+                <xpath expr="//notebook/page[@string='General']" position="inside">
+                    <group>
+                        <group>
+                            <field name="purchase_value" widget="monetary" options="{'currency_field': 'currency_id'}" on_change="onchange_purchase_salvage_value(purchase_value, salvage_value)"/>
+                            <field name="salvage_value" widget="monetary" options="{'currency_field': 'currency_id'}" on_change="onchange_purchase_salvage_value(purchase_value, salvage_value)"/>
+                        </group>
+                        <group>
+                            <field name="value_residual" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="partner_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="For Company">
+                            <field name="method"/>
+                            <label for="method_time"/>
+                            <div>
+                                <field name="method_time" on_change="onchange_method_time(method_time)" class="oe_inline"/>
+                                <button name="%(account_asset.action_asset_modify)d" states="open" string="Change Duration" type="action" icon="terp-stock_effects-object-colorize" class="oe_inline" colspan="1"/>
+                            </div>
+                            <field name="prorata" attrs="{'invisible': [('method_time','=','end')]}" on_change="onchange_prorata(prorata)"/>
+                            <field name="next_month" on_change="onchange_next_month(next_month)"/>
+                            <field name="method_number" attrs="{'invisible':[('method_time','=','end')], 'required':[('method_time','=','number')]}"/>
+                            <field name="method_period"/>
+                            <field name="method_progress_factor" attrs="{'invisible':[('method','=','linear')], 'required':[('method','=','degressive')]}"/>
+                            <field name="method_end" attrs="{'required': [('method_time','=','end')], 'invisible':[('method_time','=','number')]}"/>
+                        </group>
+                        <group string="For Taxes">
+                            <field name="method_tax"/>
+                            <label for="method_time_tax"/>
+                            <div>
+                                <field name="method_time_tax" on_change="onchange_method_time_tax(method_time_tax)" class="oe_inline"/>
+                                <button name="%(action_asset_modify_tax)d" states="open" string="Change Duration" type="action" icon="terp-stock_effects-object-colorize" class="oe_inline" colspan="1"/>
+                            </div>
+                            <field name="prorata_tax" attrs="{'invisible': [('method_time_tax','=','end')]}" on_change="onchange_prorata_tax(prorata_tax)"/>
+                            <field name="next_month_tax" on_change="onchange_next_month_tax(next_month_tax)"/>
+                            <field name="method_number_tax" attrs="{'invisible':[('method_time_tax','=','end')], 'required':[('method_time_tax','=','number')]}"/>
+                            <field name="method_period_tax"/>
+                            <field name="method_progress_factor_tax" attrs="{'invisible':[('method_tax','=','linear')], 'required':[('method_tax','=','degressive')]}"/>
+                            <field name="method_end_tax" attrs="{'required': [('method_time_tax','=','end')], 'invisible':[('method_time_tax','=','number')]}"/>
+                        </group>
+                    </group>
+                </xpath>
             </field>
         </record>
 
@@ -74,6 +117,54 @@
                 <field name="partner_id" position="after">
                     <field name="company_id" groups="base.group_multi_company"/>
                     <filter name="my_company" string="My Company" domain="[('company_id','=',0)]" context="{'my_company_filter': 1}"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_account_asset_history_form_inherit_l10n_lv">
+            <field name="name">account.asset.history.form.inherit.l10n.lv</field>
+            <field name="model">account.asset.history</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_history_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/group" position="replace"/>
+                <xpath expr="/form/separator[@string='Notes']" position="before">
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="method_time"/>
+                            <field name="method_number" attrs="{'invisible':[('method_time','=','end')]}"/>
+                            <field name="method_period"/>
+                            <field name="method_end" attrs="{'invisible':[('method_time','=','number')]}"/>
+                        </group>
+                        <group>
+                            <field name="method_time_tax"/>
+                            <field name="method_number_tax" attrs="{'invisible':[('method_time_tax','=','end')]}"/>
+                            <field name="method_period_tax"/>
+                            <field name="method_end_tax" attrs="{'invisible':[('method_time_tax','=','number')]}"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_account_asset_history_tree_inherit_l10n_lv">
+            <field name="name">account.asset.history.tree.inherit.l10n.lv</field>
+            <field name="model">account.asset.history</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_history_tree"/>
+            <field name="arch" type="xml">
+                <field name="method_end" position="after">
+                    <field name="method_time_tax" string="Time Method (Tax)"/>
+                    <field name="method_number_tax" string="Number of Depreciations (Tax)"/>
+                    <field name="method_period_tax" string="Period Length (Tax)"/>
+                    <field name="method_end_tax" string="Ending date (Tax)"/>
                 </field>
             </field>
         </record>
