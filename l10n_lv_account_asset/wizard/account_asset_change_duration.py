@@ -25,6 +25,7 @@
 from openerp.osv import fields, osv
 import time
 import xml.etree.ElementTree as ET
+import json
 
 class asset_modify(osv.osv_memory):
     _inherit = 'asset.modify'
@@ -64,32 +65,60 @@ class asset_modify(osv.osv_memory):
         if context is None:
             context = {}
         res = super(asset_modify,self).fields_view_get(cr, uid, view_id=view_id, view_type=view_type, context=context, toolbar=toolbar, submenu=submenu)
+        def new_modifiers(node):
+            attrs = node.get('attrs')
+            attrs_dict = {}
+            if attrs is not None:
+                attrs_dict = eval(attrs)
+            attrs_dict.update({'invisible': 1})
+            modifiers = node.get('modifiers')
+            modifiers_dict = {}
+            if modifiers is not None:
+                true = True
+                false = False
+                modifiers_dict = eval(modifiers)
+            modifiers_dict.update({'invisible': 1})
+            return attrs_dict, modifiers_dict
         if view_type == 'form':
             doc = ET.XML(res['arch'])
             node_mn = doc.find(".//field[@name='method_number']")
             if (node_mn is not None) and (context.get('tax',False) == True):
-                attrs = node_mn.get('attrs')
-                attrs_dict = {}
-                if attrs is not None:
-                    attrs_dict = eval(attrs)
-                attrs_dict.update({'inivisble': 1})
+                attrs_dict, modifiers_dict = new_modifiers(node_mn)
                 node_mn.set('attrs',str(attrs_dict))
+                node_mn.set('modifiers',json.dumps(modifiers_dict))
             node_mnt = doc.find(".//field[@name='method_number_tax']")
             if (node_mnt is not None) and (context.get('tax',False) == False):
-                node_mnt.set('invisible',"1")
+                attrs_dict, modifiers_dict = new_modifiers(node_mnt)
+                node_mnt.set('attrs',str(attrs_dict))
+                node_mnt.set('modifiers',json.dumps(modifiers_dict))
             node_me = doc.find(".//field[@name='method_end']")
             if (node_me is not None) and (context.get('tax',False) == True):
-                node_me.set('invisible',"1")
+                attrs_dict, modifiers_dict = new_modifiers(node_me)
+                node_me.set('attrs',str(attrs_dict))
+                node_me.set('modifiers',json.dumps(modifiers_dict))
             node_met = doc.find(".//field[@name='method_end_tax']")
             if (node_met is not None) and (context.get('tax',False) == False):
-                node_met.set('invisible',"1")
-            node_mp = doc.find(".//field[@name='method_period']")
-            if (node_mp is not None) and (context.get('tax',False) == True):
-                node_mp.set('invisible',"1")
-            node_mpt = doc.find(".//field[@name='method_period_tax']")
-            if (node_mpt is not None) and (context.get('tax',False) == False):
-                node_mpt.set('invisible',"1")
+                attrs_dict, modifiers_dict = new_modifiers(node_met)
+                node_met.set('attrs',str(attrs_dict))
+                node_met.set('modifiers',json.dumps(modifiers_dict))
+            node_mp_label = doc.find(".//label[@for='method_period']")
+            if (node_mp_label is not None) and (context.get('tax',False) == True):
+                node_mp_label.set('attrs',str({'invisible': 1}))
+                node_mp_label.set('modifiers',json.dumps({'invisible': 1}))
+            node_mp_div = doc.findall(".//div")
+            if (len(node_mp_div) != 0) and (context.get('tax',False) == True):
+                node_mp_div[0].set('attrs',str({'invisible': 1}))
+                node_mp_div[0].set('modifiers',json.dumps({'invisible': 1}))
+            node_mpt_label = doc.find(".//label[@for='method_period_tax']")
+            if (node_mpt_label is not None) and (context.get('tax',False) == False):
+                node_mpt_label.set('attrs',str({'invisible': 1}))
+                node_mpt_label.set('modifiers',json.dumps({'invisible': 1}))
+            node_mpt_div = doc.findall(".//div")
+            if (len(node_mpt_div) > 1) and (context.get('tax',False) == False):
+                node_mpt_div[1].set('attrs',str({'invisible': 1}))
+                node_mpt_div[1].set('modifiers',json.dumps({'invisible': 1}))
             res['arch'] = ET.tostring(doc, encoding='utf8', method='xml')
+            print res['arch']
         return res
 
     def modify(self, cr, uid, ids, context=None):
