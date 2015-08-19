@@ -399,7 +399,12 @@ msgstr "Laiks mēnešos starp diviem nolietojumiem"
 #: model:ir.actions.act_window,name:account_asset.action_asset_modify
 #: model:ir.model,name:account_asset.model_asset_modify
 msgid "Modify Asset"
-msgstr "Modificēt pamatlīdzekli"
+msgstr "Mainīt pamatlīdzekli"
+
+#. module: account_asset
+#: model:ir.actions.act_window,name:l10n_lv_account_asset.action_asset_modify_tax
+msgid "Modify Asset"
+msgstr "Mainīt pamatlīdzekli"
 
 #. module: account_asset
 #: field:account.asset.asset,salvage_value:0
