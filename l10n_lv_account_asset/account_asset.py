@@ -296,8 +296,18 @@ class account_asset_asset(osv.osv):
         res = super(account_asset_asset, self).onchange_category_id(cr, uid, ids, category_id, context=context)
         asset_categ_obj = self.pool.get('account.asset.category')
         if category_id:
-            category_obj = asset_categ_obj.browse(cr, uid, category_id, context=context)
-            res['value'].update({'next_month': category_obj.next_month})
+            category = asset_categ_obj.browse(cr, uid, category_id, context=context)
+            res['value'].update({
+                'next_month': category.next_month,
+                'method_tax': category.method_tax,
+                'method_time_tax': category.method_time_tax,
+                'prorata_tax': category.prorata_tax,
+                'next_month_tax': category.next_month_tax,
+                'method_number_tax': category.method_number_tax,
+                'method_period_tax': category.method_period_tax,
+                'method_progress_factor_tax': category.method_progress_factor_tax,
+                'method_end_tax': category.method_end_tax
+            })
         return res
 
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context=None, count=False):
