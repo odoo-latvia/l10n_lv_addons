@@ -238,6 +238,7 @@ class account_asset_asset(osv.osv):
         'next_month': fields.boolean('Compute from Next Month', readonly=True, states={'draft':[('readonly',False)]}, help='Indicates that the first depreciation entry for this asset has to be done from the start of the next month following the month of the purchase date.'),
         'confirmation_date': fields.date('Date Confirmed'),
         'close_date': fields.date('Date Closed'),
+        'accumulated_depreciation': fields.float('Accumulated Depreciation', readonly=True, states={'draft':[('readonly',False)]}),
         # depreciation for taxes:
         'method_tax': fields.selection([('linear','Linear'),('degressive','Degressive')], 'Computation Method', required=True, readonly=True, states={'draft':[('readonly',False)]}, help="Choose the method to use to compute the amount of depreciation lines.\n"\
             "  * Linear: Calculated on basis of: Gross Value / Number of Depreciations\n" \
@@ -252,6 +253,7 @@ class account_asset_asset(osv.osv):
         'method_period_tax': fields.integer('Number of Months in a Period', required=True, readonly=True, states={'draft':[('readonly',False)]}, help="The amount of time between two depreciations, in months"),
         'method_progress_factor_tax': fields.float('Degressive Factor', readonly=True, states={'draft':[('readonly',False)]}),
         'method_end_tax': fields.date('Ending Date', readonly=True, states={'draft':[('readonly',False)]}),
+        'accumulated_depreciation_tax': fields.float('Accumulated Depreciation', readonly=True, states={'draft':[('readonly',False)]}),
     }
 
     _defaults = {

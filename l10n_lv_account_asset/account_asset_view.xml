@@ -89,6 +89,7 @@
                             <field name="method_period"/>
                             <field name="method_progress_factor" attrs="{'invisible':[('method','=','linear')], 'required':[('method','=','degressive')]}"/>
                             <field name="method_end" attrs="{'required': [('method_time','=','end')], 'invisible':[('method_time','=','number')]}"/>
+                            <field name="accumulated_depreciation"/>
                         </group>
                         <group string="For Taxes">
                             <field name="method_tax"/>
@@ -103,6 +104,7 @@
                             <field name="method_period_tax"/>
                             <field name="method_progress_factor_tax" attrs="{'invisible':[('method_tax','=','linear')], 'required':[('method_tax','=','degressive')]}"/>
                             <field name="method_end_tax" attrs="{'required': [('method_time_tax','=','end')], 'invisible':[('method_time_tax','=','number')]}"/>
+                            <field name="accumulated_depreciation_tax"/>
                         </group>
                     </group>
                 </xpath>
@@ -138,13 +140,13 @@
                         </group>
                     </group>
                     <group>
-                        <group>
+                        <group string="For Company">
                             <field name="method_time"/>
                             <field name="method_number" attrs="{'invisible':[('method_time','=','end')]}"/>
                             <field name="method_period"/>
                             <field name="method_end" attrs="{'invisible':[('method_time','=','number')]}"/>
                         </group>
-                        <group>
+                        <group string="For Taxes">
                             <field name="method_time_tax"/>
                             <field name="method_number_tax" attrs="{'invisible':[('method_time_tax','=','end')]}"/>
                             <field name="method_period_tax"/>
