@@ -118,7 +118,6 @@ class asset_modify(osv.osv_memory):
                 node_mpt_div[1].set('attrs',str({'invisible': 1}))
                 node_mpt_div[1].set('modifiers',json.dumps({'invisible': 1}))
             res['arch'] = ET.tostring(doc, encoding='utf8', method='xml')
-            print res['arch']
         return res
 
     def modify(self, cr, uid, ids, context=None):
