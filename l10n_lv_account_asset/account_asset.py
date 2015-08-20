@@ -27,6 +27,8 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from openerp.osv import osv, fields
 from openerp import SUPERUSER_ID
+import openerp.addons.decimal_precision as dp
+from openerp.tools.translate import _
 
 class account_asset_category(osv.osv):
     _inherit = 'account.asset.category'
@@ -226,7 +228,7 @@ class account_asset_asset(osv.osv):
         # returns a wizard for close_date setting:
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Set Date Closed for Account Asset',
+            'name': _('Set Date Closed for Account Asset'),
             'view_mode': 'form',
             'view_type': 'form',
             'res_model': 'account.asset.set.close.date',
@@ -254,6 +256,7 @@ class account_asset_asset(osv.osv):
         'method_progress_factor_tax': fields.float('Degressive Factor', readonly=True, states={'draft':[('readonly',False)]}),
         'method_end_tax': fields.date('Ending Date', readonly=True, states={'draft':[('readonly',False)]}),
         'accumulated_depreciation_tax': fields.float('Accumulated Depreciation', readonly=True, states={'draft':[('readonly',False)]}),
+        'depreciation_tax_line_ids': fields.one2many('account.asset.depreciation_tax.line', 'asset_id', 'Depreciation Tax Lines', readonly=True, states={'draft':[('readonly',False)],'open':[('readonly',False)]}),
     }
 
     _defaults = {
@@ -339,7 +342,7 @@ class account_asset_asset_depreciation_line(osv.osv):
         created_move_ids = []
         asset_ids = []
         for line in self.browse(cr, uid, ids, context=context):
-            depreciation_date = line.depreciation_date or time.strftime('%Y-%m-%d') # depreciation_date from line
+            depreciation_date = line.depreciation_date or time.strftime('%Y-%m-%d') #---- depreciation_date from line
             period_ids = period_obj.find(cr, uid, depreciation_date, context=context)
             company_currency = line.asset_id.company_id.currency_id.id
             current_currency = line.asset_id.currency_id.id
@@ -391,19 +394,131 @@ class account_asset_asset_depreciation_line(osv.osv):
             self.write(cr, uid, line.id, {'move_id': move_id}, context=context)
             created_move_ids.append(move_id)
             asset_ids.append(line.asset_id.id)
-        asset_close_ids = [] # list of closable asset ids
+        asset_close_ids = [] #---- list of closable asset ids
+        asset_tax_depr_obj = self.pool.get('account.asset.depreciation_tax.line') #---- tax line object
         # we re-evaluate the assets to determine whether we can close them
         for asset in asset_obj.browse(cr, uid, list(set(asset_ids)), context=context):
-            if currency_obj.is_zero(cr, uid, asset.currency_id, asset.value_residual):
+            #---- check if tax depreciation is done:
+            draft_asset_tax_depr_ids = asset_tax_depr_obj.search(cr, uid, [('asset_id','=',asset.id), ('move_id','=',False)], context=context)
+            if currency_obj.is_zero(cr, uid, asset.currency_id, asset.value_residual) and (not draft_asset_tax_depr_ids):
                 asset.write({'state': 'close'})
-                asset_close_ids.append(asset.id) # add asset to closable list
-        # returns closing date setting wizard if closable asset ids exist:
+                asset_close_ids.append(asset.id) #---- add asset to closable list
+        #---- returns closing date setting wizard if closable asset ids exist:
         if asset_close_ids:
             ctx = context.copy()
             ctx.update({'active_ids': asset_close_ids})
             return {
                 'type': 'ir.actions.act_window',
-                'name': 'Set Date Closed for Account Asset',
+                'name': _('Set Date Closed for Account Asset'),
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_model': 'account.asset.set.close.date',
+                'target': 'new',
+                'context': ctx,
+            }
+        return created_move_ids
+
+class account_asset_depreciation_tax_line(osv.osv):
+    _name = 'account.asset.depreciation_tax.line'
+    _description = 'Asset tax depreciation line'
+
+    def _get_move_check(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        for line in self.browse(cr, uid, ids, context=context):
+            res[line.id] = bool(line.move_id)
+        return res
+
+    _columns = {
+        'name': fields.char('Depreciation Name', required=True, select=1),
+        'sequence': fields.integer('Sequence', required=True),
+        'asset_id': fields.many2one('account.asset.asset', 'Asset', required=True, ondelete='cascade'),
+        'parent_state': fields.related('asset_id', 'state', type='char', string='State of Asset'),
+        'amount': fields.float('Current Depreciation', digits_compute=dp.get_precision('Account'), required=True),
+        'remaining_value': fields.float('Next Period Depreciation', digits_compute=dp.get_precision('Account'),required=True),
+        'depreciated_value': fields.float('Amount Already Depreciated', required=True),
+        'depreciation_date': fields.date('Depreciation Date', select=1),
+        'move_id': fields.many2one('account.move', 'Depreciation Entry'),
+        'move_check': fields.function(_get_move_check, method=True, type='boolean', string='Posted', store=True)
+    }
+
+    def create_move(self, cr, uid, ids, context=None):
+        context = dict(context or {})
+        can_close = False
+        asset_obj = self.pool.get('account.asset.asset')
+        period_obj = self.pool.get('account.period')
+        move_obj = self.pool.get('account.move')
+        move_line_obj = self.pool.get('account.move.line')
+        currency_obj = self.pool.get('res.currency')
+        created_move_ids = []
+        asset_ids = []
+        for line in self.browse(cr, uid, ids, context=context):
+            depreciation_date = line.depreciation_date or time.strftime('%Y-%m-%d') #---- depreciation_date from line
+            period_ids = period_obj.find(cr, uid, depreciation_date, context=context)
+            company_currency = line.asset_id.company_id.currency_id.id
+            current_currency = line.asset_id.currency_id.id
+            context.update({'date': depreciation_date})
+            amount = currency_obj.compute(cr, uid, current_currency, company_currency, line.amount, context=context)
+            sign = (line.asset_id.category_id.journal_id.type == 'purchase' and 1) or -1
+            asset_name = line.asset_id.name
+            reference = line.name
+            move_vals = {
+                'name': asset_name,
+                'date': depreciation_date,
+                'ref': reference,
+                'period_id': period_ids and period_ids[0] or False,
+                'journal_id': line.asset_id.category_id.journal_id.id,
+                }
+            move_id = move_obj.create(cr, uid, move_vals, context=context)
+            journal_id = line.asset_id.category_id.journal_id.id
+            partner_id = line.asset_id.partner_id.id
+            move_line_obj.create(cr, uid, {
+                'name': asset_name,
+                'ref': reference,
+                'move_id': move_id,
+                'account_id': line.asset_id.category_id.account_depreciation_tax_id.id,
+                'debit': 0.0,
+                'credit': amount,
+                'period_id': period_ids and period_ids[0] or False,
+                'journal_id': journal_id,
+                'partner_id': partner_id,
+                'currency_id': company_currency != current_currency and  current_currency or False,
+                'amount_currency': company_currency != current_currency and - sign * line.amount or 0.0,
+                'date': depreciation_date,
+            })
+            move_line_obj.create(cr, uid, {
+                'name': asset_name,
+                'ref': reference,
+                'move_id': move_id,
+                'account_id': line.asset_id.category_id.account_expense_depreciation_id.id,
+                'credit': 0.0,
+                'debit': amount,
+                'period_id': period_ids and period_ids[0] or False,
+                'journal_id': journal_id,
+                'partner_id': partner_id,
+                'currency_id': company_currency != current_currency and  current_currency or False,
+                'amount_currency': company_currency != current_currency and sign * line.amount or 0.0,
+                'analytic_account_id': line.asset_id.category_id.account_analytic_id.id,
+                'date': depreciation_date,
+                'asset_id': line.asset_id.id
+            })
+            self.write(cr, uid, line.id, {'move_id': move_id}, context=context)
+            created_move_ids.append(move_id)
+            asset_ids.append(line.asset_id.id)
+        asset_close_ids = [] # list of closable asset ids
+        # we re-evaluate the assets to determine whether we can close them
+        for asset in asset_obj.browse(cr, uid, list(set(asset_ids)), context=context):
+            # check if tax depreciation is done:
+            draft_asset_tax_depr_ids = self.search(cr, uid, [('asset_id','=',asset.id), ('move_id','=',False)], context=context)
+            if currency_obj.is_zero(cr, uid, asset.currency_id, asset.value_residual) and (not draft_asset_tax_depr_ids):
+                asset.write({'state': 'close'})
+                asset_close_ids.append(asset.id) # add asset to closable
+        # return closing date setting wizard if closable asset ids exist:
+        if asset_close_ids:
+            ctx = context.copy()
+            ctx.update({'active_ids': asset_close_ids})
+            return {
+                'type': 'ir.actions.act_window',
+                'name': _('Set Date Closed for Account Asset'),
                 'view_mode': 'form',
                 'view_type': 'form',
                 'res_model': 'account.asset.set.close.date',

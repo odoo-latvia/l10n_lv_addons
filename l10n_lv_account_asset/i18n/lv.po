@@ -191,6 +191,11 @@ msgstr "Laika periods starp divām nolietojuma atskaitīšanas reizēm mēnešos
 msgid "Depreciation Date"
 msgstr "Nolietojuma datums"
 
+#. module: l10n_lv_account_asset
+#: field:account.asset.depreciation_tax.line,depreciation_date:0
+msgid "Depreciation Date"
+msgstr "Nolietojuma datums"
+
 #. module: account_asset
 #: constraint:account.asset.asset:0
 msgid "Error ! You cannot create recursive assets."
@@ -232,6 +237,11 @@ msgstr "Piezīmes"
 
 #. module: account_asset
 #: field:account.asset.depreciation.line,move_id:0
+msgid "Depreciation Entry"
+msgstr "Nolietojuma ieraksts"
+
+#. module: l10n_lv_account_asset
+#: field:account.asset.depreciation_tax.line,move_id:0
 msgid "Depreciation Entry"
 msgstr "Nolietojuma ieraksts"
 
@@ -384,6 +394,11 @@ msgstr "Proporcionalitāte laikam var tikt izmantota tikai pie laika metodes \"n
 msgid "Next Period Depreciation"
 msgstr "Nākamā perioda nolietojums"
 
+#. module: l10n_lv_account_asset
+#: field:account.asset.depreciation_tax.line,remaining_value:0
+msgid "Next Period Depreciation"
+msgstr "Nākamā perioda nolietojums"
+
 #. module: account_asset
 #: help:account.asset.history,method_period:0
 msgid "Time in month between two depreciations"
@@ -454,6 +469,11 @@ msgstr "Rēķina Rinda"
 #: view:account.asset.asset:0
 msgid "Depreciation Board"
 msgstr "Nolietojuma shēma"
+
+#. module: l10n_lv_account_asset
+#: view:account.asset.asset:0
+msgid "Depreciation Board for Taxes"
+msgstr "Nolietojuma shēma nodokļu vajadzībām"
 
 #. module: account_asset
 #: field:asset.asset.report,unposted_value:0
@@ -617,8 +637,18 @@ msgstr "Aktīvs"
 msgid "State of Asset"
 msgstr "Pamatlīdzekļa stadija"
 
+#. module: l10n_lv_account_asset
+#: field:account.asset.depreciation.line,parent_state:0
+msgid "State of Asset"
+msgstr "Pamatlīdzekļa stadija"
+
 #. module: account_asset
 #: field:account.asset.depreciation.line,name:0
+msgid "Depreciation Name"
+msgstr "Nolietojuma nosaukums"
+
+#. module: l10n_lv_account_asset
+#: field:account.asset.depreciation_tax.line,name:0
 msgid "Depreciation Name"
 msgstr "Nolietojuma nosaukums"
 
@@ -752,7 +782,12 @@ msgstr "Nodokļu vajadzībām"
 #. module: account_asset
 #: field:account.asset.depreciation.line,amount:0
 msgid "Current Depreciation"
-msgstr "Kārtējais nolietojums"
+msgstr "Tekošais nolietojums"
+
+#. module: l10n_lv_account_asset
+#: field:account.asset.depreciation_tax.line,amount:0
+msgid "Current Depreciation"
+msgstr "Tekošais nolietojums"
 
 #. module: account_asset
 #: field:account.asset.asset,name:0
@@ -787,7 +822,12 @@ msgstr "Vēstures nosaukums"
 #. module: account_asset
 #: field:account.asset.depreciation.line,depreciated_value:0
 msgid "Amount Already Depreciated"
-msgstr "Jau nolietotā summa"
+msgstr "Pašreiz nolietotā summa"
+
+#. module: l10n_lv_account_asset
+#: field:account.asset.depreciation_tax.line,depreciated_value:0
+msgid "Amount Already Depreciated"
+msgstr "Pašreiz nolietotā summa"
 
 #. module: account_asset
 #: help:account.asset.asset,method:0
@@ -814,7 +854,12 @@ msgstr "Metodes izvēle nolietojuma rindu summu aprēķinam.\n"
 #: view:asset.asset.report:0
 #: field:asset.asset.report,move_check:0
 msgid "Posted"
-msgstr "Publicēts"
+msgstr "Grāmatots"
+
+#. module: l10n_lv_account_asset
+#: field:account.asset.depreciation_tax.line,move_check:0
+msgid "Posted"
+msgstr "Grāmatots"
 
 #. module: account_asset
 #: model:ir.actions.act_window,help:account_asset.action_asset_asset_report
@@ -882,6 +927,11 @@ msgstr "Pievienojiet iekšējās piezīmes šeit..."
 
 #. module: account_asset
 #: field:account.asset.depreciation.line,sequence:0
+msgid "Sequence"
+msgstr "Secība"
+
+#. module: l10n_lv_account_asset
+#: field:account.asset.depreciation_tax.line,sequence:0
 msgid "Sequence"
 msgstr "Secība"
 
@@ -1003,6 +1053,8 @@ msgstr "Pamatlīdzekļa kartiņa"
 #. module: l10n_lv_account_asset
 #: view:account.asset.set.close.date:0
 #: model:ir.model,name:l10n_lv_account_asset.model_account_asset_set_close_date
+#: code:addons/l10n_lv_account_asset/account_asset.py:231
+#, python-format
 msgid "Set Date Closed for Account Asset"
 msgstr "Pamatlīdzekļa slēgšanas datuma uzstādīšana"
 
@@ -1117,6 +1169,7 @@ msgstr "Izvēlieties datumu."
 
 #. module: l10n_lv_account_asset
 #: model:ir.model,name:l10n_lv_account_asset.model_account_asset_asset
+#: field:account.asset.depreciation_tax.line,asset_id:0
 msgid "Asset"
 msgstr "Pamatlīdzeklis"
 

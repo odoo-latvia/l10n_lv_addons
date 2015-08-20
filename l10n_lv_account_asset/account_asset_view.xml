@@ -89,7 +89,7 @@
                             <field name="method_period"/>
                             <field name="method_progress_factor" attrs="{'invisible':[('method','=','linear')], 'required':[('method','=','degressive')]}"/>
                             <field name="method_end" attrs="{'required': [('method_time','=','end')], 'invisible':[('method_time','=','number')]}"/>
-                            <field name="accumulated_depreciation"/>
+                            <field name="accumulated_depreciation" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         </group>
                         <group string="For Taxes">
                             <field name="method_tax"/>
@@ -104,10 +104,45 @@
                             <field name="method_period_tax"/>
                             <field name="method_progress_factor_tax" attrs="{'invisible':[('method_tax','=','linear')], 'required':[('method_tax','=','degressive')]}"/>
                             <field name="method_end_tax" attrs="{'required': [('method_time_tax','=','end')], 'invisible':[('method_time_tax','=','number')]}"/>
-                            <field name="accumulated_depreciation_tax"/>
+                            <field name="accumulated_depreciation_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         </group>
                     </group>
                 </xpath>
+                <page string="Depreciation Board" position="after">
+                    <page string="Depreciation Board for Taxes">
+                        <field name="depreciation_tax_line_ids">
+                            <tree string="Depreciation Tax Lines" colors="blue:(move_check == False);black:(move_check == True)">
+                                <field name="depreciation_date"/>
+                                <field name="sequence" invisible="1"/>
+                                <field name="depreciated_value" readonly="1"/>
+                                <field name="amount"/>
+                                <field name="remaining_value" readonly="1"/>
+                                <field name="move_check"/>
+                                <field name="parent_state" invisible="1"/>
+                                <button name="create_move" attrs="{'invisible':['|',('move_check','!=',False),('parent_state','!=','open')]}" icon="gtk-execute" string="Create Move" type="object"/>
+                            </tree>
+                            <form string="Depreciation Tax Lines"> 
+                                <group>
+                                    <group>
+                                        <field name="asset_id" invisible="1"/>
+                                        <field name="parent_state" invisible="1"/>
+                                        <field name="name"/>
+                                        <field name="amount"/>
+                                        <field name="move_id"/>
+                                        <field name="move_check"/>
+                                        <field name="parent_state" invisible="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="sequence"/>
+                                        <field name="depreciation_date"/>
+                                        <field name="depreciated_value" readonly="1"/>
+                                        <field name="remaining_value" readonly="1"/>
+                                    </group>
+                                </group>
+                            </form>
+                        </field>
+                    </page>
+                </page>
             </field>
         </record>
 
