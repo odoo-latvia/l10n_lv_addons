@@ -217,14 +217,15 @@ class account_asset_asset(osv.osv):
     def validate(self, cr, uid, ids, context={}):
         if context is None:
             context = {}
-        return self.write(cr, uid, ids, {
-            'state':'open',
-            # confirmation_date is set and Depreciation Board re-computed:
-            'confirmation_date': time.strftime('%Y-%m-%d'),
-        }, context) and self.compute_depreciation_board(cr, uid, ids, context=context)
+        # confirmation_date is set and Depreciation Board re-computed:
+        self.write(cr, uid, ids, {
+            'confirmation_date': time.strftime('%Y-%m-%d')
+        }, context=context)
+        self.compute_depreciation_board(cr, uid, ids, context=context)
+        return super(account_asset_asset, self).validate(cr, uid, ids, context=context)
 
     def set_to_close(self, cr, uid, ids, context=None):
-        self.write(cr, uid, ids, {'state': 'close'}, context=context)
+        super(account_asset_asset, self).set_to_close(cr, uid, ids, context=context)
         # returns a wizard for close_date setting:
         return {
             'type': 'ir.actions.act_window',
@@ -234,7 +235,7 @@ class account_asset_asset(osv.osv):
             'res_model': 'account.asset.set.close.date',
             'target': 'new',
             'context': context,
-            }
+        }
 
     _columns = {
         'next_month': fields.boolean('Compute from Next Month', readonly=True, states={'draft':[('readonly',False)]}, help='Indicates that the first depreciation entry for this asset has to be done from the start of the next month following the month of the purchase date.'),
