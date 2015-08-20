@@ -49,6 +49,11 @@ msgstr "Beigu datums (nod.)"
 msgid "Residual Value"
 msgstr "Atlikusī vērtība"
 
+#. module: l10n_lv_account_asset
+#: field:account.asset.asset,value_residual:0
+msgid "Residual Value"
+msgstr "Atlikusī vērtība"
+
 #. module: account_asset
 #: field:account.asset.category,account_expense_depreciation_id:0
 msgid "Depr. Expense Account"

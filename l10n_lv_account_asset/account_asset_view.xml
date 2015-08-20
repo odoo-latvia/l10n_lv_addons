@@ -71,7 +71,6 @@
                             <field name="salvage_value" widget="monetary" options="{'currency_field': 'currency_id'}" on_change="onchange_purchase_salvage_value(purchase_value, salvage_value)"/>
                         </group>
                         <group>
-                            <field name="value_residual" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                             <field name="partner_id"/>
                         </group>
                     </group>
@@ -90,6 +89,7 @@
                             <field name="method_progress_factor" attrs="{'invisible':[('method','=','linear')], 'required':[('method','=','degressive')]}"/>
                             <field name="method_end" attrs="{'required': [('method_time','=','end')], 'invisible':[('method_time','=','number')]}"/>
                             <field name="accumulated_depreciation" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="value_residual" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         </group>
                         <group string="For Taxes">
                             <field name="method_tax"/>

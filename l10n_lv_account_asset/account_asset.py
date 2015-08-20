@@ -237,11 +237,35 @@ class account_asset_asset(osv.osv):
             'context': context,
         }
 
+    def _amount_residual(self, cr, uid, ids, name, args, context=None):
+        depr_l_obj = self.pool.get('account.asset.depreciation.line')
+        depr_l_ids = depr_l_obj.search(cr, uid, [('asset_id','in',ids)], context=context)
+        a_ml_ids = []
+        for l in depr_l_obj.browse(cr, uid, depr_l_ids, context=context):
+            for ml in l.move_id.line_id:
+                if ml.asset_id:
+                    a_ml_ids.append(ml.id)
+        res = {}
+        if a_ml_ids:
+            cr.execute("""SELECT
+                    l.asset_id as id, SUM(abs(l.debit-l.credit)) AS amount
+                FROM
+                    account_move_line l
+                WHERE
+                    l.id IN %s GROUP BY l.asset_id """, (tuple(a_ml_ids),))
+            res=dict(cr.fetchall())
+        for asset in self.browse(cr, uid, ids, context):
+            res[asset.id] = asset.purchase_value - res.get(asset.id, 0.0) - asset.salvage_value
+        for id in ids:
+            res.setdefault(id, 0.0)
+        return res
+
     _columns = {
         'next_month': fields.boolean('Compute from Next Month', readonly=True, states={'draft':[('readonly',False)]}, help='Indicates that the first depreciation entry for this asset has to be done from the start of the next month following the month of the purchase date.'),
         'confirmation_date': fields.date('Date Confirmed'),
         'close_date': fields.date('Date Closed'),
         'accumulated_depreciation': fields.float('Accumulated Depreciation', readonly=True, states={'draft':[('readonly',False)]}),
+        'value_residual': fields.function(_amount_residual, method=True, digits_compute=dp.get_precision('Account'), string='Residual Value'),
         # depreciation for taxes:
         'method_tax': fields.selection([('linear','Linear'),('degressive','Degressive')], 'Computation Method', required=True, readonly=True, states={'draft':[('readonly',False)]}, help="Choose the method to use to compute the amount of depreciation lines.\n"\
             "  * Linear: Calculated on basis of: Gross Value / Number of Depreciations\n" \
