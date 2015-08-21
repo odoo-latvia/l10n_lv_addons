@@ -105,6 +105,7 @@
                             <field name="method_progress_factor_tax" attrs="{'invisible':[('method_tax','=','linear')], 'required':[('method_tax','=','degressive')]}"/>
                             <field name="method_end_tax" attrs="{'required': [('method_time_tax','=','end')], 'invisible':[('method_time_tax','=','number')]}"/>
                             <field name="accumulated_depreciation_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="value_residual_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         </group>
                     </group>
                 </xpath>
@@ -141,6 +142,7 @@
                                 </group>
                             </form>
                         </field>
+                        <button type="object" name="compute_depreciation_board_tax" string="Compute" icon="terp-stock_format-scientific" colspan="2" attrs="{'invisible':[('state','=','close')]}"/>
                     </page>
                 </page>
             </field>
