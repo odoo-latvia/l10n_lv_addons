@@ -120,27 +120,23 @@ class account_asset_asset(osv.osv):
 
     def _compute_board_amount(self, cr, uid, asset, i, residual_amount, amount_to_depr, undone_dotation_number, posted_depreciation_line_ids, total_days, depreciation_date, context=None):
         amount = super(account_asset_asset, self)._compute_board_amount(cr, uid, asset, i, residual_amount, amount_to_depr, undone_dotation_number, posted_depreciation_line_ids, total_days, depreciation_date, context=context)
-        if asset.next_month:
-            amount = 0
-            if i == undone_dotation_number:
-                amount = residual_amount
-            else:
-                if asset.method == 'linear':
-                    if asset.method_period == 12:
-                        amount = amount_to_depr / asset.method_number
-                        months = 12 - float(depreciation_date.strftime('%m')) + 1
-                        if i == 1:
-                            amount = (amount_to_depr / (asset.method_period * asset.method_number)) * months
-                        elif i == undone_dotation_number:
-                            amount = (amount_to_depr / (asset.method_period * asset.method_number)) * 12
-                elif asset.method == 'degressive':
-                    if asset.next_month and asset.method_period == 12:
-                        amount = amount_to_depr / asset.method_number
-                        months = asset.method_period - float(depreciation_date.strftime('%m')) + 1
-                        if i == 1:
-                            amount = (amount_to_depr / (asset.method_period * asset.method_number)) * months
-                        elif i == undone_dotation_number:
-                            amount = (amount_to_depr / (asset.method_period * asset.method_number)) * 12
+        if asset.next_month and (i != undone_dotation_number):
+            if asset.method == 'linear':
+                if asset.method_period == 12:
+                    amount = amount_to_depr / asset.method_number
+                    months = 12 - float(depreciation_date.strftime('%m')) + 1
+                    if i == 1:
+                        amount = (amount_to_depr / (asset.method_period * asset.method_number)) * months
+                    elif i == undone_dotation_number:
+                        amount = (amount_to_depr / (asset.method_period * asset.method_number)) * 12
+            elif asset.method == 'degressive':
+                if asset.next_month and asset.method_period == 12:
+                    amount = amount_to_depr / asset.method_number
+                    months = asset.method_period - float(depreciation_date.strftime('%m')) + 1
+                    if i == 1:
+                        amount = (amount_to_depr / (asset.method_period * asset.method_number)) * months
+                    elif i == undone_dotation_number:
+                        amount = (amount_to_depr / (asset.method_period * asset.method_number)) * 12
         return amount
 
     def _compute_board_undone_dotation_nb(self, cr, uid, asset, depreciation_date, total_days, context=None):
@@ -637,7 +633,7 @@ class account_asset_depreciation_tax_line(osv.osv):
                 'ref': reference,
                 'period_id': period_ids and period_ids[0] or False,
                 'journal_id': line.asset_id.category_id.journal_id.id,
-                }
+            }
             move_id = move_obj.create(cr, uid, move_vals, context=context)
             journal_id = line.asset_id.category_id.journal_id.id
             partner_id = line.asset_id.partner_id.id
@@ -653,7 +649,7 @@ class account_asset_depreciation_tax_line(osv.osv):
                 'partner_id': partner_id,
                 'currency_id': company_currency != current_currency and  current_currency or False,
                 'amount_currency': company_currency != current_currency and - sign * line.amount or 0.0,
-                'date': depreciation_date,
+                'date': depreciation_date
             })
             move_line_obj.create(cr, uid, {
                 'name': asset_name,
