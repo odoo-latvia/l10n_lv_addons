@@ -319,6 +319,64 @@ class hr_payslip(osv.osv):
                             wd_line_obj.create(cr, uid, wd_vals, context=context)
         return True
 
+    def compute_days(self, cr, uid, ids, date_from, date_to, context=None):
+        date_from_list = date_from.split('-')
+        year_from = int(date_from_list[0])
+        month_from = int(date_from_list[1])
+        day_from = int(date_from_list[2])
+
+        date_to_list = date_to.split('-')
+        year_to = int(date_to_list[0])
+        month_to = int(date_to_list[1])
+        day_to = int(date_to_list[2])
+
+        year = year_from
+        month = month_from
+        day = day_from
+
+        days = 1
+
+        while (year != year_to or month != month_to or day != day_to):
+            days += 1
+            if month == 12:
+                if day == 31:
+                    year += 1
+                    month = 1
+                    day = 1
+                    continue
+                else:
+                    day += 1
+            if month == 2:
+                if int(str(year)[-2:]) % 4 == 0:
+                    if day == 29:
+                        month += 1
+                        day = 1
+                        continue
+                    else:
+                        day += 1
+                if int(str(year)[-2:]) % 4 != 0:
+                    if day == 28:
+                        month += 1
+                        day = 1
+                        continue
+                    else:
+                        day += 1
+            if month in [4, 6, 9, 11]:
+                if day == 30:
+                    month += 1
+                    day = 1
+                    continue
+                else:
+                    day += 1
+            if month in [1, 3, 5, 7, 8, 10]:
+                if day == 31:
+                    month += 1
+                    day = 1
+                    continue
+                else:
+                    day += 1
+        return days
+
 class hr_salary_rule(osv.osv):
     _inherit = 'hr.salary.rule'
 
