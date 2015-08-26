@@ -239,7 +239,7 @@ class hr_payslip(osv.osv):
             day_to = datetime.datetime.strptime(date_to,"%Y-%m-%d")
             nb_of_days = (day_to - day_from).days + 1
             lt_obj = self.pool.get('hr.holidays.status')
-            excl_t_ids = lt_obj.search(cr, uid, [('code','in',['LEGAL','OFFICIAL','SICK','SICK75','SICK80'])], context=context)
+            excl_t_ids = lt_obj.search(cr, uid, [('code','in',['LEGAL','OFFICIAL','SICK','SICK75','SICK80','BEZA'])], context=context)
             holiday_obj = self.pool.get('hr.holidays')
             abs_days = 0.0
             for day in range(0, nb_of_days):
