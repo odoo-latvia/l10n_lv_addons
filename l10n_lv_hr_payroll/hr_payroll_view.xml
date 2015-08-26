@@ -23,6 +23,9 @@
                 <field name="name" position="after">
                     <field name="code"/>
                 </field>
+                <field name="active" position="after">
+                    <field name="reduces_tax_relief"/>
+                </field>
             </field>
         </record>
 
@@ -44,6 +47,9 @@
             <field name="arch" type="xml">
                 <field name="name" position="after">
                     <field name="code"/>
+                </field>
+                <field name="limit" position="after">
+                    <field name="reduces_tax_relief"/>
                 </field>
             </field>
         </record>

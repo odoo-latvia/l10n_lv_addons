@@ -51,6 +51,11 @@ msgid "Leave Type Code"
 msgstr "Prombūtnes veida kods"
 
 #. module: l10n_lv_hr_payroll
+#: field:hr.holidays.status,reduces_tax_relief:0
+msgid "Reduces Tax Relief"
+msgstr "Samazina nodokļu atvieglojumus"
+
+#. module: l10n_lv_hr_payroll
 #: model:ir.model,name:l10n_lv_hr_payroll.model_hr_payslip
 msgid "Pay Slip"
 msgstr "Algas Lapa"

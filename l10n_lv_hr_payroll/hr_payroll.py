@@ -33,7 +33,8 @@ class hr_holidays_status(osv.osv):
     _inherit = "hr.holidays.status"
 
     _columns = {
-        'code': fields.char('Leave Type Code')
+        'code': fields.char('Leave Type Code'),
+        'reduces_tax_relief': fields.boolean('Reduces Tax Relief')
     }
 
 class hr_employee(osv.osv):
@@ -238,14 +239,12 @@ class hr_payslip(osv.osv):
             day_from = datetime.datetime.strptime(date_from,"%Y-%m-%d")
             day_to = datetime.datetime.strptime(date_to,"%Y-%m-%d")
             nb_of_days = (day_to - day_from).days + 1
-            lt_obj = self.pool.get('hr.holidays.status')
-            excl_t_ids = lt_obj.search(cr, uid, [('code','in',['LEGAL','OFFICIAL','SICK','SICK75','SICK80','BEZA'])], context=context)
             holiday_obj = self.pool.get('hr.holidays')
             abs_days = 0.0
             for day in range(0, nb_of_days):
                 comp_date = day_from + timedelta(days=day)
                 comp_day = comp_date.strftime("%Y-%m-%d")
-                holiday_ids = holiday_obj.search(cr, uid, [('holiday_status_id','not in',excl_t_ids), ('state','=','validate'),('employee_id','=',employee_id),('type','=','remove'),('date_from','<=',comp_day),('date_to','>=',comp_day)])
+                holiday_ids = holiday_obj.search(cr, uid, [('holiday_status_id.reduces_tax_relief','=',True), ('state','=','validate'),('employee_id','=',employee_id),('type','=','remove'),('date_from','<=',comp_day),('date_to','>=',comp_day)])
                 if holiday_ids:
                     abs_days += 1.0
             found = False
