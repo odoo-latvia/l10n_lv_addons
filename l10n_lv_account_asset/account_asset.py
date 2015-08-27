@@ -187,19 +187,21 @@ class account_asset_asset(osv.osv):
                 if asset.state == 'open':
                     #---- depreciation_date = 1st of the next month after confirmation month
                     confirmation_date = datetime.strptime(asset.confirmation_date, '%Y-%m-%d')
-                    if confirmation_date.month < 12:
-                        month = confirmation_date.month + 1
+                    month = confirmation_date.month + 1
+                    year = confirmation_date.year
                     if confirmation_date.month == 12:
                         month = 1
-                    depreciation_date = datetime(confirmation_date.year, month, 1)
+                        year += 1
+                    depreciation_date = datetime(year, month, 1)
                 else:
                     #---- depreciation_date = 1st of the next month after purchase month
                     purchase_date = datetime.strptime(asset.purchase_date, '%Y-%m-%d')
-                    if purchase_date.month < 12:
-                        month = purchase_date.month + 1
+                    month = purchase_date.month + 1
+                    year = purchase_date.year
                     if purchase_date.month == 12:
                         month = 1
-                    depreciation_date = datetime(purchase_date.year, month, 1)
+                        year += 1
+                    depreciation_date = datetime(year, month, 1)
             else:
                 # depreciation_date = 1st January of purchase year
                 purchase_date = datetime.strptime(asset.purchase_date, '%Y-%m-%d')
@@ -339,19 +341,21 @@ class account_asset_asset(osv.osv):
                 if asset.state == 'open':
                     #---- depreciation_date = 1st of the next month after confirmation month
                     confirmation_date = datetime.strptime(asset.confirmation_date, '%Y-%m-%d')
-                    if confirmation_date.month < 12:
-                        month = confirmation_date.month + 1
+                    month = confirmation_date.month + 1
+                    year = confirmation_date.year
                     if confirmation_date.month == 12:
                         month = 1
-                    depreciation_date = datetime(confirmation_date.year, month, 1)
+                        year += 1
+                    depreciation_date = datetime(year, month, 1)
                 else:
                     #---- depreciation_date = 1st of the next month after purchase month
                     purchase_date = datetime.strptime(asset.purchase_date, '%Y-%m-%d')
-                    if purchase_date.month < 12:
-                        month = purchase_date.month + 1
+                    month = purchase_date.month + 1
+                    year = purchase_date.year
                     if purchase_date.month == 12:
                         month = 1
-                    depreciation_date = datetime(purchase_date.year, month, 1)
+                        year += 1
+                    depreciation_date = datetime(year, month, 1)
             else:
                 # depreciation_date = 1st January of purchase year
                 purchase_date = datetime.strptime(asset.purchase_date, '%Y-%m-%d')
@@ -545,6 +549,54 @@ class account_asset_asset(osv.osv):
                 'method_period_tax': category.method_period_tax,
                 'method_progress_factor_tax': category.method_progress_factor_tax,
                 'method_end_tax': category.method_end_tax
+            })
+        return res
+
+    def onchange_method_progress_factor(self, cr, uid, ids, method_progress_factor, value_residual, method, method_time, method_period, currency_id, purchase_date, confirmation_date, state, prorata, next_month, context=None):
+        res = {'value': {}}
+        if method == 'degressive':
+            method_number = 0
+            cur_obj = self.pool.get('res.currency')
+            data_obj = self.pool.get('ir.model.data')
+            eur_id = data_obj.get_object_reference(cr, uid, 'base', 'EUR')[1]
+            amount_res = cur_obj.compute(cr, uid, currency_id, eur_id, value_residual, context=context)
+            value_res = value_residual
+            if state == 'open':
+                depreciation_date = datetime.strptime(confirmation_date,'%Y-%m-%d')
+            else:
+                depreciation_date = datetime.strptime(purchase_date, '%Y-%m-%d')
+            if next_month:
+                y = depreciation_date.year
+                m = depreciation_date.month + 1
+                if depreciation_date.month == 12:
+                    m = 1
+                    y += 1
+                depreciation_date = datetime(y, m, 1)
+            year = depreciation_date.year
+            month = depreciation_date.month
+            day = depreciation_date.day
+            total_days = (year % 4) and 365 or 366
+            while amount_res > 1.41:
+                method_number += 1
+                amount = value_res * (method_progress_factor * 2)
+                if prorata:
+                    days = total_days - float(depreciation_date.strftime('%j'))
+                    if method_number == 1:
+                        amount = (value_res * (method_progress_factor * 2)) / total_days * days
+                if next_month and method_period == 12:
+                    months = method_period - float(depreciation_date.strftime('%m')) + 1
+                    if method_number == 1:
+                        amount = (value_res * (method_progress_factor * 2) * months) / method_period
+                amount_cur = cur_obj.compute(cr, uid, currency_id, eur_id, amount, context=context)
+                value_res -= amount
+                amount_res -= amount_cur
+                depreciation_date = (datetime(year, month, day) + relativedelta(months=+method_period))
+                day = depreciation_date.day
+                month = depreciation_date.month
+                year = depreciation_date.year
+            res['value'].update({
+                'method_number': method_number,
+                'method_end': datetime.strftime(depreciation_date, '%Y-%m-%d')
             })
         return res
 

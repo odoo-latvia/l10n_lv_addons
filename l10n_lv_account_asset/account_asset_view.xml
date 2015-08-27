@@ -86,7 +86,7 @@
                             <field name="next_month" on_change="onchange_next_month(next_month)"/>
                             <field name="method_number" attrs="{'invisible':[('method_time','=','end')], 'required':[('method_time','=','number')]}"/>
                             <field name="method_period"/>
-                            <field name="method_progress_factor" attrs="{'invisible':[('method','=','linear')], 'required':[('method','=','degressive')]}"/>
+                            <field name="method_progress_factor" attrs="{'invisible':[('method','=','linear')], 'required':[('method','=','degressive')]}" on_change="onchange_method_progress_factor(method_progress_factor, value_residual, method, method_time, method_period, currency_id, purchase_date, confirmation_date, state, prorata, next_month)"/>
                             <field name="method_end" attrs="{'required': [('method_time','=','end')], 'invisible':[('method_time','=','number')]}"/>
                             <field name="accumulated_depreciation" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                             <field name="value_residual" widget="monetary" options="{'currency_field': 'currency_id'}"/>
