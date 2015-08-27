@@ -118,24 +118,47 @@ class account_asset_asset(osv.osv):
                 res[asset.id] = asset.purchase_date
         return res
 
+    #---- re-written to include next_month:
     def _compute_board_amount(self, cr, uid, asset, i, residual_amount, amount_to_depr, undone_dotation_number, posted_depreciation_line_ids, total_days, depreciation_date, context=None):
-        amount = super(account_asset_asset, self)._compute_board_amount(cr, uid, asset, i, residual_amount, amount_to_depr, undone_dotation_number, posted_depreciation_line_ids, total_days, depreciation_date, context=context)
-        if asset.next_month and (i != undone_dotation_number):
+        #by default amount = 0
+        amount = 0
+        if i == undone_dotation_number:
+            amount = residual_amount
+        else:
             if asset.method == 'linear':
-                if asset.method_period == 12:
+                amount = amount_to_depr / (undone_dotation_number - len(posted_depreciation_line_ids))
+                if asset.prorata:
+                    amount = amount_to_depr / asset.method_number
+                    days = total_days - float(depreciation_date.strftime('%j'))
+                    if i == 1:
+                        amount = (amount_to_depr / asset.method_number) / total_days * days
+                    elif i == undone_dotation_number:
+                        amount = (amount_to_depr / asset.method_number) / total_days * (total_days - days)
+                #---- if next_month:
+                if asset.next_month and asset.method_period == 12:
                     amount = amount_to_depr / asset.method_number
                     months = 12 - float(depreciation_date.strftime('%m')) + 1
                     if i == 1:
                         amount = (amount_to_depr / (asset.method_period * asset.method_number)) * months
                     elif i == undone_dotation_number:
                         amount = (amount_to_depr / (asset.method_period * asset.method_number)) * 12
+                #----
             elif asset.method == 'degressive':
+                amount = residual_amount * (asset.method_progress_factor * 2) #---- progress_factor * 2
+                if asset.prorata:
+                    days = total_days - float(depreciation_date.strftime('%j'))
+                    if i == 1:
+                        amount = (residual_amount * (asset.method_progress_factor * 2)) / total_days * days #---- progress_factor * 2
+                    elif i == undone_dotation_number:
+                        amount = (residual_amount * (asset.method_progress_factor * 2)) / total_days * (total_days - days) #---- progress_factor * 2
+                #---- if next_month:
                 if asset.next_month and asset.method_period == 12:
                     months = asset.method_period - float(depreciation_date.strftime('%m')) + 1
                     if i == 1:
-                        amount = (residual_amount * asset.method_progress_factor_tax * months) / asset.method_period_tax
+                        amount = (residual_amount * (asset.method_progress_factor * 2) * months) / asset.method_period #---- progress_factor * 2
                     elif i == undone_dotation_number:
-                        amount = (residual_amount * asset.method_progress_factor_tax * 12) / asset.method_period_tax
+                        amount = (residual_amount * (asset.method_progress_factor * 2) * 12) / asset.method_period #---- progress_factor * 2
+                #----
         return amount
 
     def _compute_board_undone_dotation_nb(self, cr, uid, asset, depreciation_date, total_days, context=None):
@@ -269,20 +292,20 @@ class account_asset_asset(osv.osv):
                     elif i == undone_dotation_number:
                         amount = (amount_to_depr / (asset.method_period_tax * asset.method_number_tax)) * 12
             elif asset.method_tax == 'degressive':
-                amount = residual_amount * asset.method_progress_factor_tax
+                amount = residual_amount * (asset.method_progress_factor_tax * 2) # progress_factor * 2
                 if asset.prorata_tax:
                     days = total_days - float(depreciation_date.strftime('%j'))
                     if i == 1:
-                        amount = (residual_amount * asset.method_progress_factor_tax) / total_days * days
+                        amount = (residual_amount * (asset.method_progress_factor_tax * 2)) / total_days * days # progress_factor * 2
                     elif i == undone_dotation_number:
-                        amount = (residual_amount * asset.method_progress_factor_tax) / total_days * (total_days - days)
+                        amount = (residual_amount * (asset.method_progress_factor_tax * 2)) / total_days * (total_days - days) # progress_factor * 2
                 # if next_month:
                 if asset.next_month_tax and asset.method_period_tax == 12:
                     months = asset.method_period_tax - float(depreciation_date.strftime('%m')) + 1
                     if i == 1:
-                        amount = (residual_amount * asset.method_progress_factor_tax * months) / asset.method_period_tax
+                        amount = (residual_amount * (asset.method_progress_factor_tax * 2) * months) / asset.method_period_tax # progress_factor * 2
                     elif i == undone_dotation_number:
-                        amount = (residual_amount * asset.method_progress_factor_tax * 12) / asset.method_period_tax
+                        amount = (residual_amount * (asset.method_progress_factor_tax * 2) * 12) / asset.method_period_tax # progress_factor * 2
         return amount
 
     def _compute_board_undone_dotation_nb_tax(self, cr, uid, asset, depreciation_date, total_days, context=None):
