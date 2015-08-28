@@ -600,6 +600,54 @@ class account_asset_asset(osv.osv):
             })
         return res
 
+    def onchange_method_progress_factor_tax(self, cr, uid, ids, method_progress_factor_tax, value_residual_tax, method_tax, method_time_tax, method_period_tax, currency_id, purchase_date, confirmation_date, state, prorata_tax, next_month_tax, context=None):
+        res = {'value': {}}
+        if method_tax == 'degressive':
+            method_number_tax = 0
+            cur_obj = self.pool.get('res.currency')
+            data_obj = self.pool.get('ir.model.data')
+            eur_id = data_obj.get_object_reference(cr, uid, 'base', 'EUR')[1]
+            amount_res = cur_obj.compute(cr, uid, currency_id, eur_id, value_residual_tax, context=context)
+            value_res = value_residual_tax
+            if state == 'open':
+                depreciation_date = datetime.strptime(confirmation_date,'%Y-%m-%d')
+            else:
+                depreciation_date = datetime.strptime(purchase_date, '%Y-%m-%d')
+            if next_month_tax:
+                y = depreciation_date.year
+                m = depreciation_date.month + 1
+                if depreciation_date.month == 12:
+                    m = 1
+                    y += 1
+                depreciation_date = datetime(y, m, 1)
+            year = depreciation_date.year
+            month = depreciation_date.month
+            day = depreciation_date.day
+            total_days = (year % 4) and 365 or 366
+            while amount_res > 1.41:
+                method_number_tax += 1
+                amount = value_res * (method_progress_factor_tax * 2)
+                if prorata_tax:
+                    days = total_days - float(depreciation_date.strftime('%j'))
+                    if method_number_tax == 1:
+                        amount = (value_res * (method_progress_factor_tax * 2)) / total_days * days
+                if next_month_tax and method_period_tax == 12:
+                    months = method_period_tax - float(depreciation_date.strftime('%m')) + 1
+                    if method_number_tax == 1:
+                        amount = (value_res * (method_progress_factor_tax * 2) * months) / method_period_tax
+                amount_cur = cur_obj.compute(cr, uid, currency_id, eur_id, amount, context=context)
+                value_res -= amount
+                amount_res -= amount_cur
+                depreciation_date = (datetime(year, month, day) + relativedelta(months=+method_period_tax))
+                day = depreciation_date.day
+                month = depreciation_date.month
+                year = depreciation_date.year
+            res['value'].update({
+                'method_number_tax': method_number_tax,
+                'method_end_tax': datetime.strftime(depreciation_date, '%Y-%m-%d')
+            })
+        return res
+
     # ----- ORM METHODS -----
 
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context=None, count=False):

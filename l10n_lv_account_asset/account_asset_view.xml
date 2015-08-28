@@ -102,7 +102,7 @@
                             <field name="next_month_tax" on_change="onchange_next_month_tax(next_month_tax)"/>
                             <field name="method_number_tax" attrs="{'invisible':[('method_time_tax','=','end')], 'required':[('method_time_tax','=','number')]}"/>
                             <field name="method_period_tax"/>
-                            <field name="method_progress_factor_tax" attrs="{'invisible':[('method_tax','=','linear')], 'required':[('method_tax','=','degressive')]}"/>
+                            <field name="method_progress_factor_tax" attrs="{'invisible':[('method_tax','=','linear')], 'required':[('method_tax','=','degressive')]}" on_change="onchange_method_progress_factor_tax(method_progress_factor_tax, value_residual_tax, method_tax, method_time_tax, method_period_tax, currency_id, purchase_date, confirmation_date, state, prorata_tax, next_month_tax)"/>
                             <field name="method_end_tax" attrs="{'required': [('method_time_tax','=','end')], 'invisible':[('method_time_tax','=','number')]}"/>
                             <field name="accumulated_depreciation_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                             <field name="value_residual_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
