@@ -441,7 +441,7 @@ class account_asset_asset(osv.osv):
                     l.id IN %s GROUP BY l.asset_id """, (tuple(a_ml_ids),))
             res=dict(cr.fetchall())
         for asset in self.browse(cr, uid, ids, context):
-            res[asset.id] = asset.purchase_value - res.get(asset.id, 0.0) - asset.salvage_value
+            res[asset.id] = asset.purchase_value - res.get(asset.id, 0.0) - asset.salvage_value - asset.accumulated_depreciation #---- accumulated_depreciation
         for id in ids:
             res.setdefault(id, 0.0)
         return res
@@ -464,7 +464,7 @@ class account_asset_asset(osv.osv):
                     l.id IN %s GROUP BY l.asset_id """, (tuple(a_ml_ids),))
             res=dict(cr.fetchall())
         for asset in self.browse(cr, uid, ids, context):
-            res[asset.id] = asset.purchase_value - res.get(asset.id, 0.0) - asset.salvage_value
+            res[asset.id] = asset.purchase_value - res.get(asset.id, 0.0) - asset.salvage_value - asset.accumulated_depreciation_tax #---- accumulated_depreciation_tax
         for id in ids:
             res.setdefault(id, 0.0)
         return res
@@ -576,6 +576,7 @@ class account_asset_asset(osv.osv):
             month = depreciation_date.month
             day = depreciation_date.day
             total_days = (year % 4) and 365 or 366
+            prev_date = depreciation_date
             while amount_res > 1.41:
                 method_number += 1
                 amount = value_res * (method_progress_factor * 2)
@@ -590,13 +591,14 @@ class account_asset_asset(osv.osv):
                 amount_cur = cur_obj.compute(cr, uid, currency_id, eur_id, amount, context=context)
                 value_res -= amount
                 amount_res -= amount_cur
+                prev_date = depreciation_date
                 depreciation_date = (datetime(year, month, day) + relativedelta(months=+method_period))
                 day = depreciation_date.day
                 month = depreciation_date.month
                 year = depreciation_date.year
             res['value'].update({
                 'method_number': method_number,
-                'method_end': datetime.strftime(depreciation_date, '%Y-%m-%d')
+                'method_end': datetime.strftime(prev_date, '%Y-%m-%d')
             })
         return res
 
@@ -624,6 +626,7 @@ class account_asset_asset(osv.osv):
             month = depreciation_date.month
             day = depreciation_date.day
             total_days = (year % 4) and 365 or 366
+            prev_date = depreciation_date
             while amount_res > 1.41:
                 method_number_tax += 1
                 amount = value_res * (method_progress_factor_tax * 2)
@@ -638,13 +641,14 @@ class account_asset_asset(osv.osv):
                 amount_cur = cur_obj.compute(cr, uid, currency_id, eur_id, amount, context=context)
                 value_res -= amount
                 amount_res -= amount_cur
+                prev_date = depreciation_date
                 depreciation_date = (datetime(year, month, day) + relativedelta(months=+method_period_tax))
                 day = depreciation_date.day
                 month = depreciation_date.month
                 year = depreciation_date.year
             res['value'].update({
                 'method_number_tax': method_number_tax,
-                'method_end_tax': datetime.strftime(depreciation_date, '%Y-%m-%d')
+                'method_end_tax': datetime.strftime(prev_date, '%Y-%m-%d')
             })
         return res
 
