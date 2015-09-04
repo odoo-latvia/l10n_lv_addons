@@ -62,6 +62,7 @@ My Company filter for Assets.
         'wizard/report_account_asset_list_view.xml',
         'wizard/account_asset_change_duration_view.xml',
         'account_asset_view.xml',
+        'security/ir.model.access.csv'
         ],
     'auto_install': False,
     'installable': True,
