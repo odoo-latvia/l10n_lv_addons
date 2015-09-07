@@ -97,6 +97,14 @@ class account_asset_asset(osv.osv):
         @param id: ids of a account.asset.asset objects
         @return: Returns a dictionary of the effective dates of the last depreciation entry made for given asset ids. If there isn't any, return the purchase date of this asset
         """
+        def first_next_month(date):
+            date_val = datetime.strptime(date, '%Y-%m-%d')
+            month = date_val.month + 1
+            year = date_val.year
+            if date_val.month == 12:
+                month = 1
+                year += 1
+            return datetime.strftime(datetime(year, month, 1), '%Y-%m-%d')
         depr_l_obj = self.pool.get('account.asset.depreciation.line')
         depr_l_ids = depr_l_obj.search(cr, uid, [('asset_id','in',ids)], context=context)
         a_ml_ids = []
@@ -115,7 +123,11 @@ class account_asset_asset(osv.osv):
         else:
             res = {}
             for asset in self.browse(cr, uid, ids, context=context):
-                res[asset.id] = asset.purchase_date
+                base_date = asset.start_date or (asset.state == 'open' and asset.confirmation_date) or asset.purchase_date
+                if asset.prorata:
+                    res[asset.id] = base_date
+                if asset.next_month:
+                    res[asset.id] = first_next_month(base_date)
         return res
 
     #---- re-written to include next_month:
@@ -167,7 +179,7 @@ class account_asset_asset(osv.osv):
             undone_dotation_number += 1
         return undone_dotation_number
 
-    #---- re-written to include next_month:
+    #---- re-written to include next_month and dates:
     def compute_depreciation_board(self, cr, uid, ids, context=None):
         depreciation_lin_obj = self.pool.get('account.asset.depreciation.line')
         currency_obj = self.pool.get('res.currency')
@@ -180,37 +192,19 @@ class account_asset_asset(osv.osv):
                 depreciation_lin_obj.unlink(cr, uid, old_depreciation_line_ids, context=context)
 
             amount_to_depr = residual_amount = asset.value_residual
-            if asset.prorata:
+            #---- next_month included
+            if asset.prorata or asset.next_month:
                 depreciation_date = datetime.strptime(self._get_last_depreciation_date(cr, uid, [asset.id], context)[asset.id], '%Y-%m-%d')
-            #---- if next_month:
-            elif asset.next_month:
-                if asset.state == 'open':
-                    #---- depreciation_date = 1st of the next month after confirmation month
-                    confirmation_date = datetime.strptime(asset.confirmation_date, '%Y-%m-%d')
-                    month = confirmation_date.month + 1
-                    year = confirmation_date.year
-                    if confirmation_date.month == 12:
-                        month = 1
-                        year += 1
-                    depreciation_date = datetime(year, month, 1)
-                else:
-                    #---- depreciation_date = 1st of the next month after purchase month
-                    purchase_date = datetime.strptime(asset.purchase_date, '%Y-%m-%d')
-                    month = purchase_date.month + 1
-                    year = purchase_date.year
-                    if purchase_date.month == 12:
-                        month = 1
-                        year += 1
-                    depreciation_date = datetime(year, month, 1)
             else:
-                # depreciation_date = 1st January of purchase year
-                purchase_date = datetime.strptime(asset.purchase_date, '%Y-%m-%d')
+                #---- depreciation_date = 1st of base date year
+                base_date = asset.start_date or (asset.state == 'open' and asset.confirmation_date) or asset.purchase_date
+                base_date_val = datetime.strptime(base_date, '%Y-%m-%d')
                 #if we already have some previous validated entries, starting date isn't 1st January but last entry + method period
                 if (len(posted_depreciation_line_ids)>0):
                     last_depreciation_date = datetime.strptime(depreciation_lin_obj.browse(cr,uid,posted_depreciation_line_ids[0],context=context).depreciation_date, '%Y-%m-%d')
                     depreciation_date = (last_depreciation_date+relativedelta(months=+asset.method_period))
                 else:
-                    depreciation_date = datetime(purchase_date.year, 1, 1)
+                    depreciation_date = datetime(base_date_val.year, base_date_val.month, 1)
             day = depreciation_date.day
             month = depreciation_date.month
             year = depreciation_date.year
@@ -471,6 +465,7 @@ class account_asset_asset(osv.osv):
 
     _columns = {
         'next_month': fields.boolean('Compute from Next Month', readonly=True, states={'draft':[('readonly',False)]}, help='Indicates that the first depreciation entry for this asset has to be done from the start of the next month following the month of the purchase date.'),
+        'start_date': fields.date('Date Depreciation Started'),
         'confirmation_date': fields.date('Date Confirmed'),
         'close_date': fields.date('Date Closed'),
         'accumulated_depreciation': fields.float('Accumulated Depreciation', readonly=True, states={'draft':[('readonly',False)]}),

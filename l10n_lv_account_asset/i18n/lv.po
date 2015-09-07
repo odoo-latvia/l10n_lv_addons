@@ -1052,6 +1052,11 @@ msgid "Date Confirmed"
 msgstr "Apstiprināšanas datums"
 
 #. module: l10n_lv_account_asset
+#: field:account.asset.asset,start_date:0
+msgid "Date Depreciation Started"
+msgstr "Nolietojuma sākuma datums"
+
+#. module: l10n_lv_account_asset
 #: view:account.asset.list.report:0
 msgid "Print a list of Assets"
 msgstr "Pamatlīdzekļu saraksta drukāšana"

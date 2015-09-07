@@ -65,6 +65,7 @@
                 </field>
                 <field name="parent_id" position="after">
                     <group col="2">
+                        <field name="start_date"/>
 						<field name="confirmation_date"/>
                     	<field name="close_date"/>
 					</group>
