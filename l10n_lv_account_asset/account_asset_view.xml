@@ -57,6 +57,12 @@
                 <field name="prorata" position="attributes">
 					<attribute name="on_change">onchange_prorata(prorata)</attribute>
                 </field> -->
+                <div class="oe_title" position="attributes">
+                    <attribute name="style">width: 100%;</attribute>
+                </div>
+                <field name="name" position="attributes">
+                    <attribute name="class" eval="False"/>
+                </field>
                 <field name="parent_id" position="after">
                     <group col="2">
 						<field name="confirmation_date"/>
