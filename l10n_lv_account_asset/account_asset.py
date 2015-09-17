@@ -55,7 +55,7 @@ class account_asset_category(osv.osv):
     }
 
     _defaults = {
-        'method_tax': 'linear',
+        'method_tax': 'degressive',
         'method_number_tax': 5,
         'method_time_tax': 'number',
         'method_period_tax': 12,
@@ -483,7 +483,7 @@ class account_asset_asset(osv.osv):
     }
 
     _defaults = {
-        'method_tax': 'linear',
+        'method_tax': 'degressive',
         'method_number_tax': 5,
         'method_time_tax': 'number',
         'method_period_tax': 12,
@@ -542,7 +542,7 @@ class account_asset_asset(osv.osv):
 
     def onchange_method_progress_factor(self, cr, uid, ids, method_progress_factor, value_residual, method, method_time, method_period, currency_id, purchase_date, confirmation_date, state, prorata, next_month, context=None):
         res = {'value': {}}
-        if method == 'degressive':
+        if method == 'degressive' and value_residual != 0.0:
             method_number = 0
             cur_obj = self.pool.get('res.currency')
             data_obj = self.pool.get('ir.model.data')
@@ -592,7 +592,7 @@ class account_asset_asset(osv.osv):
 
     def onchange_method_progress_factor_tax(self, cr, uid, ids, method_progress_factor_tax, value_residual_tax, method_tax, method_time_tax, method_period_tax, currency_id, purchase_date, confirmation_date, state, prorata_tax, next_month_tax, context=None):
         res = {'value': {}}
-        if method_tax == 'degressive':
+        if method_tax == 'degressive' and value_residual_tax != 0.0:
             method_number_tax = 0
             cur_obj = self.pool.get('res.currency')
             data_obj = self.pool.get('ir.model.data')
