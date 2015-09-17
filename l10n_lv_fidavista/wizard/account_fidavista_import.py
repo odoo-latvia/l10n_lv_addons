@@ -337,6 +337,14 @@ class account_fidavista_import(osv.osv_memory):
                                     if cord == 'D':
                                         account_id = partner.property_account_payable.id
                                     break
+                    line_cur_tag = cPartySet[0].getElementsByTagName('Ccy')
+                    line_cur = False
+                    if line_cur_tag:
+                        line_cur = line_cur_tag[0].toxml().replace('<Ccy>','').replace('</Ccy>','').replace('<Ccy/>','')
+                    line_amount_cur_tag = cPartySet[0].getElementsByTagName('Amt')
+                    line_amount_cur = False
+                    if line_amount_cur_tag:
+                        line_amount_cur = line_amount_cur_tag[0].toxml().replace('<Amt>','').replace('</Amt>','').replace('<Amt/>','')
 
                 # values, if there is no <CPartySet> in the document:
                 if not cPartySet:
@@ -385,7 +393,9 @@ class account_fidavista_import(osv.osv_memory):
                     'partner_id': partner_id,
                     'account_id': account_id,
                     'amount': line_amount,
-                    'bank_account_id': bank_account_id,
+                    'currency_id': line_cur,
+                    'amount_currency': line_amount_cur,
+                    'bank_account_id': bank_account_id
                 }, context=context)
 
         # getting a Bank Statement view to return
