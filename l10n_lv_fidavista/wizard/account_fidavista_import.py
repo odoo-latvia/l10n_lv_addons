@@ -238,7 +238,15 @@ class account_fidavista_import(osv.osv_memory):
                         raise osv.except_osv(_('Balances do not match!'), _("The Ending Balance of the last Bank Statement (by date) imported for the Bank Account '%s' is not equal to the Starting Balance of this document. If this is OK with you, check the 'Continue Anyway' box and try to import again.") %(company_acc_no))
 
             # creating account.bank.statement
-            statement = self.pool.get('account.bank.statement').create(cr, uid, {'name': statement_name, 'date': statement_date, 'period_id': period_id.id, 'journal_id': journal_id, 'balance_start': balance_start, 'balance_end_real': balance_end_real, 'bank_account_id': test_acc_no[0]}, context=context)
+            statement = self.pool.get('account.bank.statement').create(cr, uid, {
+                'name': statement_name,
+                'date': statement_date,
+                'period_id': period_id.id,
+                'journal_id': journal_id,
+                'balance_start': balance_start,
+                'balance_end_real': balance_end_real,
+                'bank_account_id': test_acc_no[0]
+            }, context=context)
 
             # getting elements for account.bank.statement.line and creating the lines:
             statement_lines = company_account.getElementsByTagName('TrxSet')
@@ -276,6 +284,7 @@ class account_fidavista_import(osv.osv_memory):
 
                 # getting Partner info:
                 account_id = False
+                bank_account_id = False
                 cPartySet = line.getElementsByTagName('CPartySet')
                 if cPartySet:
                     partner_name_tag = cPartySet[0].getElementsByTagName('Name')
@@ -296,7 +305,6 @@ class account_fidavista_import(osv.osv_memory):
 
                     # testing, whether it's possible to get partner_id (also type and account) from the system:
                     partner_id = False
-                    type = 'general'
                     bank_account_obj = self.pool.get('res.partner.bank')
                     bank_account = bank_account_obj.search(cr, uid, [('acc_number','=',partner_bank_account)])
                     if (not bank_account) and partner_bank_account:
@@ -309,12 +317,9 @@ class account_fidavista_import(osv.osv_memory):
                         partner_bank_account_2 = "".join(partner_bank_account_list)
                         bank_account = bank_account_obj.search(cr, uid, [('acc_number','=',partner_bank_account_2)])
                     if bank_account:
+                        bank_account_id = bank_account[0]
                         bank_acc_1 = bank_account_obj.browse(cr, uid, bank_account[0])
                         partner_id = bank_acc_1.partner_id.id
-                        if bank_acc_1.partner_id.customer and not bank_acc_1.partner_id.supplier:
-                            type = 'customer'
-                        if bank_acc_1.partner_id.supplier and not bank_acc_1.partner_id.customer:
-                            type = 'supplier'
                         if cord == 'C':
                             account_id = bank_acc_1.partner_id.property_account_receivable.id
                         if cord == 'D':
@@ -327,10 +332,6 @@ class account_fidavista_import(osv.osv_memory):
                             if vat:
                                 if vat.find(partner_reg_id) != -1:
                                     partner_id = partner.id
-                                    if partner.customer and not partner.supplier:
-                                        type = 'customer'
-                                    if partner.supplier and not partner.customer:
-                                        type = 'supplier'
                                     if cord == 'C':
                                         account_id = partner.property_account_receivable.id
                                     if cord == 'D':
@@ -343,7 +344,6 @@ class account_fidavista_import(osv.osv_memory):
                     partner_reg_id = False
                     partner_bank_account = False
                     partner_id = False
-                    type = 'general'
 
                 # getting Transaction Types
                 type_code_tag = line.getElementsByTagName('TypeCode')
@@ -373,7 +373,20 @@ class account_fidavista_import(osv.osv_memory):
                     return {}
 
                 # creating account.bank.statement.line:
-                self.pool.get('account.bank.statement.line').create(cr, uid, {'statement_id': statement, 'name': line_name, 'date': line_date, 'ref': line_ref, 'partner_name': partner_name, 'partner_reg_id': partner_reg_id, 'partner_bank_account': partner_bank_account, 'transaction_type': type_code, 'partner_id': partner_id, 'type': type, 'account_id': account_id, 'amount': line_amount}, context=context)
+                self.pool.get('account.bank.statement.line').create(cr, uid, {
+                    'statement_id': statement,
+                    'name': line_name,
+                    'date': line_date,
+                    'ref': line_ref,
+                    'partner_name': partner_name,
+                    'partner_reg_id': partner_reg_id,
+                    'partner_bank_account': partner_bank_account,
+                    'transaction_type': type_code,
+                    'partner_id': partner_id,
+                    'account_id': account_id,
+                    'amount': line_amount,
+                    'bank_account_id': bank_account_id,
+                }, context=context)
 
         # getting a Bank Statement view to return
         model, action_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'account', 'action_bank_statement_tree')
