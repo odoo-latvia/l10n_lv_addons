@@ -184,12 +184,12 @@ class account_asset_asset(osv.osv):
         depreciation_lin_obj = self.pool.get('account.asset.depreciation.line')
         currency_obj = self.pool.get('res.currency')
         for asset in self.browse(cr, uid, ids, context=context):
-            if asset.value_residual == 0.0:
-                continue
-            posted_depreciation_line_ids = depreciation_lin_obj.search(cr, uid, [('asset_id', '=', asset.id), ('move_check', '=', True)],order='depreciation_date desc')
             old_depreciation_line_ids = depreciation_lin_obj.search(cr, uid, [('asset_id', '=', asset.id), ('move_id', '=', False)])
             if old_depreciation_line_ids:
                 depreciation_lin_obj.unlink(cr, uid, old_depreciation_line_ids, context=context)
+            if asset.value_residual == 0.0:
+                continue
+            posted_depreciation_line_ids = depreciation_lin_obj.search(cr, uid, [('asset_id', '=', asset.id), ('move_check', '=', True)],order='depreciation_date desc')
 
             amount_to_depr = residual_amount = asset.value_residual
             #---- next_month included:
@@ -332,12 +332,12 @@ class account_asset_asset(osv.osv):
         depreciation_lin_obj = self.pool.get('account.asset.depreciation_tax.line')
         currency_obj = self.pool.get('res.currency')
         for asset in self.browse(cr, uid, ids, context=context):
-            if asset.value_residual_tax == 0.0:
-                continue
-            posted_depreciation_line_ids = depreciation_lin_obj.search(cr, uid, [('asset_id', '=', asset.id), ('move_check', '=', True)],order='depreciation_date desc')
             old_depreciation_line_ids = depreciation_lin_obj.search(cr, uid, [('asset_id', '=', asset.id), ('move_id', '=', False)])
             if old_depreciation_line_ids:
                 depreciation_lin_obj.unlink(cr, uid, old_depreciation_line_ids, context=context)
+            if asset.value_residual_tax == 0.0:
+                continue
+            posted_depreciation_line_ids = depreciation_lin_obj.search(cr, uid, [('asset_id', '=', asset.id), ('move_check', '=', True)],order='depreciation_date desc')
 
             amount_to_depr = residual_amount = asset.value_residual_tax
             if asset.prorata_tax or asset.next_month_tax:
