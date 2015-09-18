@@ -697,6 +697,11 @@ class account_asset_depreciation_line(osv.osv):
             }
         return created_move_ids
 
+    def fields_get(self, cr, uid, allfields=None, context=None):
+        res = super(account_asset_depreciation_line, self).fields_get(cr, uid, allfields=allfields, context=context)
+        res['remaining_value']['string'] = _("Remaining Value")
+        return res
+
 class account_asset_depreciation_tax_line(osv.osv):
     _name = 'account.asset.depreciation_tax.line'
     _description = 'Asset tax depreciation line'
@@ -713,7 +718,7 @@ class account_asset_depreciation_tax_line(osv.osv):
         'asset_id': fields.many2one('account.asset.asset', 'Asset', required=True, ondelete='cascade'),
         'parent_state': fields.related('asset_id', 'state', type='char', string='State of Asset'),
         'amount': fields.float('Current Depreciation', digits_compute=dp.get_precision('Account'), required=True),
-        'remaining_value': fields.float('Next Period Depreciation', digits_compute=dp.get_precision('Account'),required=True),
+        'remaining_value': fields.float('Remaining Value', digits_compute=dp.get_precision('Account'),required=True),
         'depreciated_value': fields.float('Amount Already Depreciated', required=True),
         'depreciation_date': fields.date('Depreciation Date', select=1),
         'move_id': fields.many2one('account.move', 'Depreciation Entry'),

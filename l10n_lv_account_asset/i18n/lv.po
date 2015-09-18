@@ -402,8 +402,10 @@ msgstr "Nākamā perioda nolietojums"
 
 #. module: l10n_lv_account_asset
 #: field:account.asset.depreciation_tax.line,remaining_value:0
-msgid "Next Period Depreciation"
-msgstr "Nākamā perioda nolietojums"
+#: code:addons/l10n_lv_account_asset/account_asset.py:702
+#, python-format
+msgid "Remaining Value"
+msgstr "Atlikusī vērtība"
 
 #. module: account_asset
 #: help:account.asset.history,method_period:0
