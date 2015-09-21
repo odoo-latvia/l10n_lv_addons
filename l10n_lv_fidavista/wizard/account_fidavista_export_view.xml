@@ -11,17 +11,8 @@
                     <group>
                         <field name="name" attrs="{'invisible': [('file_save','!=',False)]}"/>
                         <field name="file_save" filename="name" attrs="{'invisible': [('file_save','=',False)]}"/>
-                        <field name="period_id" on_change="onchange_period_id(period_id,bank_account_id)" attrs="{'readonly': [('file_save','!=',False)]}"/>
-                        <field name="partner_id" invisible="1"/>
-                        <field name="bank_account_id" on_change="onchange_period_id(period_id,bank_account_id)" domain="[('partner_id','=',partner_id)]" context="{'default_partner_id': partner_id}" attrs="{'readonly': [('file_save','!=',False)]}"/>
+                        <field name="payment_order_id" on_change="onchange_payment_order_id(payment_order_id)" attrs="{'invisible': [('file_save','!=',False)]}" invisible="context.get('payment_order_id',False)"/>
                     </group>
-                    <field name="payments_ids" attrs="{'invisible': [('file_save','!=',False)]}">
-                        <tree editable="top" create="0" delete="0">
-                            <field name="payment_number" readonly="1"/>
-                            <field name="partner_id" readonly="1"/>
-                            <field name="bank_account_id" domain="[('partner_id','=',partner_id)]"/>
-                        </tree>
-                    </field>
                     <footer attrs="{'invisible': [('file_save','!=',False)]}">
                         <button name="create_xml" string="Create File" type="object" default_focus="1" class="oe_highlight"/>
                         or
@@ -40,6 +31,16 @@
             <field name="target">new</field>
             <field name="view_id" ref="account_fidavista_export_view"/>
         </record>
+
+        <act_window
+            id="act_fidavista_export_wizard" name="Export FiDAViSta Payments"
+            res_model="account.fidavista.export"
+            src_model="payment.order"
+            view_type="form"
+            view_mode="form"
+            target="new"
+            context="{'payment_order_id': active_id, 'hide_field':True}"
+        />
 
         <menuitem name="Export FiDAViSta File" parent="account.menu_finance_bank_and_cash" id="menu_account_fidavista_export" action="action_account_fidavista_export" sequence="11"/>
 
