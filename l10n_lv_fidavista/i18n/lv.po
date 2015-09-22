@@ -298,6 +298,8 @@ msgstr "Izraksti, kurus ielādēt"
 
 #. module: l10n_lv_fidavista
 #: view:account.fidavista.import:0
+#: view:account.fidavista.export:l10n_lv_fidavista.account_fidavista_export_view
+#: view:account.fidavista.import:l10n_lv_fidavista.account_fidavista_import_view
 msgid "Cancel"
 msgstr "Atcelt"
 
@@ -316,3 +318,64 @@ msgstr "Trans. tipa kods"
 msgid "The account for the transaction."
 msgstr "Transakcijai paredzētais konts."
 
+#. module: l10n_lv_fidavista
+#: view:account.fidavista.export:l10n_lv_fidavista.account_fidavista_export_view
+msgid "Create File"
+msgstr "Izveidot failu"
+
+#. module: l10n_lv_fidavista
+#: view:account.fidavista.export:l10n_lv_fidavista.account_fidavista_export_view
+#: model:ir.actions.act_window,name:l10n_lv_fidavista.action_account_fidavista_export
+#: model:ir.model,name:l10n_lv_fidavista.model_account_fidavista_export
+#: model:ir.ui.menu,name:l10n_lv_fidavista.menu_account_fidavista_export
+msgid "Export FiDAViSta File"
+msgstr "Eksportēt FiDAViSta failu"
+
+#. module: l10n_lv_fidavista
+#: model:ir.actions.act_window,name:l10n_lv_fidavista.act_fidavista_export_wizard
+msgid "Export FiDAViSta Payments"
+msgstr "Eksportēt FiDAViSta maksājumus"
+
+#. module: l10n_lv_fidavista
+#: field:account.fidavista.export,name:0
+msgid "File Name"
+msgstr "Faila nosaukums"
+
+#. module: l10n_lv_fidavista
+#: field:account.fidavista.export,payment_order_id:0
+msgid "Payment Order"
+msgstr "Maksājuma uzdevums"
+
+#. module: l10n_lv_fidavista
+#: field:account.fidavista.export,file_save:0
+msgid "Save File"
+msgstr "Saglabāt failu"
+
+#. module: l10n_lv_fidavista
+#: view:account.fidavista.export:l10n_lv_fidavista.account_fidavista_export_view
+msgid "or"
+msgstr "vai"
+
+#. module: l10n_lv_fidavista
+#: code:addons/l10n_lv_fidavista/wizard/account_fidavista_export.py:116
+#, python-format
+msgid "Not enough Data Error !"
+msgstr "Nepietiekamu datu kļūda !"
+
+#. module: l10n_lv_fidavista
+#: code:addons/l10n_lv_fidavista/wizard/account_fidavista_export.py:116
+#, python-format
+msgid "Destination Bank account not defined for payment %s!"
+msgstr "Maksājumā %s nav nodefinēts mērķa bankas konts!"
+
+#. module: l10n_lv_fidavista
+#: code:addons/l10n_lv_fidavista/wizard/account_fidavista_export.py:153
+#, python-format
+msgid "Insufficient data!"
+msgstr "Nepietiekami dati"
+
+#. module: l10n_lv_fidavista
+#: code:addons/l10n_lv_fidavista/wizard/account_fidavista_export.py:153
+#, python-format
+msgid "No Country or VAT defined for Partner %s, but the Country Code is a mandatory tag. Please define either a Country or a VAT to get the Country Code!"
+msgstr "Partnerim %s nav norādīta ne valsts, ne PVN reģistrācijas numurs, bet valsts kods ir obligāts tags. Lūdzu norādīt vai nu valsti vai PVN reģistrācijas numuru, lai varētu iegūt valsts kodu!"

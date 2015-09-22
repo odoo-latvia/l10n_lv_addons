@@ -38,11 +38,17 @@ class account_fidavista_export(osv.osv_memory):
     _columns = {
         'name': fields.char('File Name', size=32),
         'file_save': fields.binary('Save File', filters='*.xml', readonly=True),
-        'payment_order_id': fields.many2one('payment.order', 'Payment Order', required=False),
+        'payment_order_id': fields.many2one('payment.order', 'Payment Order', required=True),
     }
 
+    def _get_payment_order(self, cr, uid, context=None):
+        if context is None:
+            context = {}
+        return context.get('payment_order_id',False)
+
     _defaults = {
-        'name': 'FiDAViSta_export.xml'
+        'name': 'FiDAViSta_export.xml',
+        'payment_order_id': _get_payment_order
     }
 
     def onchange_payment_order_id(self, cr, uid, ids, payment_order_id, context=None):
@@ -57,6 +63,8 @@ class account_fidavista_export(osv.osv_memory):
     def create_xml(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
+        def format_string(strval):
+            return strval.replace('&', '&amp;').replace('>', '&gt;').replace('<', '&lt;').replace("'", "&apos;").replace('"', '&quot;')
         data_exp = self.browse(cr, uid, ids[0], context=context)
         if context.get('payment_order_id',False):
             payment_order = self.pool.get('payment.order').browse(cr, uid, context['payment_order_id'], context=context)
@@ -66,8 +74,10 @@ class account_fidavista_export(osv.osv_memory):
 <FIDAVISTA xmlns="http://bankasoc.lv/fidavista/fidavista0101.xsd">"""
         data_of_file += "\n    <Header>"
         data_of_file += ("\n        <Timestamp>" + datetime.now().strftime('%Y%m%d%H%M%S%f')[:-3] + "</Timestamp>")
-        company = self.pool.get('res.users').browse(cr, uid, uid, context=context).company_id
-        data_of_file += ("\n        <From>" + company.name + "</From>")
+        company = payment_order.company_id
+        if not company:
+            company = self.pool.get('res.users').browse(cr, uid, uid, context=context).company_id
+        data_of_file += ("\n        <From>" + format_string(company.name) + "</From>")
         data_of_file += "\n    </Header>"
         pay_acc = payment_order.mode.bank_id.acc_number.replace(' ', '').upper()
         pay_legal = False
@@ -103,13 +113,13 @@ class account_fidavista_export(osv.osv_memory):
             data_of_file += ("\n            <Comm>" + "OUR" + "</Comm>")
             data_of_file += ("\n            <Amt>") + str(payment.amount_currency) + ("</Amt>")
             if not payment.bank_id:
-                raise osv.except_osv(_('Not enought Data Error !'), _('Destination Bank account not defined for payment %s!' % payment.name))
+                raise osv.except_osv(_('Not enough Data Error !'), _('Destination Bank account not defined for payment %s!' % payment.name))
             data_of_file += ("\n            <BenAccNo>" + (payment.bank_id.acc_number).replace(' ','').upper() + "</BenAccNo>")
             flg = "N"
             if payment.bank_id.state == 'iban':
                 flg = "Y"
             data_of_file += ("\n            <BenAccIbanFlg>" + flg + "</BenAccIbanFlg>")
-            data_of_file += ("\n            <BenName>" + payment.partner_id.name + "</BenName>")
+            data_of_file += ("\n            <BenName>" + format_string(payment.partner_id.name) + "</BenName>")
             ben_legal = hasattr(payment.partner_id,'company_registry') and payment.partner_id.company_registry or False
             if (not ben_legal) and hasattr(payment.partner_id, 'vat') and (payment.partner_id.vat):
                 ben_legal = ((payment.partner_id.vat).replace(" ","").upper())[2:]
@@ -131,7 +141,7 @@ class account_fidavista_export(osv.osv_memory):
             if payment.partner_id.country_id:
                 address_list.append(payment.partner_id.country_id.name)
             if address_list:
-                data_of_file += ("\n            <BenAddress>" + ", ".join(address_list) + "</BenAddress>")
+                data_of_file += ("\n            <BenAddress>" + format_string(", ".join(address_list)) + "</BenAddress>")
             country_code = False
             if payment.partner_id.country_id:
                 country_code = payment.partner_id.country_id.code
@@ -143,7 +153,7 @@ class account_fidavista_export(osv.osv_memory):
                 raise osv.except_osv(_('Insufficient data!'), _('No Country or VAT defined for Partner "%s", but the Country Code is a mandatory tag. Please define either a Country or a VAT to get the Country Code!') % (payment.partner_id.name))
             bank_name = payment.bank_id.bank and payment.bank_id.bank.name or payment.bank_id.bank_name
             if bank_name:
-                data_of_file += ("\n            <BBName>" + bank_name + "</BBName>")
+                data_of_file += ("\n            <BBName>" + format_string(bank_name) + "</BBName>")
             if payment.bank_id.bank:
                 bank_address_list = []
                 if payment.bank_id.bank.street:
@@ -159,7 +169,7 @@ class account_fidavista_export(osv.osv_memory):
                 if payment.bank_id.bank.country:
                     bank_address_list.append(payment.bank_id.bank.country.name)
                 if bank_address_list:
-                    data_of_file += ("\n            <BBAddress>" + ", ".join(bank_address_list) + "</BBAddress>")
+                    data_of_file += ("\n            <BBAddress>" + format_string(", ".join(bank_address_list)) + "</BBAddress>")
             swift = payment.bank_id.bank and payment.bank_id.bank.bic or payment.bank_id.bank_bic
             if swift:
                 data_of_file += ("\n            <BBSwift>" + swift + "</BBSwift>")
