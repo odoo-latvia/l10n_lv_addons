@@ -22,8 +22,26 @@
 #
 ##############################################################################
 
-import account
-import report
-import wizard
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
+
+class account_move(osv.osv):
+    _inherit = "account.move"
+
+    def create(self, cr, uid, vals, context=None):
+        if context is None:
+            context = {}
+        if vals.get('date',False) and vals.get('period_id',False):
+            period_obj = self.pool.get('account.period')
+            period = period_obj.browse(cr, uid, vals['period_id'], context=context)
+            if vals['date'] < period.date_start or vals['date'] > period.date_stop:
+                ctx = context.copy()
+                if vals.get('journal_id',False):
+                    journal = self.pool.get('account.journal').browse(cr, uid, vals['journal_id'], context=context)
+                    ctx.update({'company_id': journal.company_id.id})
+                period_ids = period_obj.find(cr, uid, dt=vals['date'], context=context)
+                if period_ids:
+                    vals['period_id'] = period_ids[0]
+        return super(account_move, self).create(cr, uid, vals, context=context)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
