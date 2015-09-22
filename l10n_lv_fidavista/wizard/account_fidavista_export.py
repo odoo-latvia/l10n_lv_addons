@@ -150,7 +150,7 @@ class account_fidavista_export(osv.osv_memory):
             if country_code:
                 data_of_file += ("\n            <BenCountry>" + country_code + "</BenCountry>")
             if not country_code:
-                raise osv.except_osv(_('Insufficient data!'), _('No Country or VAT defined for Partner "%s", but the Country Code is a mandatory tag. Please define either a Country or a VAT to get the Country Code!') % (payment.partner_id.name))
+                raise osv.except_osv(_('Insufficient data!'), _('No Country or VAT defined for Partner %s, but the Country Code is a mandatory tag. Please define either a Country or a VAT to get the Country Code!') % (payment.partner_id.name))
             bank_name = payment.bank_id.bank and payment.bank_id.bank.name or payment.bank_id.bank_name
             if bank_name:
                 data_of_file += ("\n            <BBName>" + format_string(bank_name) + "</BBName>")
