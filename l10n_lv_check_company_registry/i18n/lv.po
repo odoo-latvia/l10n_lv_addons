@@ -68,13 +68,13 @@ msgstr "kontakti"
 #: code:addons/l10n_lv_check_company_registry/res_partner_check.py:184
 #, python-format
 msgid "%s %s found with similar name%s"
-msgstr "Atrasti %s %s ar līdzīgu nosaukumu:%s"
+msgstr "Atrasti %s %s ar līdzīgu nosaukumu%s"
 
 #. module: l10n_lv_check_company_registry
 #: code:addons/l10n_lv_check_company_registry/res_partner_check.py:239
 #, python-format
 msgid "%s %s found with the same company registry%s"
-msgstr "Atrasti %s %s ar tādu pašu reģistrācijas numuru:%s"
+msgstr "Atrasti %s %s ar tādu pašu reģistrācijas numuru%s"
 
 #. module: l10n_lv_check_company_registry
 #: code:addons/l10n_lv_check_company_registry/res_partner_check.py:239
@@ -85,8 +85,8 @@ msgstr "Atrasti %s %s ar tādu pašu personas kodu%s"
 #. module: l10n_lv_check_company_registry
 #: code:addons/l10n_lv_check_company_registry/res_partner_check.py:221
 #, python-format
-msgid " for partner %s."
-msgstr " partnerim %s."
+msgid " for partner %s"
+msgstr " partnerim %s"
 
 #. module: l10n_lv_check_company_registry
 #: code:addons/l10n_lv_check_company_registry/res_partner_check.py:241

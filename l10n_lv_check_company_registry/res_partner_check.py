@@ -208,7 +208,7 @@ where char_length(form_name(name)) > 1 and (convert_from(convert_to(form_name(na
                     pn_ids = pn_ids[:6]
                 p_names = [r['name'] for r in self.read(cr, uid, pn_ids, ['name'], context=context)]
                 p_names = ", ".join(p_names)
-                inp_text = ": %s" % p_names
+                inp_text += ": %s" % p_names
                 inp_text += (pname_count > 6 and "..." or ".")
             err_text += _("%s %s found with similar name%s") % (pname_count, enames, inp_text)
         if company_registry:
