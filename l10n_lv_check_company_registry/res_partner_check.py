@@ -136,7 +136,7 @@ class res_partner(osv.osv):
             new_name = new_name.strip().strip(",").replace('"',"").replace("'","")
         return new_name
 
-    def test_partners(self, cr, uid, name, company_registry, identification_id, parent_id, context=None):
+    def test_partners(self, cr, uid, name, company_registry, identification_id, parent_id, partner_id=False, context=None):
         if context is None:
             context = {}
 
@@ -152,6 +152,8 @@ class res_partner(osv.osv):
             enames = _("contacts")
             partner_domain.append(('parent_id','=',parent_id))
             parent_name = self.read(cr, uid, [parent_id], ['name'], context=context)[0]['name']
+        if partner_id:
+            partner_domain.append(('id','!=',partner_id))
         partner_ids = []
         err_text = ""
         if test_name:
@@ -278,7 +280,7 @@ where char_length(form_name(name)) > 1 and (convert_from(convert_to(form_name(na
                 identification_id = 'identification_id' in vals and vals['identification_id'] or partner.identification_id
                 parent_id = 'parent_id' in vals and vals['parent_id'] or (partner.parent_id and partner.parent_id.id or False)
                 if name or company_registry or identification_id or parent_id:
-                    self.test_partners(cr, uid, name, company_registry, identification_id, parent_id, context=context)
+                    self.test_partners(cr, uid, name, company_registry, identification_id, parent_id, partner_id=partner.id, context=context)
         return super(res_partner, self).write(cr, uid, ids, vals, context=context)
 
     def copy(self, cr, uid, id, default=None, context=None):
