@@ -28,6 +28,7 @@ import urllib
 from xml.dom.minidom import getDOMImplementation, parseString
 import base64
 import re
+from operator import itemgetter
 
 company_list = [
     (u'Sabiedrība ar ierobežotu atbildību', 'SIA'),
@@ -120,18 +121,6 @@ class res_partner(osv.osv):
             val['load_from_registry'] = False
         return {'value': val}
 
-    def _add_partner_name(self, cr, uid, partner, partner_count, context=None):
-        if context is None:
-            context = {}
-        next_partner_name = ""
-        if partner_count == 1:
-            next_partner_name = (": " + partner.name)
-        if (partner_count != 1) and (partner_count <= 5):
-            next_partner_name += (", " + partner.name)
-        if partner_count == 6:
-            next_partner_name += "..."
-        return next_partner_name
-
     def _form_name(self, cr, uid, name, context=None):
         if context is None:
             context = {}
@@ -147,44 +136,121 @@ class res_partner(osv.osv):
             new_name = new_name.strip().strip(",").replace('"',"").replace("'","")
         return new_name
 
-    def test_partners(self, cr, uid, name, company_registry, parent_id, context=None):
+    def test_partners(self, cr, uid, name, company_registry, identification_id, parent_id, context=None):
         if context is None:
             context = {}
 
         test_name = False
         if name:
             test_name = self._form_name(cr, uid, name, context=context)
+            test_name = test_name.encode('utf-8')
         partner_domain = []
+        ename = _("partner")
+        enames = _("partners")
         if parent_id:
+            ename = _("contact")
+            enames = _("contacts")
             partner_domain.append(('parent_id','=',parent_id))
-        partner_ids = self.search(cr, uid, partner_domain, context=context)
-        partner_count = 0
-        partner_names = ""
-        partner_count_reg = 0
-        partner_names_reg = ""
-        for partner in self.browse(cr, uid, partner_ids, context=context):
-            if (test_name) and len(partner.name) > 1:
-                p_name = self._form_name(cr, uid, partner.name, context=context)
-                if (test_name in p_name) or (p_name in test_name):
-                    partner_count += 1
-                    if partner_count <= 6:
-                        partner_names += self._add_partner_name(cr, uid, partner, partner_count, context=context)
-            if (company_registry) and (partner.company_registry == company_registry):
-                partner_count_reg += 1
-                if partner_count_reg <= 6:
-                    partner_names_reg += self._add_partner_name(cr, uid, partner, partner_count_reg, context=context)
-        if (partner_count > 0) or (partner_count_reg > 0):
-            if parent_id:
-                parent = self.browse(cr, uid, parent_id, context=context)
-                first_text = _("%s contacts found with similar name%s") % (str(partner_count), partner_names)
-                if partner_count > 0 and partner_count_reg > 0:
-                    first_text += ", "
-                if partner_count_reg > 0:
-                    first_text += _("%s contacts found with the same company registry%s") % (str(partner_count_reg), partner_names_reg)
-                first_text += _(" for partner %s.") % parent.name
-                raise osv.except_osv(first_text, _("Check the 'Allow similar Partner creation' box and try again if you want to save the contact anyway."))
-            else:
-                raise osv.except_osv(_("%s partners found with similar name%s. %s partners found with the same company registry%s.") % (str(partner_count), partner_names, str(partner_count_reg), partner_names_reg), _("Check the 'Allow similar Partner creation' box and try again if you want to save the Partner anyway."))
+            parent_name = self.read(cr, uid, [parent_id], ['name'], context=context)[0]['name']
+        partner_ids = []
+        err_text = ""
+        if test_name:
+            partner_name_domain = partner_domain[:]
+            cr.execute("""CREATE OR REPLACE FUNCTION form_name(srcname TEXT)
+RETURNS text AS $resname$
+DECLARE
+    new_srcname text;
+    textlist text[];
+    replacelist text[];
+    rpl int;
+    rplval text;
+    t int;
+    tval text;
+    t1 text;
+    resname text;
+BEGIN
+    replacelist =  array['SIA', 'IU', 'I/U', 'AS', 'A/S', 'SABIEDRĪBA', 'LTD', 'CORP', 'INC'];
+    new_srcname = upper(srcname);
+    FOR rpl IN array_lower(replacelist, 1) .. array_upper(replacelist, 1)
+    LOOP
+        rplval = replacelist[rpl];
+        textlist = string_to_array(new_srcname, ' ');
+        FOR t IN array_lower(textlist, 1) .. array_upper(textlist, 1)
+        LOOP
+            tval = textlist[t];
+            t1 = replace(replace(replace(replace(tval,',',''),' ',''),'"',''),'''','');
+            IF rplval = t1 THEN
+                textlist = array_remove(textlist, tval);
+            END IF;
+        END LOOP;
+        new_srcname = array_to_string(textlist, ' ');
+        new_srcname = replace(replace((trim(both ',' from (trim(both ' ' from new_srcname)))),'"',''),'''','');
+    END LOOP;
+    resname = new_srcname;
+    RETURN resname;
+END;
+$resname$ LANGUAGE plpgsql;
+
+select id from res_partner
+where char_length(form_name(name)) > 1 and (convert_from(convert_to(form_name(name),'utf-8'),'utf-8') like concat('%%','%s','%%') or '%s' like concat('%%',convert_from(convert_to(form_name(name),'utf-8'),'utf-8'),'%%'));""" % (test_name, test_name))
+            sp_ids = map(itemgetter(0), cr.fetchall())
+            partner_name_domain.append(('id','in',sp_ids))
+            partner_name_ids = self.search(cr, uid, partner_name_domain, context=context)
+            partner_ids += partner_name_ids
+            pname_count = len(partner_name_ids)
+            inp_text = "."
+            if pname_count != 0:
+                inp_text = ""
+                if parent_id:
+                    inp_text += _(" for partner %s") % parent_name
+                pn_ids = partner_name_ids
+                if pname_count > 6:
+                    pn_ids = pn_ids[:6]
+                p_names = [r['name'] for r in self.read(cr, uid, pn_ids, ['name'], context=context)]
+                p_names = ", ".join(p_names)
+                inp_text = ": %s" % p_names
+                inp_text += (pname_count > 6 and "..." or ".")
+            err_text += _("%s %s found with similar name%s") % (pname_count, enames, inp_text)
+        if company_registry:
+            partner_reg_domain = partner_domain[:]
+            partner_reg_domain.append(('is_company','=',True))
+            partner_reg_domain.append(('company_registry','=',company_registry))
+            partner_reg_ids = self.search(cr, uid, partner_reg_domain, context=context)
+            partner_ids += partner_reg_ids
+            preg_count = len(partner_reg_ids)
+            inp_text = "."
+            if preg_count != 0:
+                pr_ids = partner_reg_ids
+                if preg_count > 6:
+                    pr_ids = pr_ids[:6]
+                p_names = [r['name'] for r in self.read(cr, uid, pr_ids, ['name'], context=context)]
+                p_names = ", ".join(p_names)
+                inp_text = ": %s" % p_names
+                inp_text += (preg_count > 6 and "..." or ".")
+            err_text += _("%s %s found with the same company registry%s") % (preg_count, enames, inp_text)
+        if identification_id:
+            partner_id_domain = partner_domain[:]
+            partner_id_domain.append(('is_company','=',False))
+            partner_id_domain.append(('identification_id','=',identification_id))
+            partner_id_ids = self.search(cr, uid, partner_id_domain, context=context)
+            partner_ids += partner_id_ids
+            pid_count = len(partner_id_ids)
+            inp_text = "."
+            if pid_count != 0:
+                inp_text = ""
+                if parent_id:
+                    inp_text += _(" for partner %s") % parent_name
+                pi_ids = partner_id_ids
+                if pid_count > 6:
+                    pi_ids = pi_ids[:6]
+                p_names = [r['name'] for r in self.read(cr, uid, pi_ids, ['name'], context=context)]
+                p_names = ", ".join(p_names)
+                inp_text += ": %s" % p_names
+                inp_text += (pid_count > 6 and "..." or ".")
+
+            err_text += _("%s %s found with the same identification ID%s") % (preg_count, enames, inp_text)
+        if partner_ids:
+            raise osv.except_osv(err_text, _("Check the 'Allow similar Partner creation' box and try again if you want to save the %s anyway.") % ename)
         return False
 
     def create(self, cr, uid, vals, context=None):
@@ -193,8 +259,9 @@ class res_partner(osv.osv):
         if 'allow_creation' not in vals or vals['allow_creation'] == False:
             name = vals.get('name',False)
             company_registry = vals.get('company_registry',False)
+            identification_id = vals.get('identification_id',False)
             parent_id = vals.get('parent_id',False)
-            self.test_partners(cr, uid, name, company_registry, parent_id, context=context)
+            self.test_partners(cr, uid, name, company_registry, identification_id, parent_id, context=context)
         return super(res_partner, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
@@ -204,16 +271,14 @@ class res_partner(osv.osv):
         partner_obj = self.pool.get('res.partner')
         if not isinstance(ids, list):
             ids = [ids]
-        for rec in ids:            
-            if partner_obj.browse(cr, uid, rec, context).allow_creation == False:
-                allow = False
-                break
-        name = vals.get('name',False)
-        company_registry = vals.get('company_registry',False)
-        parent_id = vals.get('parent_id',False)
-        if ('allow_creation' in vals and vals['allow_creation'] == False) or ('allow_creation' not in vals and allow == False):
-            if name or company_registry or parent_id:
-                self.test_partners(cr, uid, name, company_registry, parent_id, context=context)
+        for partner in partner_obj.browse(cr, uid, ids, context):            
+            if ('allow_creation' in vals and vals['allow_creation'] == False) or ('allow_creation' not in vals and partner.allow_creation == False):
+                name = 'name' in vals and vals['name'] or partner.name
+                company_registry = 'company_registry' in vals and vals['company_registry'] or partner.company_registry
+                identification_id = 'identification_id' in vals and vals['identification_id'] or partner.identification_id
+                parent_id = 'parent_id' in vals and vals['parent_id'] or (partner.parent_id and partner.parent_id.id or False)
+                if name or company_registry or identification_id or parent_id:
+                    self.test_partners(cr, uid, name, company_registry, identification_id, parent_id, context=context)
         return super(res_partner, self).write(cr, uid, ids, vals, context=context)
 
     def copy(self, cr, uid, id, default=None, context=None):
