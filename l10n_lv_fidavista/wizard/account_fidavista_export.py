@@ -110,7 +110,7 @@ class account_fidavista_export(osv.osv_memory):
                 benextid = data_obj.browse(cr, uid, ben_ext_ids[0], context=context).complete_name
                 data_of_file += ("\n            <BenExtId>" + benextid + "</BenExtId>")
             data_of_file += ("\n            <Priority>" + "N" + "</Priority>")
-            data_of_file += ("\n            <Comm>" + "OUR" + "</Comm>")
+            data_of_file += ("\n            <Comm>" + "SHA" + "</Comm>")
             data_of_file += ("\n            <Amt>") + str(payment.amount_currency) + ("</Amt>")
             if not payment.bank_id:
                 raise osv.except_osv(_('Not enough Data Error !'), _('Destination Bank account not defined for payment %s!' % payment.name))
