@@ -197,7 +197,7 @@ BEGIN
             tval = textlist[t];
             t1 = replace(replace(replace(replace(tval,',',''),' ',''),'"',''),'''','');
             IF rplval = t1 THEN
-                textlist = array_remove(textlist, tval);
+                textlist = array_remove_txt(textlist, tval);
             END IF;
         END LOOP;
         new_srcname = array_to_string(textlist, ' ');
