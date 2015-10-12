@@ -158,7 +158,22 @@ class res_partner(osv.osv):
         err_text = ""
         if test_name:
             partner_name_domain = partner_domain[:]
-            cr.execute("""CREATE OR REPLACE FUNCTION form_name(srcname TEXT)
+            cr.execute("""CREATE OR REPLACE FUNCTION array_remove_txt(inputarr TEXT[], inputtxt TEXT)
+RETURNS text[] AS $outputarr$
+DECLARE
+    outputarr text[];
+BEGIN
+    FOR i IN array_lower(inputarr, 1) .. array_upper(inputarr, 1)
+    LOOP
+        IF inputarr[i] != inputtxt THEN
+            outputarr = array_append(outputarr, inputarr[i]);
+        END IF;
+    END LOOP;
+    RETURN outputarr;
+END;
+$outputarr$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION form_name(srcname TEXT)
 RETURNS text AS $resname$
 DECLARE
     new_srcname text;
