@@ -173,7 +173,7 @@ BEGIN
 END;
 $outputarr$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION form_name(srcname TEXT)
+CREATE OR REPLACE FUNCTION form_name_fromtxt(srcname TEXT)
 RETURNS text AS $resname$
 DECLARE
     new_srcname text;
@@ -209,7 +209,7 @@ END;
 $resname$ LANGUAGE plpgsql;
 
 select id from res_partner
-where char_length(form_name(name)) > 1 and (convert_from(convert_to(form_name(name),'utf-8'),'utf-8') like concat('%%','%s','%%') or '%s' like concat('%%',convert_from(convert_to(form_name(name),'utf-8'),'utf-8'),'%%'));""" % (test_name, test_name))
+where char_length(form_name_fromtxt(name)) > 1 and (convert_from(convert_to(form_name_fromtxt(name),'utf-8'),'utf-8') like concat('%%','%s','%%') or '%s' like concat('%%',convert_from(convert_to(form_name_fromtxt(name),'utf-8'),'utf-8'),'%%'));""" % (test_name, test_name))
             sp_ids = map(itemgetter(0), cr.fetchall())
             partner_name_domain.append(('id','in',sp_ids))
             partner_name_ids = self.search(cr, uid, partner_name_domain, context=context)
