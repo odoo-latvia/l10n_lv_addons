@@ -158,7 +158,7 @@ class res_partner(osv.osv):
         err_text = ""
         if test_name:
             partner_name_domain = partner_domain[:]
-            cr.execute("""CREATE OR REPLACE FUNCTION array_remove_txt(inputarr TEXT[], inputtxt TEXT)
+            cr.execute("""CREATE OR REPLACE FUNCTION array_remove_txtfromlst(inputarr TEXT[], inputtxt TEXT)
 RETURNS text[] AS $outputarr$
 DECLARE
     outputarr text[];
@@ -197,7 +197,7 @@ BEGIN
             tval = textlist[t];
             t1 = replace(replace(replace(replace(tval,',',''),' ',''),'"',''),'''','');
             IF rplval = t1 THEN
-                textlist = array_remove_txt(textlist, tval);
+                textlist = array_remove_txtfromlst(textlist, tval);
             END IF;
         END LOOP;
         new_srcname = array_to_string(textlist, ' ');
