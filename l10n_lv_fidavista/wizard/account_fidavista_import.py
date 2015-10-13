@@ -340,7 +340,11 @@ class account_fidavista_import(osv.osv_memory):
                     line_cur_tag = cPartySet[0].getElementsByTagName('Ccy')
                     line_cur = False
                     if line_cur_tag:
-                        line_cur = line_cur_tag[0].toxml().replace('<Ccy>','').replace('</Ccy>','').replace('<Ccy/>','')
+                        line_cur_txt = line_cur_tag[0].toxml().replace('<Ccy>','').replace('</Ccy>','').replace('<Ccy/>','')
+                        if line_cur_txt:
+                            line_cur_ids = self.pool.get('res.currency').search(cr, uid, [('name','=',line_cur_txt)], context=context)
+                            if line_cur_ids:
+                                line_cur = line_cur_ids[0]
                     line_amount_cur_tag = cPartySet[0].getElementsByTagName('Amt')
                     line_amount_cur = False
                     if line_amount_cur_tag:
