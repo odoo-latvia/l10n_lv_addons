@@ -93,39 +93,53 @@ class account_fidavista_export(osv.osv_memory):
             ext_ids = data_obj.search(cr, uid, [('model','=','payment.line'), ('res_id','=',payment.id)], context=context)
             if ext_ids:
                 extid = data_obj.browse(cr, uid, ext_ids[0], context=context).complete_name
+                extid = len(extid) > 10 and extid[-10:] or extid
                 data_of_file += ("\n        <ExtId>" + extid + "</ExtId>")
-            data_of_file += ("\n        <DocNo>" + payment.name + "</DocNo>")
+            payment_name = len(payment.name) > 10 and payment.name[0:10] or payment.name
+            data_of_file += ("\n        <DocNo>" + payment_name + "</DocNo>")
             if payment.date:
-                data_of_file += ("\n        <RegDate>" + payment.date + "</RegDate>")
+                payment_date = len(payment.date) > 10 and payment.date[0:10] or payment.date
+                data_of_file += ("\n        <RegDate>" + payment_date + "</RegDate>")
             data_of_file += ("\n        <TaxPmtFlg>" + "N" + "</TaxPmtFlg>")
             data_of_file += ("\n        <Ccy>" + payment.currency.name + "</Ccy>")
-            data_of_file += ("\n        <PmtInfo>" + payment.communication + "</PmtInfo>")
+            payment_communication = len(payment.communication) > 140 and payment.communication[0:140] or payment.communication
+            data_of_file += ("\n        <PmtInfo>" + payment_communication + "</PmtInfo>")
             if pay_legal:
+                pay_legal = len(pay_legal) > 20 and pay_legal[0:20] or pay_legal
                 data_of_file += ("\n        <PayLegalId>" + pay_legal + "</PayLegalId>")
+            pay_acc = len(pay_acc) > 34 and pay_acc[0:34] or pay_acc
             data_of_file += ("\n        <PayAccNo>" + pay_acc + "</PayAccNo>")
             data_of_file += ("\n        <DebitCcy>" + payment.company_currency.name + "</DebitCcy>")
             data_of_file += ("\n        <BenSet>")
             ben_ext_ids = data_obj.search(cr, uid, [('model','=','res.partner'), ('res_id','=',payment.partner_id.id)], context=context)
             if ben_ext_ids:
                 benextid = data_obj.browse(cr, uid, ben_ext_ids[0], context=context).complete_name
+                benextid = len(benextid) > 5 and benextid[-5:] and benextid
                 data_of_file += ("\n            <BenExtId>" + benextid + "</BenExtId>")
             data_of_file += ("\n            <Priority>" + "N" + "</Priority>")
             data_of_file += ("\n            <Comm>" + "SHA" + "</Comm>")
-            data_of_file += ("\n            <Amt>") + str(payment.amount_currency) + ("</Amt>")
+            payment_amount_currency = str(payment.amount_currency)
+            payment_amount_currency = len(payment_amount_currency) > 12 and payment_amount_currency[-12:] or payment_amount_currency
+            data_of_file += ("\n            <Amt>") + payment_amount_currency + ("</Amt>")
             if not payment.bank_id:
                 raise osv.except_osv(_('Not enough Data Error !'), _('Destination Bank account not defined for payment %s!' % payment.name))
-            data_of_file += ("\n            <BenAccNo>" + (payment.bank_id.acc_number).replace(' ','').upper() + "</BenAccNo>")
+            payment_bank_acc_number = (payment.bank_id.acc_number).replace(' ','').upper()
+            payment_bank_acc_number = len(payment_bank_acc_number) > 34 and payment_bank_acc_number[0:34] or payment_bank_acc_number
+            data_of_file += ("\n            <BenAccNo>" + payment_bank_acc_number + "</BenAccNo>")
             flg = "N"
             if payment.bank_id.state == 'iban':
                 flg = "Y"
             data_of_file += ("\n            <BenAccIbanFlg>" + flg + "</BenAccIbanFlg>")
-            data_of_file += ("\n            <BenName>" + format_string(payment.partner_id.name) + "</BenName>")
+            payment_partner_name = format_string(payment.partner_id.name)
+            payment_partner_name = len(payment_partner_name) > 105 and payment_partner_name[0:105] or payment_partner_name
+            data_of_file += ("\n            <BenName>" + payment_partner_name + "</BenName>")
             ben_legal = hasattr(payment.partner_id,'company_registry') and payment.partner_id.company_registry or False
             if (not ben_legal) and hasattr(payment.partner_id, 'vat') and (payment.partner_id.vat):
                 ben_legal = ((payment.partner_id.vat).replace(" ","").upper())[2:]
             if (not ben_legal) and hasattr(payment.partner_id, 'identification_id') and payment.partner_id.is_company == False:
                 ben_legal = payment.partner_id.identification_id
             if ben_legal:
+                ben_legal = len(ben_legal) > 35 and ben_legal[0:35] or ben_legal
                 data_of_file += ("\n            <BenLegalId>" + ben_legal + "</BenLegalId>")
             address_list = []
             if payment.partner_id.street:
@@ -141,7 +155,9 @@ class account_fidavista_export(osv.osv_memory):
             if payment.partner_id.country_id:
                 address_list.append(payment.partner_id.country_id.name)
             if address_list:
-                data_of_file += ("\n            <BenAddress>" + format_string(", ".join(address_list)) + "</BenAddress>")
+                address = format_string(", ".join(address_list))
+                address = len(address) > 70 and address[0:70] or address
+                data_of_file += ("\n            <BenAddress>" + address + "</BenAddress>")
             country_code = False
             if payment.partner_id.country_id:
                 country_code = payment.partner_id.country_id.code
@@ -153,7 +169,9 @@ class account_fidavista_export(osv.osv_memory):
                 raise osv.except_osv(_('Insufficient data!'), _('No Country or VAT defined for Partner %s, but the Country Code is a mandatory tag. Please define either a Country or a VAT to get the Country Code!') % (payment.partner_id.name))
             bank_name = payment.bank_id.bank and payment.bank_id.bank.name or payment.bank_id.bank_name
             if bank_name:
-                data_of_file += ("\n            <BBName>" + format_string(bank_name) + "</BBName>")
+                bank_name = format_string(bank_name)
+                bank_name = len(bank_name) > 35 and bank_name[0:35] or bank_name
+                data_of_file += ("\n            <BBName>" + bank_name + "</BBName>")
             if payment.bank_id.bank:
                 bank_address_list = []
                 if payment.bank_id.bank.street:
@@ -169,9 +187,12 @@ class account_fidavista_export(osv.osv_memory):
                 if payment.bank_id.bank.country:
                     bank_address_list.append(payment.bank_id.bank.country.name)
                 if bank_address_list:
-                    data_of_file += ("\n            <BBAddress>" + format_string(", ".join(bank_address_list)) + "</BBAddress>")
+                    bank_address = format_string(", ".join(bank_address_list))
+                    bank_address = len(bank_address) > 70 and bank_address[0:70] or bank_address
+                    data_of_file += ("\n            <BBAddress>" + bank_address + "</BBAddress>")
             swift = payment.bank_id.bank and payment.bank_id.bank.bic or payment.bank_id.bank_bic
             if swift:
+                swift = len(swift) > 11 and swift[0:11] or swift
                 data_of_file += ("\n            <BBSwift>" + swift + "</BBSwift>")
             data_of_file += ("\n        </BenSet>")
             data_of_file += "\n    </Payment>"
