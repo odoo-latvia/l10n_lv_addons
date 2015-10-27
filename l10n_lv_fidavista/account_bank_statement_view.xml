@@ -8,13 +8,16 @@
             <field name="inherit_id" ref="account.view_bank_statement_form"/>
             <field name="arch" type="xml">
                 <xpath expr="/form/sheet/notebook/page[@name='statement_line_ids']/field[@name='line_ids']/tree[@string='Statement lines']/field[@name='partner_id']" position="before">
-		    <field name="transaction_type"/>
+		            <field name="transaction_type"/>
                     <field name="partner_name"/>
-		    <field name="partner_reg_id" invisible="1"/>
-		    <field name="partner_bank_account" invisible="1"/>
+		            <field name="partner_reg_id" invisible="1"/>
+		            <field name="partner_bank_account" invisible="1"/>
                 </xpath>
                 <xpath expr="/form/sheet/notebook/page[@name='statement_line_ids']/field[@name='line_ids']/tree[@string='Statement lines']/field[@name='partner_id']" position="attributes">
-		    <attribute name="context">{'default_name': partner_name and partner_name or '', 'default_vat': partner_reg_id and partner_reg_id or '', 'default_comment': partner_bank_account and ('Bank Account: '+partner_bank_account) or ''}</attribute>
+		            <attribute name="context">{'default_name': partner_name and partner_name or '', 'default_vat': partner_reg_id and partner_reg_id or '', 'default_comment': partner_bank_account and ('Bank Account: '+partner_bank_account) or ''}</attribute>
+                </xpath>
+                <xpath expr="/form/sheet/notebook/page[@name='statement_line_ids']/field[@name='line_ids']/tree[@string='Statement lines']/field[@name='bank_account_id']" position="attributes">
+                    <attribute name="groups">account.group_account_manager</attribute>
                 </xpath>
             </field>
         </record>
