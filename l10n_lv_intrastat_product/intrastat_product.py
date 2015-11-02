@@ -43,8 +43,9 @@ except ImportError:
 
 def createTextNode(xmldoc, pointer, nodeName, value):
     el = xmldoc.createElement(nodeName)
-    textNode=xmldoc.createTextNode(value)
-    el.appendChild(textNode)
+    if value:
+        textNode=xmldoc.createTextNode(value)
+        el.appendChild(textNode)
     pointer.appendChild(el)
     return pointer
 
