@@ -4,3 +4,8 @@ access_report_intrastat_code_employee,report.intrastat.code read for employee,mo
 access_report_intrastat_product,report.intrastat.product,model_report_intrastat_product,account.group_account_manager,1,1,1,1
 access_report_intrastat_product_line,report.intrastat.product.line,model_report_intrastat_product_line,account.group_account_manager,1,1,1,1
 access_report_intrastat_product_xml,report.intrastat.product.xml,model_report_intrastat_product_xml,account.group_account_manager,1,1,1,1
+,,,,,,,
+access_report_intrastat_type_stock_manager,report.intrastat.type,model_report_intrastat_type,stock.group_stock_manager,1,1,1,1
+access_report_intrastat_product_stock_manager,report.intrastat.product,model_report_intrastat_product,stock.group_stock_manager,1,1,1,1
+access_report_intrastat_product_line_stock_manager,report.intrastat.product.line,model_report_intrastat_product_line,stock.group_stock_manager,1,1,1,1
+access_report_intrastat_product_xml_stock_manager,report.intrastat.product.xml,model_report_intrastat_product_xml,stock.group_stock_manager,1,1,1,1

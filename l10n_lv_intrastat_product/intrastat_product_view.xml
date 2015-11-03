@@ -210,5 +210,29 @@
         <!-- Intrastat product menu -->
         <menuitem id="lv_intrastat_product_menu" parent="menu_intrastat_base_root" action="lv_intrastat_product_tree_action" sequence="1"/>
 
+        <!-- Warehouse Report menus -->
+
+        <menuitem id="stock.menu_stock_report" name="Reports" parent="stock.menu_stock_root" groups="stock.group_stock_manager"/>
+
+        <menuitem id="menu_intrastat_stock_base_root" name="Intrastat Reporting" parent="stock.menu_stock_report"/>
+
+        <record id="lv_intrastat_product_stock_tree_action" model="ir.actions.act_window">
+            <field name="name">Intrastat Product</field>
+            <field name="res_model">report.intrastat.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="lv_intrastat_product_stock_menu" parent="menu_intrastat_stock_base_root" action="lv_intrastat_product_stock_tree_action" sequence="1"/>
+
+        <record id="lv_intrastat_product_reports_stock_action" model="ir.actions.act_window">
+            <field name="name">Intrastat Reports</field>
+            <field name="res_model">report.intrastat.product.xml</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="lv_intrastat_product_report_stock_menu" parent="menu_intrastat_stock_base_root" action="lv_intrastat_product_reports_stock_action" sequence="10"/>
+
     </data>
 </openerp>

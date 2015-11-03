@@ -225,7 +225,10 @@ msgstr "DRN atskaite"
 #. module: l10n_lv_drn
 #: model:ir.actions.act_window,name:l10n_lv_drn.action_drn_return_wizard_natural_resources_tax
 #: model:ir.ui.menu,name:l10n_lv_drn.drn_return_wizard_natural_resources_tax_menu
+#: model:ir.actions.act_window,name:l10n_lv_drn.action_drn_return_wizard_natural_resources_tax_stock
+#: model:ir.ui.menu,name:l10n_lv_drn.drn_return_wizard_natural_resources_tax_stock_menu
 #: model:ir.ui.menu,name:l10n_lv_drn.natural_resources_tax_menu
+#: model:ir.ui.menu,name:l10n_lv_drn.natural_resources_tax_stock_menu
 #: view:product.template:l10n_lv_drn.view_product_template_drn_form
 #: model:sr.return_type,name:l10n_lv_drn.sr_return_type_7
 msgid "Natural Resources Tax"
@@ -257,6 +260,8 @@ msgstr "Produkta Dabas Resursu Nodokļa Kategorijas"
 #. module: l10n_lv_drn
 #: model:ir.actions.act_window,name:l10n_lv_drn.action_sr_return_type_sr_return_type
 #: model:ir.ui.menu,name:l10n_lv_drn.sr_return_type_natural_resources_tax_reports_menu
+#: model:ir.actions.act_window,name:l10n_lv_drn.action_sr_return_type_sr_return_type_stock
+#: model:ir.ui.menu,name:l10n_lv_drn.sr_return_type_natural_resources_tax_reports_stock_menu
 msgid "Natural Resources Tax Reports"
 msgstr "Sagatavotās Dabas Resursu Nodokļa Atskaites"
 
@@ -439,3 +444,7 @@ msgstr "Tips"
 msgid "Warning"
 msgstr "Brīdinājums"
 
+#. module: stock
+#: model:ir.ui.menu,name:stock.menu_stock_report
+msgid "Reports"
+msgstr "Atskaites"

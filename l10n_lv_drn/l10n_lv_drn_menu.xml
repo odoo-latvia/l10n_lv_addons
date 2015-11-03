@@ -33,5 +33,31 @@
 
         <menuitem name="Natural Resources Tax Reports" parent="natural_resources_tax_menu" sequence="10" action="action_sr_return_type_sr_return_type" id="sr_return_type_natural_resources_tax_reports_menu" icon="STOCK_JUSTIFY_FILL"/>
 
+        <!-- Warehouse Report menus -->
+
+        <menuitem id="stock.menu_stock_report" name="Reports" parent="stock.menu_stock_root" groups="stock.group_stock_manager"/>
+
+        <menuitem name="Natural Resources Tax" sequence="10" id="natural_resources_tax_stock_menu" parent="stock.menu_stock_report" icon="STOCK_OPEN"/>
+
+        <record model="ir.actions.act_window" id="action_drn_return_wizard_natural_resources_tax_stock">
+            <field name="name">Natural Resources Tax</field>
+            <field name="res_model">drn.return.wizard</field>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <menuitem name="Natural Resources Tax" parent="natural_resources_tax_stock_menu" sequence="1" action="action_drn_return_wizard_natural_resources_tax_stock" id="drn_return_wizard_natural_resources_tax_stock_menu" icon="STOCK_EXECUTE"/>
+
+        <record model="ir.actions.act_window" id="action_sr_return_type_sr_return_type_stock">
+            <field name="name">Natural Resources Tax Reports</field>
+            <field name="res_model">sr.return</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('type_id.code_system','=','DRN_LV')]</field>
+        </record>
+
+        <menuitem name="Natural Resources Tax Reports" parent="natural_resources_tax_stock_menu" sequence="10" action="action_sr_return_type_sr_return_type_stock" id="sr_return_type_natural_resources_tax_reports_stock_menu" icon="STOCK_JUSTIFY_FILL"/>
+
     </data>
 </openerp>

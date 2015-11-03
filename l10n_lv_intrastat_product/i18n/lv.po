@@ -642,6 +642,8 @@ msgstr "Intrastat Rēķini"
 #. module: l10n_lv_intrastat_product
 #: model:ir.actions.act_window,name:l10n_lv_intrastat_product.lv_intrastat_product_tree_action
 #: model:ir.ui.menu,name:l10n_lv_intrastat_product.lv_intrastat_product_menu
+#: model:ir.actions.act_window,name:l10n_lv_intrastat_product.lv_intrastat_product_stock_tree_action
+#: model:ir.ui.menu,name:l10n_lv_intrastat_product.lv_intrastat_product_stock_menu
 #: view:report.intrastat.product:l10n_lv_intrastat_product.lv_intrastat_product_tree
 msgid "Intrastat Product"
 msgstr "Intrastat Produkti"
@@ -654,12 +656,15 @@ msgstr "Intrastat rekvizīti"
 
 #. module: l10n_lv_intrastat_product
 #: model:ir.ui.menu,name:l10n_lv_intrastat_product.menu_intrastat_base_root
+#: model:ir.ui.menu,name:l10n_lv_intrastat_product.menu_intrastat_stock_base_root
 msgid "Intrastat Reporting"
 msgstr "Intrastat Atskaites"
 
 #. module: l10n_lv_intrastat_product
 #: model:ir.actions.act_window,name:l10n_lv_intrastat_product.lv_intrastat_product_reports_action
 #: model:ir.ui.menu,name:l10n_lv_intrastat_product.lv_intrastat_product_report_menu
+#: model:ir.actions.act_window,name:l10n_lv_intrastat_product.lv_intrastat_product_reports_stock_action
+#: model:ir.ui.menu,name:l10n_lv_intrastat_product.lv_intrastat_product_report_stock_menu
 #: view:report.intrastat.product.xml:l10n_lv_intrastat_product.report_intrastat_product_xml_form
 #: view:report.intrastat.product.xml:l10n_lv_intrastat_product.report_intrastat_product_xml_tree
 msgid "Intrastat Reports"
@@ -1305,3 +1310,8 @@ msgstr "Šeit iespējams ievadīt komentārus, pēc izvēles."
 #: help:report.intrastat.product,obligation_level:0
 msgid "Your obligation level for a certain type of Intrastat (Import or Export) depends on the total value that you export or import per year."
 msgstr "Intrastat atskaites tips ir atkarīgs no uzņēmuma importa/eksporta apjoma gadā."
+
+#. module: stock
+#: model:ir.ui.menu,name:stock.menu_stock_report
+msgid "Reports"
+msgstr "Atskaites"

@@ -1,3 +1,10 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_product_category_drn_user,product.category.drn.user,model_product_category_drn,base.group_user,1,0,0,0
 access_product_category_drn_account_manager,product.category.drn.account.manager,model_product_category_drn,account.group_account_manager,1,1,1,1
+,,,,,,,
+sr_return_type_stock_manager,sr.return_type,base_returns.model_sr_return_type,stock.group_stock_manager,1,1,1,1
+sr_return_stock_manager,sr.return,base_returns.model_sr_return,stock.group_stock_manager,1,1,1,1
+sr_return_crn_stock_manager,sr.return.crn,base_returns.model_sr_return_cnr,stock.group_stock_manager,1,1,1,1
+sr_report_templates_stock_manager,sr.report_templates,base_returns.model_sr_report_templates,stock.group_stock_manager,1,1,1,1
+sr_report_tmp_loc_stock_manager,sr.report_tmp_loc,base_returns.model_sr_report_tmp_loc,stock.group_stock_manager,1,1,1,1
+sr_period_type_stock_manager,sr.period_type,base_returns.model_sr_period_type,stock.group_stock_manager,1,1,1,1
