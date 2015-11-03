@@ -32,6 +32,7 @@ from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DF
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import math
+import re
 
 from xml.dom import minidom
 try:
@@ -633,7 +634,10 @@ class drn_return_wizard(osv.osv_memory):
 
                 curr_categ_node.appendChild(group_node)
 
-        xml_file = base64.encodestring(xmldoc.toprettyxml().encode('utf8'))
+        uglyXml = xmldoc.toprettyxml(indent='  ')
+        text_re = re.compile('>\n\s+([^<>\s].*?)\n\s+</', re.DOTALL)
+        prettyXml = text_re.sub('>\g<1></', uglyXml)
+        xml_file = base64.encodestring(prettyXml.encode('utf8'))
         return_id = self.pool.get('sr.return').create(cr, uid, {
             'name':this.name+' '+this.date_start+' - '+this.date_stop,
             'type_id':this.type_id.id,
