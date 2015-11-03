@@ -27,6 +27,7 @@ from openerp.tools.translate import _
 import base64
 from datetime import date, datetime, timedelta
 import pytz
+from openerp import SUPERUSER_ID
 
 class payslip_eds_export(osv.osv_memory):
     _name = 'payslip.eds.export'
@@ -151,7 +152,7 @@ class payslip_eds_export(osv.osv_memory):
         date_pay = date.today().strftime('%Y-%m-%d')
         year, month = self.get_year_month(cr, uid, context=context)
         if len(year) == 1 and len(month) == 1:
-            day_def = self.pool.get('ir.values').get_default(cr, uid, 'payslip.eds.export', 'date_pay_day')
+            day_def = self.pool.get('ir.values').get_default(cr, SUPERUSER_ID, 'payslip.eds.export', 'date_pay_day')
             if day_def:
                 day = int(day_def)
                 date_pay = datetime.strftime(date(year[0], month[0], day), '%Y-%m-%d')
@@ -301,13 +302,13 @@ class payslip_eds_export(osv.osv_memory):
         self.write(cr, uid, ids, {'file_save': data_of_file_real, 'name': data_exp.name}, context=context)
 
         vals_obj = self.pool.get('ir.values')
-        def_resp_id = vals_obj.get_default(cr, uid, 'payslip.eds.export', 'responsible_id')
+        def_resp_id = vals_obj.get_default(cr, SUPERUSER_ID, 'payslip.eds.export', 'responsible_id')
         if (not def_resp_id) or def_resp_id != data_exp.responsible_id.id:
-            vals_obj.set_default(cr, uid, 'payslip.eds.export', 'responsible_id', data_exp.responsible_id.id)
-        def_date_pay_day = vals_obj.get_default(cr, uid, 'payslip.eds.export', 'date_pay_day')
+            vals_obj.set_default(cr, SUPERUSER_ID, 'payslip.eds.export', 'responsible_id', data_exp.responsible_id.id)
+        def_date_pay_day = vals_obj.get_default(cr, SUPERUSER_ID, 'payslip.eds.export', 'date_pay_day')
         exp_date_pay_day = datetime.strftime(datetime.strptime(data_exp.date_pay, '%Y-%m-%d'), '%d')
         if (not def_date_pay_day) or def_date_pay_day != exp_date_pay_day:
-            vals_obj.set_default(cr, uid, 'payslip.eds.export', 'date_pay_day', exp_date_pay_day)
+            vals_obj.set_default(cr, SUPERUSER_ID, 'payslip.eds.export', 'date_pay_day', exp_date_pay_day)
 
         return {
             'type': 'ir.actions.act_window',
