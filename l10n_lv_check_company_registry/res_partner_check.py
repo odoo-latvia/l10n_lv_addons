@@ -318,8 +318,9 @@ class res_users(osv.osv):
     def create(self, cr, uid, vals, context=None):
         if context is None:
             context = {}
-        context.update({'default_allow_creation': True})
-        return super(res_users, self).create(cr, uid, vals, context=context)
+        ctx = context.copy()
+        ctx.update({'default_allow_creation': True})
+        return super(res_users, self).create(cr, uid, vals, context=ctx)
 
 res_users()
 
@@ -335,8 +336,9 @@ class res_company(osv.osv):
     def create(self, cr, uid, vals, context=None):
         if context is None:
             context = {}
-        context.update({'default_allow_creation': True})
-        return super(res_company, self).create(cr, uid, vals, context=context)
+        ctx = context.copy()
+        ctx.update({'default_allow_creation': True})
+        return super(res_company, self).create(cr, uid, vals, context=ctx)
 
 res_company()
 
