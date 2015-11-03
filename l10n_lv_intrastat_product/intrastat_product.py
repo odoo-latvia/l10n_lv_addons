@@ -750,7 +750,16 @@ class report_intrastat_product(osv.osv):
 
         user = self.pool.get('res.users').browse(cr, uid, uid, context=context)
         company = user.company_id
-        currNode = createTextNode(xmldoc, currNode, "RegistrationNumber", (company.partner_id.ref or ''))
+        reg_no = company.company_registry
+        if (not reg_no) and hasattr(company.partner_id,'company_registry'):
+            reg_no = company.partner_id.company_registry
+        if not reg_no:
+            reg_no = company.vat
+        if not reg_no:
+            reg_no = company.partner_id.vat
+        if not reg_no:
+            reg_no = company.partner_id.ref
+        currNode = createTextNode(xmldoc, currNode, "RegistrationNumber", (reg_no or ''))
         currNode = createTextNode(xmldoc, currNode, "Name", company.name[:200])
 
         legal_address = self._form_address(cr, uid, company.partner_id, context=context)
