@@ -24,6 +24,27 @@
 
 from openerp import models, fields, api
 from openerp.tools.translate import _
+import xml.etree.ElementTree as ET
+
+class stock_transfer_details(models.TransientModel):
+    _inherit = 'stock.transfer_details'
+
+    def default_get(self, cr, uid, fields, context=None):
+        if context is None: context = {}
+        res = super(stock_transfer_details, self).default_get(cr, uid, fields, context=context)
+        if 'item_ids' in res:
+            product_obj = self.pool.get('product.product')
+            for ind, item in enumerate(res['item_ids']):
+                if item.get('product_id',False) and item.get('lot_id',False):
+                    ctx = context.copy()
+                    ctx.update({'lot_id': item['lot_id']})
+                    if item.get('sourceloc_id',False):
+                        ctx.update({'location': item['sourceloc_id']})
+                    qty_data = product_obj._product_available(cr, uid, [item['product_id']], context=ctx)
+                    qty = qty_data[item['product_id']]['qty_available']
+                    if qty <= 0.0:
+                        res['item_ids'][ind]['lot_id'] = False
+        return res
 
 class stock_transfer_details_items(models.TransientModel):
     _inherit = 'stock.transfer_details_items'
@@ -76,6 +97,12 @@ class stock_transfer_details_items(models.TransientModel):
             res['value']['lot_id'] = False
             if len(lot_list) == 1:
                 res['value']['lot_id'] = lot_list[0]
+        return res
+
+    def fields_get(self, cr, uid, allfields=[], context=None):
+        res = super(stock_transfer_details_items, self).fields_get(cr, uid, allfields=allfields, context=context)
+        print '--------------------------'
+        print res
         return res
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
