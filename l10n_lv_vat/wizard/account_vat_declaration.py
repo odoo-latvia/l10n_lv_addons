@@ -28,6 +28,7 @@ import sys
 from openerp.tools.translate import _
 import base64
 import openerp.addons.decimal_precision as dp
+from datetime import datetime
 from xml.etree import ElementTree
 from cStringIO import StringIO
 
@@ -174,9 +175,12 @@ class l10n_lv_vat_declaration(osv.osv_memory):
             doc_number = line.move_id.name
             doc_date = line.move_id.date
             invoice_id = line.invoice.id
-            if (amount_untaxed >= 1000.0) and (not partner_country):
-                raise osv.except_osv(_('Insufficient data!'), _('No VAT or Country defined for Partner "%s", but Taxed Amount is greater than 1000.00. Please define either a Country or a VAT to get the Country Code!') % (partner_name))
-        return {'partner_id': partner_id, 'partner_country': partner_country, 'partner_vat': partner_vat, 'partner_name': partner_name, 'partner_fpos': partner_fpos, 'journal_type': journal_type, 'amount_tax': amount_tax, 'amount_taxed': amount_taxed, 'amount_untaxed': amount_untaxed, 'doc_number': doc_number, 'doc_date': doc_date, 'tax_code': tax_code, 'tax_case_code': tax_case_code, 'tax_code_l': tax_code_l, 'invoice_id': invoice_id}
+            limit_val = 1000.0
+            if line.move_id.date > datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
+                limit_val = 1430.0
+            if (amount_untaxed >= limit_val) and (not partner_country):
+                raise osv.except_osv(_('Insufficient data!'), _('No VAT or Country defined for Partner "%s", but Taxed Amount is greater than %s. Please define either a Country or a VAT to get the Country Code!') % (partner_name, limit_val))
+        return {'partner_id': partner_id, 'partner_country': partner_country, 'partner_vat': partner_vat, 'partner_name': partner_name, 'partner_fpos': partner_fpos, 'journal_type': journal_type, 'amount_tax': amount_tax, 'amount_taxed': amount_taxed, 'amount_untaxed': amount_untaxed, 'doc_number': doc_number, 'doc_date': doc_date, 'tax_code': tax_code, 'tax_case_code': tax_case_code, 'tax_code_l': tax_code_l, 'invoice_id': invoice_id, 'limit_val': limit_val}
 
     def _process_expense(self, cr, uid, line_id, context=None):
         if context is None:
@@ -216,6 +220,9 @@ class l10n_lv_vat_declaration(osv.osv_memory):
             doc_date = line.move_id.date
             invoice_id = line.invoice.id
             amount_taxed = line.debit or line.credit
+            limit_val = 1000.0
+            if line.move_id.date > datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
+                limit_val = 1430.0
             if line.tax_code_id and self._check_tax_code(cr, uid, line.tax_code_id.id, context=context):
                 amount_tax = line.debit or line.credit
                 tax_code = line.tax_code_id.tax_code
@@ -231,7 +238,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                     amount_untaxed += datas1[(partner_id)]['amount_untaxed']
                 datas1[(partner_id)].clear()
             if not datas1.get((partner_id)):
-                datas1[(partner_id)] = {'partner_id': partner_id, 'partner_country': partner_country, 'partner_vat': partner_vat, 'partner_name': partner_name, 'partner_fpos': partner_fpos, 'journal_type': journal_type, 'amount_tax': amount_tax, 'amount_taxed': amount_taxed, 'amount_untaxed': amount_untaxed, 'doc_number': doc_number, 'doc_date': doc_date, 'tax_code': tax_code, 'tax_case_code': tax_case_code, 'tax_code_l': tax_code_l, 'invoice_id': invoice_id}
+                datas1[(partner_id)] = {'partner_id': partner_id, 'partner_country': partner_country, 'partner_vat': partner_vat, 'partner_name': partner_name, 'partner_fpos': partner_fpos, 'journal_type': journal_type, 'amount_tax': amount_tax, 'amount_taxed': amount_taxed, 'amount_untaxed': amount_untaxed, 'doc_number': doc_number, 'doc_date': doc_date, 'tax_code': tax_code, 'tax_case_code': tax_case_code, 'tax_code_l': tax_code_l, 'invoice_id': invoice_id, 'limit_val': limit_val}
             result11.append(datas1[(partner_id)])
 
         for object in result11:
@@ -314,6 +321,10 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         for p in periods:
             ctx = context.copy()
             ctx['period_id'] = p
+            p_br = obj_acc_period.browse(cr, uid, p, context=context)
+            limit_val = 1000.0
+            if p_br.date_start > datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
+                limit_val = 1430.0
             tax_info = obj_tax_code.read(cr, uid, tax_code_ids, ['tax_code','code','sum_period'], context=ctx)
             for item in tax_info:
                 tax_code = item['tax_code']
@@ -323,7 +334,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                     sum_period += data_period[(code)]['sum_period']
                     data_period[(code)].clear()
                 if not data_period.get((code)):
-                    data_period[(code)] = {'tax_code': tax_code,'code': code, 'sum_period': sum_period}
+                    data_period[(code)] = {'tax_code': tax_code,'code': code, 'sum_period': sum_period, 'limit_val': limit_val}
                 result_period.append(data_period[(code)])
         result_period_real = []
         for object in result_period:
@@ -331,7 +342,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 result_period_real.append(object)
 
         for item in result_period_real:
-            if (item['code'] == '420') and (item['sum_period'] <= -1000.00):
+            if (item['code'] == '420') and (item['sum_period'] <= -item['limit_val']):
                 amount_overpaid = (item['sum_period']) * (-1)
                 data_of_file += "\n    <SummaParm>" + str(amount_overpaid) + "</SummaParm>"
                 break
@@ -455,7 +466,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
             if r_purchase != []:
                 for p in r_purchase:
                     # getting document types "A" and "N":
-                    if p['amount_untaxed'] >= 1000.0:
+                    if p['amount_untaxed'] >= p['limit_val']:
                         data_of_file += "\n        <R>"
                         data_of_file += ("\n            <DpValsts>" + unicode(p['partner_country']) + "</DpValsts>")
                         deal_type = "A"
@@ -496,7 +507,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         data_of_file += ("\n        </R>")
 
                     # summing up, what's left for each partner:
-                    if (p['amount_untaxed'] < 1000.0) and p['partner_id']:
+                    if (p['amount_untaxed'] < p['limit_val']) and p['partner_id']:
                         partner_id = p['partner_id']
                         partner_country = p['partner_country']
                         partner_vat = p['partner_vat']
@@ -515,7 +526,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                             amount_taxed += d_p_s[(partner_id)]['amount_taxed']
                             d_p_s[(partner_id)].clear()
                         if not d_p_s.get((partner_id)):
-                            d_p_s[(partner_id)] = {'partner_id': partner_id, 'partner_country': partner_country, 'partner_vat': partner_vat, 'partner_name': partner_name, 'amount_untaxed': amount_untaxed, 'amount_tax': amount_tax, 'amount_taxed': amount_taxed}
+                            d_p_s[(partner_id)] = {'partner_id': partner_id, 'partner_country': partner_country, 'partner_vat': partner_vat, 'partner_name': partner_name, 'amount_untaxed': amount_untaxed, 'amount_tax': amount_tax, 'amount_taxed': amount_taxed, 'limit_val': p['limit_val']}
                         r_p_s.append(d_p_s[(partner_id)])
 
                 r_p_s_t = []
@@ -529,7 +540,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 amount_taxed_a = 0.0
                 for rpst in r_p_s_t:
                     # getting document type "V":
-                    if rpst['amount_untaxed'] >= 1000.0:
+                    if rpst['amount_untaxed'] >= rpst['limit_val']:
                         data_of_file += "\n        <R>"
                         data_of_file += ("\n            <DpValsts>" + unicode(rpst['partner_country']) + "</DpValsts>")
                         if rpst['partner_vat']:
@@ -540,7 +551,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         data_of_file += ("\n            <PvnVertiba>" + str(rpst['amount_tax']) + "</PvnVertiba>")
                         data_of_file += ("\n        </R>")
                     # summing up, what's left:
-                    if rpst['amount_untaxed'] < 1000.0:
+                    if rpst['amount_untaxed'] < rpst['limit_val']:
                         amount_untaxed_a += rpst['amount_untaxed']
                         amount_tax_a += rpst['amount_tax']
                         amount_taxed_a += rpst['amount_taxed']
@@ -579,9 +590,13 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                             val_taxed_cur = line.amount_currency
                             if val_taxed_cur < 0:
                                 val_taxed_cur = line.amount_currency * (-1)
+                            if line.amount_currency == 0.0 and (not line.currency_id):
+                                val_taxed_cur = val_taxed_LVL
                         if line.tax_code_id and self._check_tax_code(cr, uid, line.tax_code_id.id, context=context) and (line.tax_code_id.tax_code == '64'):
                             val_tax_LVL = line.credit or line.debit
                             val_tax_cur = line.amount_currency
+                            if line.amount_currency == 0.0 and (not line.currency_id):
+                                val_tax_cur = val_tax_LVL
                         if line.currency_id:
                             currency = line.currency_id.name
                         if line.invoice:
@@ -622,7 +637,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 r_s_s = []
                 for s in r_sale:
                     # getting document types "X" or numbers:
-                    if s['amount_untaxed'] >= 1000.0:
+                    if s['amount_untaxed'] >= s['limit_val']:
                         # number document types:
                         if s['partner_fpos'] == ('LR PVN maksātājs').decode('utf-8'):
                             if not s['partner_vat']:
@@ -655,7 +670,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                             amount_tax_x += s['amount_tax']
                             amount_taxed_x += s['amount_taxed']
                     # summing up values for each partner:
-                    if s['amount_untaxed'] < 1000.0:
+                    if s['amount_untaxed'] < s['limit_val']:
                         partner_id = s['partner_id']
                         partner_country = s['partner_country']
                         partner_vat = s['partner_vat']
@@ -675,7 +690,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                             amount_taxed += d_s_s[(partner_id)]['amount_taxed']
                             d_s_s[(partner_id)].clear()
                         if not d_s_s.get((partner_id)):
-                            d_s_s[(partner_id)] = {'partner_id': partner_id, 'partner_country': partner_country, 'partner_vat': partner_vat, 'partner_name': partner_name, 'partner_fpos': partner_fpos, 'amount_untaxed': amount_untaxed, 'amount_tax': amount_tax, 'amount_taxed': amount_taxed}
+                            d_s_s[(partner_id)] = {'partner_id': partner_id, 'partner_country': partner_country, 'partner_vat': partner_vat, 'partner_name': partner_name, 'partner_fpos': partner_fpos, 'amount_untaxed': amount_untaxed, 'amount_tax': amount_tax, 'amount_taxed': amount_taxed, 'limit_val': s['limit_val']}
                         r_s_s.append(d_s_s[(partner_id)])
 
                 r_s_s_t = []
@@ -689,7 +704,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 amount_taxed_t = 0.0
                 for rsst in r_s_s_t:
                     # getting document type "V":
-                    if rsst['amount_untaxed'] >= 1000.0:
+                    if rsst['amount_untaxed'] >= rsst['limit_val']:
                         data_of_file += "\n        <R>"
                         data_of_file += ("\n            <DpValsts>" + unicode(rsst['partner_country']) + "</DpValsts>")
                         data_of_file += ("\n            <DpNumurs>" + str(rsst['partner_vat']) + "</DpNumurs>")
@@ -699,7 +714,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         data_of_file += ("\n            <DokVeids>" + "V" + "</DokVeids>")
                         data_of_file += ("\n        </R>")
                     # summing up, what's left:
-                    if rsst['amount_untaxed'] < 1000.0:
+                    if rsst['amount_untaxed'] < rsst['limit_val']:
                         amount_untaxed_t += rsst['amount_untaxed']
                         amount_tax_t += rsst['amount_tax']
                         amount_taxed_t += rsst['amount_taxed']
