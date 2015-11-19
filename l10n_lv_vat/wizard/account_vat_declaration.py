@@ -561,6 +561,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 data_of_file += "\n    <PVN1II>"
 
                 for p_EU in account_move_obj.browse(cr, uid, purchase_EU_ids, context=context):
+                    currency = p_EU.journal_id.currency and p_EU.journal_id.currency.name or p_EU.journal_id.company_id.currency_id.name
                     for line in p_EU.line_id:
                         if line.partner_id and line.partner_id.vat:
                             partner_country = line.partner_id.vat[:2]
@@ -581,7 +582,8 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         if line.tax_code_id and self._check_tax_code(cr, uid, line.tax_code_id.id, context=context) and (line.tax_code_id.tax_code == '64'):
                             val_tax_LVL = line.credit or line.debit
                             val_tax_cur = line.amount_currency
-                        currency = line.currency_id and line.currency_id.name
+                        if line.currency_id:
+                            currency = line.currency_id.name
                         if line.invoice:
                             doc_number = line.invoice.number
                             doc_date = line.invoice.date_invoice
