@@ -508,6 +508,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         if p['tax_code'] == '65':
                             deal_type == "K"
                         data_of_file += ("\n            <DpNosaukums>" + unicode(p['partner_name']) + "</DpNosaukums>")
+                        data_of_file += ("\n<!--            <FPozicija>" + unicode(p['partner_fpos']) + "</FPozicija>-->")
                         data_of_file += ("\n            <DarVeids>" + deal_type + "</DarVeids>")
                         if p['journal_type'] in ['purchase','expense']:
                             data_of_file += ("\n            <VertibaBezPvn>" + str(p['amount_untaxed']) + "</VertibaBezPvn>")
