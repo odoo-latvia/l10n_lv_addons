@@ -266,7 +266,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         check1 = True
                     if 'VAT' in fpos_need.split('_') and ('PVN' in fl or 'VAT' in fl):
                         check2 = True
-                    if ('payer' in fpos_need.split('_') and ((('maksātājs').decode('utf-8') in fl.decode('utf-8') and ('nemaksātājs').decode('utf-8') not in fl.decode('utf-8')) or ('payer' in fl and 'non-payer' not in fl))) or ('non-payer' in fpos_need.split('_') and (('nemaksātājs').decode('utf-8') in fl.decode('utf-8') or 'non-payer' in fl)):
+                    if ('payer' in fpos_need.split('_') and ((u'maksātājs' in (u'' + fl) and u'nemaksātājs' not in (u'' + fl)) or ('payer' in fl and 'non-payer' not in fl))) or ('non-payer' in fpos_need.split('_') and (u'nemaksātājs' in (u'' + fl) or 'non-payer' in fl)):
                         check3 = True
                 if check1 and check2 and check3:
                     result = True
