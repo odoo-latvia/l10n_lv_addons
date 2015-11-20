@@ -261,8 +261,8 @@ class payslip_eds_export(osv.osv_memory):
                             rn += l.total
                     data_of_file += ("\n            <Ienakumi>" + str(ienakumi) + "</Ienakumi>")
                     data_of_file += ("\n            <Iemaksas>" + str(iemaksas) + "</Iemaksas>")
-                    data_of_file += ("\n            <PrecizetieIenakumi>" + str(0.0) + "<PrecizetieIenakumi/>")
-                    data_of_file += ("\n            <PrecizetasIemaksas>" + str(0.0) + "<PrecizetasIemaksas/>")
+                    data_of_file += ("\n            <PrecizetieIenakumi>" + str(0.0) + "</PrecizetieIenakumi>")
+                    data_of_file += ("\n            <PrecizetasIemaksas>" + str(0.0) + "</PrecizetasIemaksas>")
                     data_of_file += ("\n            <IetIedzNodoklis>" + str(iin) + "</IetIedzNodoklis>")
                     wt = "1"
                     data_of_file += ("\n            <DarbaVeids>" + wt + "</DarbaVeids>")
