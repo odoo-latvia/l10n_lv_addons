@@ -32,6 +32,8 @@ from datetime import datetime
 from xml.etree import ElementTree
 from cStringIO import StringIO
 
+EU_list = ['AT', 'BE', 'BG', 'CY', 'HR', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB']
+
 class l10n_lv_vat_declaration(osv.osv_memory):
     """ Vat Declaration """
     _name = "l10n_lv.vat.declaration"
@@ -479,7 +481,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                                 raise osv.except_osv(_('Insufficient data!'), _('No VAT defined for Partner "%s", but this partner is defined as a VAT payer. Please define the VAT!') % (p['partner_name']))
                             else:
                                 deal_type = "N"
-                        if p['tax_code'] == '61':
+                        if p['tax_code'] == '61' or (p['partner_country'] != 'LV' and p['partner_country'] not in EU_list):
                             deal_type == "I"
                         if p['tax_code'] == '65':
                             deal_type == "K"
@@ -540,7 +542,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 amount_taxed_a = 0.0
                 for rpst in r_p_s_t:
                     # getting document type "V":
-                    if rpst['amount_untaxed'] >= rpst['limit_val']:
+                    if rpst['amount_untaxed'] >= rpst['limit_val'] and rpst['partner_country'] == 'LV':
                         data_of_file += "\n        <R>"
                         data_of_file += ("\n            <DpValsts>" + unicode(rpst['partner_country']) + "</DpValsts>")
                         if rpst['partner_vat']:
@@ -551,7 +553,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         data_of_file += ("\n            <PvnVertiba>" + str(rpst['amount_tax']) + "</PvnVertiba>")
                         data_of_file += ("\n        </R>")
                     # summing up, what's left:
-                    if rpst['amount_untaxed'] < rpst['limit_val']:
+                    if rpst['amount_untaxed'] < rpst['limit_val'] or rpst['partner_country'] != 'LV':
                         amount_untaxed_a += rpst['amount_untaxed']
                         amount_tax_a += rpst['amount_tax']
                         amount_taxed_a += rpst['amount_taxed']
@@ -704,7 +706,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 amount_taxed_t = 0.0
                 for rsst in r_s_s_t:
                     # getting document type "V":
-                    if rsst['amount_untaxed'] >= rsst['limit_val']:
+                    if rsst['amount_untaxed'] >= rsst['limit_val'] and rsst['partner_country'] == 'LV':
                         data_of_file += "\n        <R>"
                         data_of_file += ("\n            <DpValsts>" + unicode(rsst['partner_country']) + "</DpValsts>")
                         data_of_file += ("\n            <DpNumurs>" + str(rsst['partner_vat']) + "</DpNumurs>")
@@ -714,7 +716,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         data_of_file += ("\n            <DokVeids>" + "V" + "</DokVeids>")
                         data_of_file += ("\n        </R>")
                     # summing up, what's left:
-                    if rsst['amount_untaxed'] < rsst['limit_val']:
+                    if rsst['amount_untaxed'] < rsst['limit_val'] or rsst['partner_country'] != 'LV':
                         amount_untaxed_t += rsst['amount_untaxed']
                         amount_tax_t += rsst['amount_tax']
                         amount_taxed_t += rsst['amount_taxed']
