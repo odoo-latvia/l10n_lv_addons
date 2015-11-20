@@ -496,7 +496,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         deal_type = "?"
                         if p['partner_vat']:
                             data_of_file += ("\n            <DpNumurs>" + str(p['partner_vat']) + "</DpNumurs>")
-                            if (p['tax_code'] == '62') and (check_fpos(p['partner_fpos'], 'LR_VAT_payer') or check_fpos(p['partner_fpos'], 'EU_VAT_payer')):
+                            if (p['tax_code'] == '62') or (check_fpos(p['partner_fpos'], 'LR_VAT_payer') or check_fpos(p['partner_fpos'], 'EU_VAT_payer')):
                                 deal_type = "A"
                         if (not p['partner_vat']) and (p['tax_code'] == '62'):
                             if check_fpos(p['partner_fpos'], 'LR_VAT_payer'):
@@ -508,11 +508,6 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         if p['tax_code'] == '65':
                             deal_type == "K"
                         data_of_file += ("\n            <DpNosaukums>" + unicode(p['partner_name']) + "</DpNosaukums>")
-                        data_of_file += ("\n<!--            <FPozicija>" + unicode(p['partner_fpos']) + "</FPozicija>-->")
-                        data_of_file += ("\n<!--            <LRPVNmaks>" + str(check_fpos(p['partner_fpos'], 'LR_VAT_payer')) + "</LRPVNmaks>-->")
-                        data_of_file += ("\n<!--            <LRPVNnemaks>" + str(check_fpos(p['partner_fpos'], 'LR_VAT_non-payer')) + "</LRPVNnemaks>-->")
-                        data_of_file += ("\n<!--            <ESPVNmaks>" + str(check_fpos(p['partner_fpos'], 'EU_VAT_payer')) + "</ESPVNmaks>-->")
-                        data_of_file += ("\n<!--            <ESPVNnemaks>" + str(check_fpos(p['partner_fpos'], 'EU_VAT_non-payer')) + "</ESPVNnemaks>-->")
                         data_of_file += ("\n            <DarVeids>" + deal_type + "</DarVeids>")
                         if p['journal_type'] in ['purchase','expense']:
                             data_of_file += ("\n            <VertibaBezPvn>" + str(p['amount_untaxed']) + "</VertibaBezPvn>")
