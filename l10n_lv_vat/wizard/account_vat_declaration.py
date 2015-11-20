@@ -32,7 +32,7 @@ from datetime import datetime
 from xml.etree import ElementTree
 from cStringIO import StringIO
 
-EU_list = ['AT', 'BE', 'BG', 'CY', 'HR', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB']
+#EU_list = ['AT', 'BE', 'BG', 'CY', 'HR', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB']
 
 class l10n_lv_vat_declaration(osv.osv_memory):
     """ Vat Declaration """
@@ -252,6 +252,26 @@ class l10n_lv_vat_declaration(osv.osv_memory):
     def create_xml(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
+
+        # method for fiscal position checking:
+        def check_fpos(fpos, fpos_need):
+            result = False
+            if fpos:
+                fpos_list = fpos.split(' ')
+                check1 = False
+                check2 = False
+                check3 = False
+                for fl in fpos_list:
+                    if ('LR' in fpos_need.split('_') and 'LR' in fl) or ('EU' in fpos_need.split('_') and ('EU' in fl or 'ES' in fl)):
+                        check1 = True
+                    if 'VAT' in fpos_need.split('_') and ('PVN' in fl or 'VAT' in fl):
+                        check2 = True
+                    if ('payer' in fpos_need.split('_') and (('maksātājs' in fl and 'nemaksātājs' not in fl) or ('payer' in fl and 'non-payer' not in fl))) or ('non-payer' in fpos_need.split('_') and ('nemaksātājs' in fl or 'non-payer' in fl)):
+                        check3 = True
+                if check1 and check2 and check3:
+                    result = True
+            return result
+
         # defining objects used:
         obj_tax_code = self.pool.get('account.tax.code')
         obj_acc_period = self.pool.get('account.period')
@@ -474,14 +494,14 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         deal_type = "A"
                         if p['partner_vat']:
                             data_of_file += ("\n            <DpNumurs>" + str(p['partner_vat']) + "</DpNumurs>")
-                            if (p['tax_code'] == '62') and (p['partner_fpos'] == ('LR PVN maksātājs').decode('utf-8')):
+                            if (p['tax_code'] == '62') and check_fpos(p['partner_fpos'], 'LR_VAT_payer'):
                                 deal_type = "A"
                         if (not p['partner_vat']) and (p['tax_code'] == '62'):
-                            if p['partner_fpos'] == ('LR PVN maksātājs').decode('utf-8'):
+                            if check_fpos(p['partner_fpos'], 'LR_VAT_payer'):
                                 raise osv.except_osv(_('Insufficient data!'), _('No VAT defined for Partner "%s", but this partner is defined as a VAT payer. Please define the VAT!') % (p['partner_name']))
                             else:
                                 deal_type = "N"
-                        if p['tax_code'] == '61' or (p['partner_country'] != 'LV' and p['partner_country'] not in EU_list):
+                        if p['tax_code'] == '61' or (p['partner_fpos'] and ((not check_fpos(p['partner_fpos'], 'EU_VAT_payer')) and (not check_fpos(p['partner_fpos'], 'EU_VAT_non-payer')) and (not check_fpos(p['partner_fpos'], 'LR_VAT_payer')) and (not check_fpos(p['partner_fpos'], 'LR_VAT_non-payer')))):
                             deal_type == "I"
                         if p['tax_code'] == '65':
                             deal_type == "K"
@@ -641,7 +661,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                     # getting document types "X" or numbers:
                     if s['amount_untaxed'] >= s['limit_val']:
                         # number document types:
-                        if s['partner_fpos'] == ('LR PVN maksātājs').decode('utf-8'):
+                        if check_fpos(s['partner_fpos'], 'LR_VAT_payer'):
                             if not s['partner_vat']:
                                 raise osv.except_osv(_('Insufficient data!'), _('No VAT defined for Partner "%s", but this partner is marked as VAT payer. Please define the VAT!') % (s['partner_name']))
                             else:
@@ -667,7 +687,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                                 data_of_file += ("\n            <DokDatums>" + str(s['doc_date']) + "</DokDatums>")
                                 data_of_file += "\n        </R>"
                         # "X" document types:
-                        if (s['partner_fpos'] == ('LR PVN nemaksātājs').decode('utf-8')) or (not s['partner_vat']):
+                        if check_fpos(s['partner_fpos'], 'LR_VAT_non-payer') or (not s['partner_vat']):
                             amount_untaxed_x += s['amount_untaxed']
                             amount_tax_x += s['amount_tax']
                             amount_taxed_x += s['amount_taxed']
