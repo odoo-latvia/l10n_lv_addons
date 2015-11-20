@@ -491,7 +491,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                     if p['amount_untaxed'] >= p['limit_val']:
                         data_of_file += "\n        <R>"
                         data_of_file += ("\n            <DpValsts>" + unicode(p['partner_country']) + "</DpValsts>")
-                        deal_type = "A"
+                        deal_type = "?"
                         if p['partner_vat']:
                             data_of_file += ("\n            <DpNumurs>" + str(p['partner_vat']) + "</DpNumurs>")
                             if (p['tax_code'] == '62') and check_fpos(p['partner_fpos'], 'LR_VAT_payer'):
