@@ -141,6 +141,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         amount_untaxed = 0.0
         partner_id = False
         partner_country = False
+        partner_fpos = False
         partner_vat = False
         partner_name = False
         doc_number = False
@@ -192,6 +193,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         amount_taxed = 0.0
         partner_id = False
         partner_country = False
+        partner_fpos = False
         partner_vat = False
         partner_name = False
         doc_number = False
