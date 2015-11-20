@@ -493,17 +493,17 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                     if p['amount_untaxed'] >= p['limit_val']:
                         data_of_file += "\n        <R>"
                         data_of_file += ("\n            <DpValsts>" + unicode(p['partner_country']) + "</DpValsts>")
-                        deal_type = "A"
+                        deal_type = "?"
                         if p['partner_vat']:
                             data_of_file += ("\n            <DpNumurs>" + str(p['partner_vat']) + "</DpNumurs>")
-                            if (p['tax_code'] == '62') or (check_fpos(p['partner_fpos'], 'LR_VAT_payer') or check_fpos(p['partner_fpos'], 'EU_VAT_payer')):
+                            if (p['tax_code'] == '62') and (check_fpos(p['partner_fpos'], 'LR_VAT_payer') or check_fpos(p['partner_fpos'], 'EU_VAT_payer')):
                                 deal_type = "A"
                         if (not p['partner_vat']) and (p['tax_code'] == '62'):
                             if check_fpos(p['partner_fpos'], 'LR_VAT_payer'):
                                 raise osv.except_osv(_('Insufficient data!'), _('No VAT defined for Partner "%s", but this partner is defined as a VAT payer. Please define the VAT!') % (p['partner_name']))
                             else:
                                 deal_type = "N"
-                        if p['tax_code'] == '61' or (p['partner_fpos'] and ((not check_fpos(p['partner_fpos'], 'EU_VAT_payer')) and (not check_fpos(p['partner_fpos'], 'EU_VAT_non-payer')) and (not check_fpos(p['partner_fpos'], 'LR_VAT_payer')) and (not check_fpos(p['partner_fpos'], 'LR_VAT_non-payer')))):
+                        if p['tax_code'] == '61' and (p['partner_fpos'] and ((not check_fpos(p['partner_fpos'], 'EU_VAT_payer')) and (not check_fpos(p['partner_fpos'], 'EU_VAT_non-payer')) and (not check_fpos(p['partner_fpos'], 'LR_VAT_payer')) and (not check_fpos(p['partner_fpos'], 'LR_VAT_non-payer')))):
                             deal_type = "I"
                         if p['tax_code'] == '65':
                             deal_type == "K"
