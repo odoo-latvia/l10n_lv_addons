@@ -120,7 +120,7 @@ class payslip_eds_export(osv.osv_memory):
                     datas1[(emp_id,tab)] = {
                         'tab': tab,
                         'emp_name': emp_name,
-                        'emp_code': emp_code,
+                        'emp_code': emp_code and emp_code.replace('-','') or False,
                         'emp_stat': emp_stat,
                         'lines': lines,
                         'hours': hours
