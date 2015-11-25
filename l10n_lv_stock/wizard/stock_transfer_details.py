@@ -99,10 +99,4 @@ class stock_transfer_details_items(models.TransientModel):
                 res['value']['lot_id'] = lot_list[0]
         return res
 
-    def fields_get(self, cr, uid, allfields=[], context=None):
-        res = super(stock_transfer_details_items, self).fields_get(cr, uid, allfields=allfields, context=context)
-        print '--------------------------'
-        print res
-        return res
-
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
