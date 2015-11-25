@@ -183,7 +183,24 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 limit_val = 1430.0
             if (amount_untaxed >= limit_val) and (not partner_country):
                 raise osv.except_osv(_('Insufficient data!'), _('No VAT or Country defined for Partner "%s", but Taxed Amount is greater than %s. Please define either a Country or a VAT to get the Country Code!') % (partner_name, limit_val))
-        return {'partner_id': partner_id, 'partner_country': partner_country, 'partner_vat': partner_vat, 'partner_name': partner_name, 'partner_fpos': partner_fpos, 'journal_type': journal_type, 'amount_tax': amount_tax, 'amount_taxed': amount_taxed, 'amount_untaxed': amount_untaxed, 'doc_number': doc_number, 'doc_date': doc_date, 'tax_code': tax_code, 'tax_case_code': tax_case_code, 'tax_code_l': tax_code_l, 'invoice_id': invoice_id, 'limit_val': limit_val}
+        return {
+            'partner_id': partner_id,
+            'partner_country': partner_country,
+            'partner_vat': partner_vat,
+            'partner_name': partner_name,
+            'partner_fpos': partner_fpos,
+            'journal_type': journal_type,
+            'amount_tax': amount_tax,
+            'amount_taxed': amount_taxed,
+            'amount_untaxed': amount_untaxed,
+            'doc_number': doc_number,
+            'doc_date': doc_date,
+            'tax_code': tax_code,
+            'tax_case_code': tax_case_code,
+            'tax_code_l': tax_code_l,
+            'invoice_id': invoice_id,
+            'limit_val': limit_val
+        }
 
     def _process_expense(self, cr, uid, line_id, context=None):
         if context is None:
@@ -242,7 +259,24 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                     amount_untaxed += datas1[(partner_id)]['amount_untaxed']
                 datas1[(partner_id)].clear()
             if not datas1.get((partner_id)):
-                datas1[(partner_id)] = {'partner_id': partner_id, 'partner_country': partner_country, 'partner_vat': partner_vat, 'partner_name': partner_name, 'partner_fpos': partner_fpos, 'journal_type': journal_type, 'amount_tax': amount_tax, 'amount_taxed': amount_taxed, 'amount_untaxed': amount_untaxed, 'doc_number': doc_number, 'doc_date': doc_date, 'tax_code': tax_code, 'tax_case_code': tax_case_code, 'tax_code_l': tax_code_l, 'invoice_id': invoice_id, 'limit_val': limit_val}
+                datas1[(partner_id)] = {
+                    'partner_id': partner_id,
+                    'partner_country': partner_country,
+                    'partner_vat': partner_vat,
+                    'partner_name': partner_name,
+                    'partner_fpos': partner_fpos,
+                    'journal_type': journal_type,
+                    'amount_tax': amount_tax,
+                    'amount_taxed': amount_taxed,
+                    'amount_untaxed': amount_untaxed,
+                    'doc_number': doc_number,
+                    'doc_date': doc_date,
+                    'tax_code': tax_code,
+                    'tax_case_code': tax_case_code,
+                    'tax_code_l': tax_code_l,
+                    'invoice_id': invoice_id,
+                    'limit_val': limit_val
+                }
             result11.append(datas1[(partner_id)])
 
         for object in result11:

@@ -131,7 +131,8 @@ class hr_employee(osv.osv):
                 if not name:
                     name = data['name']
                 emp_name_ids = self.search(cr, uid, [('name','=',name)], context=context)
-                emp_name_ids.remove(data['id'])
+                if data['id'] in emp_name_ids:
+                    emp_name_ids.remove(data['id'])
                 emp_wid_ids = []
                 emp_woid_ids = []
                 if 'identification_id' not in vals:
