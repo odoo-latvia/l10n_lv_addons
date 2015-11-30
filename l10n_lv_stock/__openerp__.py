@@ -34,6 +34,7 @@ Latvian localization for Stock.
     'category': 'Localization',
     'depends': ['stock'],
     'data': [
+        'stock_view.xml',
         'wizard/stock_transfer_details_view.xml'
     ],
     'auto_install': False,

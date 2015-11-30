@@ -26,9 +26,34 @@ from openerp.osv import osv, fields
 from openerp import SUPERUSER_ID
 from openerp.tools.translate import _
 from datetime import datetime
+import openerp.addons.decimal_precision as dp
 
 class stock_production_lot(osv.osv):
     _inherit = 'stock.production.lot'
+
+    def _lot_available(self, cr, uid, ids, field_names=None, arg=False, context=None):
+        context = context or {}
+        field_names = field_names or []
+        product_obj = self.pool.get('product.product')
+        res = {}
+        for lot in self.browse(cr, uid, ids, context=context):
+            ctx = context.copy()
+            ctx.update({'lot_id': lot.id})
+            location = False
+            if 'location_id' in context:
+                location = context['location_id']
+            if (not location) and 'default_sourceloc_id' in context:
+                location = context['default_sourceloc_id']
+            if location:
+                ctx.update({'location': location})
+            qty_data = product_obj._product_available(cr, uid, [lot.product_id.id], context=ctx)
+            qty = qty_data[lot.product_id.id]['qty_available']
+            res[lot.id] = qty
+        return res
+
+    _columns = {
+        'qty_available': fields.function(_lot_available, type='float', digits_compute=dp.get_precision('Product Unit of Measure'), string='Quantity On Hand')
+    }
 
     def name_get(self, cr, uid, ids, context=None):
         if context is None:
@@ -41,10 +66,10 @@ class stock_production_lot(osv.osv):
         product_obj = self.pool.get('product.product')
         for record in self.browse(cr, uid, ids, context=context):
             name = record.name
-            if 'default_sourceloc_id' in context or 'name_get_location_id' in context:
+            if 'default_sourceloc_id' in context or 'location_id' in context:
                 location = False
-                if 'name_get_location_id' in context:
-                    location = context['name_get_location_id']
+                if 'location_id' in context:
+                    location = context['location_id']
                 if (not location) and 'default_sourceloc_id' in context:
                     location = context['default_sourceloc_id']
                 ctx = context.copy()
