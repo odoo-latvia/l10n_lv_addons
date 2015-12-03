@@ -251,6 +251,8 @@ class l10n_lv_vat_declaration(osv.osv_memory):
 
         # amount check:
         for key, value in partner_data.iteritems():
+            if value['tax_codes'] == [] and value['tax_codes_l'] == [] and value['amount_taxed'] != 0.0:
+                partner_data[key]['amount_taxed'] = value['amount_taxed'] / 2
             if value['amount_tax'] == 0.0 and value['amount_untaxed'] == 0.0:
                 partner_data[key]['amount_untaxed'] = value['amount_taxed']
             if value['amount_taxed'] == 0.0:
@@ -263,9 +265,9 @@ class l10n_lv_vat_declaration(osv.osv_memory):
 
             if (value['amount_untaxed'] >= limit_val):
                 if key == False:
-                    raise osv.except_osv(_('Insufficient data!'), _('No Partner defined, but Taxed Amount is greater than %s. Please define a Partner in document %s!') % (limit_val, doc_number))
+                    raise osv.except_osv(_('Insufficient data!'), _('No Partner defined, but Untaxed Amount is greater than %s. Please define a Partner in document %s!') % (limit_val, doc_number))
                 if not value['partner_country']:
-                    raise osv.except_osv(_('Insufficient data!'), _('No VAT or Country defined for Partner "%s", but Untaxed Amount is greater than %s in document %s. Please define either a Country or a VAT to get the Country Code!') % (value['partner_name'], limit_val, doc_number))
+                    raise osv.except_osv(_('Insufficient data!'), _('No TIN or Country defined for Partner %s, but Untaxed Amount is greater than %s in document %s. Please define either a Country or a TIN to get the Country Code!') % (value['partner_name'], limit_val, doc_number))
 
             # Purchases:
             if journal_type in ['purchase', 'purchase_refund', 'expense']:
@@ -276,17 +278,17 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                     # PVN1-I deal type:
                     deal_type = ""
                     if value['partner_vat']:
-                        if ('62' in value['tax_codes']) and value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'LR_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_payer')):
+                        if ('62' in value['tax_codes'] or (value['tax_codes'] == [] and value['tax_codes_l'] == [])) and value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'LR_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_payer')):
                             deal_type = "A"
-                    if (not value['partner_vat']) and ('62' in value['tax_codes']):
-                        if value['partner_fpos'] and check_fpos(value['partner_fpos'], 'LR_VAT_payer'):
-                            raise osv.except_osv(_('Insufficient data!'), _('No VAT defined for Partner "%s", but this partner is defined as a VAT payer. Please define the VAT!') % (value['partner_name']))
-                        else:
+                    if '62' in value['tax_codes'] or (value['tax_codes'] == [] and value['tax_codes_l'] == []):
+                        if (not value['partner_vat']) and value['partner_fpos'] and check_fpos(value['partner_fpos'], 'LR_VAT_payer'):
+                            raise osv.except_osv(_('Insufficient data!'), _('No TIN defined for Partner %s, but this partner is defined as a VAT payer. Please define the TIN!') % (value['partner_name']))
+                        if (not value['partner_vat']) or check_fpos(value['partner_fpos'], 'LR_VAT_non-payer'):
                             deal_type = "N"
-                    if ('61' in value['tax_codes']) and (p['partner_fpos'] and ((not check_fpos(p['partner_fpos'], 'EU_VAT_payer')) and (not check_fpos(p['partner_fpos'], 'EU_VAT_non-payer')) and (not check_fpos(p['partner_fpos'], 'LR_VAT_payer')) and (not check_fpos(p['partner_fpos'], 'LR_VAT_non-payer')))):
-                            deal_type = "I"
+                    if ('61' in value['tax_codes'] or (value['tax_codes'] == [] and value['tax_codes_l'] == [])) and (value['partner_fpos'] and ((not check_fpos(value['partner_fpos'], 'EU_VAT_payer')) and (not check_fpos(value['partner_fpos'], 'EU_VAT_non-payer')) and (not check_fpos(value['partner_fpos'], 'LR_VAT_payer')) and (not check_fpos(value['partner_fpos'], 'LR_VAT_non-payer')))):
+                        deal_type = "I"
                     if '65' in value['tax_codes']:
-                            deal_type == "K"
+                        deal_type == "K"
                     partner_data[key]['deal_type'] = deal_type
 
                     # PVN1-I doc type:
@@ -348,6 +350,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                                     doc_type = "2"
                     if not value['invoices']:
                         doc_type = "5"
+                    partner_data[key]['doc_type'] = doc_type
 
                 if (not partner_data[key]['tag_name']) and value['partner_fpos'] and check_fpos(value['partner_fpos'], 'EU_VAT_payer'):
                     # PVN2:
@@ -419,7 +422,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
             vat = obj_company.company_registry
             data_of_file += "\n    <NmrKods>" + str(vat) + "</NmrKods>"
             if not vat:
-                raise osv.except_osv(_('Insufficient data!'), _('No VAT or Company Registry number associated with your company.'))
+                raise osv.except_osv(_('Insufficient data!'), _('No TIN or Company Registry number associated with your company.'))
 
         # getting e-mail and phone:
         default_address = obj_partner.address_get(cr, uid, [obj_company.partner_id.id])

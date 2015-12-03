@@ -132,3 +132,32 @@ msgstr "Uzņēmums"
 msgid "Save your VAT declaration"
 msgstr "PVN deklarācijas saglabāšana"
 
+#. module: l10n_lv_vat
+#: code:addons/l10n_lv_vat/wizard/account_vat_declaration.py:268
+#, python-format
+msgid "Insufficient data!"
+msgstr "Nepietiekami dati!"
+
+#. module: l10n_lv_vat
+#: code:addons/l10n_lv_vat/wizard/account_vat_declaration.py:268
+#, python-format
+msgid "No Partner defined, but Untaxed Amount is greater than %s. Please define a Partner in document %s!"
+msgstr "Nav norādīts partneris, taču ar nodokļiem apliekamā summa ir lielāka par %s. Lūdzu, norādiet partneri dokumentā %s!"
+
+#. module: l10n_lv_vat
+#: code:addons/l10n_lv_vat/wizard/account_vat_declaration.py:92
+#, python-format
+msgid "No TIN or Country defined for Partner %s, but Untaxed Amount is greater than %s in document %s. Please define either a Country or a TIN to get the Country Code!"
+msgstr "Partnerim nav norādīts PVN reģistrācijas numurs vai valsts, taču ar nodokļiem apliekamā summa ir lielāka par %s dokumentā %s. Lūdzu, nodefinējiet vai nu valsti vai PVN reģistrācijas numuru, lai būtu iespējams iegūt valsts kodu!"
+
+#. module: l10n_lv_vat
+#: code:addons/l10n_lv_vat/wizard/account_vat_declaration.py:92
+#, python-format
+msgid "No TIN defined for Partner %s, but this partner is defined as a VAT payer. Please define the TIN!"
+msgstr "Partnerim %s nav norādīts PVN reģistrācijas numurs, taču šis partneris ir norādīts kā PVN maksātājs. Lūdzu, nodefinējiet PVN reģistrācijas numuru!"
+
+#. module: l10n_lv_vat
+#: code:addons/l10n_lv_vat/wizard/account_vat_declaration.py:92
+#, python-format
+msgid "No TIN or Company Registry number associated with your company."
+msgstr "Jūsu uzņēmumam nav norādīts ne PVN reģistrācijas numurs, ne uzņēmuma reģistrācijas numurs."
