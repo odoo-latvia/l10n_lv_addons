@@ -242,8 +242,12 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                     amount_taxed_cur = amount_taxed
                 partner_data[partner_id]['amount_taxed_cur'] += amount_taxed_cur
 
-            if line.invoice and line.invoice not in partner_data[partner_id]['invoices']:
-                partner_data[partner_id]['invoices'].append(line.invoice)
+            if line.invoice:
+                if line.invoice not in partner_data[partner_id]['invoices']:
+                    partner_data[partner_id]['invoices'].append(line.invoice)
+                if line.invoice.type in ['in_invoice', 'in_refund'] and line.invoice.supplier_invoice_number:
+                    partner_data[partner_id]['doc_number'] = line.invoice.supplier_invoice_number
+
             if line.product_id and line.product_id.type not in partner_data[partner_id]['product_types']:
                 partner_data[partner_id]['product_types'].append(line.product_id.type)
             if line.currency_id:
