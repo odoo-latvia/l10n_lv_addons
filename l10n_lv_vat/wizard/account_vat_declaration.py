@@ -32,7 +32,7 @@ from datetime import datetime
 from xml.etree import ElementTree
 from cStringIO import StringIO
 
-#EU_list = ['AT', 'BE', 'BG', 'CY', 'HR', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB']
+EU_list = ['AT', 'BE', 'BG', 'CY', 'HR', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB']
 
 # method for fiscal position checking:
 def check_fpos(fpos, fpos_need):
@@ -174,18 +174,17 @@ class l10n_lv_vat_declaration(osv.osv_memory):
             if partner_id not in partner_data:
                 partner_data.update({partner_id: {}})
                 partner_country = line.partner_id and line.partner_id.country_id and line.partner_id.country_id.code or False
-                if partner_country == 'GR':
-                    partner_country = 'EL'
                 vat_no = line.partner_id and line.partner_id.vat or False
                 partner_vat = False
                 if vat_no:
                     vat_no = vat_no.replace(' ','').upper()
                     if vat_no[:2].isalpha():
                         partner_vat = vat_no[2:]
-                        if not partner_country:
-                            partner_country = vat_no[:2]
+                        partner_country = vat_no[:2]
                     else:
                         partner_vat = vat_no
+                if partner_country == 'GR':
+                    partner_country = 'EL'
                 if line.partner_id and (not partner_vat) and hasattr(line.partner_id, 'company_registry'):
                     partner_vat = line.partner_id.company_registry
                 partner_data[partner_id].update({
@@ -221,7 +220,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 if line.amount_currency == 0.0 and (not line.currency_id):
                     amount_tax_cur = amount_tax
                 partner_data[partner_id]['amount_tax_cur'] += amount_tax_cur
-                if line.tax_code_id.tax_code and line.tax_code_id not in partner_data[partner_id]['tax_codes']:
+                if line.tax_code_id.tax_code and line.tax_code_id.tax_code not in partner_data[partner_id]['tax_codes']:
                     partner_data[partner_id]['tax_codes'].append(line.tax_code_id.tax_code)
 
             if line.tax_code_id and self._check_tax_base_code(cr, uid, line.tax_code_id.id, context=context):
