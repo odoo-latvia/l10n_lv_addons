@@ -155,6 +155,13 @@ class payslip_eds_export(osv.osv_memory):
             day_def = self.pool.get('ir.values').get_default(cr, SUPERUSER_ID, 'payslip.eds.export', 'date_pay_day')
             if day_def:
                 day = int(day_def)
+                if month[0] in [4, 6, 9, 11] and day > 30:
+                    day = 30
+                if month[0] == 2:
+                    if int(str(year[0])[-2:]) % 4 != 0 and day > 28:
+                        day = 28
+                    if int(str(year[0])[-2:]) % 4 == 0 and day > 29:
+                        day = 29
                 date_pay = datetime.strftime(date(year[0], month[0], day), '%Y-%m-%d')
             if not day_def:
                 m = month[0]
