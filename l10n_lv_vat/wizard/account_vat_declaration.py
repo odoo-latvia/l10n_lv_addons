@@ -137,6 +137,8 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         main_tax_code_id = tax_code_obj.search(cr, uid, ['|',('name','in',['APRĒĶINĀTAIS PVN (latos)','PVN SUMMA PAR SAŅEMTAJĀM PRECĒM UN PAKALPOJUMIEM (latos), no tā:']),('code','in',['250','310']),('tax_code','in',[False,'60'])], context=context)
         if main_tax_code_id:
             code_id = tax_code_obj.search(cr, uid, [('id','=',tax_code_id),('id','child_of',main_tax_code_id)], context=context)
+            if not code_id:
+                code_id = tax_code_obj.search(cr, uid, [('id','=',tax_code_id), ('tax_code','in',['66', '67', '57'])], context=context)
             if code_id:
                 return True
         return False
@@ -227,6 +229,8 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                     'amount_tax_cur': 0.0,
                     'amount_untaxed': 0.0,
                     'amount_untaxed_cur': 0.0,
+                    'amount_untaxed_45': 0.0,
+                    'amount_untaxed_48.2': 0.0,
                     'amount_taxed': 0.0,
                     'amount_taxed_cur': 0.0,
                     'currency': currency,
@@ -259,8 +263,13 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 partner_data[partner_id]['amount_untaxed'] += currency_data['tax_amount']
                 partner_data[partner_id]['amount_untaxed_cur'] += currency_data['cur_amount']
                 partner_data[partner_id]['currency'] = currency_data['country_currency']
-                if line.tax_code_id.tax_code and line.tax_code_id.tax_code not in partner_data[partner_id]['tax_codes_l']:
-                    partner_data[partner_id]['tax_codes_l'].append(line.tax_code_id.tax_code)
+                if line.tax_code_id.tax_code:
+                    if line.tax_code_id.tax_code == '45':
+                        partner_data[partner_id]['amount_untaxed_45'] += currency_data['tax_amount']
+                    if line.tax_code_id.tax_code == '48.2':
+                        partner_data[partner_id]['amount_untaxed_48.2'] += currency_data['tax_amount']
+                    if line.tax_code_id.tax_code not in partner_data[partner_id]['tax_codes_l']:
+                        partner_data[partner_id]['tax_codes_l'].append(line.tax_code_id.tax_code)
 
             if not line.tax_code_id:
                 currency_data = self._get_amount_data(cr, uid, line, (line.debit or line.credit), partner_data[partner_id]['partner_country'], context=context)
@@ -280,17 +289,21 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         # amount check:
         for key, value in partner_data.iteritems():
             if value['tax_codes'] == [] and value['tax_codes_l'] == [] and value['amount_taxed'] != 0.0:
-                partner_data[key]['amount_taxed'] = value['amount_taxed'] / 2
-                partner_data[key]['amount_taxed_cur'] = value['amount_taxed_cur'] / 2
+                partner_data[key]['amount_taxed'] = value['amount_taxed'] * 0.5
+                partner_data[key]['amount_taxed_cur'] = value['amount_taxed_cur'] * 0.5
             if '61' in value['tax_codes']:
-                partner_data[key]['amount_tax'] = value['amount_tax'] / 2
-                partner_data[key]['amount_tax_cur'] = value['amount_tax_cur'] / 2
+                partner_data[key]['amount_tax'] = value['amount_tax'] * 0.5
+                partner_data[key]['amount_tax_cur'] = value['amount_tax_cur'] * 0.5
             if value['amount_untaxed'] == 0.0 and value['amount_tax'] == 0.0:
                 partner_data[key]['amount_untaxed'] = value['amount_taxed']
                 partner_data[key]['amount_untaxed_cur'] = value['amount_taxed_cur']
             if value['amount_taxed'] == 0.0:
                 partner_data[key]['amount_taxed'] = value['amount_untaxed'] + value['amount_tax']
                 partner_data[key]['amount_taxed_cur'] = value['amount_untaxed_cur'] + value['amount_tax_cur']
+            if '64' in value['tax_codes'] and (value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'EU_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_non-payer'))):
+                key2_list = ['amount_untaxed', 'amount_untaxed_cur', 'amount_tax', 'amount_tax_cur', 'amount_taxed', 'amount_taxed_cur']
+                for key2 in key2_list:
+                    partner_data[key][key2] = round((round(partner_data[key][key2], 2) * 0.5), 2)
             if journal_type == 'expense' and value['tax_codes'] == [] and value['tax_codes_l'] == [] and value['amount_taxed'] != 0.0:
                 partner_data.pop(key)
 
@@ -303,108 +316,120 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 if not value['partner_country']:
                     raise osv.except_osv(_('Insufficient data!'), _('No TIN or Country defined for Partner %s, but Untaxed Amount is greater than %s in document %s. Please define either a Country or a TIN to get the Country Code!') % (value['partner_name'], limit_val, doc_number))
 
-            # Purchases:
-            if journal_type in ['purchase', 'purchase_refund', 'expense']:
-                if ('64' not in value['tax_codes']) and ((not value['partner_fpos']) or (value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'EU_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_non-payer') or check_fpos(value['partner_fpos'], 'LR_VAT_payer') or check_fpos(value['partner_fpos'], 'LR_VAT_non-payer'))) or ('61' in value['tax_codes'])):
-                    # PVN1-I:
-                    partner_data[key]['tag_name'] = 'PVN1-I'
+            # PVN1-I:
+            if (journal_type in ['purchase', 'expense', 'sale_refund']) and  ('64' not in value['tax_codes']) and ((not value['partner_fpos']) or (value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'EU_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_non-payer') or check_fpos(value['partner_fpos'], 'LR_VAT_payer') or check_fpos(value['partner_fpos'], 'LR_VAT_non-payer'))) or ('61' in value['tax_codes'])):
+                # PVN1-I tag:
+                partner_data[key]['tag_name'] = 'PVN1-I'
 
-                    # PVN1-I deal type:
-                    deal_type = ""
-                    if value['partner_vat']:
-                        if ('62' in value['tax_codes'] or (value['tax_codes'] == [] and value['tax_codes_l'] == [])) and value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'LR_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_payer')):
-                            deal_type = "A"
-                    if '62' in value['tax_codes'] or (value['tax_codes'] == [] and value['tax_codes_l'] == []):
-                        if (not value['partner_vat']) and value['partner_fpos'] and check_fpos(value['partner_fpos'], 'LR_VAT_payer'):
-                            raise osv.except_osv(_('Insufficient data!'), _('No TIN defined for Partner %s, but this partner is defined as a VAT payer. Please define the TIN!') % (value['partner_name']))
-                        if (not value['partner_vat']) or check_fpos(value['partner_fpos'], 'LR_VAT_non-payer') or check_fpos(value['partner_fpos'], 'EU_VAT_non-payer'):
-                            deal_type = "N"
+                # PVN1-I deal type:
+                deal_type = ""
+                if value['partner_vat']:
+                    if ('62' in value['tax_codes'] or '67' in value['tax_codes'] or (value['tax_codes'] == [] and value['tax_codes_l'] == [])) and value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'LR_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_payer')):
+                        deal_type = "A"
+                if '62' in value['tax_codes'] or (value['tax_codes'] == [] and value['tax_codes_l'] == []):
+                    if (not value['partner_vat']) and value['partner_fpos'] and check_fpos(value['partner_fpos'], 'LR_VAT_payer'):
+                        raise osv.except_osv(_('Insufficient data!'), _('No TIN defined for Partner %s, but this partner is defined as a VAT payer. Please define the TIN!') % (value['partner_name']))
+                    if (not value['partner_vat']) or check_fpos(value['partner_fpos'], 'LR_VAT_non-payer') or check_fpos(value['partner_fpos'], 'EU_VAT_non-payer'):
+                        deal_type = "N"
+                if '61' in value['tax_codes']:
+                    deal_type = "I"
+                if '65' in value['tax_codes']:
+                    deal_type == "K"
+                partner_data[key]['deal_type'] = deal_type
+
+                # PVN1-I doc type:
+                doc_type = "1"
+                if value['invoices']:
+                    for invoice in value['invoices']:
+                        if invoice.payment_ids:
+                            if invoice.payment_ids[0].journal_id.type == 'bank':
+                                doc_type = "3"
+                            if invoice.payment_ids[0].journal_id.type == 'cash':
+                                doc_type = "2"
+                    if journal_type == 'sale_refund':
+                        doc_type = "4"
+                        partner_data[key]['limit_val'] = 0.0
+                        key2_list = ['amount_untaxed', 'amount_untaxed_cur', 'amount_tax', 'amount_tax_cur', 'amount_taxed', 'amount_taxed_cur']
+                        for key2 in key2_list:
+                            if partner_data[key][key2] < 0.0:
+                                partner_data[key][key2] = partner_data[key][key2] * (-1.0)
+                if (not value['invoices']) and journal_type != 'expense':
+                    doc_type = "5"
                     if '61' in value['tax_codes']:
-                        deal_type = "I"
-                    if '65' in value['tax_codes']:
-                        deal_type == "K"
-                    partner_data[key]['deal_type'] = deal_type
+                        doc_type = "6"
+                        partner_data[key]['limit_val'] = 0.0
+                partner_data[key]['doc_type'] = doc_type
 
-                    # PVN1-I doc type:
-                    doc_type = "1"
-                    if value['invoices']:
-                        for invoice in value['invoices']:
-                            if invoice.payment_ids:
-                                if invoice.payment_ids[0].journal_id.type == 'bank':
-                                    doc_type = "3"
-                                if invoice.payment_ids[0].journal_id.type == 'cash':
-                                    doc_type = "2"
-                        if journal_type == 'purchase_refund':
-                            doc_type = "4"
-                    if (not value['invoices']) and journal_type != 'expense':
-                        doc_type = "5"
-                        if '61' in value['tax_codes']:
-                            doc_type = "6"
-                            partner_data[key]['limit_val'] = 0.0
-                    partner_data[key]['doc_type'] = doc_type
+            # PVN1-II:
+            if journal_type in ['purchase', 'purchase_refund'] and '64' in value['tax_codes'] and (value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'EU_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_non-payer'))):
+                # PVN1-II tag:
+                partner_data[key]['tag_name'] = 'PVN1-II'
 
-                if '64' in value['tax_codes'] and (value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'EU_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_non-payer'))):
-                    # PVN1-II:
-                    partner_data[key]['tag_name'] = 'PVN1-II'
+                # PVN1-II deal type:
+                deal_type = "C"
+                if 'service' not in value['product_types']:
+                    deal_type = "G"
+                if len(value['product_types']) == 1 and 'service' in value['product_types']:
+                    deal_type = "P"
+                partner_data[key]['deal_type'] = deal_type
+                # PVN1-II refunds:
+                if journal_type == 'purchase_refund':
+                    key2_list = ['amount_untaxed', 'amount_untaxed_cur', 'amount_tax', 'amount_tax_cur', 'amount_taxed', 'amount_taxed_cur']
+                    for key2 in key2_list:
+                        if partner_data[key][key2] > 0.0:
+                            partner_data[key][key2] = partner_data[key][key2] * (-1.0)
 
-                    # PVN1-II deal type:
-                    deal_type = "C"
-                    if 'service' not in value['product_types']:
-                        deal_type = "G"
-                    if len(value['product_types']) == 1 and 'service' in value['product_types']:
-                        deal_type = "P"
-                    partner_data[key]['deal_type'] = deal_type
+            # PVN1-III
+            if journal_type in ['sale', 'purchase_refund'] and (any(x in ['41', '41.1', '42', '43', '44', '48.2'] for x in value['tax_codes_l'])) and (value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'LR_VAT_payer') or check_fpos(value['partner_fpos'], 'LR_VAT_non-payer'))):
+                # PVN1-III tag:
+                partner_data[key]['tag_name'] = 'PVN1-III'
 
-            # Sales:
-            if journal_type in ['sale', 'sale_refund']:
-                if (any(x in ['41', '41.1', '42', '43', '44', '48.2'] for x in value['tax_codes_l'])) and (value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'LR_VAT_payer') or check_fpos(value['partner_fpos'], 'LR_VAT_non-payer'))):
-                    # PVN1-III:
-                    partner_data[key]['tag_name'] = 'PVN1-III'
+                # PVN1-III deal types:
+                deal_type = len(value['tax_codes_l']) == 1 and value['tax_codes_l'][0] or ''
+                if not deal_type:
+                    if '41' in value['tax_codes_l']:
+                        deal_type = '41'
+                    if '41.1' in value['tax_codes_l']:
+                        deal_type = '41.1'
+                    if '42' in value['tax_codes_l']:
+                        deal_type = '42'
+                    if '43' in value['tax_codes_l']:
+                        deal_type = '43'
+                    if '44' in value['tax_codes_l']:
+                        deal_type = '44'
+                    if '48.2' in value['tax_codes_l']:
+                        deal_type = '48.2'
+                partner_data[key]['deal_type'] = deal_type
 
-                    # PVN1-III deal types:
-                    deal_type = len(value['tax_codes_l']) == 1 and value['tax_codes_l'][0] or ''
-                    if not deal_type:
-                        if '41' in value['tax_codes_l']:
-                            deal_type = '41'
-                        if '41.1' in value['tax_codes_l']:
-                            deal_type = '41.1'
-                        if '42' in value['tax_codes_l']:
-                            deal_type = '42'
-                        if '43' in value['tax_codes_l']:
-                            deal_type = '43'
-                        if '44' in value['tax_codes_l']:
-                            deal_type = '44'
-                        if '48.2' in value['tax_codes_l']:
-                            deal_type = '48.2'
-                    partner_data[key]['deal_type'] = deal_type
+                # PVN1-III doc type:
+                doc_type = "1"
+                if value['invoices']:
+                    for invoice in value['invoices']:
+                        if invoice.payment_ids:
+                            if invoice.payment_ids[0].journal_id.type == 'bank':
+                                doc_type = "3"
+                            if invoice.payment_ids[0].journal_id.type == 'cash':
+                                doc_type = "2"
+                    if journal_type == 'purchase_refund':
+                        doc_type = "4"
+                        partner_data[key]['limit_val'] = 0.0
+                        key2_list = ['amount_untaxed', 'amount_untaxed_cur', 'amount_tax', 'amount_tax_cur', 'amount_taxed', 'amount_taxed_cur']
+                        for key2 in key2_list:
+                            if partner_data[key][key2] < 0.0:
+                                partner_data[key][key2] = partner_data[key][key2] * (-1.0)
+                if not value['invoices']:
+                    doc_type = "5"
+                partner_data[key]['doc_type'] = doc_type
 
-                    # PVN1-III doc type:
-                    doc_type = "1"
-                    if value['invoices']:
-                        for invoice in value['invoices']:
-                            if invoice.payment_ids:
-                                if invoice.payment_ids[0].journal_id.type == 'bank':
-                                    doc_type = "3"
-                                if invoice.payment_ids[0].journal_id.type == 'cash':
-                                    doc_type = "2"
-                        if journal_type == 'sale_refund':
-                            doc_type = "4"
-                    if not value['invoices']:
-                        doc_type = "5"
-                    partner_data[key]['doc_type'] = doc_type
-
-                if (not partner_data[key]['tag_name']) and value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'EU_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_non-payer')):
-                    # PVN2:
-                    partner_data[key]['tag_name'] = 'PVN2'
-
-                    # PVN1-II deal type:
-                    deal_type = "C"
-                    if 'service' not in value['product_types']:
-                        deal_type = "G"
-                    if len(value['product_types']) == 1 and 'service' in value['product_types']:
-                        deal_type = "P"
-                    partner_data[key]['deal_type'] = deal_type
-
+            # PVN2:
+            if journal_type in ['sale', 'sale_refund'] and (not partner_data[key]['tag_name']) and value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'EU_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_non-payer')):
+                # PVN2 tag:
+                partner_data[key]['tag_name'] = 'PVN2'
+                if journal_type == 'sale_refund':
+                    key2_list = ['amount_untaxed', 'amount_untaxed_cur', 'amount_untaxed_45', 'amount_untaxed_48.2', 'amount_tax', 'amount_tax_cur', 'amount_taxed', 'amount_taxed_cur']
+                    for key2 in key2_list:
+                        if partner_data[key][key2] > 0.0:
+                            partner_data[key][key2] = partner_data[key][key2] * (-1.0)
         return partner_data
 
     def create_xml(self, cr, uid, ids, context=None):
@@ -593,16 +618,17 @@ class l10n_lv_vat_declaration(osv.osv_memory):
             # making separate data lists for different journal types and tax codes:
             account_move_ids = account_move_obj.search(cr, uid, [('period_id','in',periods), ('state','=','posted')], context=context)
             for account_move in account_move_obj.browse(cr, uid, account_move_ids, context=context):
-                lines = self._process_line(cr, uid, account_move.line_id, context=context)
-                for key, value in lines.iteritems():
-                    if value['tag_name'] == 'PVN1-I':
-                        r_purchase.append(value)
-                    if value['tag_name'] == 'PVN1-II':
-                        purchase_EU.append(value)
-                    if value['tag_name'] == 'PVN1-III':
-                        r_sale.append(value)
-                    if value['tag_name'] == 'PVN2':
-                        sale_EU.append(value)
+                if account_move.line_id:
+                    lines = self._process_line(cr, uid, account_move.line_id, context=context)
+                    for key, value in lines.iteritems():
+                        if value['tag_name'] == 'PVN1-I':
+                            r_purchase.append(value)
+                        if value['tag_name'] == 'PVN1-II':
+                            purchase_EU.append(value)
+                        if value['tag_name'] == 'PVN1-III':
+                            r_sale.append(value)
+                        if value['tag_name'] == 'PVN2':
+                            sale_EU.append(value)
 
             # processing purchase and purchase_refund journal types:
             d_p_s = {}
@@ -611,7 +637,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 data_of_file += "\n    <PVN1I>"
                 for p in r_purchase:
                     # getting document types "A", "N" and "I":
-                    if p['amount_untaxed'] >= p['limit_val']:
+                    if (p['amount_untaxed'] >= 0.0 and p['amount_untaxed'] >= p['limit_val']) or (p['amount_untaxed'] < 0.0 and (p['amount_untaxed'] * (-1.0)) >= p['limit_val']):
                         data_of_file += "\n        <R>"
                         if p['deal_type'] != "I":
                             data_of_file += ("\n            <DpValsts>" + unicode(p['partner_country']) + "</DpValsts>")
@@ -619,31 +645,22 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                             data_of_file += ("\n            <DpNumurs>" + str(p['partner_vat']) + "</DpNumurs>")
                         data_of_file += ("\n            <DpNosaukums>" + unicode(p['partner_name']) + "</DpNosaukums>")
                         data_of_file += ("\n            <DarVeids>" + p['deal_type'] + "</DarVeids>")
-                        if p['journal_type'] in ['purchase','expense']:
-                            data_of_file += ("\n            <VertibaBezPvn>" + str(p['amount_untaxed']) + "</VertibaBezPvn>")
-                            data_of_file += ("\n            <PvnVertiba>" + str(p['amount_tax']) + "</PvnVertiba>")
-                        if p['journal_type'] == 'purchase_refund':
-                            data_of_file += ("\n            <VertibaBezPvn>" + str(p['amount_untaxed'] * (-1)) + "</VertibaBezPvn>")
-                            data_of_file += ("\n            <PvnVertiba>" + str(p['amount_tax'] * (-1)) + "</PvnVertiba>")
+                        data_of_file += ("\n            <VertibaBezPvn>" + str(p['amount_untaxed']) + "</VertibaBezPvn>")
+                        data_of_file += ("\n            <PvnVertiba>" + str(p['amount_tax']) + "</PvnVertiba>")
                         data_of_file += ("\n            <DokVeids>" + p['doc_type'] + "</DokVeids>")
                         data_of_file += ("\n            <DokNumurs>" + unicode(p['doc_number']) + "</DokNumurs>")
                         data_of_file += ("\n            <DokDatums>" + str(p['doc_date']) + "</DokDatums>")
                         data_of_file += ("\n        </R>")
 
                     # summing up, what's left for each partner:
-                    if (p['amount_untaxed'] < p['limit_val']) and p['partner_id']:
+                    if ((p['amount_untaxed'] >= 0.0 and p['amount_untaxed'] < p['limit_val']) or (p['amount_untaxed'] < 0.0 and (p['amount_untaxed'] * (-1.0)) < p['limit_val'])) and p['partner_id']:
                         partner_id = p['partner_id']
                         partner_country = p['partner_country']
                         partner_vat = p['partner_vat']
                         partner_name = p['partner_name']
-                        if p['journal_type'] in ['purchase', 'expense']:
-                            amount_untaxed = p['amount_untaxed']
-                            amount_tax = p['amount_tax']
-                            amount_taxed = p['amount_taxed']
-                        if p['journal_type'] == 'purchase_refund':
-                            amount_untaxed = p['amount_untaxed'] * (-1)
-                            amount_tax = p['amount_tax'] * (-1)
-                            amount_taxed = p['amount_taxed'] * (-1)
+                        amount_untaxed = p['amount_untaxed']
+                        amount_tax = p['amount_tax']
+                        amount_taxed = p['amount_taxed']
                         if d_p_s.get((partner_id)):
                             amount_untaxed += d_p_s[(partner_id)]['amount_untaxed']
                             amount_tax += d_p_s[(partner_id)]['amount_tax']
@@ -673,7 +690,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 amount_taxed_a = 0.0
                 for rpst in r_p_s_t:
                     # getting document type "V":
-                    if rpst['amount_untaxed'] >= rpst['limit_val']:
+                    if (rpst['amount_untaxed'] >= 0.0 and rpst['amount_untaxed'] >= rpst['limit_val']) or (rpst['amount_untaxed'] < 0.0 and (rpst['amount_untaxed'] * (-1.0)) >= rpst['limit_val']):
                         data_of_file += "\n        <R>"
                         data_of_file += ("\n            <DpValsts>" + unicode(rpst['partner_country']) + "</DpValsts>")
                         if rpst['partner_vat']:
@@ -684,7 +701,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         data_of_file += ("\n            <PvnVertiba>" + str(rpst['amount_tax']) + "</PvnVertiba>")
                         data_of_file += ("\n        </R>")
                     # summing up, what's left:
-                    if rpst['amount_untaxed'] < rpst['limit_val']:
+                    if (rpst['amount_untaxed'] >= 0.0 and rpst['amount_untaxed'] < rpst['limit_val']) or (rpst['amount_untaxed'] < 0.0 and (rpst['amount_untaxed'] * (-1.0)) < rpst['limit_val']):
                         amount_untaxed_a += rpst['amount_untaxed']
                         amount_tax_a += rpst['amount_tax']
                         amount_taxed_a += rpst['amount_taxed']
@@ -737,7 +754,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 r_s_s = []
                 for s in r_sale:
                     # getting document types "X" or numbers:
-                    if s['amount_untaxed'] >= s['limit_val']:
+                    if (s['amount_untaxed'] >= 0.0 and s['amount_untaxed'] >= s['limit_val']) or (s['amount_untaxed'] < 0.0 and (s['amount_untaxed'] * (-1.0)) >= s['limit_val']):
                         # number document types:
                         if check_fpos(s['partner_fpos'], 'LR_VAT_payer'):
                             data_of_file += "\n        <R>"
@@ -757,20 +774,15 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                             amount_tax_x += s['amount_tax']
                             amount_taxed_x += s['amount_taxed']
                     # summing up values for each partner:
-                    if s['amount_untaxed'] < s['limit_val']:
+                    if (s['amount_untaxed'] >= 0.0 and s['amount_untaxed'] < s['limit_val']) or (s['amount_untaxed'] < 0.0 and (s['amount_untaxed'] * (-1.0)) < s['limit_val']):
                         partner_id = s['partner_id']
                         partner_country = s['partner_country']
                         partner_vat = s['partner_vat']
                         partner_name = s['partner_name']
                         partner_fpos = s['partner_fpos']
-                        if s['journal_type'] == 'sale':
-                            amount_untaxed = s['amount_untaxed']
-                            amount_tax = s['amount_tax']
-                            amount_taxed = s['amount_taxed']
-                        if s['journal_type'] == 'sale_refund':
-                            amount_untaxed = s['amount_untaxed'] * (-1)
-                            amount_tax = s['amount_tax'] * (-1)
-                            amount_taxed = s['amount_taxed'] * (-1)
+                        amount_untaxed = s['amount_untaxed']
+                        amount_tax = s['amount_tax']
+                        amount_taxed = s['amount_taxed']
                         if d_s_s.get((partner_id)):
                             amount_untaxed += d_s_s[(partner_id)]['amount_untaxed']
                             amount_tax += d_s_s[(partner_id)]['amount_tax']
@@ -801,7 +813,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 amount_taxed_t = 0.0
                 for rsst in r_s_s_t:
                     # getting document type "V":
-                    if rsst['amount_untaxed'] >= rsst['limit_val']:
+                    if (rsst['amount_untaxed'] >= 0.0 and rsst['amount_untaxed'] >= rsst['limit_val']) or (rsst['amount_untaxed'] < 0.0 and (rsst['amount_untaxed'] * (-1.0)) >= rsst['limit_val']):
                         data_of_file += "\n        <R>"
                         data_of_file += ("\n            <DpValsts>" + unicode(rsst['partner_country']) + "</DpValsts>")
                         data_of_file += ("\n            <DpNumurs>" + str(rsst['partner_vat']) + "</DpNumurs>")
@@ -811,7 +823,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         data_of_file += ("\n            <DokVeids>" + "V" + "</DokVeids>")
                         data_of_file += ("\n        </R>")
                     # summing up, what's left:
-                    if rsst['amount_untaxed'] < rsst['limit_val']:
+                    if (rsst['amount_untaxed'] >= 0.0 and rsst['amount_untaxed'] < rsst['limit_val']) or (rsst['amount_untaxed'] < 0.0 and (rsst['amount_untaxed'] * (-1.0)) < rsst['limit_val']):
                         amount_untaxed_t += rsst['amount_untaxed']
                         amount_tax_t += rsst['amount_tax']
                         amount_taxed_t += rsst['amount_taxed']
@@ -851,28 +863,24 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 s_EU_group = []
                 s_EU_gd = {}
                 for s_EU in sale_EU:
-                    print '-----------------'
-                    print s_EU['partner_country']
-                    print s_EU['partner_vat']
-                    print s_EU['tax_codes']
-                    print s_EU['tax_codes_l']
                     partner_id = s_EU['partner_id']
                     partner_country = s_EU['partner_country']
                     partner_vat = s_EU['partner_vat']
-                    deal_type = s_EU['deal_type']
-                    amount_untaxed = s_EU['amount_untaxed']
-                    if s_EU_gd.get((str(partner_id),deal_type)):
-                        amount_untaxed += s_EU_gd[(str(partner_id),deal_type)]['amount_untaxed']
-                        s_EU_gd[(str(partner_id),deal_type)].clear()
-                    if not s_EU_gd.get((str(partner_id),deal_type)):
-                        s_EU_gd[(str(partner_id),deal_type)] = {
+                    amount_untaxed_45 = s_EU['amount_untaxed_45']
+                    amount_untaxed_48_2 = s_EU['amount_untaxed_48.2']
+                    if s_EU_gd.get((partner_id)):
+                        amount_untaxed_45 += s_EU_gd[(partner_id)]['amount_untaxed_45']
+                        amount_untaxed_48_2 += s_EU_gd[(partner_id)]['amount_untaxed_48.2']
+                        s_EU_gd[(partner_id)].clear()
+                    if not s_EU_gd.get((partner_id)):
+                        s_EU_gd[(partner_id)] = {
                                 'partner_id': partner_id,
                                 'partner_country': partner_country,
                                 'partner_vat': partner_vat,
-                                'deal_type': deal_type,
-                                'amount_untaxed': amount_untaxed
+                                'amount_untaxed_45': amount_untaxed_45,
+                                'amount_untaxed_48.2': amount_untaxed_48_2
                             }
-                    s_EU_group.append(s_EU_gd[(str(partner_id),deal_type)])
+                    s_EU_group.append(s_EU_gd[(partner_id)])
 
                 s_EU_group_t = []
                 for object in s_EU_group:
@@ -880,14 +888,24 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         s_EU_group_t.append(object)
 
                 for s_EU_t in s_EU_group_t:
-                    data_of_file += "\n        <R>"
+                    if s_EU_t['amount_untaxed_45'] != 0.0:
+                        data_of_file += "\n        <R>"
 
-                    data_of_file += "\n            <Valsts>" + unicode(s_EU_t['partner_country']) + "</Valsts>"
-                    data_of_file += "\n            <PVNNumurs>" + str(s_EU_t['partner_vat']) + "</PVNNumurs>"
-                    data_of_file += "\n            <Summa>" + str(s_EU_t['amount_untaxed']) + "</Summa>"
-                    data_of_file += "\n            <Pazime>" + str(s_EU_t['deal_type']) + "</Pazime>"
+                        data_of_file += "\n            <Valsts>" + unicode(s_EU_t['partner_country']) + "</Valsts>"
+                        data_of_file += "\n            <PVNNumurs>" + str(s_EU_t['partner_vat']) + "</PVNNumurs>"
+                        data_of_file += "\n            <Summa>" + str(s_EU_t['amount_untaxed_45']) + "</Summa>"
+                        data_of_file += "\n            <Pazime>" + 'G' + "</Pazime>"
 
-                    data_of_file += "\n        </R>"
+                        data_of_file += "\n        </R>"
+                    if s_EU_t['amount_untaxed_48.2'] != 0.0:
+                        data_of_file += "\n        <R>"
+
+                        data_of_file += "\n            <Valsts>" + unicode(s_EU_t['partner_country']) + "</Valsts>"
+                        data_of_file += "\n            <PVNNumurs>" + str(s_EU_t['partner_vat']) + "</PVNNumurs>"
+                        data_of_file += "\n            <Summa>" + str(s_EU_t['amount_untaxed_48.2']) + "</Summa>"
+                        data_of_file += "\n            <Pazime>" + 'P' + "</Pazime>"
+
+                        data_of_file += "\n        </R>"
 
                 data_of_file += "\n    </PVN2>"
 
