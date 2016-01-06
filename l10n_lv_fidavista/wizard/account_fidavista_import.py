@@ -286,6 +286,7 @@ class account_fidavista_import(osv.osv_memory):
                 account_id = False
                 bank_account_id = False
                 line_cur = False
+                line_amount_cur = False
                 cPartySet = line.getElementsByTagName('CPartySet')
                 if cPartySet:
                     partner_name_tag = cPartySet[0].getElementsByTagName('Name')
@@ -346,7 +347,6 @@ class account_fidavista_import(osv.osv_memory):
                             if line_cur_ids:
                                 line_cur = line_cur_ids[0]
                     line_amount_cur_tag = cPartySet[0].getElementsByTagName('Amt')
-                    line_amount_cur = False
                     if line_amount_cur_tag:
                         line_amount_cur = line_amount_cur_tag[0].toxml().replace('<Amt>','').replace('</Amt>','').replace('<Amt/>','')
 
