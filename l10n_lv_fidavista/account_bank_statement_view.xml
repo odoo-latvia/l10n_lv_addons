@@ -7,6 +7,9 @@
             <field name="model">account.bank.statement</field>
             <field name="inherit_id" ref="account.view_bank_statement_form"/>
             <field name="arch" type="xml">
+                <xpath expr="/form/sheet/notebook/page[@name='statement_line_ids']/field[@name='line_ids']/tree[@string='Statement lines']/field[@name='journal_entry_id']" position="after">
+                    <field name="account_id"/>
+                </xpath>
                 <xpath expr="/form/sheet/notebook/page[@name='statement_line_ids']/field[@name='line_ids']/tree[@string='Statement lines']/field[@name='partner_id']" position="before">
 		            <field name="transaction_type"/>
                     <field name="partner_name"/>
