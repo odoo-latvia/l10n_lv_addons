@@ -29,6 +29,42 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from datetime import timedelta
 
+def compute_dmy(date_from, date_to):
+    res = {
+        'years': 0,
+        'months': 0,
+        'days': 0,
+        'total_days': 0,
+        'tm_days': 0
+    }
+    if date_from <= date_to:
+        dfl = date_from.split('-')
+        year_from = int(dfl[0])
+        month_from = int(dfl[1])
+        day_from = int(dfl[2])
+        dtl = date_to.split('-')
+        while (year_from != int(dtl[0]) or month_from != int(dtl[1]) or day_from != int(dtl[2])):
+            day_from += 1
+            res['days'] += 1
+            res['total_days'] += 1
+            if (month_from == 2 and ((year_from % 4 == 0 and day_from == 30) or (year_from % 4 != 0 and day_from == 29))) or (month_from in [4, 6, 9, 11] and day_from == 31) or (month_from in [1, 3, 5, 7, 8, 10, 12] and day_from == 32):
+                day_from = 1
+                month_from += 1
+                if month_from == 13:
+                    month_from = 1
+                    year_from += 1
+            if day_from == int(dfl[2]):
+                if month_from != int(dfl[1]):
+                    res['days'] = 0
+                    res['months'] += 1
+                if month_from == int(dfl[1]) and year_from != int(dfl[0]):
+                    res['months'] = 0
+                    res['years'] += 1
+        res['days'] += 1
+        res['total_days'] += 1
+        res['tm_days'] = (int(dtl[1]) == 2 and int(dtl[0]) % 4 == 0 and 29) or (int(dtl[1]) == 2 and int(dtl[0]) % 4 != 0 and 28) or (int(dtl[1]) in [4, 6, 9, 11] and 30) or 31 # total days in final month
+    return res
+
 class hr_holidays_status(osv.osv):
     _inherit = "hr.holidays.status"
 
@@ -41,7 +77,19 @@ class hr_employee(osv.osv):
     _inherit = "hr.employee"
 
     _columns = {
-        'disability_group': fields.selection([('I','I'), ('II','II'), ('III','III')], 'Disability group')
+        'disability_group': fields.selection([('I','I'), ('II','II'), ('III','III')], 'Disability group'),
+        'holiday_ids': fields.one2many('hr.holidays', 'employee_id', 'Leaves'),
+        'dependent_ids': fields.one2many('hr.employee.dependent', 'employee_id', 'Dependents')
+    }
+
+class hr_employee_dependent(osv.osv):
+    _name = 'hr.employee.dependent'
+
+    _columns = {
+        'employee_id': fields.many2one('hr.employee', 'Employee', ondelete='cascade'),
+        'name': fields.char('Name', required=True),
+        'date_from': fields.date('Date From'),
+        'date_to': fields.date('Date To')
     }
 
 class hr_contract(osv.osv):
@@ -179,10 +227,29 @@ class hr_payslip(osv.osv):
             # if no current payslip ids, compute the value:
             if (not curr_ps_ids) and total_days != 0.0:
                 curr_ts += contract.wage * curr_wd / total_days
+                if contract.prem_deduct_ids:
+                    prem_amount = 0.0
+                    for pd in contract.prem_deduct_ids:
+                        if pd.code == 'PIEM':
+                            date_from_pd = date_from
+                            date_to_pd = date_to
+                            if pd.date_from and pd.date_from > payslip.date_from and pd.date_from <= payslip.date_to:
+                                date_from_pd = pd.date_from
+                            if pd.date_to and pd.date_to < payslip.date_to and pd.date_to >= payslip.date_from:
+                                date_to_pd = pd.date_to
+                            if date_from and date_to:
+                                dmy = compute_dmy(date_from, date_to)
+                                pd_amount = (dmy['years'] != 0 and pd.amount * 12.0 or 0.0) + (dmy['months'] != 0 and pd.amount * dmy['months'] or 0.0) + ((pd.amount / dmy['tm_days']) * dmy['days'])
+                                prem_amount += pd_amount
+                    if prem_amount != 0.0:
+                        premium = total_days and ((prem_amount * curr_wd) / total_days) or 0.0
+                        if total_days == 0.0:
+                            premium = prem_amount
+                        curr_ts += premium
                 ip_lines = self.get_inputs(cr, uid, [contract_id], date_from, date_to, context=context)
                 if ip_lines:
                     for cil in ip_lines:
-                        if cil['code'] in ['PIEM', 'PIEMV']:
+                        if cil['code'] == 'PIEMV':
                             curr_ts += cil.get('amount',0.0)
             total_salary += curr_ts
             worked_days += curr_wd
@@ -263,26 +330,26 @@ class hr_payslip(osv.osv):
                 })
 
         # Insert premium and deduction amounts:
-        if contract and contract.prem_deduct_ids:
-            for pd in contract.prem_deduct_ids:
-                if pd.date_from and pd.date_from > date_to:
-                    continue
-                if pd.date_to and pd.date_to < date_from:
-                    continue
-                found = False
-                for inp_val in res['value']['input_line_ids']:
-                    if inp_val['code'] == pd.code:
-                        found = True
-                        if inp_val.get('amount',0.0) != pd.amount:
-                            ind = res['value']['input_line_ids'].index(inp_val)
-                            res['value']['input_line_ids'][ind].update({'amount': pd.amount})
-                if not found:
-                    res['value']['input_line_ids'].append({
-                        'code': pd.code,
-                        'name': pd.name,
-                        'amount': pd.amount,
-                        'contract_id': contract_id
-                    })
+#        if contract and contract.prem_deduct_ids:
+#            for pd in contract.prem_deduct_ids:
+#                if pd.date_from and pd.date_from > date_to:
+#                    continue
+#                if pd.date_to and pd.date_to < date_from:
+#                    continue
+#                found = False
+#                for inp_val in res['value']['input_line_ids']:
+#                    if inp_val['code'] == pd.code:
+#                        found = True
+#                        if inp_val.get('amount',0.0) != pd.amount:
+#                            ind = res['value']['input_line_ids'].index(inp_val)
+#                            res['value']['input_line_ids'][ind].update({'amount': pd.amount})
+#                if not found:
+#                    res['value']['input_line_ids'].append({
+#                        'code': pd.code,
+#                        'name': pd.name,
+#                        'amount': pd.amount,
+#                        'contract_id': contract_id
+#                    })
         return res
 
     def reload_inputs(self, cr, uid, ids, context=None):

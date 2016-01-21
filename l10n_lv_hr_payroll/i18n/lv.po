@@ -27,6 +27,7 @@ msgstr "Invaliditātes grupa"
 
 #. module: l10n_lv_hr_payroll
 #: model:ir.model,name:l10n_lv_hr_payroll.model_hr_employee
+#: field:hr.employee.dependent,employee_id:0
 msgid "Employee"
 msgstr "Darbinieks"
 
@@ -222,6 +223,7 @@ msgstr "Līgums"
 
 #. module: l10n_lv_hr_payroll
 #: field:hr.contract.pd,name:0
+#: field:hr.employee.dependent,name:0
 msgid "Name"
 msgstr "Nosaukums"
 
@@ -245,3 +247,18 @@ msgstr "Spēkā no"
 msgid "Active To"
 msgstr "Spēkā līdz"
 
+#. module: l10n_lv_hr_payroll
+#: field:hr.employee.dependent,date_from:0
+msgid "Date From"
+msgstr "Datums no"
+
+#. module: l10n_lv_hr_payroll
+#: field:hr.employee.dependent,date_to:0
+msgid "Date To"
+msgstr "Datums līdz"
+
+#. module: l10n_lv_hr_payroll
+#: field:hr.employee,dependent_ids:0
+#: view:hr.employee:l10n_lv_hr_payroll.hr_hr_employee_view_form2_l10n_lv
+msgid "Dependents"
+msgstr "Apgādājamie"

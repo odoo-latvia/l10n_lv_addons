@@ -75,6 +75,17 @@
                 <field name="children" position="after">
                     <field name="disability_group"/>
                 </field>
+                <xpath expr="//notebook/page[@string='Personal Information']/group" position="inside">
+                    <group colspan="4" col="1" string="Dependents">
+                        <field name="dependent_ids" nolabel="1">
+                            <tree editable="top">
+                                <field name="name"/>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                            </tree>
+                        </field>
+                    </group>
+                </xpath>
             </field>
         </record>
 
