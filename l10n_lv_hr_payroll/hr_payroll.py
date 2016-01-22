@@ -283,51 +283,51 @@ class hr_payslip(osv.osv):
                         res['value']['worked_days_line_ids'][ind]['code'] = hd_type.code
 
         # Put number of dependents in Other Inputs:
-        if res['value']['input_line_ids']:
-            emp_obj = self.pool.get('hr.employee')
-            employee = emp_obj.browse(cr, uid, employee_id, context=context)
-            found = False
-            for inp_val in res['value']['input_line_ids']:
-                if inp_val['code'] == 'APG':
-                    found = True
-                    if inp_val.get('amount',0.0) != float(employee.children):
-                        ind = res['value']['input_line_ids'].index(inp_val)
-                        res['value']['input_line_ids'][ind].update({'amount': float(employee.children)})
-            if not found:
-                res['value']['input_line_ids'].append({
-                    'code': 'APG',
-                    'name': _("Dependent persons"),
-                    'amount': float(employee.children),
-                    'contract_id': contract_id
-                })
+#        if res['value']['input_line_ids']:
+#            emp_obj = self.pool.get('hr.employee')
+#            employee = emp_obj.browse(cr, uid, employee_id, context=context)
+#            found = False
+#            for inp_val in res['value']['input_line_ids']:
+#                if inp_val['code'] == 'APG':
+#                    found = True
+#                    if inp_val.get('amount',0.0) != float(employee.children):
+#                        ind = res['value']['input_line_ids'].index(inp_val)
+#                        res['value']['input_line_ids'][ind].update({'amount': float(employee.children)})
+#            if not found:
+#                res['value']['input_line_ids'].append({
+#                    'code': 'APG',
+#                    'name': _("Dependent persons"),
+#                    'amount': float(employee.children),
+#                    'contract_id': contract_id
+#                })
 
         # Compute number of calendar days absent:
-        if res['value']['input_line_ids']:
-            day_from = datetime.datetime.strptime(date_from,"%Y-%m-%d")
-            day_to = datetime.datetime.strptime(date_to,"%Y-%m-%d")
-            nb_of_days = (day_to - day_from).days + 1
-            holiday_obj = self.pool.get('hr.holidays')
-            abs_days = 0.0
-            for day in range(0, nb_of_days):
-                comp_date = day_from + timedelta(days=day)
-                comp_day = comp_date.strftime("%Y-%m-%d")
-                holiday_ids = holiday_obj.search(cr, uid, [('holiday_status_id.reduces_tax_relief','=',True), ('state','=','validate'),('employee_id','=',employee_id),('type','=','remove'),('date_from','<=',comp_day),('date_to','>=',comp_day)])
-                if holiday_ids:
-                    abs_days += 1.0
-            found = False
-            for inp_val in res['value']['input_line_ids']:
-                if inp_val['code'] == 'KAL':
-                    found = True
-                    if inp_val.get('amount',0.0) != abs_days:
-                        ind = res['value']['input_line_ids'].index(inp_val)
-                        res['value']['input_line_ids'][ind].update({'amount': abs_days})
-            if not found:
-                res['value']['input_line_ids'].append({
-                    'code': 'KAL',
-                    'name': _("Number of calendar days absent"),
-                    'amount': abs_days,
-                    'contract_id': contract_id
-                })
+#        if res['value']['input_line_ids']:
+#            day_from = datetime.datetime.strptime(date_from,"%Y-%m-%d")
+#            day_to = datetime.datetime.strptime(date_to,"%Y-%m-%d")
+#            nb_of_days = (day_to - day_from).days + 1
+#            holiday_obj = self.pool.get('hr.holidays')
+#            abs_days = 0.0
+#            for day in range(0, nb_of_days):
+#                comp_date = day_from + timedelta(days=day)
+#                comp_day = comp_date.strftime("%Y-%m-%d")
+#                holiday_ids = holiday_obj.search(cr, uid, [('holiday_status_id.reduces_tax_relief','=',True), ('state','=','validate'),('employee_id','=',employee_id),('type','=','remove'),('date_from','<=',comp_day),('date_to','>=',comp_day)])
+#                if holiday_ids:
+#                    abs_days += 1.0
+#            found = False
+#            for inp_val in res['value']['input_line_ids']:
+#                if inp_val['code'] == 'KAL':
+#                    found = True
+#                    if inp_val.get('amount',0.0) != abs_days:
+#                        ind = res['value']['input_line_ids'].index(inp_val)
+#                        res['value']['input_line_ids'][ind].update({'amount': abs_days})
+#            if not found:
+#                res['value']['input_line_ids'].append({
+#                    'code': 'KAL',
+#                    'name': _("Number of calendar days absent"),
+#                    'amount': abs_days,
+#                    'contract_id': contract_id
+#                })
 
         # Insert premium and deduction amounts:
 #        if contract and contract.prem_deduct_ids:
@@ -384,64 +384,6 @@ class hr_payslip(osv.osv):
                             wd_vals.update({'payslip_id': payslip.id})
                             wd_line_obj.create(cr, uid, wd_vals, context=context)
         return True
-
-    def compute_days(self, cr, uid, ids, date_from, date_to, context=None):
-        date_from_list = date_from.split('-')
-        year_from = int(date_from_list[0])
-        month_from = int(date_from_list[1])
-        day_from = int(date_from_list[2])
-
-        date_to_list = date_to.split('-')
-        year_to = int(date_to_list[0])
-        month_to = int(date_to_list[1])
-        day_to = int(date_to_list[2])
-
-        year = year_from
-        month = month_from
-        day = day_from
-
-        days = 1
-
-        while (year != year_to or month != month_to or day != day_to):
-            days += 1
-            if month == 12:
-                if day == 31:
-                    year += 1
-                    month = 1
-                    day = 1
-                    continue
-                else:
-                    day += 1
-            if month == 2:
-                if int(str(year)[-2:]) % 4 == 0:
-                    if day == 29:
-                        month += 1
-                        day = 1
-                        continue
-                    else:
-                        day += 1
-                if int(str(year)[-2:]) % 4 != 0:
-                    if day == 28:
-                        month += 1
-                        day = 1
-                        continue
-                    else:
-                        day += 1
-            if month in [4, 6, 9, 11]:
-                if day == 30:
-                    month += 1
-                    day = 1
-                    continue
-                else:
-                    day += 1
-            if month in [1, 3, 5, 7, 8, 10]:
-                if day == 31:
-                    month += 1
-                    day = 1
-                    continue
-                else:
-                    day += 1
-        return days
 
 class hr_salary_rule(osv.osv):
     _inherit = 'hr.salary.rule'
