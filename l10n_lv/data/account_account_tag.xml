@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+
+    <record id="lv_account_tag_0" model="account.account.tag">
+        <field name="name">0 - Kontu plāns</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_1" model="account.account.tag">
+        <field name="name">1 - Ilgtermiņa ieguldījumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_11" model="account.account.tag">
+        <field name="name">11 - Nemateriālie ieguldījumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_119" model="account.account.tag">
+        <field name="name">119 - Nemateriālo ieguldījumu vērtības norakstītā daļa (pasīvā)</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_12" model="account.account.tag">
+        <field name="name">12 - Pamatlīdzekļi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+
+    <record id="lv_account_tag_129" model="account.account.tag">
+        <field name="name">129 - Pamatlīdzekļu nolietojums (pasīvā)</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_13" model="account.account.tag">
+        <field name="name">13 - Ieguldījuma īpašumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_14" model="account.account.tag">
+        <field name="name">14 - Bioloģiskie aktīvi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_15" model="account.account.tag">
+        <field name="name">15 - Ilgtermiņa finanšu ieguldījumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_2" model="account.account.tag">
+        <field name="name">2 - Apgrozāmie līdzekļi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_21" model="account.account.tag">
+        <field name="name">21 - Krājumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_22" model="account.account.tag">
+        <field name="name">22 - Pārdošanai turēti ilgtermiņa ieguldījumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_23" model="account.account.tag">
+        <field name="name">23 - Debitori</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_234" model="account.account.tag">
+        <field name="name">234 - Citi debitori</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_24" model="account.account.tag">
+        <field name="name">Īstermiņa finanšu ieguldījumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_26" model="account.account.tag">
+        <field name="name">26 - Nauda</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_261" model="account.account.tag">
+        <field name="name">261 - Kase</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_262" model="account.account.tag">
+        <field name="name">262 - Norēķinu konti bankās</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_3" model="account.account.tag">
+        <field name="name">3 - Pašu kapitāls</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_31" model="account.account.tag">
+        <field name="name">31 - Pamatkapitāls, pārvērtēšanas rezerve</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_33" model="account.account.tag">
+        <field name="name">33 - Rezerves</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_34" model="account.account.tag">
+        <field name="name">34 - Nesadalītā peļņa vai nesegtie zaudējumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_4" model="account.account.tag">
+        <field name="name">4 - Uzkrājumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_41" model="account.account.tag">
+        <field name="name">41 - Uzkrājumi pensijām un tamlīdzīgām saistībām</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_42" model="account.account.tag">
+        <field name="name">42 - Uzkrājumi paredzamajiem nodokļiem</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_43" model="account.account.tag">
+        <field name="name">43 - Citi uzkrājumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_5" model="account.account.tag">
+        <field name="name">5 - Kreditori</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_51" model="account.account.tag">
+        <field name="name">51 - Norēķini par aizņēmumiem</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_513" model="account.account.tag">
+        <field name="name">513 - Aizņēmumi no kredītiestādēm</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_52" model="account.account.tag">
+        <field name="name">52 - No pircējiem saņemtie avansi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_53" model="account.account.tag">
+        <field name="name">53 - Parādi piegādātājiem un darbuzņēmējiem</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_54" model="account.account.tag">
+        <field name="name">54 - Maksājamie vekseļi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_55" model="account.account.tag">
+        <field name="name">55 - Norēķini ar sabiedrībām</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_56" model="account.account.tag">
+        <field name="name">56 - Norēķini par darba samaksu, ieturējumiem (izņemot nodokļus) un parādiem personālam</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_57" model="account.account.tag">
+        <field name="name">57 - Nodokļi un valsts sociālās apdrošināšanas obligātās iemaksas</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_572" model="account.account.tag">
+        <field name="name">572 - Norēķini par pievienotās vērtības nodokli</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_573" model="account.account.tag">
+        <field name="name">573 - Norēķini par valsts sociālās apdrošināšanas obligātajām iemaksām</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_574" model="account.account.tag">
+        <field name="name">574 - Norēķini par uzņēmējdarbības riska valsts nodevām</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_575" model="account.account.tag">
+        <field name="name">575 - Norēķini par iedzīvotāju ienākuma nodokli</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_58" model="account.account.tag">
+        <field name="name">58 - Norēķini par dividendēm</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_59" model="account.account.tag">
+        <field name="name">59 - Citi kreditori</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_6" model="account.account.tag">
+        <field name="name">6 - Ieņēmumi no uzņēmuma saimnieciskās darbības</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_61" model="account.account.tag">
+        <field name="name">61 - Ieņēmumi no pārdošanas, kas apliekami ar nodokļiem vispārējā kārtībā</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_62" model="account.account.tag">
+        <field name="name">62 - Ieņēmumi no pārdošanas, kas citādi apliekami ar nodokļiem</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_63" model="account.account.tag">
+        <field name="name">63 - Komisijas, starpniecības un citi ieņēmumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_64" model="account.account.tag">
+        <field name="name">64 - Ieņēmumus samazinošas atlaides</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_65" model="account.account.tag">
+        <field name="name">65 - Pārējie uzņēmuma ieņēmumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_66" model="account.account.tag">
+        <field name="name">66 - Gatavās produkcijas un nepabeigto ražojumu krājumu un vērtības izmaiņas</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_67" model="account.account.tag">
+        <field name="name">67 - Citu periodu ieņēmumi, kas attiecas uz pārskata periodu</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_69" model="account.account.tag">
+        <field name="name">69 - Sociālās infrastruktūras iestāžu un pasākumu ieņēmumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_7" model="account.account.tag">
+        <field name="name">7 - Saimnieciskās darbības izdevumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_71" model="account.account.tag">
+        <field name="name">71 - Izdevumi izejvielu, materiālu un preču iepirkšanai</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_72" model="account.account.tag">
+        <field name="name">72 - Personāla izmaksas</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_73" model="account.account.tag">
+        <field name="name">73 - Sociālās nodevas un izmaksas</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_74" model="account.account.tag">
+        <field name="name">74 - Pamatlīdzekļu nolietojums un citu ieguldījumu vērtības norakstījumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_75" model="account.account.tag">
+        <field name="name">75 - Pārējie saimnieciskās darbības izdevumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_76" model="account.account.tag">
+        <field name="name">76 - Preču pārdošanas izdevumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_77" model="account.account.tag">
+        <field name="name">77 - Administrācijas izdevumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_78" model="account.account.tag">
+        <field name="name">78 - Pārskata periodā iekļaujamie iepriekšējo periodu izdevumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_79" model="account.account.tag">
+        <field name="name">79 - Sociālās infrastruktūras uzturēšanas izdevumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_8" model="account.account.tag">
+        <field name="name">8 - Dažādi ieņēmumi un izdevumi, peļņa un zaudējumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_81" model="account.account.tag">
+        <field name="name">81 - Dažādi ieņēmumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_82" model="account.account.tag">
+        <field name="name">82 - Dažādi izdevumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_83" model="account.account.tag">
+        <field name="name">83 - Ārkārtas ieņēmumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_84" model="account.account.tag">
+        <field name="name">84 - Ārkārtas izdevumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_86" model="account.account.tag">
+        <field name="name">86 - Peļņa vai zaudējumi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+    <record id="lv_account_tag_88" model="account.account.tag">
+        <field name="name">88 - Nodokļi no peļņas un citi saimnieciskās darbības izdevumos  neiekļaujamie nodokļi</field>
+        <field name="applicability">accounts</field>
+    </record>
+
+</data>
+</openerp>

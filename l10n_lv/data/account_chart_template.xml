@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+
+    <record id="lv_account_template_3140" model="account.account.template">
+        <field name="name">Finanšu instrumentu pārvērtēšanas rezerve</field>
+        <field name="code">3140</field>
+        <field name="user_type_id" ref="lv_account_type_3"/>
+        <field name="tag_ids" eval="[(6, 0, [ref('l10n_lv.lv_account_tag_0'), ref('l10n_lv.lv_account_tag_3'), ref('l10n_lv.lv_account_tag_31')])]"/>
+    </record>
+
+    <record id="l10n_lv_chart_template" model="account.chart.template">
+        <field name="name">Latvija – saimnieciskā aprēķina</field>
+        <field name="bank_account_code_prefix">262</field>
+        <field name="cash_account_code_prefix">261</field>
+        <field name="code_digits">4</field>
+        <field name="currency_id" ref="base.EUR"/>
+        <field name="transfer_account_id" ref="lv_account_template_3140"/>
+    </record>
+
+    <record id="l10n_lv.lv_account_template_3140" model="account.account.template">
+        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
+    </record>
+
+</data>
+</openerp>
