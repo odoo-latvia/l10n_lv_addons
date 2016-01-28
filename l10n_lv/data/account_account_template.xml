@@ -462,14 +462,6 @@
         <field name="tag_ids" eval="[(6, 0, [ref('l10n_lv.lv_account_tag_0'), ref('l10n_lv.lv_account_tag_2'), ref('l10n_lv.lv_account_tag_26')])]"/>
     </record>
 
-    <record id="lv_account_template_2690" model="account.account.template">
-        <field name="name">Nauda ceļā</field>
-        <field name="code">2690</field>
-        <field name="user_type_id" ref="lv_account_type_2_5"/>
-        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
-        <field name="tag_ids" eval="[(6, 0, [ref('l10n_lv.lv_account_tag_0'), ref('l10n_lv.lv_account_tag_2'), ref('l10n_lv.lv_account_tag_26')])]"/>
-    </record>
-
 <!-- -->
 
     <record id="lv_account_template_3110" model="account.account.template">
@@ -491,6 +483,14 @@
     <record id="lv_account_template_3130" model="account.account.template">
         <field name="name">Ilgtermiņa ieguldījumu pārvērtēšanas rezerve</field>
         <field name="code">3130</field>
+        <field name="user_type_id" ref="lv_account_type_3"/>
+        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
+        <field name="tag_ids" eval="[(6, 0, [ref('l10n_lv.lv_account_tag_0'), ref('l10n_lv.lv_account_tag_3'), ref('l10n_lv.lv_account_tag_31')])]"/>
+    </record>
+
+    <record id="lv_account_template_3140" model="account.account.template">
+        <field name="name">Finanšu instrumentu pārvērtēšanas rezerve</field>
+        <field name="code">3140</field>
         <field name="user_type_id" ref="lv_account_type_3"/>
         <field name="chart_template_id" ref="l10n_lv_chart_template"/>
         <field name="tag_ids" eval="[(6, 0, [ref('l10n_lv.lv_account_tag_0'), ref('l10n_lv.lv_account_tag_3'), ref('l10n_lv.lv_account_tag_31')])]"/>
