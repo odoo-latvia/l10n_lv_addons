@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+
+    <record id="lv_account_fpos_LR_PVN_maks" model="account.fiscal.position.template">
+        <field name="name">LR PVN maksātājs</field>
+        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
+    </record>
+
+    <record id="lv_account_fpos_LR_PVN_nemaks" model="account.fiscal.position.template">
+        <field name="name">LR PVN nemaksātājs</field>
+        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
+    </record>
+
+    <record id="lv_account_fpos_ES_PVN_maks" model="account.fiscal.position.template">
+        <field name="name">ES PVN maksātājs</field>
+        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
+    </record>
+
+</data>
+</openerp>
