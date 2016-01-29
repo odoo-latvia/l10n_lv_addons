@@ -56,4 +56,42 @@ class AccountJournal(models.Model):
                 res.update({'tag_ids': [(6, 0, tags)]})
         return res
 
+class WizardMultiChartsAccounts(models.TransientModel):
+    _inherit = 'wizard.multi.charts.accounts'
+
+    @api.onchange('chart_template_id')
+    def onchange_chart_template_id(self):
+        res = super(WizardMultiChartsAccounts, self).onchange_chart_template_id()
+        lv_chart_template = self.env.ref('l10n_lv.l10n_lv_chart_template')
+        if lv_chart_template and self.chart_template_id.id == lv_chart_template.id:
+            lv_sale_tax = self.env.ref('l10n_lv.lv_tax_template_PVN-SR')
+            lv_purchase_tax = self.env.ref('l10n_lv.lv_tax_template_Pr-SR')
+            if lv_sale_tax:
+                self.sale_tax_id = lv_sale_tax.id
+            if lv_purchase_tax:
+                self.purchase_tax_id = lv_purchase_tax.id
+            self.sale_tax_rate = 21.0
+            self.purchase_tax_rate = 21.0
+        return res
+
+class AccountConfigSettings(models.TransientModel):
+    _inherit = 'account.config.settings'
+
+    @api.onchange('chart_template_id')
+    def onchange_chart_template_id(self):
+        res = super(AccountConfigSettings, self).onchange_chart_template_id()
+        lv_chart_template = self.env.ref('l10n_lv.l10n_lv_chart_template')
+        if self.chart_template_id and lv_chart_template and self.chart_template_id.id == lv_chart_template.id:
+            lv_sale_tax = self.env.ref('l10n_lv.lv_tax_template_PVN-SR')
+            lv_purchase_tax = self.env.ref('l10n_lv.lv_tax_template_Pr-SR')
+            if lv_sale_tax:
+                self.sale_tax_id = lv_sale_tax.id
+                self.default_sale_tax_id = lv_sale_tax.id
+            if lv_purchase_tax:
+                self.purchase_tax_id = lv_purchase_tax.id
+                self.default_purchase_tax_id = lv_purchase_tax.id
+            self.sale_tax_rate = 21.0
+            self.purchase_tax_rate = 21.0
+        return res
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

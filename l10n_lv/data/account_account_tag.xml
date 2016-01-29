@@ -2,6 +2,8 @@
 <openerp>
 <data noupdate="0">
 
+<!-- Account Tags -->
+
     <record id="lv_account_tag_0" model="account.account.tag">
         <field name="name">0 - Kontu plāns</field>
         <field name="applicability">accounts</field>
@@ -336,6 +338,223 @@
     <record id="lv_account_tag_88" model="account.account.tag">
         <field name="name">88 - Nodokļi no peļņas un citi saimnieciskās darbības izdevumos  neiekļaujamie nodokļi</field>
         <field name="applicability">accounts</field>
+    </record>
+
+<!-- Tax Tags -->
+
+    <record id="lv_account_tax_tag_1" model="account.account.tag">
+        <field name="name">1 - Nodokļu plāns</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_50" model="account.account.tag">
+        <field name="name">50 - Pievienotās vērtības nodoklis (PVN deklarācijas 70 vai 80 rinda)</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_420" model="account.account.tag">
+        <field name="name">420 - [70 - 80] Valsts budžetā maksājamā nodokļa summa (+), no valsts budžeta atmaksājamā nodokļa summa (-)</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_100" model="account.account.tag">
+        <field name="name">100 - [40] KOPĒJĀ DARĪJUMU VĒRTĪBA (latos), no tās:</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_110" model="account.account.tag">
+        <field name="name">110 - [41] Ar PVN standartlikmi apliekamie darījumi</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_120" model="account.account.tag">
+        <field name="name">120 - [41.1] - Iekšzemē veiktie darījumi, par kuriem nodokli maksā preču vai pakalpojumu saņēmējs</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_130" model="account.account.tag">
+        <field name="name">130 - [42] Ar PVN samazināto likmi apliekamie darījumi</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_140" model="account.account.tag">
+        <field name="name">140 - [43] Ar PVN 0% likmi apliekamie darījumi, tai skaitā:</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_150" model="account.account.tag">
+        <field name="name">150 - [44] - darījumi, kas veikti brīvostās un SEZ</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_160" model="account.account.tag">
+        <field name="name">160 - [45] - uz ES dalībvalstīm piegādātās preces</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_170" model="account.account.tag">
+        <field name="name">170 - [46] - ārpuskopienas preču piegādes muitas noliktavās un brīvajās zonās</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_180" model="account.account.tag">
+        <field name="name">180 - [47] - uz ES dalībvalstīm piegādātie jaunie transportlīdzekļi</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_190" model="account.account.tag">
+        <field name="name">190 - [48] - par sniegtajiem pakalpojumiem</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_200" model="account.account.tag">
+        <field name="name">200 - [48.1] - eksportētās preces</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_210" model="account.account.tag">
+        <field name="name">210 - [48.2] Citās valstīs veiktie darījumi</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_220" model="account.account.tag">
+        <field name="name">220 - [49] Ar PVN neapliekamie darījumi</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_230" model="account.account.tag">
+        <field name="name">230 - [50] No ES dalībvalstīm saņemtās preces un pakalpojumi (standartlikme)</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_240" model="account.account.tag">
+        <field name="name">240 - [51] No ES dalībvalstīm saņemtās preces (samazinātā likme)</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_250" model="account.account.tag">
+        <field name="name">250 - APRĒĶINĀTAIS PVN (latos):</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_260" model="account.account.tag">
+        <field name="name">260 - [52] Ar PVN standartlikmi apliekamiem darījumiem</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_270" model="account.account.tag">
+        <field name="name">270 - [53] Ar PVN samazināto likmi apliekamiem darījumiem</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_280" model="account.account.tag">
+        <field name="name">280 - [54] Par saņemtajiem pakalpojumiem</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_290" model="account.account.tag">
+        <field name="name">290 - [55] Ar PVN standartlikmi apliekamām precēm un pakalpojumiem, kas saņemti no ES dalībvalstīm</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_300" model="account.account.tag">
+        <field name="name">300 - [56] Ar PVN samazināto likmi apliekamām precēm, kas saņemtas no ES dalībvalstīm</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_310" model="account.account.tag">
+        <field name="name">310 - [60] PVN SUMMA PAR SAŅEMTAJĀM PRECĒM UN PAKALPOJUMIEM (latos), no tā:</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_320" model="account.account.tag">
+        <field name="name">320 - [61] Par importētajām precēm</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_330" model="account.account.tag">
+        <field name="name">330 - [62] Par precēm un pakalpojumiem iekšzemē</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_340" model="account.account.tag">
+        <field name="name">340 - [63] Aprēkinātā PVN summa saskaņā ar likuma 92.panta pirmās daļas 4.punktu (izņemot 64.rindu)</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_350" model="account.account.tag">
+        <field name="name">350 - [64] Aprēķinātā PVN summa par precēm un pakalpojumiem, kas saņemti no ES dalībvalstīm</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_360" model="account.account.tag">
+        <field name="name">360 - [65] Lauksaimniekiem izmaksātā kompensācija</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_370" model="account.account.tag">
+        <field name="name">370 - [66] PVN summa, kas nav atskaitāma kā priekšnodoklis</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_380" model="account.account.tag">
+        <field name="name">380 - [67] Korekcijas - iepriekšējos taksācijas periodos samaksai valsts budžetā aprēķinātā nodokļa samazinājums</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_390" model="account.account.tag">
+        <field name="name">390 - [57] Korekcijas - iepriekšējos taksācijas periodos atskaitītā priekšnodokļa samazinājums</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_500" model="account.account.tag">
+        <field name="name">500 - Priekšnodokļa bāzes</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_510" model="account.account.tag">
+        <field name="name">510 - PVN 1-1</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_520" model="account.account.tag">
+        <field name="name">520 - PVN bāze dekl. 62.rindai</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_530" model="account.account.tag">
+        <field name="name">530 - PVN bāze dekl. 63.rindai</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_540" model="account.account.tag">
+        <field name="name">540 - PVN bāze dekl. 67.rindai</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_550" model="account.account.tag">
+        <field name="name">550 - PVN bāze dekl. 57.rindai</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_600" model="account.account.tag">
+        <field name="name">600 - PVN 1-2</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_610" model="account.account.tag">
+        <field name="name">610 - PVN bāze dekl. 64.rindai</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_620" model="account.account.tag">
+        <field name="name">620 - PVN bāze dekl. 64.rindai - Prece</field>
+        <field name="applicability">taxes</field>
+    </record>
+
+    <record id="lv_account_tax_tag_630" model="account.account.tag">
+        <field name="name">630 - PVN bāze dekl. 64.rindai - Pakalpojums</field>
+        <field name="applicability">taxes</field>
     </record>
 
 </data>
