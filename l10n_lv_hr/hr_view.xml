@@ -285,5 +285,21 @@
 
         <menuitem id="menu_hr_job_config" parent="hr.menu_hr_configuration" action="hr.action_hr_job"/>
 
+        <!-- Recruitment -->
+
+        <record model="ir.ui.view" id="crm_case_form_view_job_inherit_l10n_lv">
+            <field name="name">Jobs - Recruitment Form Inherit LV</field>
+            <field name="model">hr.applicant</field>
+            <field name="inherit_id" ref="hr_recruitment.crm_case_form_view_job"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/sheet/div[1]" position="before">
+                    <field name="image" widget='image' class="oe_left oe_avatar" options='{"preview_image": "image_medium", "size": [90, 90]}'/>
+                </xpath>
+                <field name="reference" position="after">
+                    <field name="website" widget="url" placeholder="e.g. www.odoo.com"/>
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>

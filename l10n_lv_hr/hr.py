@@ -25,7 +25,7 @@
 from openerp import addons
 import logging
 from openerp.osv import fields, osv
-from openerp import tools
+from openerp import tools, api
 _logger = logging.getLogger(__name__)
 import time
 from openerp.tools.translate import _
@@ -248,5 +248,38 @@ class hr_job(osv.osv):
     }
 
 hr_job()
+
+class hr_applicant(osv.Model):
+    _inherit = "hr.applicant"
+
+    @api.multi
+    def _get_image(self, name, args):
+        return dict((a.id, tools.image_get_resized_images(a.image)) for a in self)
+
+    @api.one
+    def _set_image(self, name, value, args):
+        return self.write({'image': tools.image_resize_image_big(value)})
+
+    _columns = {
+        'website': fields.char('Website', help="Here you can put a link to the applicant's CV or the applicant's website."),
+        'image': fields.binary("Image",
+            help="This field holds the image used as avatar for this applicant, limited to 1024x1024px"),
+        'image_medium': fields.function(_get_image, fnct_inv=_set_image,
+            string="Medium-sized image", type="binary", multi="_get_image",
+            store={
+                'hr.applicant': (lambda self, cr, uid, ids, c={}: ids, ['image'], 10),
+            },
+            help="Medium-sized image of this applicant. It is automatically "\
+                 "resized as a 128x128px image, with aspect ratio preserved. "\
+                 "Use this field in form views or some kanban views."),
+        'image_small': fields.function(_get_image, fnct_inv=_set_image,
+            string="Small-sized image", type="binary", multi="_get_image",
+            store={
+                'hr.applicant': (lambda self, cr, uid, ids, c={}: ids, ['image'], 10),
+            },
+            help="Small-sized image of this applicant. It is automatically "\
+                 "resized as a 64x64px image, with aspect ratio preserved. "\
+                 "Use this field anywhere a small image is required."),
+    }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

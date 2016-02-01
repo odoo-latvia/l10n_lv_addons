@@ -484,3 +484,43 @@ msgstr "Nodokļu maksātāja numurs"
 #: model:res.groups,name:l10n_lv_hr.group_multiple_emp_id_vat
 msgid "Use Multiple Personal ID / TIN for Countries"
 msgstr "Izmantot vairākus personas kodus / nodokļu maksātāja numurus valstīm"
+
+#. module: l10n_lv_hr
+#: field:hr.applicant,website:0
+msgid "Website"
+msgstr "Tīkla vietne"
+
+#. module: l10n_lv_hr
+#: help:hr.applicant,website:0
+msgid "Here you can put a link to the applicant's CV or the applicant's website."
+msgstr "Šeit iespējams norādīt saiti uz pretendenta CV vai pretendenta mājaslapu."
+
+#. module: l10n_lv_hr
+#: field:hr.applicant,image:0
+msgid "Image"
+msgstr "Attēls"
+
+#. module: l10n_lv_hr
+#: help:hr.applicant,image:0
+msgid "This field holds the image used as avatar for this applicant, limited to 1024x1024px"
+msgstr "Šis lauks satur pretendenta fotogrāfiju, izmērs ierobežots līdz 1024x1024px"
+
+#. module: l10n_lv_hr
+#: field:hr.applicant,image_medium:0
+msgid "Medium-sized image"
+msgstr "Vidēja izmēra attēls"
+
+#. module: l10n_lv_hr
+#: help:hr.applicant,image_medium:0
+msgid "Medium-sized image of this applicant. It is automatically resized as a 128x128px image, with aspect ratio preserved. Use this field in form views or some kanban views."
+msgstr "Pretendenta vidēja izmēra attēls. Tas tiek automātiski samazināts līdz 128x128px attēlam, saglabājot malu attiecību. Šis lauks paredzēts izmantošanai formas skatījumos un dažos kanban tipa skatījumos."
+
+#. module: l10n_lv_hr
+#: field:hr.applicant,image_small:0
+msgid "Small-sized image"
+msgstr "Maza izmēra attēls"
+
+#. module: l10n_lv_hr
+#: help:hr.applicant,image_small:0
+msgid "Small-sized image of this applicant. It is automatically resized as a 64x64px image, with aspect ratio preserved. Use this field anywhere a small image is required."
+msgstr "Pretendenta maza izmēra attēls. Tas tiek automātiski samazināts līdz 64x64px attēlam, saglabājot malu attiecību. Šis lauks paredzēts izmantošanai vietās, kur nepieciešams maza izmēra attēls."
