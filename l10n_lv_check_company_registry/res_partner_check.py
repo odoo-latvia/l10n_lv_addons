@@ -230,6 +230,7 @@ where char_length(form_name_fromtxt(name)) > 1 and (convert_from(convert_to(form
                 inp_text += ": %s" % p_names
                 inp_text += (pname_count > 6 and "..." or ".")
             err_text += _("%s %s found with similar name%s") % (pname_count, enames, inp_text)
+        preg_count = 0
         if company_registry:
             partner_reg_domain = partner_domain[:]
             partner_reg_domain.append(('is_company','=',True))
