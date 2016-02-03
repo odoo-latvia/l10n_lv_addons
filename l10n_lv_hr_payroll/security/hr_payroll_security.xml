@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
+<data noupdate="0">
+
+    <record id="base.group_hr_reader" model="res.groups">
+        <field name="name">HR Reader</field>
+        <field name="category_id" ref="base.module_category_human_resources"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+</data>
 <data noupdate="1">
 
     <record id="property_rule_employee_payslip_manager" model="ir.rule">
