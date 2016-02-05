@@ -9,40 +9,76 @@
         <field name="chart_template_id" ref="l10n_lv_chart_template"/>
     </record>
 
-    <record id="lv_account_fpos_tax_LR_PVN_maks_1" model="account.fiscal.position.tax.template">
+    <record id="lv_account_fpos_tax_LR_PVN_maks_1_1" model="account.fiscal.position.tax.template">
         <field name="position_id" ref="lv_account_fpos_LR_PVN_maks"/>
         <field name="tax_src_id" ref="lv_tax_template_Pr-SR"/>
-        <field name="tax_dest_id" ref="lv_tax_template_PVN-Rev-SR-EU"/>
+        <field name="tax_dest_id" ref="lv_tax_template_PVN-Rev-SR-EU-G"/>
     </record>
 
-    <record id="lv_account_fpos_tax_LR_PVN_maks_2" model="account.fiscal.position.tax.template">
+    <record id="lv_account_fpos_tax_LR_PVN_maks_1_2" model="account.fiscal.position.tax.template">
+        <field name="position_id" ref="lv_account_fpos_LR_PVN_maks"/>
+        <field name="tax_src_id" ref="lv_tax_template_Pr-SR"/>
+        <field name="tax_dest_id" ref="lv_tax_template_PVN-Rev-SR-EU-P"/>
+    </record>
+
+    <record id="lv_account_fpos_tax_LR_PVN_maks_2_1" model="account.fiscal.position.tax.template">
         <field name="position_id" ref="lv_account_fpos_LR_PVN_maks"/>
         <field name="tax_src_id" ref="lv_tax_template_Pr-RR"/>
-        <field name="tax_dest_id" ref="lv_tax_template_PVN-Rev-RR-EU"/>
+        <field name="tax_dest_id" ref="lv_tax_template_PVN-Rev-RR-EU-G"/>
     </record>
 
-    <record id="lv_account_fpos_tax_LR_PVN_maks_3" model="account.fiscal.position.tax.template">
+    <record id="lv_account_fpos_tax_LR_PVN_maks_2_2" model="account.fiscal.position.tax.template">
+        <field name="position_id" ref="lv_account_fpos_LR_PVN_maks"/>
+        <field name="tax_src_id" ref="lv_tax_template_Pr-RR"/>
+        <field name="tax_dest_id" ref="lv_tax_template_PVN-Rev-RR-EU-P"/>
+    </record>
+
+    <record id="lv_account_fpos_tax_LR_PVN_maks_3_1" model="account.fiscal.position.tax.template">
         <field name="position_id" ref="lv_account_fpos_LR_PVN_maks"/>
         <field name="tax_src_id" ref="lv_tax_template_PVN-SR"/>
-        <field name="tax_dest_id" ref="lv_tax_template_Pieg-ES"/>
+        <field name="tax_dest_id" ref="lv_tax_template_Pieg-ES-G"/>
     </record>
 
-    <record id="lv_account_fpos_tax_LR_PVN_maks_4" model="account.fiscal.position.tax.template">
+    <record id="lv_account_fpos_tax_LR_PVN_maks_3_2" model="account.fiscal.position.tax.template">
+        <field name="position_id" ref="lv_account_fpos_LR_PVN_maks"/>
+        <field name="tax_src_id" ref="lv_tax_template_PVN-SR"/>
+        <field name="tax_dest_id" ref="lv_tax_template_Pieg-ES-P"/>
+    </record>
+
+    <record id="lv_account_fpos_tax_LR_PVN_maks_4_1" model="account.fiscal.position.tax.template">
         <field name="position_id" ref="lv_account_fpos_LR_PVN_maks"/>
         <field name="tax_src_id" ref="lv_tax_template_PVN-RR"/>
-        <field name="tax_dest_id" ref="lv_tax_template_Pieg-ES"/>
+        <field name="tax_dest_id" ref="lv_tax_template_Pieg-ES-G"/>
     </record>
 
-    <record id="lv_account_fpos_tax_LR_PVN_maks_5" model="account.fiscal.position.tax.template">
+    <record id="lv_account_fpos_tax_LR_PVN_maks_4_2" model="account.fiscal.position.tax.template">
+        <field name="position_id" ref="lv_account_fpos_LR_PVN_maks"/>
+        <field name="tax_src_id" ref="lv_tax_template_PVN-RR"/>
+        <field name="tax_dest_id" ref="lv_tax_template_Pieg-ES-P"/>
+    </record>
+
+    <record id="lv_account_fpos_tax_LR_PVN_maks_5_1" model="account.fiscal.position.tax.template">
         <field name="position_id" ref="lv_account_fpos_LR_PVN_maks"/>
         <field name="tax_src_id" ref="lv_tax_template_Pr-SR-80"/>
-        <field name="tax_dest_id" ref="lv_tax_template_PVN-Rev-SR-EU-80"/>
+        <field name="tax_dest_id" ref="lv_tax_template_PVN-Rev-SR-EU-80-G"/>
     </record>
 
-    <record id="lv_account_fpos_tax_LR_PVN_maks_6" model="account.fiscal.position.tax.template">
+    <record id="lv_account_fpos_tax_LR_PVN_maks_5_2" model="account.fiscal.position.tax.template">
+        <field name="position_id" ref="lv_account_fpos_LR_PVN_maks"/>
+        <field name="tax_src_id" ref="lv_tax_template_Pr-SR-80"/>
+        <field name="tax_dest_id" ref="lv_tax_template_PVN-Rev-SR-EU-80-P"/>
+    </record>
+
+    <record id="lv_account_fpos_tax_LR_PVN_maks_6_1" model="account.fiscal.position.tax.template">
         <field name="position_id" ref="lv_account_fpos_LR_PVN_maks"/>
         <field name="tax_src_id" ref="lv_tax_template_Pr-SR-40"/>
-        <field name="tax_dest_id" ref="lv_tax_template_PVN-Rev-SR-EU-40"/>
+        <field name="tax_dest_id" ref="lv_tax_template_PVN-Rev-SR-EU-40-G"/>
+    </record>
+
+    <record id="lv_account_fpos_tax_LR_PVN_maks_6_2" model="account.fiscal.position.tax.template">
+        <field name="position_id" ref="lv_account_fpos_LR_PVN_maks"/>
+        <field name="tax_src_id" ref="lv_tax_template_Pr-SR-40"/>
+        <field name="tax_dest_id" ref="lv_tax_template_PVN-Rev-SR-EU-40-P"/>
     </record>
 
 <!-- LR VAT non-payer -->
