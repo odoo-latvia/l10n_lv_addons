@@ -2,10 +2,28 @@
 <openerp>
 <data noupdate="0">
 
-<!-- First Group 1 -->
+<!-- Common Taxes -->
 
-    <record id="lv_tax_template_PVN-21-EU-G_1" model="account.tax.template">
-        <field name="name">PVN 21% ES Prece.</field>
+    <record id="lv_tax_template_Izd-20" model="account.tax.template">
+        <field name="name">Izdevumi 20%</field>
+        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
+        <field name="type_tax_use">purchase</field>
+        <field name="amount_type">percent</field>
+        <field name="amount">4.2</field>
+        <field name="description">Izd-20</field>
+    </record>
+
+    <record id="lv_tax_template_Izd-60" model="account.tax.template">
+        <field name="name">Izdevumi 60%</field>
+        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
+        <field name="type_tax_use">purchase</field>
+        <field name="amount_type">percent</field>
+        <field name="amount">12.6</field>
+        <field name="description">Izd-60</field>
+    </record>
+
+    <record id="lv_tax_template_PVN-21-EU-G" model="account.tax.template">
+        <field name="name">PVN 21% ES Prece</field>
         <field name="chart_template_id" ref="l10n_lv_chart_template"/>
         <field name="type_tax_use">purchase</field>
         <field name="amount_type">percent</field>
@@ -15,6 +33,20 @@
         <field name="description">PVN-21-EU-G</field>
         <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_1'), ref('lv_account_tax_tag_50'), ref('lv_account_tax_tag_420'), ref('lv_account_tax_tag_100'), ref('lv_account_tax_tag_230'), ref('lv_account_tax_tag_250'), ref('lv_account_tax_tag_290')])]"/>
     </record>
+
+    <record id="lv_tax_template_PVN-21-EU-P" model="account.tax.template">
+        <field name="name">PVN 21% ES Pakalpojums</field>
+        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
+        <field name="type_tax_use">purchase</field>
+        <field name="amount_type">percent</field>
+        <field name="amount">-21.0</field>
+        <field name="account_id" ref="lv_account_template_5721"/>
+        <field name="refund_account_id" ref="lv_account_template_5721"/>
+        <field name="description">PVN-21-EU-P</field>
+        <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_1'), ref('lv_account_tax_tag_50'), ref('lv_account_tax_tag_420'), ref('lv_account_tax_tag_100'), ref('lv_account_tax_tag_230'), ref('lv_account_tax_tag_250'), ref('lv_account_tax_tag_290')])]"/>
+    </record>
+
+<!-- First Group 1 -->
 
     <record id="lv_tax_template_Pr-21-80-EU-G" model="account.tax.template">
         <field name="name">Priekšnodoklis 21% (80%) ES Prece</field>
@@ -28,21 +60,12 @@
         <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_1'), ref('lv_account_tax_tag_500'), ref('lv_account_tax_tag_600'), ref('lv_account_tax_tag_610'), ref('lv_account_tax_tag_620'), ref('lv_account_tax_tag_50'), ref('lv_account_tax_tag_420'), ref('lv_account_tax_tag_310'), ref('lv_account_tax_tag_350')])]"/>
     </record>
 
-    <record id="lv_tax_template_Izd-20_1" model="account.tax.template">
-        <field name="name">Izdevumi 20%.</field>
-        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount_type">percent</field>
-        <field name="amount">4.2</field>
-        <field name="description">Izd-20</field>
-    </record>
-
     <record id="lv_tax_template_Pr-SR-EU-G" model="account.tax.template">
         <field name="name">Priekšnodoklis SR (80%) ES Prece</field>
         <field name="chart_template_id" ref="l10n_lv_chart_template"/>
         <field name="type_tax_use">purchase</field>
         <field name="amount_type">group</field>
-        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_Pr-21-80-EU-G'), ref('lv_tax_template_Izd-20_1')])]"/>
+        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_Pr-21-80-EU-G'), ref('lv_tax_template_Izd-20')])]"/>
         <field name="amount">100.0</field>
         <field name="description">Pr-SR-80-EU-G</field>
     </record>
@@ -52,24 +75,12 @@
         <field name="chart_template_id" ref="l10n_lv_chart_template"/>
         <field name="type_tax_use">purchase</field>
         <field name="amount_type">group</field>
-        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_PVN-21-EU-G_1'), ref('lv_tax_template_Pr-SR-EU-G')])]"/>
+        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_PVN-21-EU-G'), ref('lv_tax_template_Pr-SR-EU-G')])]"/>
         <field name="amount">100.0</field>
         <field name="description">PVN-Rev-SR-EU-80-G</field>
     </record>
 
 <!-- First Group 2 -->
-
-    <record id="lv_tax_template_PVN-21-EU-P_1" model="account.tax.template">
-        <field name="name">PVN 21% ES Pakalpojums.</field>
-        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount_type">percent</field>
-        <field name="amount">-21.0</field>
-        <field name="account_id" ref="lv_account_template_5721"/>
-        <field name="refund_account_id" ref="lv_account_template_5721"/>
-        <field name="description">PVN-21-EU-P</field>
-        <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_1'), ref('lv_account_tax_tag_50'), ref('lv_account_tax_tag_420'), ref('lv_account_tax_tag_100'), ref('lv_account_tax_tag_230'), ref('lv_account_tax_tag_250'), ref('lv_account_tax_tag_290')])]"/>
-    </record>
 
     <record id="lv_tax_template_Pr-21-80-EU-P" model="account.tax.template">
         <field name="name">Priekšnodoklis 21% (80%) ES Pakalpojums</field>
@@ -83,21 +94,12 @@
         <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_1'), ref('lv_account_tax_tag_500'), ref('lv_account_tax_tag_600'), ref('lv_account_tax_tag_610'), ref('lv_account_tax_tag_630'), ref('lv_account_tax_tag_50'), ref('lv_account_tax_tag_420'), ref('lv_account_tax_tag_310'), ref('lv_account_tax_tag_350')])]"/>
     </record>
 
-    <record id="lv_tax_template_Izd-20_2" model="account.tax.template">
-        <field name="name">Izdevumi 20%..</field>
-        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount_type">percent</field>
-        <field name="amount">4.2</field>
-        <field name="description">Izd-20</field>
-    </record>
-
     <record id="lv_tax_template_Pr-SR-80-EU-P" model="account.tax.template">
         <field name="name">Priekšnodoklis SR (80%) ES Pakalpojums</field>
         <field name="chart_template_id" ref="l10n_lv_chart_template"/>
         <field name="type_tax_use">purchase</field>
         <field name="amount_type">group</field>
-        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_Pr-21-80-EU-P'), ref('lv_tax_template_Izd-20_2')])]"/>
+        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_Pr-21-80-EU-P'), ref('lv_tax_template_Izd-20')])]"/>
         <field name="amount">100.0</field>
         <field name="description">Pr-SR-80-EU-P</field>
     </record>
@@ -107,24 +109,12 @@
         <field name="chart_template_id" ref="l10n_lv_chart_template"/>
         <field name="type_tax_use">purchase</field>
         <field name="amount_type">group</field>
-        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_PVN-21-EU-P_1'), ref('lv_tax_template_Pr-SR-80-EU-P')])]"/>
+        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_PVN-21-EU-P'), ref('lv_tax_template_Pr-SR-80-EU-P')])]"/>
         <field name="amount">100.0</field>
         <field name="description">PVN-Rev-SR-EU-80-P</field>
     </record>
 
 <!-- Second Group 1 -->
-
-    <record id="lv_tax_template_PVN-21-EU-G_2" model="account.tax.template">
-        <field name="name">PVN 21% ES Prece..</field>
-        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount_type">percent</field>
-        <field name="amount">-21.0</field>
-        <field name="account_id" ref="lv_account_template_5721"/>
-        <field name="refund_account_id" ref="lv_account_template_5721"/>
-        <field name="description">PVN-21-EU-G</field>
-        <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_1'), ref('lv_account_tax_tag_50'), ref('lv_account_tax_tag_420'), ref('lv_account_tax_tag_100'), ref('lv_account_tax_tag_230'), ref('lv_account_tax_tag_250'), ref('lv_account_tax_tag_290')])]"/>
-    </record>
 
     <record id="lv_tax_template_Pr-21-40-EU-G" model="account.tax.template">
         <field name="name">Priekšnodoklis 21% (40%) ES Prece</field>
@@ -138,21 +128,12 @@
         <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_1'), ref('lv_account_tax_tag_500'), ref('lv_account_tax_tag_600'), ref('lv_account_tax_tag_610'), ref('lv_account_tax_tag_620'), ref('lv_account_tax_tag_50'), ref('lv_account_tax_tag_420'), ref('lv_account_tax_tag_310'), ref('lv_account_tax_tag_350')])]"/>
     </record>
 
-    <record id="lv_tax_template_Izd-60_1" model="account.tax.template">
-        <field name="name">Izdevumi 60%.</field>
-        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount_type">percent</field>
-        <field name="amount">12.6</field>
-        <field name="description">Izd-60</field>
-    </record>
-
     <record id="lv_tax_template_Pr-SR-40-EU-G" model="account.tax.template">
         <field name="name">Priekšnodoklis SR (40%) ES Prece</field>
         <field name="chart_template_id" ref="l10n_lv_chart_template"/>
         <field name="type_tax_use">purchase</field>
         <field name="amount_type">group</field>
-        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_Pr-21-40-EU-G'), ref('lv_tax_template_Izd-60_1')])]"/>
+        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_Pr-21-40-EU-G'), ref('lv_tax_template_Izd-60')])]"/>
         <field name="amount">100.0</field>
         <field name="description">Pr-SR-40-EU-G</field>
     </record>
@@ -162,24 +143,12 @@
         <field name="chart_template_id" ref="l10n_lv_chart_template"/>
         <field name="type_tax_use">purchase</field>
         <field name="amount_type">group</field>
-        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_PVN-21-EU-G_2'), ref('lv_tax_template_Pr-SR-40-EU-G')])]"/>
+        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_PVN-21-EU-G'), ref('lv_tax_template_Pr-SR-40-EU-G')])]"/>
         <field name="amount">100.0</field>
         <field name="description">PVN-Rev-SR-EU-40-G</field>
     </record>
 
 <!-- Second Group 2 -->
-
-    <record id="lv_tax_template_PVN-21-EU-P_2" model="account.tax.template">
-        <field name="name">PVN 21% ES Pakalpojums..</field>
-        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount_type">percent</field>
-        <field name="amount">-21.0</field>
-        <field name="account_id" ref="lv_account_template_5721"/>
-        <field name="refund_account_id" ref="lv_account_template_5721"/>
-        <field name="description">PVN-21-EU-P</field>
-        <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_1'), ref('lv_account_tax_tag_50'), ref('lv_account_tax_tag_420'), ref('lv_account_tax_tag_100'), ref('lv_account_tax_tag_230'), ref('lv_account_tax_tag_250'), ref('lv_account_tax_tag_290')])]"/>
-    </record>
 
     <record id="lv_tax_template_Pr-21-40-EU-P" model="account.tax.template">
         <field name="name">Priekšnodoklis 21% (40%) ES Pakalpojums</field>
@@ -193,21 +162,12 @@
         <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_1'), ref('lv_account_tax_tag_500'), ref('lv_account_tax_tag_600'), ref('lv_account_tax_tag_610'), ref('lv_account_tax_tag_630'), ref('lv_account_tax_tag_50'), ref('lv_account_tax_tag_420'), ref('lv_account_tax_tag_310'), ref('lv_account_tax_tag_350')])]"/>
     </record>
 
-    <record id="lv_tax_template_Izd-60_2" model="account.tax.template">
-        <field name="name">Izdevumi 60%..</field>
-        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount_type">percent</field>
-        <field name="amount">12.6</field>
-        <field name="description">Izd-60</field>
-    </record>
-
     <record id="lv_tax_template_Pr-SR-40-EU-P" model="account.tax.template">
         <field name="name">Priekšnodoklis SR (40%) ES Pakalpojums</field>
         <field name="chart_template_id" ref="l10n_lv_chart_template"/>
         <field name="type_tax_use">purchase</field>
         <field name="amount_type">group</field>
-        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_Pr-21-40-EU-P'), ref('lv_tax_template_Izd-60_2')])]"/>
+        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_Pr-21-40-EU-P'), ref('lv_tax_template_Izd-60')])]"/>
         <field name="amount">100.0</field>
         <field name="description">Pr-SR-40-EU-P</field>
     </record>
@@ -217,7 +177,7 @@
         <field name="chart_template_id" ref="l10n_lv_chart_template"/>
         <field name="type_tax_use">purchase</field>
         <field name="amount_type">group</field>
-        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_PVN-21-EU-P_2'), ref('lv_tax_template_Pr-SR-40-EU-P')])]"/>
+        <field name="children_tax_ids" eval="[(6, 0, [ref('lv_tax_template_PVN-21-EU-P'), ref('lv_tax_template_Pr-SR-40-EU-P')])]"/>
         <field name="amount">100.0</field>
         <field name="description">PVN-Rev-SR-EU-40-P</field>
     </record>
@@ -234,18 +194,6 @@
         <field name="refund_account_id" ref="lv_account_template_5721"/>
         <field name="description">Pr-21-EU-G</field>
         <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_1'), ref('lv_account_tax_tag_500'), ref('lv_account_tax_tag_600'), ref('lv_account_tax_tag_610'), ref('lv_account_tax_tag_620'), ref('lv_account_tax_tag_50'), ref('lv_account_tax_tag_420'), ref('lv_account_tax_tag_310'), ref('lv_account_tax_tag_350')])]"/>
-    </record>
-
-    <record id="lv_tax_template_PVN-21-EU-G" model="account.tax.template">
-        <field name="name">PVN 21% ES Prece</field>
-        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount_type">percent</field>
-        <field name="amount">-21.0</field>
-        <field name="account_id" ref="lv_account_template_5721"/>
-        <field name="refund_account_id" ref="lv_account_template_5721"/>
-        <field name="description">PVN-21-EU-G</field>
-        <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_1'), ref('lv_account_tax_tag_50'), ref('lv_account_tax_tag_420'), ref('lv_account_tax_tag_100'), ref('lv_account_tax_tag_230'), ref('lv_account_tax_tag_250'), ref('lv_account_tax_tag_290')])]"/>
     </record>
 
     <record id="lv_tax_template_PVN-Rev-SR-EU-G" model="account.tax.template">
@@ -270,18 +218,6 @@
         <field name="refund_account_id" ref="lv_account_template_5721"/>
         <field name="description">Pr-21-EU-P</field>
         <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_1'), ref('lv_account_tax_tag_500'), ref('lv_account_tax_tag_600'), ref('lv_account_tax_tag_610'), ref('lv_account_tax_tag_630'), ref('lv_account_tax_tag_50'), ref('lv_account_tax_tag_420'), ref('lv_account_tax_tag_310'), ref('lv_account_tax_tag_350')])]"/>
-    </record>
-
-    <record id="lv_tax_template_PVN-21-EU-P" model="account.tax.template">
-        <field name="name">PVN 21% ES Pakalpojums</field>
-        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount_type">percent</field>
-        <field name="amount">-21.0</field>
-        <field name="account_id" ref="lv_account_template_5721"/>
-        <field name="refund_account_id" ref="lv_account_template_5721"/>
-        <field name="description">PVN-21-EU-P</field>
-        <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_1'), ref('lv_account_tax_tag_50'), ref('lv_account_tax_tag_420'), ref('lv_account_tax_tag_100'), ref('lv_account_tax_tag_230'), ref('lv_account_tax_tag_250'), ref('lv_account_tax_tag_290')])]"/>
     </record>
 
     <record id="lv_tax_template_PVN-Rev-SR-EU-P" model="account.tax.template">
@@ -520,15 +456,6 @@
         <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_1'), ref('lv_account_tax_tag_500'), ref('lv_account_tax_tag_510'), ref('lv_account_tax_tag_520'), ref('lv_account_tax_tag_50'), ref('lv_account_tax_tag_420'), ref('lv_account_tax_tag_310'), ref('lv_account_tax_tag_330'), ref('lv_account_tax_tag_550'), ref('lv_account_tax_tag_390')])]"/>
     </record>
 
-    <record id="lv_tax_template_Izd-20" model="account.tax.template">
-        <field name="name">Izdevumi 20%</field>
-        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount_type">percent</field>
-        <field name="amount">4.2</field>
-        <field name="description">Izd-20</field>
-    </record>
-
     <record id="lv_tax_template_Pr-SR-80" model="account.tax.template">
         <field name="name">Priekšnodoklis standartlikme 80%</field>
         <field name="chart_template_id" ref="l10n_lv_chart_template"/>
@@ -551,15 +478,6 @@
         <field name="refund_account_id" ref="lv_account_template_5721"/>
         <field name="description">Pr-21-40</field>
         <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_1'), ref('lv_account_tax_tag_500'), ref('lv_account_tax_tag_510'), ref('lv_account_tax_tag_520'), ref('lv_account_tax_tag_50'), ref('lv_account_tax_tag_420'), ref('lv_account_tax_tag_310'), ref('lv_account_tax_tag_330'), ref('lv_account_tax_tag_550'), ref('lv_account_tax_tag_390')])]"/>
-    </record>
-
-    <record id="lv_tax_template_Izd-60" model="account.tax.template">
-        <field name="name">Izdevumi 60%</field>
-        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount_type">percent</field>
-        <field name="amount">12.6</field>
-        <field name="description">Izd-60</field>
     </record>
 
     <record id="lv_tax_template_Pr-SR-40" model="account.tax.template">
