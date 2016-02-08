@@ -4,3 +4,6 @@ access_resource_calendar_attendance,resource.calendar.attendance,resource.model_
 access_hr_contract_pd_manager,hr.contract.pd.manager,model_hr_contract_pd,base.group_hr_manager,1,1,1,1
 access_hr_contract_pd_user,hr.contract.pd.user,model_hr_contract_pd,base.group_user,1,0,0,0
 access_hr_contract_pd_reader,hr.contract.pd.reader,model_hr_contract_pd,base.group_hr_reader,1,0,0,0
+access_hr_employee_dependent_manager,hr.employee.dependent.manager,model_hr_employee_dependent,base.group_hr_manager,1,1,1,1
+access_hr_employee_dependent_user,hr.employee.dependent.user,model_hr_employee_dependent,base.group_user,1,0,0,0
+access_hr_employee_dependent_reader,hr.employee.dependent.reader,model_hr_employee_dependent,base.group_hr_reader,1,0,0,0
