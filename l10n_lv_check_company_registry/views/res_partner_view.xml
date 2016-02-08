@@ -2,18 +2,17 @@
 <openerp>
     <data>
 
-        <!-- Partner Form View -->
+        <!-- Partner Form Views -->
+
         <record id="view_partner_form_inherit_check" model="ir.ui.view">
             <field name="name">partner.form.inherit.check</field>
             <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="inherit_id" ref="l10n_lv.view_partner_form_inherit_l10n_lv"/>
             <field name="arch" type="xml">
-                <field name="email" position="after">
-	                <field name="company_registry" attrs="{'invisible': [('is_company','=',False)]}"/>
-	                <field name="identification_id" attrs="{'invisible': [('is_company','=',True)]}"/>
+                <field name="identification_id" position="after">
                     <group colspan="2" attrs="{'invisible': ['|', ('is_company','=',False), ('company_registry','=',False)]}">
                         <div>
-                            <field name="load_from_registry" nolabel="1" class="oe_inline" on_change="onchange_load_from_registry(load_from_registry, company_registry)"/>
+                            <field name="load_from_registry" nolabel="1" class="oe_inline"/>
                             <label for="load_from_registry"/>
                         </div>
                     </group>
@@ -49,30 +48,6 @@
                     <field name="allow_creation" class="oe_edit_only"/>
                     <label for="allow_creation" class="oe_inline oe_edit_only"/>
                 </xpath>
-            </field>
-        </record>
-
-        <!-- Partner Tree View -->
-        <record id="view_partner_tree_inherit_check" model="ir.ui.view">
-            <field name="name">res.partner.tree.inherit.check</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_tree"/>
-            <field name="arch" type="xml">
-                <field name="display_name" position="after">
-                    <field name="company_registry"/>
-                </field>
-            </field>
-        </record>
-
-        <!-- Partner Search View -->
-       <record id="view_res_partner_filter_inherit_check" model="ir.ui.view">
-            <field name="name">res.partner.select.inherit.check</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_res_partner_filter"/>
-            <field name="arch" type="xml">
-                <field name="name" position="after">
-                    <field name="company_registry"/>
-                </field>
             </field>
         </record>
 

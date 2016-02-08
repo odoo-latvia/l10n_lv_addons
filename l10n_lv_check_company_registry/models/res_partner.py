@@ -22,8 +22,7 @@
 #
 ##############################################################################
 
-from openerp.osv import fields,osv
-from openerp.tools.translate import _
+from openerp import api, fields, models, _
 import urllib
 from xml.dom.minidom import getDOMImplementation, parseString
 import base64
@@ -42,21 +41,17 @@ company_list = [
     (u'Komandītsabiedrība', 'KS')
     ]
 
-class res_partner(osv.osv):
+class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    _columns = {
-        'company_registry': fields.char('Company Registry'),
-        'identification_id': fields.char('Identification ID'),
-        'load_from_registry': fields.boolean('Load data from LV company registry'),
-        'allow_creation': fields.boolean('Allow similar Partner creation')
-    }
+    load_from_registry = fields.Boolean('Load data from LV company registry')
+    allow_creation = fields.Boolean('Allow similar Partner creation')
 
-    def onchange_load_from_registry(self, cr, uid, ids, load_from_registry, company_registry, context=None):
-        if context is None:
-            context = {}
-        val = {}
-        if company_registry and (load_from_registry == True):
+    @api.onchange('load_from_registry', 'company_registry')
+    def _onchange_load_from_registry(self):
+        company_registry = self.company_registry
+        if company_registry and (self.load_from_registry == True):
+            country_obj = self.env['res.country']
             reg_num = re.sub("\D", "", company_registry)
             url = 'http://services.ozols.lv/misc/company_info.aspx?type=1&rnum=%s' % reg_num
             try:
@@ -68,8 +63,9 @@ class res_partner(osv.osv):
             record = content.decode('utf-8').encode('cp1257')
             dom = parseString(record)
             name = dom.getElementsByTagName('name')
+            name_val = False
             if name:
-                val['name'] = name[0].toxml().replace('<name>','').replace('</name>','')
+                name_val = name[0].toxml().replace('<name>','').replace('</name>','')
             c_type = dom.getElementsByTagName('companytype')
             if c_type and name:
                 c_type_t = c_type[0].toxml().replace('<companytype>','').replace('</companytype>','')
@@ -77,53 +73,58 @@ class res_partner(osv.osv):
                     if c_type_t.upper() == item[0].upper():
                         c_type_t = item[-1]
                         break
-                val['name'] = c_type_t + ' "' + val['name'] + '"'
+                name_val = c_type_t + ' "' + name_val + '"'
+            if name_val:
+                self.name = name_val
             c_reg_num = dom.getElementsByTagName('regnum')
             if c_reg_num:
-                val['company_registry'] = c_reg_num[0].toxml().replace('<regnum>','').replace('</regnum>','')
+                self.company_registry = c_reg_num[0].toxml().replace('<regnum>','').replace('</regnum>','')
             phone = dom.getElementsByTagName('phone')
             if phone:
-                val['phone'] = phone[0].toxml().replace('<phone>','').replace('</phone>','')
+                self.phone = phone[0].toxml().replace('<phone>','').replace('</phone>','')
             street = dom.getElementsByTagName('street')
             if street:
-                val['street'] = street[0].toxml().replace('<street>','').replace('</street>','').replace('&quot;','"')
+                self.street = street[0].toxml().replace('<street>','').replace('</street>','').replace('&quot;','"')
             city = dom.getElementsByTagName('city')
             if city:
-                val['city'] = city[0].toxml().replace('<city>','').replace('</city>','')
+                self.city = city[0].toxml().replace('<city>','').replace('</city>','')
             zip_no = dom.getElementsByTagName('postalcode')
+            zip_val = False
             if zip_no:
-                val['zip'] = zip_no[0].toxml().replace('<postalcode>','').replace('</postalcode>','')
+                zip_val = zip_no[0].toxml().replace('<postalcode>','').replace('</postalcode>','')
+                self.zip = zip_val
             vat = dom.getElementsByTagName('vatnum')
+            vat_val = False
             if vat:
-                val['vat'] = vat[0].toxml().replace('<vatnum>','').replace('</vatnum>','')
-            val['country_id'] = self.pool.get('ir.model.data').get_object(cr, uid, 'base', 'lv').id
+                vat_val = vat[0].toxml().replace('<vatnum>','').replace('</vatnum>','')
+                self.vat = vat_val
+            country_id = self.env.ref('base.lv').id
             country = dom.getElementsByTagName('country')
             if country:
                 country_name = country[0].toxml().replace('<country>','').replace('</country>','')
-                country_ids = self.pool.get('res.country').search(cr, uid, [('name','=',country_name)], context=context)
-                if country_ids:
-                    val['country_id'] = country_ids[0]
-            if (not country) and (zip_no):
-                country_code = re.sub(r"[^A-Za-z]+", '', val['zip'])
-                country_ids = self.pool.get('res.country').search(cr, uid, [('code','=',country_code)], context=context)
-                if country_ids:
-                    val['country_id'] = country_ids[0]
-            if (not country) and (not zip_no) and (vat):
-                country_code = re.sub(r"[^A-Za-z]+", '', val['vat'])
-                country_ids = self.pool.get('res.country').search(cr, uid, [('code','=',country_code)], context=context)
-                if country_ids:
-                    val['country_id'] = country_ids[0]
+                countries = country_obj.search([('name','=',country_name)])
+                if countries:
+                    country_id = countries[0].id
+            if (not country) and (zip_val):
+                country_code = re.sub(r"[^A-Za-z]+", '', zip_val)
+                countries = country_obj.search([('code','=',country_code)])
+                if countries:
+                    country_id = countries[0].id
+            if (not country) and (not zip_no) and (vat_val):
+                country_code = re.sub(r"[^A-Za-z]+", '', vat_val)
+                countries = country_obj.search([('code','=',country_code)])
+                if countries:
+                    country_id = countries[0].id
             if (not country) and (not zip_no) and (not vat):
                 country_code = re.sub(r"[^A-Za-z]+", '', company_registry)
-                country_ids = self.pool.get('res.country').search(cr, uid, [('code','=',country_code)], context=context)
-                if country_ids:
-                    val['country_id'] = country_ids[0]
-            val['load_from_registry'] = False
-        return {'value': val}
+                countries = country_obj.search([('code','=',country_code)])
+                if countries:
+                    country_id = countries[0].id
+            self.country_id = country_id
+            self.load_from_registry = False
 
-    def _form_name(self, cr, uid, name, context=None):
-        if context is None:
-            context = {}
+    @api.model
+    def _form_name(self, name):
         new_name = name.upper()
         replace_list = ['SIA', 'IU', 'I/U', 'AS', 'A/S', u'SABIEDRĪBA', 'LTD', 'CORP', 'INC']
         for value in replace_list:
@@ -136,13 +137,12 @@ class res_partner(osv.osv):
             new_name = new_name.strip().strip(",").replace('"',"").replace("'","")
         return new_name
 
-    def test_partners(self, cr, uid, name, company_registry, identification_id, parent_id, partner_id=False, context=None):
-        if context is None:
-            context = {}
-
+    @api.model
+    def test_partners(self, name, company_registry, identification_id, parent_id, partner_id=False):
         test_name = False
+        parent_name = ''
         if name:
-            test_name = self._form_name(cr, uid, name, context=context)
+            test_name = self._form_name(name)
             test_name = test_name.encode('utf-8')
         partner_domain = []
         ename = _("partner")
@@ -151,14 +151,16 @@ class res_partner(osv.osv):
             ename = _("contact")
             enames = _("contacts")
             partner_domain.append(('parent_id','=',parent_id))
-            parent_name = self.read(cr, uid, [parent_id], ['name'], context=context)[0]['name']
+            parent = self.browse(parent_id)
+            if parent:
+                parent_name = parent.name
         if partner_id:
             partner_domain.append(('id','!=',partner_id))
         partner_ids = []
         err_text = ""
         if test_name:
             partner_name_domain = partner_domain[:]
-            cr.execute("""CREATE OR REPLACE FUNCTION array_remove_txtfromlst(inputarr TEXT[], inputtxt TEXT)
+            self._cr.execute("""CREATE OR REPLACE FUNCTION array_remove_txtfromlst(inputarr TEXT[], inputtxt TEXT)
 RETURNS text[] AS $outputarr$
 DECLARE
     outputarr text[];
@@ -212,9 +214,9 @@ $resname$ LANGUAGE plpgsql;
 
 select id from res_partner
 where char_length(form_name_fromtxt(name)) > 1 and (convert_from(convert_to(form_name_fromtxt(name),'utf-8'),'utf-8') like concat('%%','%s','%%') or '%s' like concat('%%',convert_from(convert_to(form_name_fromtxt(name),'utf-8'),'utf-8'),'%%'));""" % (test_name, test_name))
-            sp_ids = map(itemgetter(0), cr.fetchall())
+            sp_ids = map(itemgetter(0), self._cr.fetchall())
             partner_name_domain.append(('id','in',sp_ids))
-            partner_name_ids = self.search(cr, uid, partner_name_domain, context=context)
+            partner_name_ids = self.search(partner_name_domain)
             partner_ids += partner_name_ids
             pname_count = len(partner_name_ids)
             inp_text = "."
@@ -225,7 +227,7 @@ where char_length(form_name_fromtxt(name)) > 1 and (convert_from(convert_to(form
                 pn_ids = partner_name_ids
                 if pname_count > 6:
                     pn_ids = pn_ids[:6]
-                p_names = [r['name'] for r in self.read(cr, uid, pn_ids, ['name'], context=context)]
+                p_names = [p.name for p in pn_ids]
                 p_names = ", ".join(p_names)
                 inp_text += ": %s" % p_names
                 inp_text += (pname_count > 6 and "..." or ".")
@@ -234,7 +236,7 @@ where char_length(form_name_fromtxt(name)) > 1 and (convert_from(convert_to(form
             partner_reg_domain = partner_domain[:]
             partner_reg_domain.append(('is_company','=',True))
             partner_reg_domain.append(('company_registry','=',company_registry))
-            partner_reg_ids = self.search(cr, uid, partner_reg_domain, context=context)
+            partner_reg_ids = self.search(partner_reg_domain)
             partner_ids += partner_reg_ids
             preg_count = len(partner_reg_ids)
             inp_text = "."
@@ -242,7 +244,7 @@ where char_length(form_name_fromtxt(name)) > 1 and (convert_from(convert_to(form
                 pr_ids = partner_reg_ids
                 if preg_count > 6:
                     pr_ids = pr_ids[:6]
-                p_names = [r['name'] for r in self.read(cr, uid, pr_ids, ['name'], context=context)]
+                p_names = [p.name for p in pr_ids]
                 p_names = ", ".join(p_names)
                 inp_text = ": %s" % p_names
                 inp_text += (preg_count > 6 and "..." or ".")
@@ -251,7 +253,7 @@ where char_length(form_name_fromtxt(name)) > 1 and (convert_from(convert_to(form
             partner_id_domain = partner_domain[:]
             partner_id_domain.append(('is_company','=',False))
             partner_id_domain.append(('identification_id','=',identification_id))
-            partner_id_ids = self.search(cr, uid, partner_id_domain, context=context)
+            partner_id_ids = self.search(partner_id_domain)
             partner_ids += partner_id_ids
             pid_count = len(partner_id_ids)
             inp_text = "."
@@ -262,86 +264,71 @@ where char_length(form_name_fromtxt(name)) > 1 and (convert_from(convert_to(form
                 pi_ids = partner_id_ids
                 if pid_count > 6:
                     pi_ids = pi_ids[:6]
-                p_names = [r['name'] for r in self.read(cr, uid, pi_ids, ['name'], context=context)]
+                p_names = [p.name for p in pi_ids]
                 p_names = ", ".join(p_names)
                 inp_text += ": %s" % p_names
                 inp_text += (pid_count > 6 and "..." or ".")
 
-            err_text += _("%s %s found with the same identification ID%s") % (preg_count, enames, inp_text)
+            err_text += _("%s %s found with the same identification ID%s") % (pid_count, enames, inp_text)
         if partner_ids:
             raise osv.except_osv(err_text, _("Check the 'Allow similar Partner creation' box and try again if you want to save the %s anyway.") % ename)
         return False
 
-    def create(self, cr, uid, vals, context=None):
-        if context is None:
-            context = {}
+    @api.model
+    def create(self, vals):
         if 'allow_creation' not in vals or vals['allow_creation'] == False:
             name = vals.get('name',False)
             company_registry = vals.get('company_registry',False)
             identification_id = vals.get('identification_id',False)
             parent_id = vals.get('parent_id',False)
-            self.test_partners(cr, uid, name, company_registry, identification_id, parent_id, context=context)
-        return super(res_partner, self).create(cr, uid, vals, context=context)
+            self.test_partners(name, company_registry, identification_id, parent_id)
+        return super(ResPartner, self).create(vals)
 
-    def write(self, cr, uid, ids, vals, context=None):
-        if context is None:
-            context = {}
-        allow = True
-        partner_obj = self.pool.get('res.partner')
-        if not isinstance(ids, list):
-            ids = [ids]
-        for partner in partner_obj.browse(cr, uid, ids, context):            
+    @api.multi
+    def write(self, vals):
+        partner_obj = self.env['res.partner']
+        for partner in self:            
             if ('allow_creation' in vals and vals['allow_creation'] == False) or ('allow_creation' not in vals and partner.allow_creation == False):
                 name = 'name' in vals and vals['name'] or partner.name
                 company_registry = 'company_registry' in vals and vals['company_registry'] or partner.company_registry
                 identification_id = 'identification_id' in vals and vals['identification_id'] or partner.identification_id
                 parent_id = 'parent_id' in vals and vals['parent_id'] or (partner.parent_id and partner.parent_id.id or False)
                 if name or company_registry or identification_id or parent_id:
-                    self.test_partners(cr, uid, name, company_registry, identification_id, parent_id, partner_id=partner.id, context=context)
-        return super(res_partner, self).write(cr, uid, ids, vals, context=context)
+                    self.test_partners(name, company_registry, identification_id, parent_id, partner_id=partner.id)
+        return super(ResPartner, self).write(vals)
 
     def copy(self, cr, uid, id, default=None, context=None):
         if default is None:
             default = {}
         default.update({'allow_creation': True})
-        return super(res_partner, self).copy(cr, uid, id, default, context)
+        return super(ResPartner, self).copy(cr, uid, id, default, context)
 
-res_partner()
-
-class res_users(osv.osv):
+class ResUsers(models.Model):
     _inherit = "res.users"
 
     def copy(self, cr, uid, id, default=None, context=None):
         if default is None:
             default = {}
         default.update({'allow_creation': True})
-        return super(res_users, self).copy(cr, uid, id, default, context)
+        return super(ResUsers, self).copy(cr, uid, id, default, context)
 
-    def create(self, cr, uid, vals, context=None):
-        if context is None:
-            context = {}
-        ctx = context.copy()
-        ctx.update({'default_allow_creation': True})
-        return super(res_users, self).create(cr, uid, vals, context=ctx)
+    @api.model
+    def create(self, vals):
+        self.context.update({'default_allow_creation': True})
+        return super(ResUsers, self).create(vals)
 
-res_users()
-
-class res_company(osv.osv):
+class ResCompany(models.Model):
     _inherit = "res.company"
 
     def copy(self, cr, uid, id, default=None, context=None):
         if default is None:
             default = {}
         default.update({'allow_creation': True})
-        return super(res_company, self).copy(cr, uid, id, default, context)
+        return super(ResCompany, self).copy(cr, uid, id, default, context)
 
-    def create(self, cr, uid, vals, context=None):
-        if context is None:
-            context = {}
-        ctx = context.copy()
-        ctx.update({'default_allow_creation': True})
-        return super(res_company, self).create(cr, uid, vals, context=ctx)
-
-res_company()
+    @api.model
+    def create(self, vals):
+        self.context.update({'default_allow_creation': True})
+        return super(ResCompany, self).create(vals)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

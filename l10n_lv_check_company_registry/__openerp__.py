@@ -35,10 +35,10 @@ When the data loading checkbox is checked, the loaded data is not saved, so that
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
     'category': 'Hidden',
-    'depends': ['base'],
+    'depends': ['l10n_lv'],
     'demo_xml': [],
     'data': [
-        'res_partner_check_view.xml'
+        'views/res_partner_view.xml'
     ],
     'auto_install': False,
     'installable': True,
