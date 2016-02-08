@@ -192,16 +192,18 @@ BEGIN
     LOOP
         rplval = replacelist[rpl];
         textlist = string_to_array(new_srcname, ' ');
-        FOR t IN array_lower(textlist, 1) .. array_upper(textlist, 1)
-        LOOP
-            tval = textlist[t];
-            t1 = replace(replace(replace(replace(tval,',',''),' ',''),'"',''),'''','');
-            IF rplval = t1 THEN
-                textlist = array_remove_txtfromlst(textlist, tval);
-            END IF;
-        END LOOP;
-        new_srcname = array_to_string(textlist, ' ');
-        new_srcname = replace(replace((trim(both ',' from (trim(both ' ' from new_srcname)))),'"',''),'''','');
+        IF array_lower(textlist, 1) != NULL THEN
+            FOR t IN array_lower(textlist, 1) .. array_upper(textlist, 1)
+            LOOP
+                tval = textlist[t];
+                t1 = replace(replace(replace(replace(tval,',',''),' ',''),'"',''),'''','');
+                IF rplval = t1 THEN
+                    textlist = array_remove_txtfromlst(textlist, tval);
+                END IF;
+            END LOOP;
+            new_srcname = array_to_string(textlist, ' ');
+            new_srcname = replace(replace((trim(both ',' from (trim(both ' ' from new_srcname)))),'"',''),'''','');
+        END IF;
     END LOOP;
     resname = new_srcname;
     RETURN resname;
