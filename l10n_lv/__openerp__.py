@@ -48,7 +48,8 @@ This is the base module for Latvian localization of :
         'data/account_chart_template.xml',
         'data/account_account_template.xml',
         'data/account_tax_template.xml',
-        'data/account_fiscal_position_template.xml'
+        'data/account_fiscal_position_template.xml',
+        'views/res_partner_view.xml'
     ],
     'auto_install': False,
     'installable': True,

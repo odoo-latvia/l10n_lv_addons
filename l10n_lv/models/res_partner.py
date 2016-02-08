@@ -22,8 +22,12 @@
 #
 ##############################################################################
 
-import account
-import res_partner
-import res_company
+from openerp import api, fields, models, _
+
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+
+    company_registry = fields.Char('Registration No')
+    identification_id = fields.Char('Identification No')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -22,8 +22,16 @@
 #
 ##############################################################################
 
-import account
-import res_partner
-import res_company
+from openerp import api, fields, models, _
+
+class ResCompany(models.Model):
+    _inherit = "res.company"
+
+    @api.model
+    def fields_get(self, allfields=None, write_access=True, attributes=None):
+        res = super(ResCompany, self).fields_get(allfields=allfields, write_access=write_access, attributes=attributes)
+        if 'company_registry' in res and 'string' in res['company_registry']:
+            res['company_registry']['string'] = _('Registration No')
+        return res
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
