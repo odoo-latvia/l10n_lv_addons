@@ -22,35 +22,6 @@
 #
 ##############################################################################
 
-{
-    'name': 'Latvia - Accounting',
-    'version': '1.0',
-    'description': """
-Latvian Accounting
--------------------------
+import res_partner
 
-This is the base module for Latvian localization of :
-
-* Account Codes
-* Chart of Accounts
-* Tax Codes
-* Chart of Taxes
-* Fiscal Positions
-    """,
-    'author': 'ITS-1',
-    'website': 'http://www.its1.lv/',
-    'category': 'Localization/Account Charts',
-    'depends': ['account', 'base_vat', 'base_iban'],
-    'data': [
-        'data/res_company.xml',
-        'data/account_account_type.xml',
-        'data/account_account_tag.xml',
-        'data/account_chart_template.xml',
-        'data/account_account_template.xml',
-        'data/account_tax_template.xml',
-        'data/account_fiscal_position_template.xml'
-    ],
-    'auto_install': False,
-    'installable': True,
-}
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

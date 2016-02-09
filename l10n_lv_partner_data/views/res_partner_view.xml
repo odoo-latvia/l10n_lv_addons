@@ -2,8 +2,8 @@
 <openerp>
     <data>
 
-        <record id="view_partner_form_inherit_l10n_lv" model="ir.ui.view">
-            <field name="name">partner.form.inherit.l10n.lv</field>
+        <record id="view_partner_form_l10n_lv" model="ir.ui.view">
+            <field name="name">partner.form.l10n.lv</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
@@ -14,7 +14,7 @@
             </field>
         </record>
 
-        <record id="view_partner_simple_form_inherit_l10n_lv" model="ir.ui.view">
+        <record id="view_partner_simple_form_l10n_lv" model="ir.ui.view">
             <field name="name">res.partner.simplified.form.l10n.lv</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_simple_form"/>
@@ -26,8 +26,8 @@
             </field>
         </record>
 
-        <record id="view_partner_tree_inherit_l10n_lv" model="ir.ui.view">
-            <field name="name">res.partner.tree.inherit.l10n.lv</field>
+        <record id="view_partner_tree_l10n_lv" model="ir.ui.view">
+            <field name="name">res.partner.tree.l10n.lv</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_tree"/>
             <field name="arch" type="xml">
@@ -38,8 +38,8 @@
             </field>
         </record>
 
-       <record id="view_res_partner_filter_inherit_l10n_lv" model="ir.ui.view">
-            <field name="name">res.partner.select.inherit.l10n.lv</field>
+       <record id="view_res_partner_filter_l10n_lv" model="ir.ui.view">
+            <field name="name">res.partner.select.l10n.lv</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_res_partner_filter"/>
             <field name="arch" type="xml">

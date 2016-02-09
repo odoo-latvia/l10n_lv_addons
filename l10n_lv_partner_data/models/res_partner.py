@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012 ITS-1 (<http://www.its1.lv/>)
+#    Copyright (C) 2016 ITS-1 (<http://www.its1.lv/>)
 #                       E-mail: <info@its1.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
 #                       Phone: +371 66116534
@@ -22,26 +22,22 @@
 #
 ##############################################################################
 
-{
-    'name': 'Check Partner Company Registry',
-    'version': '1.0',
-    'description': """
-Partner Company Registry Check.
-=====================================
-Adds a checkbox 'Load data from LV company registry' in Partner form view. If this checkbox is checked, data from Latvian Company Registry is loaded in the corresponding Partner's data fields.
-The data search is based on the Company Registry field's value.
-When the data loading checkbox is checked, the loaded data is not saved, so that the user can choose to save/edit the new data or leave the old data by pressing 'Discard'.
-    """,
-    'author': 'ITS-1',
-    'website': 'http://www.its1.lv/',
-    'category': 'Hidden',
-    'depends': ['l10n_lv'],
-    'demo_xml': [],
-    'data': [
-        'views/res_partner_view.xml'
-    ],
-    'auto_install': False,
-    'installable': True,
-}
+from openerp import api, fields, models, _
+
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+
+    company_registry = fields.Char('Registration No')
+    identification_id = fields.Char('Identification No')
+
+class ResCompany(models.Model):
+    _inherit = "res.company"
+
+    @api.model
+    def fields_get(self, allfields=None, write_access=True, attributes=None):
+        res = super(ResCompany, self).fields_get(allfields=allfields, write_access=write_access, attributes=attributes)
+        if 'company_registry' in res and 'string' in res['company_registry']:
+            res['company_registry']['string'] = _('Registration No')
+        return res
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

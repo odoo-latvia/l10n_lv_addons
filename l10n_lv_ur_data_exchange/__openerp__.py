@@ -23,34 +23,24 @@
 ##############################################################################
 
 {
-    'name': 'Latvia - Accounting',
+    'name': 'LV company registry data exchange',
     'version': '1.0',
     'description': """
-Latvian Accounting
--------------------------
-
-This is the base module for Latvian localization of :
-
-* Account Codes
-* Chart of Accounts
-* Tax Codes
-* Chart of Taxes
-* Fiscal Positions
+Data exchange with the company registry of Latvia.
+=====================================
+Adds a checkbox 'Load data from LV company registry' in Partner form view. If this checkbox is checked, data from Latvian company registry is loaded in the corresponding Partner's data fields.
+The data search is based on the Registration No field's value.
+When the data loading checkbox is checked, the loaded data is not saved, so that the user can choose to save/edit the new data or leave the old data by pressing 'Discard'.
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
-    'category': 'Localization/Account Charts',
-    'depends': ['account', 'base_vat', 'base_iban'],
+    'category': 'Hidden',
+    'depends': ['l10n_lv_partner_data'],
     'data': [
-        'data/res_company.xml',
-        'data/account_account_type.xml',
-        'data/account_account_tag.xml',
-        'data/account_chart_template.xml',
-        'data/account_account_template.xml',
-        'data/account_tax_template.xml',
-        'data/account_fiscal_position_template.xml'
+        'views/res_partner_view.xml'
     ],
     'auto_install': False,
     'installable': True,
 }
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

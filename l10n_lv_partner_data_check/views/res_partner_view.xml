@@ -2,21 +2,11 @@
 <openerp>
     <data>
 
-        <!-- Partner Form Views -->
-
-        <record id="view_partner_form_inherit_check" model="ir.ui.view">
-            <field name="name">partner.form.inherit.check</field>
+        <record id="view_partner_form_check" model="ir.ui.view">
+            <field name="name">partner.form.check</field>
             <field name="model">res.partner</field>
-            <field name="inherit_id" ref="l10n_lv.view_partner_form_inherit_l10n_lv"/>
+            <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <field name="identification_id" position="after">
-                    <group colspan="2" attrs="{'invisible': ['|', ('is_company','=',False), ('company_registry','=',False)]}">
-                        <div>
-                            <field name="load_from_registry" nolabel="1" class="oe_inline"/>
-                            <label for="load_from_registry"/>
-                        </div>
-                    </group>
-	            </field>
                 <xpath expr="/form/sheet/div[@class='oe_title']/h1" position="after">
                     <field name="allow_creation" class="oe_edit_only"/>
                     <label for="allow_creation" class="oe_inline oe_edit_only"/>
@@ -27,8 +17,8 @@
             </field>
         </record>
 
-        <record id="view_partner_simple_form_inherit_check" model="ir.ui.view">
-            <field name="name">res.partner.simplified.form.inherit.check</field>
+        <record id="view_partner_simple_form_check" model="ir.ui.view">
+            <field name="name">res.partner.simplified.form.check</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_simple_form"/>
             <field name="arch" type="xml">
@@ -39,8 +29,8 @@
             </field>
         </record>
 
-        <record id="view_partner_address_form_inherit_check" model="ir.ui.view">
-            <field name="name">res.partner.form.address.inherit.check</field>
+        <record id="view_partner_address_form_check" model="ir.ui.view">
+            <field name="name">res.partner.form.address.check</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_address_form"/>
             <field name="arch" type="xml">

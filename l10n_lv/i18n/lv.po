@@ -16,11 +16,6 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_lv
-#: model:ir.model.fields,field_description:l10n_lv.field_res_partner_identification_id
-msgid "Identification No"
-msgstr "Personas kods"
-
-#. module: l10n_lv
 #: model:ir.model,name:l10n_lv.model_account_journal
 msgid "Journal"
 msgstr "Reģistrs"
@@ -28,22 +23,5 @@ msgstr "Reģistrs"
 #. module: l10n_lv
 #: model:ir.actions.client,name:l10n_lv.action_client_l10n_lv_menu
 msgid "Open Account Dashboard Menu"
-msgstr "Open Account Dashboard Menu"
-
-#. module: l10n_lv
-#: model:ir.model,name:l10n_lv.model_res_partner
-msgid "Partner"
-msgstr "Partneris"
-
-#. module: l10n_lv
-#: model:ir.model.fields,field_description:l10n_lv.field_res_partner_company_registry
-#: code:addons/l10n_lv/models/res_company.py:34
-#, python-format
-msgid "Registration No"
-msgstr "Reģistrācijas Nr."
-
-#. module: l10n_lv
-#: model:ir.ui.view,arch_db:l10n_lv.view_res_partner_filter_inherit_l10n_lv
-msgid "Registration No / Identification No"
-msgstr "Reģistrācijas Nr. / Personas kods"
+msgstr "Atvērt grāmatvedības infopaneļa izvēlni"
 

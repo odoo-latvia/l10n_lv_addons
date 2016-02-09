@@ -22,16 +22,24 @@
 #
 ##############################################################################
 
-from openerp import api, fields, models, _
-
-class ResCompany(models.Model):
-    _inherit = "res.company"
-
-    @api.model
-    def fields_get(self, allfields=None, write_access=True, attributes=None):
-        res = super(ResCompany, self).fields_get(allfields=allfields, write_access=write_access, attributes=attributes)
-        if 'company_registry' in res and 'string' in res['company_registry']:
-            res['company_registry']['string'] = _('Registration No')
-        return res
+{
+    'name': 'LV Partner data check',
+    'version': '1.0',
+    'description': """
+Similar Partner data check.
+=====================================
+Checks for similar Partners when creating/editing a Partner.
+Allows to create similar partners if "Allow similar Partner creation" is checked in Partner form view.
+    """,
+    'author': 'ITS-1',
+    'website': 'http://www.its1.lv/',
+    'category': 'Hidden',
+    'depends': ['l10n_lv_partner_data'],
+    'data': [
+        'views/res_partner_view.xml'
+    ],
+    'auto_install': False,
+    'installable': True,
+}
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
