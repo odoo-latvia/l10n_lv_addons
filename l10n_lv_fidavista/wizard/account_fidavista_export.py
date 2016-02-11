@@ -90,11 +90,11 @@ class account_fidavista_export(osv.osv_memory):
         data_obj = self.pool.get('ir.model.data')
         for payment in payment_order.line_ids:
             data_of_file += "\n    <Payment>"
-            ext_ids = data_obj.search(cr, uid, [('model','=','payment.line'), ('res_id','=',payment.id)], context=context)
-            if ext_ids:
-                extid = data_obj.browse(cr, uid, ext_ids[0], context=context).complete_name
-                extid = len(extid) > 10 and extid[-10:] or extid
-                data_of_file += ("\n        <ExtId>" + extid + "</ExtId>")
+#            ext_ids = data_obj.search(cr, uid, [('model','=','payment.line'), ('res_id','=',payment.id)], context=context)
+#            if ext_ids:
+#                extid = data_obj.browse(cr, uid, ext_ids[0], context=context).complete_name
+#                extid = len(extid) > 10 and extid[-10:] or extid
+#                data_of_file += ("\n        <ExtId>" + extid + "</ExtId>")
             payment_name = len(payment.name) > 10 and payment.name[0:10] or payment.name
             data_of_file += ("\n        <DocNo>" + payment_name + "</DocNo>")
             if payment.date:
@@ -111,11 +111,11 @@ class account_fidavista_export(osv.osv_memory):
             data_of_file += ("\n        <PayAccNo>" + pay_acc + "</PayAccNo>")
             data_of_file += ("\n        <DebitCcy>" + payment.company_currency.name + "</DebitCcy>")
             data_of_file += ("\n        <BenSet>")
-            ben_ext_ids = data_obj.search(cr, uid, [('model','=','res.partner'), ('res_id','=',payment.partner_id.id)], context=context)
-            if ben_ext_ids:
-                benextid = data_obj.browse(cr, uid, ben_ext_ids[0], context=context).complete_name
-                benextid = len(benextid) > 5 and benextid[-5:] and benextid
-                data_of_file += ("\n            <BenExtId>" + benextid + "</BenExtId>")
+#            ben_ext_ids = data_obj.search(cr, uid, [('model','=','res.partner'), ('res_id','=',payment.partner_id.id)], context=context)
+#            if ben_ext_ids:
+#                benextid = data_obj.browse(cr, uid, ben_ext_ids[0], context=context).complete_name
+#                benextid = len(benextid) > 5 and benextid[-5:] and benextid
+#                data_of_file += ("\n            <BenExtId>" + benextid + "</BenExtId>")
             data_of_file += ("\n            <Priority>" + "N" + "</Priority>")
             data_of_file += ("\n            <Comm>" + "SHA" + "</Comm>")
             payment_amount_currency = str(payment.amount_currency)
