@@ -5,7 +5,7 @@
 #    Copyright (C) 2016 ITS-1 (<http://www.its1.lv/>)
 #                       E-mail: <info@its1.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
-#                       Phone: +371 66116534
+#                       Phone: +371 67289467
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
