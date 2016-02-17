@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<template id="hr_expense">
+    <t t-call="report.html_container">
+        <t t-foreach="lines" t-as="o">
+            <t>
+                <div class="page">
+                    <style type="text/css">
+                        div.title {
+                            font-size: 16px;
+                            text-align: center;
+                            vertical-align: middle;
+                            margin-top: 20px; 
+                            margin-bottom: 20px;
+                            font-weight: bold;
+                        }
+                        div.dates {
+                            text-align: center;
+                        }
+                        table.list_table th {
+                            border: 1px solid black;
+                            font-weight: normal;
+                            text-align: center;
+                            vertical-align: middle;
+                        }
+                        table.list_table td, th {
+                            padding-top: 2px;
+                            padding-bottom: 2px;
+                            padding-left: 4px;
+                            padding-right: 4px;
+                        }
+                        table.signatures td {
+                            padding-top: 6px;
+                            padding-bottom: 6px;
+                            padding-left: 4px;
+                            padding-right: 4px;
+                        }
+                    </style>
+                    <div>
+                        <span>Name Surname:</span>
+                        <span style="font-weight: bold;" t-esc="o.employee_id.name"/>
+                    </div>
+                    <div t-if="o.employee_id.identification_id">
+                        <span>Identification No:</span>
+                        <span t-esc="o.employee_id.identification_id or ''"/>
+                    </div>
+                    <div t-if="o.employee_id.department_id">
+                        <span>Department:</span>
+                        <span t-esc="o.employee_id.department_id.name or ''"/>
+                    </div>
+                    <div t-if="o.employee_id.bank_account_id">
+                        <span>Bank Account:</span>
+                        <span t-esc="o.employee_id.bank_account_id.acc_number or ''"/>
+                    </div>
+                    <div>
+                        <span>Currency:</span>
+                        <span t-esc="o.currency_id.name or ''"/>
+                    </div>
+                    <div class="title">
+                        <span>EXPENSE No</span>
+                        <span t-esc="o.name"/>
+                    </div>
+                    <div t-if="data" class="dates">
+                        <span t-esc="formatLang(data['date_from'], date=True)"/>
+                        <span>-</span>
+                        <span t-esc="formatLang(data['date_to'], date=True)"/>
+                    </div>
+                    <br/>
+                    <br/>
+
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+
+<report 
+    id="action_report_hr_expense_l10n_lv"
+    model="hr.expense"
+    string="HR Expense"
+    name="l10n_lv_hr_expense.hr_expense"
+    file="l10n_lv_hr_expense.hr_expense"
+    />
+
+</odoo>
