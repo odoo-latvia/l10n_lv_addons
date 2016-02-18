@@ -23,23 +23,19 @@
 ##############################################################################
 
 {
-    'name': 'LV Expense Management',
+    'name': 'Latvian localization tools for reports',
     'version': '1.0',
     'description': """
-Accounting improvements for expenses.
+Atsakišu palīgfunkcijas Latvijas lokalizācijai 
 =====================================
-Partner in expenses and journal items created from the corresponding expense.
+-Skaitlisko naudas vērtību pārveidošana tekstā
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
-    'category': 'Human Resources',
-    'depends': ['hr_expense', 'l10n_lv_verbose'],
+    'category': 'Reporting',
+    'depends': ['base'],
     'demo_xml': [],
-    'data': [
-        'views/hr_expense_view.xml',
-        'views/hr_expense_report.xml',
-        'wizard/hr_expense_account_report_view.xml'
-    ],
+    'data': [],
     'auto_install': False,
     'installable': True,
 }
