@@ -24,19 +24,26 @@
 
 import time
 from openerp import api, models, _
-from openerp.report.report_sxw import rml_parse
+from openerp.report import report_sxw
 
-class ReportHrExpenseAccount(models.AbstractModel):
-    _name = 'report.l10n_lv_hr_expense.hr_expense'
+class ReportHrExpenseAccount(report_sxw.rml_parse):
+    def __init__(self, cr, uid, name, context):
+        super(ReportHrExpenseAccount, self).__init__(cr, uid, name, context=context)
+        self.localcontext.update({
+            'time': time,
+            'expense_groups': self.expense_groups,
+            'bank_move_lines': self.bank_move_lines
+        })
+        self.context = context
 
     def expense_groups(self, form):
-        expense_obj = self.env['hr.expense']
-        expenses = expense_obj.browse(self.env.context.get('active_id'))
+        expense_obj = self.pool.get('hr.expense')
+        expense_ids = self.context.get('active_ids', [])
         if form:
-            expenses = expense_obj.search([('date','>=',form['date_from']),('date','<=',form['date_to']),('employee_id','=',form['employee_id'][0]),('account_move_id','!=',False)])
+            expense_ids = expense_obj.search(self.cr, self.uid, [('date','>=',form['date_from']),('date','<=',form['date_to']),('employee_id','=',form['employee_id'][0]),('account_move_id','!=',False)])
         exp_data = {}
-        if expenses:
-            for e in expenses:
+        if expense_ids:
+            for e in expense_obj.browse(self.cr, self.uid, expense_ids):
                 if (e.employee_id, e.currency_id, e.journal_id) in exp_data:
                     exp_data[(e.employee_id, e.currency_id, e.journal_id)].append(e)
                 else:
@@ -62,17 +69,17 @@ class ReportHrExpenseAccount(models.AbstractModel):
         return e_groups
 
     def bank_move_lines(self, form):
-        bank_obj = self.env['account.bank.statement.line']
+        bank_obj = self.pool.get('account.bank.statement.line')
         if form:
-            result_bank = bank_obj.browse(form['bank_statement_line_ids'])
+            result_bank = bank_obj.browse(self.cr, self.uid, form['bank_statement_line_ids'])
         else:
-            expense_obj = self.env['hr.expense']
-            exp_ids = self.env.context.get('active_id')
+            expense_obj = self.pool.get('hr.expense')
+            exp_ids = self.context.get('active_ids', [])
             partners = []
-            for exp in expense_obj.browse(exp_ids):
+            for exp in expense_obj.browse(self.cr, self.uid, exp_ids):
                 if exp.employee_id.address_home_id:
                     partners.append(exp.employee_id.address_home_id.id)
-            result_bank = bank_obj.search([('partner_id','in',partners)])
+            result_bank = bank_obj.search(self.cr, self.uid, [('partner_id','in',partners)])
         line_list = []
         for bsl in result_bank:
             for m in bsl.journal_entry_ids:
@@ -81,20 +88,10 @@ class ReportHrExpenseAccount(models.AbstractModel):
                         line_list.append(ml)
         return line_list
 
-    @api.multi
-    def render_html(self, data):
-        self.model = self.env.context.get('active_model')
-        docs = self.env[self.model].browse(self.env.context.get('active_id'))
-        docargs = {
-            'doc_ids': self.ids,
-            'doc_model': self.model,
-            'data': data['form'],
-            'docs': docs,
-            'time': time,
-            'formatLang': rml_parse(self._cr, self._uid, '', context=self.env.context).formatLang,
-            'expense_groups': self.expense_groups(data.get('form')),
-            'bank_move_lines': self.bank_move_lines(data.get('form'))
-        }
-        return self.env['report'].render('l10n_lv_hr_expense.hr_expense', docargs)
+class HrEAreport(models.AbstractModel):
+    _name = 'report.l10n_lv_hr_expense.hr_expense'
+    _inherit = 'report.abstract_report'
+    _template = 'l10n_lv_hr_expense.hr_expense'
+    _wrapped_report_class = ReportHrExpenseAccount
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

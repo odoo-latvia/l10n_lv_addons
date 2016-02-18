@@ -3,7 +3,8 @@
 
 <template id="hr_expense">
     <t t-call="report.html_container">
-        <t t-foreach="expense_groups" t-as="g">
+        <t t-set="e_groups" t-value="expense_groups(data and data['form'] or {})"/>
+        <t t-foreach="e_groups" t-as="g">
             <t>
                 <div class="page">
                     <style type="text/css">
@@ -61,17 +62,18 @@
                         <span>EXPENSES</span>
                     </div>
                     <div t-if="data" class="dates">
-                        <span t-esc="formatLang(data['date_from'], date=True)"/>
+                        <span t-esc="data and formatLang(data['form']['date_from'], date=True) or ''"/>
                         <span>-</span>
-                        <span t-esc="formatLang(data['date_to'], date=True)"/>
+                        <span t-esc="data and formatLang(data['form']['date_to'], date=True)"/>
                     </div>
                     <br/>
                     <br/>
+                    <t t-set="bm_lines" t-value="bank_move_lines(data and data['form'])"/>
                     <div>
                         <span>Received:</span>
-                        <span t-esc="((not bank_move_lines) and formatLang(0.0)) or ''"/>
+                        <span t-esc="((not bm_lines) and formatLang(0.0)) or ''"/>
                     </div>
-                    <table class="list_table" width="100%" t-if="bank_move_lines">
+                    <table class="list_table" width="100%" t-if="bm_lines">
                         <tr>
         		            <th width="10%">Doc. No</th>
         		            <th width="15%">Journal Entry No</th>
@@ -81,7 +83,7 @@
         		            <th width="14%">Amount</th>
                         </tr>
                         <t t-set="total_received" t-value="0.0"></t>
-                        <t t-foreach="bank_move_lines" t-as="move_line">
+                        <t t-foreach="bm_lines" t-as="move_line">
                         <tr t-if="move_line.account_id.id == g['employee'].address_home_id.property_account_receivable_id.id">
                             <td>
                                 <span t-esc="move_line.ref or ''"/>
