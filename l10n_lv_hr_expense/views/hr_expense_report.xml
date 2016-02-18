@@ -83,8 +83,7 @@
         		            <th width="14%">Amount</th>
                         </tr>
                         <t t-set="total_received" t-value="0.0"></t>
-                        <t t-foreach="bm_lines" t-as="move_line">
-                        <tr t-if="move_line.account_id.id == g['employee'].address_home_id.property_account_receivable_id.id">
+                        <tr t-foreach="bm_lines" t-as="move_line">
                             <td>
                                 <span t-esc="move_line.ref or ''"/>
                             </td>
@@ -105,7 +104,7 @@
                             </td>
                             <t t-set="total_received" t-value="total_received + move_line.credit"></t>
                         </tr>
-                        <tr t-if="move_line == bank_move_lines[-1]">
+                        <tr>
                             <td colspan="4"/>
                             <td style="border-top: 1px solid black; font-weight: bold;">
                                 <span>Total:</span>
@@ -114,7 +113,6 @@
                                 <span t-esc="formatLang(total_received)"/>
                             </td>
                         </tr>
-                        </t>
                     </table>
                     <br/>
                     <div>
@@ -131,32 +129,31 @@
         		            <th width="14%">Amount</th>
                         </tr>
                         <t t-set="total_spent" t-value="0.0"></t>
-                        <t t-foreach="g['exp_move_lines']" t-as="line">
-                        <tr t-if="(not line.partner_id) or (line.partner_id and line.partner_id.id != g['employee'].address_home_id.id)">
+                        <tr t-foreach="g['exp_move_lines']" t-as="line">
                             <td>
-                                <span t-esc="line.ref or ''"/>
+                                <span t-esc="line['doc_no'] or ''"/>
                             </td>
                             <td style="text-align: center;">
-                                <span t-esc="line.move_id.name or ''"/>
+                                <span t-esc="line['journ_entr_no'] or ''"/>
                             </td>
                             <td style="text-align: center;">
-                                <span t-esc="formatLang(line.date, date=True)"/>
+                                <span t-esc="line['doc_date'] and formatLang(line['doc_date'], date=True) or ''"/>
                             </td>
                             <td>
-                                <span t-esc="line.partner_id and line.partner_id.name or ''"/><span t-if="line.partner_id">, </span>
-                                <span t-if="line.partner_id and line.partner_id.vat">TIN</span>
-                                <span t-esc="line.partner_id and line.partner_id.vat or ''"/><span t-if="line.partner_id and line.partner_id.vat">, </span>
-                                <span t-esc="line.name"/>
+                                <span t-esc="line['partner'] and line['partner'].name or ''"/><span t-if="line['partner']">, </span>
+                                <span t-if="line['partner'] and line['partner'].vat">TIN</span>
+                                <span t-esc="line['partner'] and line['partner'].vat or ''"/><span t-if="line['partner'] and line['partner'].vat">, </span>
+                                <span t-esc="line['name']"/>
                             </td>
                             <td style="text-align: center;">
-                                <span t-esc="line.account_id.code"/>
+                                <span t-esc="line['account'].code"/>
                             </td>
                             <td style="text-align: right;">
-                                <span t-esc="formatLang(line.debit)"/>
+                                <span t-esc="formatLang(line['debit'])"/>
                             </td>
-                            <t t-set="total_spent" t-value="total_spent + line.debit"></t>
+                            <t t-set="total_spent" t-value="total_spent + line['debit']"></t>
                         </tr>
-                        <tr t-if="line == g['exp_move_lines'][-1]">
+                        <tr>
                             <td colspan="4"/>
                             <td style="border-top: 1px solid black; font-weight: bold;">
                                 <span>Total:</span>
@@ -165,14 +162,13 @@
                                 <span t-esc="formatLang(total_spent)"/>
                             </td>
                         </tr>
-                        <tr t-if="line == g['exp_move_lines'][-1]">
+                        <tr>
                             <td colspan="3"/>
                             <td colspan="3">
                                 <t t-set="cur" t-value="g['currency']"/>
                                 <span t-esc="total_spent" t-esc-options='{"widget": "verbose", "display_currency": "cur"}'/>
                             </td>
                         </tr>
-                        </t>
                     </table>
                     <br/>
                     <table width="100%" class="signatures">

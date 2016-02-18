@@ -60,8 +60,22 @@ class ReportHrExpenseAccount(report_sxw.rml_parse):
             for v in value:
                 if v.account_move_id:
                     for ml in v.account_move_id.line_ids:
-                        if ml not in exp_move_lines:
-                            exp_move_lines.append(ml)
+                        if (ml not in exp_move_lines) and ((not ml.partner_id) or (ml.partner_id and ml.partner_id.id != key[0].address_home_id.id)):
+                            ml_name = ml.name
+                            if (not ml.tax_ids) and (not ml.tax_line_id):
+                                ml_name = v.product_id.name
+                                if ml.product_id.default_code:
+                                    ml_name = '[%s] %s' % (ml.product_id.default_code, ml_name)
+                            exp_move_lines.append({
+                                'doc_no': ml.ref,
+                                'journ_entr_no': ml.move_id.name,
+                                'doc_date': ml.date,
+                                'partner': ml.partner_id,
+                                'name': ml_name,
+                                'account': ml.account_id,
+                                'debit': ml.debit,
+                                'credit': ml.credit
+                            })
             e_dict.update({
                 'exp_move_lines': exp_move_lines
             })
@@ -70,12 +84,15 @@ class ReportHrExpenseAccount(report_sxw.rml_parse):
 
     def bank_move_lines(self, form):
         bank_obj = self.pool.get('account.bank.statement.line')
+        partners = []
         if form:
             result_bank = bank_obj.browse(self.cr, self.uid, form['bank_statement_line_ids'])
+            employee = self.pool.get('hr.employee').browse(self.cr, self.uid, form['employee_id'][0])
+            if employee.address_home_id:
+                partners.append(employee.address_home_id.id)
         else:
             expense_obj = self.pool.get('hr.expense')
             exp_ids = self.context.get('active_ids', [])
-            partners = []
             for exp in expense_obj.browse(self.cr, self.uid, exp_ids):
                 if exp.employee_id.address_home_id:
                     partners.append(exp.employee_id.address_home_id.id)
@@ -84,7 +101,7 @@ class ReportHrExpenseAccount(report_sxw.rml_parse):
         for bsl in result_bank:
             for m in bsl.journal_entry_ids:
                 for ml in m.line_ids:
-                    if ml not in line_list:
+                    if ml not in line_list and ml.partner_id and ml.partner_id.id in partners:
                         line_list.append(ml)
         return line_list
 
