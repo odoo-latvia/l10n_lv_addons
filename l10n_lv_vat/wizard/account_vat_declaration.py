@@ -616,7 +616,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
             r_sale = []
             sale_EU = []
             # making separate data lists for different journal types and tax codes:
-            account_move_ids = account_move_obj.search(cr, uid, [('period_id','in',periods), ('state','=','posted')], context=context)
+            account_move_ids = account_move_obj.search(cr, uid, [('period_id','in',periods), ('state','=','posted'), ('journal_id.type','in',['sale','sale_refund','purchase','purchase_refund','expense'])], context=context)
             for account_move in account_move_obj.browse(cr, uid, account_move_ids, context=context):
                 if account_move.line_id:
                     lines = self._process_line(cr, uid, account_move.line_id, context=context)
