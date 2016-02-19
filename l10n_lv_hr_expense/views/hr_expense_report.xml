@@ -61,10 +61,11 @@
                     <div class="title">
                         <span>EXPENSES</span>
                     </div>
-                    <div t-if="data" class="dates">
-                        <span t-esc="data and formatLang(data['form']['date_from'], date=True) or ''"/>
-                        <span>-</span>
-                        <span t-esc="data and formatLang(data['form']['date_to'], date=True)"/>
+                    <t t-set="date_dict" t-value="dates(data and data['form'] or {})"/>
+                    <div class="dates">
+                        <span t-esc="date_dict['date_from'] and formatLang(date_dict['date_from'], date=True) or ''"/>
+                        <span t-esc="date_dict['date_from'] and date_dict['date_to'] and '-' or ''"/>
+                        <span t-esc="date_dict['date_to'] and formatLang(date_dict['date_to'], date=True) or ''"/>
                     </div>
                     <br/>
                     <br/>
@@ -85,7 +86,7 @@
                         <t t-set="total_received" t-value="0.0"></t>
                         <tr t-foreach="bm_lines" t-as="move_line">
                             <td>
-                                <span t-esc="move_line.ref or ''"/>
+                                <span t-esc="move_line.statement_id.name or ''"/>
                             </td>
                             <td style="text-align: center;">
                                 <span t-esc="move_line.move_id.name or ''"/>
@@ -205,5 +206,19 @@
     name="l10n_lv_hr_expense.hr_expense"
     file="l10n_lv_hr_expense.hr_expense"
     />
+
+<record id="report_paperformat_hr_expense_portrait" model="report.paperformat">
+    <field name="name">HR Expense Portrait</field>
+    <field name="margin_top" eval="10"/>
+    <field name="margin_left" eval="20"/>
+    <field name="margin_bottom" eval="10"/>
+    <field name="margin_right" eval="10"/>
+    <field name="format">A4</field>
+    <field name="orientation">Portrait</field>
+</record>
+
+<record id="l10n_lv_hr_expense.action_report_hr_expense_l10n_lv" model="ir.actions.report.xml">
+    <field name="paperformat_id" ref="l10n_lv_hr_expense.report_paperformat_hr_expense_portrait"/>
+</record>
 
 </odoo>

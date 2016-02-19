@@ -32,6 +32,7 @@ class ReportHrExpenseAccount(report_sxw.rml_parse):
         self.localcontext.update({
             'time': time,
             'expense_groups': self.expense_groups,
+            'dates': self.dates,
             'bank_move_lines': self.bank_move_lines
         })
         self.context = context
@@ -60,14 +61,14 @@ class ReportHrExpenseAccount(report_sxw.rml_parse):
             for v in value:
                 if v.account_move_id:
                     for ml in v.account_move_id.line_ids:
-                        if (ml not in exp_move_lines) and ((not ml.partner_id) or (ml.partner_id and ml.partner_id.id != key[0].address_home_id.id)):
+                        if (not ml.partner_id) or (ml.partner_id and ml.partner_id.id != key[0].address_home_id.id):
                             ml_name = ml.name
                             if (not ml.tax_ids) and (not ml.tax_line_id):
                                 ml_name = v.product_id.name
                                 if ml.product_id.default_code:
                                     ml_name = '[%s] %s' % (ml.product_id.default_code, ml_name)
                             exp_move_lines.append({
-                                'doc_no': ml.ref,
+                                'doc_no': v.name,
                                 'journ_entr_no': ml.move_id.name,
                                 'doc_date': ml.date,
                                 'partner': ml.partner_id,
@@ -81,6 +82,27 @@ class ReportHrExpenseAccount(report_sxw.rml_parse):
             })
             e_groups.append(e_dict)
         return e_groups
+
+    def dates(self, form):
+        if form:
+            date_from = form['date_from']
+            date_to = form['date_to']
+        else:
+            expense_obj = self.pool.get('hr.expense')
+            exp_ids = self.context.get('active_ids',[])
+            date_from = False
+            date_to = False
+            for e in expense_obj.browse(self.cr, self.uid, exp_ids):
+                if e.date:
+                    if date_from != False and e.date < date_from:
+                        date_from = e.date
+                    if date_to != False and e.date > date_to:
+                        date_to = e.date
+                    if date_from == False:
+                        date_from = e.date
+                    if date_to == False:
+                        date_to = e.date
+        return {'date_from': date_from, 'date_to': date_to}
 
     def bank_move_lines(self, form):
         bank_obj = self.pool.get('account.bank.statement.line')
