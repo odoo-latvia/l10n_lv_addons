@@ -29,6 +29,7 @@
 Accounting improvements for expenses.
 =====================================
 Partner in expenses and journal items created from the corresponding expense.
+Report for Expenses in PDF.
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
