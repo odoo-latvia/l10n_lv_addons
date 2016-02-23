@@ -63,19 +63,28 @@ class account_fidavista_import(osv.osv_memory):
         'fidavista_fname': fields.char('FiDAViSta Filename', size=128, required=True),
         'note': fields.text('Log'),
         'period_id': fields.many2one('account.period', 'Period', help="Select a Period for the Bank Statement.", required=True),
+        'journal_id': fields.many2one('account.journal', 'Journal', domain=[('type','=','bank')], required=True),
         'flag': fields.boolean('Continue Anyway', help="If checked, continues without comparing balances."),
         'wrong_balance': fields.boolean('Wrong Balance'),
         'imported_statements' : fields.one2many('account.fidavista.imported.statements', 'wizard_id', 'Imported Statements'),
         'importing_statements' : fields.one2many('account.fidavista.importing.statements', 'wizard_id', 'Statements to Import'),
     }
 
+    def _get_default_journal(self, cr, uid, context=None):
+        if context is None:
+            context = {}
+        journal_ids = self.pool.get('account.journal').search(cr, uid, [('type','=','bank')], context=context)
+        journal_id = journal_ids and journal_ids[0] or False
+        return journal_id
+
     _defaults = {
         'fidavista_fname': lambda *a: '',
         'flag': False,
-        'wrong_balance': False
+        'wrong_balance': False,
+        'journal_id': _get_default_journal
     }
 
-    def onchange_fidavista_data(self, cr, uid, ids, fidavista_data, fidavista_fname, context=None, fidavistafile=None, fidavistafilename=None):
+    def onchange_fidavista_data(self, cr, uid, ids, fidavista_data, fidavista_fname, journal_id, context=None, fidavistafile=None, fidavistafilename=None):
         # getting data:
         if context is None:
             context = {}
@@ -159,7 +168,31 @@ class account_fidavista_import(osv.osv_memory):
                 else:
                     period_id = period[0]
 
-            return {'value': {'period_id': period_id, 'imported_statements': result_imported, 'importing_statements': result_importing, 'wrong_balance': wrong_balance}}
+            value = {
+                'period_id': period_id,
+                'imported_statements': result_imported,
+                'importing_statements': result_importing,
+                'wrong_balance': wrong_balance
+            }
+
+            currency = company_account.getElementsByTagName('Ccy')[0].toxml().replace('<Ccy>','').replace('</Ccy>','')
+            cur_obj = self.pool.get('res.currency')
+            cur_ids = cur_obj.search(cr, uid, [('name','=',currency)], context=context)
+            j_domain = [('type','=','bank')]
+            if cur_ids:
+                j_domain = [('type','=','bank'), '|', '&', ('currency','!=',False), ('currency','in',cur_ids), '&', ('currency','=',False), ('company_id.currency_id','in',cur_ids)]
+            j_test_ids = self.pool.get('account.journal').search(cr, uid, j_domain, context=context)
+            j_id = journal_id
+            if j_id not in j_test_ids:
+                j_id = j_test_ids and j_test_ids[0] or False
+                value.update({'journal_id': j_id})
+
+            return {
+                'value': value,
+                'domain': {
+                    'journal_id': j_domain
+                }
+            }
         return {}
 
 
@@ -210,22 +243,9 @@ class account_fidavista_import(osv.osv_memory):
             statement_name = company_acc_no + ' ' + start_date+ ':' + end_date
             statement_date = end_date
 
-            # testing, wheteher there is a journal available for the import:
+            # getting currency and journal:
             currency = company_account.getElementsByTagName('Ccy')[0].toxml().replace('<Ccy>','').replace('</Ccy>','')
-            journal_obj = self.pool.get('account.journal')
-            journal = journal_obj.search(cr, uid, [('type','=','bank')], context=context)
-            journal_id = False
-            if journal:
-                for jrn in journal_obj.browse(cr, uid, journal, context=context):
-                    cur = jrn.currency.name
-                    if not cur:
-                        cur = jrn.company_id.currency_id.name
-                    if cur == currency:
-                        journal_id = jrn.id
-                        break
-            if not journal or journal_id==False:
-                raise osv.except_osv(_('No Journal available'), _("There is no Journal of Type 'Bank and Checks' and Currency '%s' currenlty available in the system. Please define such Journal and try again!") %(currency))
-                return {}
+            journal_id = data.journal_id.id
 
             # getting and checking balances:
             balance_start = company_account.getElementsByTagName('OpenBal')[0].toxml().replace('<OpenBal>','').replace('</OpenBal>','')

@@ -16,11 +16,12 @@
 		                <field name="last_balance_end"/>
 		            </tree>
 	            </field>
-                <group col="2">
-		            <field name="fidavista_fname" invisible="1"/>
-                    <field name="fidavista_data" filename="fidavista_fname" on_change="onchange_fidavista_data(fidavista_data,fidavista_fname)"/>
-                    <field name="period_id"/>
-		            <field name="wrong_balance" invisible="1"/>
+                <group col="4">
+		            <field name="fidavista_fname" invisible="1" colspan="4"/>
+                    <field name="fidavista_data" filename="fidavista_fname" on_change="onchange_fidavista_data(fidavista_data,fidavista_fname, journal_id)" colspan="4"/>
+                    <field name="period_id" colspan="2"/>
+                    <field name="journal_id" context="{'default_type': 'bank'}" colspan="2"/>
+		            <field name="wrong_balance" invisible="1" colspan="4"/>
                 </group>
 	            <field name="importing_statements" readonly="1">
 		            <tree colors="red:wrong_balance==True;blue:wrong_balance==False">

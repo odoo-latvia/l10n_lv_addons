@@ -277,6 +277,11 @@ msgid "Period"
 msgstr "Periods"
 
 #. module: l10n_lv_fidavista
+#: field:account.fidavista.import,journal_id:0
+msgid "Journal"
+msgstr "Reģistrs"
+
+#. module: l10n_lv_fidavista
 #: model:ir.model,name:l10n_lv_fidavista.model_account_bank_statement
 msgid "Bank Statement"
 msgstr "Bankas konta izraksts"
