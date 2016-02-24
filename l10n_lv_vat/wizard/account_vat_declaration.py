@@ -339,20 +339,13 @@ class l10n_lv_vat_declaration(osv.osv_memory):
 
                 # PVN1-I doc type:
                 doc_type = "1"
-                if value['invoices']:
-                    for invoice in value['invoices']:
-                        if invoice.payment_ids:
-                            if invoice.payment_ids[0].journal_id.type == 'bank':
-                                doc_type = "3"
-                            if invoice.payment_ids[0].journal_id.type == 'cash':
-                                doc_type = "2"
-                    if journal_type == 'sale_refund':
-                        doc_type = "4"
-                        partner_data[key]['limit_val'] = 0.0
-                        key2_list = ['amount_untaxed', 'amount_untaxed_cur', 'amount_tax', 'amount_tax_cur', 'amount_taxed', 'amount_taxed_cur']
-                        for key2 in key2_list:
-                            if partner_data[key][key2] < 0.0:
-                                partner_data[key][key2] = partner_data[key][key2] * (-1.0)
+                if value['invoices'] and journal_type == 'sale_refund':
+                    doc_type = "4"
+                    partner_data[key]['limit_val'] = 0.0
+                    key2_list = ['amount_untaxed', 'amount_untaxed_cur', 'amount_tax', 'amount_tax_cur', 'amount_taxed', 'amount_taxed_cur']
+                    for key2 in key2_list:
+                        if partner_data[key][key2] < 0.0:
+                            partner_data[key][key2] = partner_data[key][key2] * (-1.0)
                 if (not value['invoices']) and journal_type != 'expense':
                     doc_type = "5"
                     if '61' in value['tax_codes']:
@@ -403,20 +396,13 @@ class l10n_lv_vat_declaration(osv.osv_memory):
 
                 # PVN1-III doc type:
                 doc_type = "1"
-                if value['invoices']:
-                    for invoice in value['invoices']:
-                        if invoice.payment_ids:
-                            if invoice.payment_ids[0].journal_id.type == 'bank':
-                                doc_type = "3"
-                            if invoice.payment_ids[0].journal_id.type == 'cash':
-                                doc_type = "2"
-                    if journal_type == 'purchase_refund':
-                        doc_type = "4"
-                        partner_data[key]['limit_val'] = 0.0
-                        key2_list = ['amount_untaxed', 'amount_untaxed_cur', 'amount_tax', 'amount_tax_cur', 'amount_taxed', 'amount_taxed_cur']
-                        for key2 in key2_list:
-                            if partner_data[key][key2] < 0.0:
-                                partner_data[key][key2] = partner_data[key][key2] * (-1.0)
+                if value['invoices'] and journal_type == 'purchase_refund':
+                    doc_type = "4"
+                    partner_data[key]['limit_val'] = 0.0
+                    key2_list = ['amount_untaxed', 'amount_untaxed_cur', 'amount_tax', 'amount_tax_cur', 'amount_taxed', 'amount_taxed_cur']
+                    for key2 in key2_list:
+                        if partner_data[key][key2] < 0.0:
+                            partner_data[key][key2] = partner_data[key][key2] * (-1.0)
                 if not value['invoices']:
                     doc_type = "5"
                 partner_data[key]['doc_type'] = doc_type
