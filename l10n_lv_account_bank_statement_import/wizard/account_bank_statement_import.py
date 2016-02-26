@@ -33,18 +33,32 @@ from xml.dom.minidom import getDOMImplementation, parseString
 class AccountBankStatementImported(models.TransientModel):
     _name = 'account.bank.statement.imported'
 
+    @api.model
+    def _default_currency(self):
+        user = self.env['res.users'].browse(self._uid)
+        currency_id = user.company_id.currency_id.id
+        return currency_id
+
     wizard_id = fields.Many2one('account.bank.statement.import', string='Wizard')
     last_statement = fields.Char('Last statements for selected accounts')
     last_balance_end = fields.Monetary('Ending Balance')
     wrong_balance = fields.Boolean('Wrong Balance')
+    currency_id = fields.Many2one('res.currency', string='Currency', default=_default_currency)
 
 class AccountBankStatementImporting(models.TransientModel):
     _name = 'account.bank.statement.importing'
+
+    @api.model
+    def _default_currency(self):
+        user = self.env['res.users'].browse(self._uid)
+        currency_id = user.company_id.currency_id.id
+        return currency_id
 
     wizard_id = fields.Many2one('account.bank.statement.import', string='Wizard')
     current_statement = fields.Char('Statements to import')
     current_balance_start = fields.Monetary('Starting Balance')
     wrong_balance = fields.Boolean('Wrong Balance')
+    currency_id = fields.Many2one('res.currency', string='Currency', default=_default_currency)
 
 class AccountBankStatementImport(models.TransientModel):
     _inherit = 'account.bank.statement.import'
@@ -55,9 +69,9 @@ class AccountBankStatementImport(models.TransientModel):
         journal_id = journals and journals[0].id or False
         return journal_id
 
-    format = fields.selection([('ofx','.OFX'), ('fidavista','FiDAViSta')], string='Format', required=True)
-    note = fields.Text('Log')
-    journal_id = fields.Many2one('account.journal', string='Journal', domain=[('type','=','bank')], required=True, default=_default_journal)
+    format = fields.Selection([('ofx','.OFX'), ('fidavista','FiDAViSta')], string='Format', required=True)
+    journal_id = fields.Many2one('account.journal', string='Journal', domain=[('type','=','bank')], default=_default_journal)
+    currency_id = fields.Many2one('res.currency', string='Currency')
     flag = fields.Boolean('Continue Anyway', help='If checked, continues without comparing balances.', default=False)
     wrong_balance = fields.Boolean('Wrong Balance', default=False)
     imported_statement_ids = fields.One2many('account.bank.statement.imported', 'wizard_id', string='Imported Statements')
@@ -82,13 +96,18 @@ class AccountBankStatementImport(models.TransientModel):
             # getting the accountsets to browse through and giving start values for fields:
             accountsets = dom.getElementsByTagName('AccountSet')
             wrong_balance = False
-            latest_bank_statement_name = False
-            latest_bank_statement_balance_end = False
             result_imported = []
             result_importing = []
+            currencies = []
             bank_obj = self.env['res.partner.bank']
             statement_obj = self.env['account.bank.statement']
+            cur_obj = self.env['res.currency']
             for company_account in accountsets:
+                latest_bank_statement = False
+                latest_bank_statement_name = False
+                latest_bank_statement_balance_end = False
+                latest_bank_statement_currency = False
+
                 # testing, whether the Company's bank account is defined in the system:
                 company_acc_no = company_account.getElementsByTagName('AccNo')[0].toxml().replace('<AccNo>','').replace('</AccNo>','')
                 company_acc_no_list = list(company_acc_no)
@@ -110,38 +129,59 @@ class AccountBankStatementImport(models.TransientModel):
                 if test_acc_no:
                     bank_statements = statement_obj.search([('bank_account_id', '=', test_acc_no[0].id)], order='date asc')
                     if bank_statements:
-                        latest_bank_statement_name = bank_statements[-1].name
-                        latest_bank_statement_balance_end = bank_statements[-1].balance_end_real
+                        latest_bank_statement = bank_statements[-1]
+                        latest_bank_statement_name = latest_bank_statement.name
+                        latest_bank_statement_balance_end = latest_bank_statement.balance_end_real
+                        latest_bank_statement_currency = latest_bank_statement.currency_id
 
-                        if bank_statements[-1].balance_end_real != float(balance_start):
+                        if latest_bank_statement.balance_end_real != float(balance_start):
                             wrong_balance = True
 
-                # creating values for fields:
-                datas_imported = {
-                    'last_statement': latest_bank_statement_name,
-                    'last_balance_end': latest_bank_statement_balance_end,
-                    'wrong_balance': wrong_balance
-                }
-                result_imported.append((0, 0, datas_imported))
+                # creating values for already imported data:
+                if latest_bank_statement:
+                    datas_imported = {
+                        'last_statement': latest_bank_statement_name,
+                        'last_balance_end': latest_bank_statement_balance_end,
+                        'wrong_balance': wrong_balance
+                    }
+                    if latest_bank_statement_currency:
+                        datas_imported.update({
+                            'currency_id': latest_bank_statement_currency.id
+                        })
+                    result_imported.append((0, 0, datas_imported))
 
                 datas_importing = {
                     'current_statement': statement_name,
                     'current_balance_start': float(balance_start),
                     'wrong_balance': wrong_balance
                 }
+
+                # get importing currency
+                currency = company_account.getElementsByTagName('Ccy')[0].toxml().replace('<Ccy>','').replace('</Ccy>','')
+                currencies_c = cur_obj.search([('name','=',currency)])
+                if not currencies_c:
+                    currencies_c = cur_obj.search([('name','=',currency), ('active','=',False)])
+                    if currencies_c:
+                        currencies_c.write({'active': True})
+                if currencies_c:
+                    if currencies_c[0] not in currencies:
+                        currencies.append(currencies_c[0])
+                    datas_importing.update({
+                        'currency_id': currencies_c[0].id
+                    })
+
                 result_importing.append((0, 0, datas_importing))
 
-            self.imported_statement_ids = result_imported,
-            self.importing_statement_ids = result_importing,
+            self.imported_statement_ids = result_imported 
+            self.importing_statement_ids = result_importing
             self.wrong_balance = wrong_balance
 
-            # get journal and domain
-            currency = company_account.getElementsByTagName('Ccy')[0].toxml().replace('<Ccy>','').replace('</Ccy>','')
-            currencies = self.env['res.currency'].search([('name','=',currency)])
             j_domain = [('type','=','bank')]
             if currencies:
                 cur_ids = [c.id for c in currencies]
                 j_domain = [('type','=','bank'), '|', '&', ('currency_id','!=',False), ('currency_id','in',cur_ids), '&', ('currency_id','=',False), ('company_id.currency_id','in',cur_ids)]
+                self.currency_id = currencies[0].id
+                
             j_test_ids = self.env['account.journal'].search(j_domain)
             j_id = self.journal_id.id
             if j_id not in [j.id for j in j_test_ids]:

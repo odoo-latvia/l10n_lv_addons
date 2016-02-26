@@ -22,7 +22,7 @@
 #
 ##############################################################################
 
+import account_bank_config
 import account_bank_statement
-import res_bank
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

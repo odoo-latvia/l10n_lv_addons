@@ -28,7 +28,7 @@ class AccountBankTransactionType(models.Model):
     _name = 'account.bank.transaction.type'
     _description = 'Bank Transaction Types'
 
-    name = fields.Char(string='Type', required=True)
+    name = fields.Char(string='Name', required=True)
     io = fields.Selection([('+','+'), ('-','-')], string='I/O', help="Controls, whether the Amount of the transaction is positive or negative.")
     account_id = fields.Many2one('account.account', string='Account', required=True, help="The account for the transaction.")
     description = fields.Text(string='Description')

@@ -18,7 +18,7 @@
             <field name="model">account.bank.transaction.type</field>
             <field name="arch" type="xml">
                 <tree string="Bank Transaction Types">
-                    <field name="type"/>
+                    <field name="name"/>
                     <field name="io"/>
 		            <field name="account_id"/>
                 </tree>
