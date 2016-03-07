@@ -233,9 +233,9 @@ class hr_payslip(osv.osv):
                         if pd.code == 'PIEM':
                             date_from_pd = date_from
                             date_to_pd = date_to
-                            if pd.date_from and pd.date_from > payslip.date_from and pd.date_from <= payslip.date_to:
+                            if pd.date_from and pd.date_from > date_from and pd.date_from <= date_to:
                                 date_from_pd = pd.date_from
-                            if pd.date_to and pd.date_to < payslip.date_to and pd.date_to >= payslip.date_from:
+                            if pd.date_to and pd.date_to < date_to and pd.date_to >= date_from:
                                 date_to_pd = pd.date_to
                             if date_from and date_to:
                                 dmy = compute_dmy(date_from, date_to)
