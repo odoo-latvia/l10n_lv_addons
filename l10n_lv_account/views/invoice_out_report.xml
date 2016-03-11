@@ -91,32 +91,32 @@
                 </div>
             </section>
             <section style="margin-top: 4.5cm;">
-    	        <table class="address">
+    	        <table class="address" style="width: 100%;">
     	            <tr>
-        		        <td style="color: black !important;">Recipient requisites:</td>
-        		        <td></td>
+        		        <td style="color: black !important; white-space: pre;">Recipient requisites:</td>
+        		        <td colspan="4" style="width: 100%;"></td>
     	            </tr>
     	            <tr>
-        		        <td>Name:</td>
-        		        <td style="font-weight: bold;">
+        		        <td style="white-space: pre;">Name:</td>
+        		        <td style="font-weight: bold;" colspan="4">
         	                <span t-esc="receiver.name"/><span t-if="rec_title">,</span>
                             <span t-esc="rec_title or ''"/>
                         </td>
     	            </tr>
     	            <tr t-if="receiver.vat">
-        		        <td>VAT registration No.:</td>
-        		        <td t-esc="receiver.vat or ''"/>
+        		        <td style="white-space: pre;">VAT registration No.:</td>
+        		        <td colspan="4" t-esc="receiver.vat or ''"/>
     	            </tr>
     	            <tr t-if="form_address(receiver)">
-        		        <td>Address:</td>
-        		        <td t-esc="form_address(receiver)"/>
+        		        <td style="white-space: pre;">Address:</td>
+        		        <td colspan="4" t-esc="form_address(receiver)"/>
     	            </tr>
     	            <tr t-if="receiver.bank_ids">
-        		        <td>
+        		        <td style="white-space: pre;">
                             <span t-if="len(receiver.bank_ids) == 1">Billing account:</span>
                             <span t-if="len(receiver.bank_ids) > 1">Billing accounts:</span>
                         </td>
-                        <td>
+                        <td colspan="4">
                             <div t-foreach="receiver.bank_ids" t-as="b">
                                 <span t-esc="b.acc_number"/><span t-if="b.acc_number and b.bank_name">,</span>
                                 <span t-esc="b.bank_name"/>
@@ -124,14 +124,23 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="color: white;">...</td>
-                        <td style="color: white;">...</td>
+                        <td style="color: white; white-space: pre;">...</td>
+                        <td style="color: white;" colspan="4">...</td>
                     </tr>
     	            <tr>
-        		        <td style="color: black !important;">Payment term:</td>
+        		        <td style="color: black !important; white-space: pre;">Payment term:</td>
         		        <td>
                             <span t-if="o.date_due or o.date_invoice" t-esc="(o.date_due and formatLang(o.date_due, date=True)) or (o.date_invoice and formatLang(o.date_invoice, date=True)) or ''"/>
-                            <span t-if="not (o.date_due and o.date_invoice)" style="color: white; border-bottom: 1px solid black;">________________</span>
+                            <span t-if="o.date_due == False and o.date_invoice == False" style="color: white; border-bottom: 1px solid black;">________________</span>
+                        </td>
+                        <td class="align-right">
+                            <span t-if="o.origin">Source Document:</span>
+                        </td>
+                        <td class="align-left">
+                            <span t-esc="o.origin"/>
+                        </td>
+                        <td class="align-right">
+                            <span t-esc="o.name"/>
                         </td>
     	            </tr>
     	        </table>

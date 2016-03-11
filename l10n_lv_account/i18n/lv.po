@@ -675,6 +675,16 @@ msgstr "Piegādātājs:"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.invoice_lv_document
+msgid "Reference"
+msgstr "Atsauce"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
+msgid "Source Document"
+msgstr "Pamatojums"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_lv_document
 msgid "Description"
 msgstr "Apraksts"
 
@@ -764,6 +774,11 @@ msgstr "Adrese:"
 #: view:website:l10n_lv_account.invoice_out_document
 msgid "Payment term:"
 msgstr "Apmaksas termiņš:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.invoice_out_document
+msgid "Source Document:"
+msgstr "Pamatojums:"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.invoice_out_document

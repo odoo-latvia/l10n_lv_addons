@@ -165,27 +165,46 @@
                 </tr>
             </table>
             <br/>
-            <table class="date_table">
-                <tr>
-                    <td style="border-right: 1px solid grey;">
-                        <span>Date</span>
-                    </td>
-                    <td>
-                        <span t-esc="formatLang(o.date_invoice, date=True)"/>
-                    </td>
-                    <td>
-                        <span t-esc="o.name or ''"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border-right: 1px solid grey;">
-                        <span>Due Date</span>
-                    </td>
-                    <td colspan="2">
-                        <span t-esc="formatLang(o.date_due, date=True)"/>
-                    </td>
-                </tr>
-            </table>
+            <div style="float: left;">
+                <table class="date_table">
+                    <tr>
+                        <td style="border-right: 1px solid grey;">
+                            <span>Date</span>
+                        </td>
+                        <td>
+                            <span t-esc="formatLang(o.date_invoice, date=True)"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 1px solid grey;">
+                            <span>Due Date</span>
+                        </td>
+                        <td>
+                            <span t-esc="formatLang(o.date_due, date=True)"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div style="float: right;" t-if="o.name or o.origin">
+                <table class="date_table">
+                    <tr t-if="o.name">
+                        <td style="border-right: 1px solid grey;">
+                            <span>Reference</span>
+                        </td>
+                        <td>
+                            <span t-esc="o.name"/>
+                        </td>
+                    </tr>
+                    <tr t-if="o.origin">
+                        <td style="border-right: 1px solid grey;">
+                            <span>Source Document</span>
+                        </td>
+                        <td>
+                            <span t-esc="o.origin"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
 	        <table width="100%" class="list_table">
 		        <thead>
 			        <tr>
