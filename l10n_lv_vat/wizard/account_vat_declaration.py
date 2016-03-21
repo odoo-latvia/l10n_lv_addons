@@ -305,7 +305,9 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 for key2 in key2_list:
                     partner_data[key][key2] = round((round(partner_data[key][key2], 2) * 0.5), 2)
             if journal_type == 'expense' and value['tax_codes'] == [] and value['tax_codes_l'] == [] and value['amount_taxed'] != 0.0:
-                partner_data.pop(key)
+                partner_data[key].clear()
+
+        partner_data = {k: v for k,v in partner_data.iteritems() if v}
 
         # tag names, deal types and doc types:
         for key, value in partner_data.iteritems():
