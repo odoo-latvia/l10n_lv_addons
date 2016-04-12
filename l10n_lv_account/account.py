@@ -31,7 +31,7 @@ class account_move(osv.osv):
     def create(self, cr, uid, vals, context=None):
         if context is None:
             context = {}
-        if vals.get('date',False) and vals.get('period_id',False):
+        if (not context.get('force_period',False)) and vals.get('date',False) and vals.get('period_id',False):
             period_obj = self.pool.get('account.period')
             period = period_obj.browse(cr, uid, vals['period_id'], context=context)
             if vals['date'] < period.date_start or vals['date'] > period.date_stop:
