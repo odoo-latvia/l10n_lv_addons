@@ -164,8 +164,8 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         journal_cur = line.move_id.journal_id.currency or line.move_id.journal_id.company_id.currency_id
         line_cur = line.currency_id or journal_cur
         tax_amount = amount_tax
-        if journal_cur.id != comp_cur.id:
-            tax_amount = cur_obj.compute(cr, uid, journal_cur.id, comp_cur.id, tax_amount, context=ctx)
+#        if journal_cur.id != comp_cur.id:
+#            tax_amount = cur_obj.compute(cr, uid, journal_cur.id, comp_cur.id, tax_amount, context=ctx)
         cur_amount = line.amount_currency
         if cur_amount == 0.0:
             cur_amount = tax_amount
@@ -178,6 +178,9 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 country_currency = country.currency_id.name
                 if country.currency_id.id != line_cur.id:
                     cur_amount = cur_obj.compute(cr, uid, line_cur.id, country.currency_id.id, cur_amount, context=ctx)
+        if line.debit == 0.0 and line.credit == 0.0:
+            tax_amount = 0.0
+            cur_amount = 0.0
         return {
             'tax_amount': tax_amount,
             'cur_amount': cur_amount,
@@ -301,7 +304,8 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 partner_data[key]['amount_taxed'] = value['amount_untaxed'] + value['amount_tax']
                 partner_data[key]['amount_taxed_cur'] = value['amount_untaxed_cur'] + value['amount_tax_cur']
             if '64' in value['tax_codes'] and (value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'EU_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_non-payer'))):
-                key2_list = ['amount_untaxed', 'amount_untaxed_cur', 'amount_tax', 'amount_tax_cur', 'amount_taxed', 'amount_taxed_cur']
+#                key2_list = ['amount_untaxed', 'amount_untaxed_cur', 'amount_tax', 'amount_tax_cur', 'amount_taxed', 'amount_taxed_cur']
+                key2_list = ['amount_tax', 'amount_tax_cur']
                 for key2 in key2_list:
                     partner_data[key][key2] = round((round(partner_data[key][key2], 2) * 0.5), 2)
             if journal_type == 'expense' and value['tax_codes'] == [] and value['tax_codes_l'] == [] and value['amount_taxed'] != 0.0:
