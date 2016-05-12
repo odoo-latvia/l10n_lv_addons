@@ -436,6 +436,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         mod_obj = self.pool.get('ir.model.data')
         account_move_obj = self.pool.get('account.move')
         account_move_line_obj = self.pool.get('account.move.line')
+        model_obj = self.pool.get('ir.model')
 
         # getting wizard data and company:
         data_tax = self.browse(cr, uid, ids[0])
@@ -609,6 +610,13 @@ class l10n_lv_vat_declaration(osv.osv_memory):
             sale_EU = []
             # making separate data lists for different journal types and tax codes:
             account_move_ids = account_move_obj.search(cr, uid, [('period_id','in',periods), ('state','=','posted'), ('journal_id.type','in',['sale','sale_refund','purchase','purchase_refund','expense'])], context=context)
+            customs_exist = model_obj.search(cr, uid, [('model','=','account.customs.declaration')], context=context)
+            if customs_exist:
+                custom_obj = self.pool.get('account.customs.declaration')
+                custom_ids = custom_obj.search(cr, uid, [('move_id','in',account_move_ids)], context=context)
+                if custom_ids:
+                    for c in custom_obj.browse(cr, uid, custom_ids, context=context):
+                        account_move_ids.remove(c.move_id.id)
             for account_move in account_move_obj.browse(cr, uid, account_move_ids, context=context):
                 if account_move.line_id:
                     lines = self._process_line(cr, uid, account_move.line_id, context=context)
