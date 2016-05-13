@@ -31,6 +31,7 @@ import openerp.addons.decimal_precision as dp
 from datetime import datetime
 from xml.etree import ElementTree
 from cStringIO import StringIO
+from openerp import SUPERUSER_ID
 
 EU_list = ['AT', 'BE', 'BG', 'CY', 'HR', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'EL', 'HU', 'IE', 'IT', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB']
 
@@ -154,6 +155,17 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 return True
         return False
 
+    def _check_customs(self, cr, uid, move_id, context=None):
+        customs = False
+        model_obj = self.pool.get('ir.model')
+        customs_exist = model_obj.search(cr, SUPERUSER_ID, [('model','=','account.customs.declaration')], context=context)
+        if customs_exist:
+            customs_obj = self.pool.get('account.customs.declaration')
+            customs_ids = customs_obj.search(cr, SUPERUSER_ID, [('move_id','=',move_id)], context=context)
+            if customs_ids:
+                customs = True
+        return customs
+
     def _get_amount_data(self, cr, uid, line, amount_tax, partner_country, context=None):
         ctx = context.copy()
         ctx.update({'date': line.move_id.date})
@@ -164,8 +176,6 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         journal_cur = line.move_id.journal_id.currency or line.move_id.journal_id.company_id.currency_id
         line_cur = line.currency_id or journal_cur
         tax_amount = amount_tax
-#        if journal_cur.id != comp_cur.id:
-#            tax_amount = cur_obj.compute(cr, uid, journal_cur.id, comp_cur.id, tax_amount, context=ctx)
         cur_amount = line.amount_currency
         if cur_amount == 0.0:
             cur_amount = tax_amount
@@ -178,7 +188,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 country_currency = country.currency_id.name
                 if country.currency_id.id != line_cur.id:
                     cur_amount = cur_obj.compute(cr, uid, line_cur.id, country.currency_id.id, cur_amount, context=ctx)
-        if line.debit == 0.0 and line.credit == 0.0:
+        if line.debit == 0.0 and line.credit == 0.0 and (not self._check_customs(cr, uid, line.move_id.id, context=context)):
             tax_amount = 0.0
             cur_amount = 0.0
         return {
@@ -436,7 +446,6 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         mod_obj = self.pool.get('ir.model.data')
         account_move_obj = self.pool.get('account.move')
         account_move_line_obj = self.pool.get('account.move.line')
-        model_obj = self.pool.get('ir.model')
 
         # getting wizard data and company:
         data_tax = self.browse(cr, uid, ids[0])
@@ -522,22 +531,6 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         for object in result_period:
             if object != {}:
                 result_period_real.append(object)
-
-        account_move_ids = account_move_obj.search(cr, uid, [('period_id','in',periods), ('state','=','posted'), ('journal_id.type','in',['sale','sale_refund','purchase','purchase_refund','expense'])], context=context)
-        customs_exist = model_obj.search(cr, uid, [('model','=','account.customs.declaration')], context=context)
-        if customs_exist:
-            custom_obj = self.pool.get('account.customs.declaration')
-            custom_ids = custom_obj.search(cr, uid, [('move_id','in',account_move_ids)], context=context)
-            if custom_ids:
-                for c in custom_obj.browse(cr, uid, custom_ids, context=context):
-                    for ml in c.move_id.line_id:
-                        if ml.tax_code_id:
-                            i = 0
-                            for rpr in result_period_real:
-                                if rpr['tax_code'] == ml.tax_code_id.tax_code or rpr['code'] == ml.tax_code_id.code:
-                                    result_period_real[i]['sum_period'] -= ml.tax_amount
-                                i += 1
-                    account_move_ids.remove(c.move_id.id)
 
         for item in result_period_real:
             if (item['code'] == '420') and (item['sum_period'] <= -item['limit_val']):
@@ -625,6 +618,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
             purchase_EU = []
             r_sale = []
             sale_EU = []
+            account_move_ids = account_move_obj.search(cr, uid, [('period_id','in',periods), ('state','=','posted'), ('journal_id.type','in',['sale','sale_refund','purchase','purchase_refund','expense'])], context=context)
             for account_move in account_move_obj.browse(cr, uid, account_move_ids, context=context):
                 if account_move.line_id:
                     lines = self._process_line(cr, uid, account_move.line_id, context=context)
