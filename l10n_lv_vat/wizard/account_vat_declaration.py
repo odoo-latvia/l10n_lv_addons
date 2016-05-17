@@ -339,10 +339,9 @@ class l10n_lv_vat_declaration(osv.osv_memory):
 
                 # PVN1-I deal type:
                 deal_type = ""
-                if value['partner_vat']:
-                    if ('62' in value['tax_codes'] or '67' in value['tax_codes'] or (value['tax_codes'] == [] and value['tax_codes_l'] == [])) and value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'LR_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_payer')):
+                if ('62' in value['tax_codes'] or '67' in value['tax_codes'] or (value['tax_codes'] == [] and value['tax_codes_l'] == [])):
+                    if value['partner_vat'] and (value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'LR_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_payer'))):
                         deal_type = "A"
-                if '62' in value['tax_codes'] or (value['tax_codes'] == [] and value['tax_codes_l'] == []):
                     if (not value['partner_vat']) and value['partner_fpos'] and check_fpos(value['partner_fpos'], 'LR_VAT_payer'):
                         raise osv.except_osv(_('Insufficient data!'), _('No TIN defined for Partner %s, but this partner is defined as a VAT payer. Please define the TIN!') % (value['partner_name']))
                     if (not value['partner_vat']) or check_fpos(value['partner_fpos'], 'LR_VAT_non-payer') or check_fpos(value['partner_fpos'], 'EU_VAT_non-payer'):
