@@ -33,8 +33,8 @@ from xml.etree import ElementTree
 from cStringIO import StringIO
 from openerp import SUPERUSER_ID
 
-import logging
-_logger = logging.getLogger('PVN1-III')
+#import logging
+#_logger = logging.getLogger('PVN1-III')
 
 EU_list = ['AT', 'BE', 'BG', 'CY', 'HR', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'EL', 'HU', 'IE', 'IT', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB']
 
@@ -371,7 +371,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 partner_data[key]['doc_type'] = doc_type
 
             # PVN1-II:
-            if journal_type in ['purchase', 'purchase_refund'] and '64' in value['tax_codes'] and (value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'EU_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_non-payer'))):
+            if journal_type in ['purchase', 'purchase_refund', 'expense'] and '64' in value['tax_codes'] and (value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'EU_VAT_payer') or check_fpos(value['partner_fpos'], 'EU_VAT_non-payer'))):
                 # PVN1-II tag:
                 partner_data[key]['tag_name'] = 'PVN1-II'
 
@@ -390,11 +390,11 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                             partner_data[key][key2] = partner_data[key][key2] * (-1.0)
 
             # PVN1-III
-            if journal_type in ['sale', 'purchase_refund'] and (any(x in ['41', '41.1', '42', '43', '44', '48.2'] for x in value['tax_codes_l'])) and ((not value['partner_fpos']) or ((not check_fpos(value['partner_fpos'], 'LR_VAT_payer')) and (not check_fpos(value['partner_fpos'], 'LR_VAT_non-payer')))):
-                _logger.info('----------------------------')
-                _logger.info('%s' % value['partner_name'])
-                _logger.info('%s' % value['partner_fpos'])
-                _logger.info('%s' % value['doc_number'])
+#            if journal_type in ['sale', 'purchase_refund'] and (any(x in ['41', '41.1', '42', '43', '44', '48.2'] for x in value['tax_codes_l'])) and ((not value['partner_fpos']) or ((not check_fpos(value['partner_fpos'], 'LR_VAT_payer')) and (not check_fpos(value['partner_fpos'], 'LR_VAT_non-payer')))):
+#                _logger.info('----------------------------')
+#                _logger.info('%s' % value['partner_name'])
+#                _logger.info('%s' % value['partner_fpos'])
+#                _logger.info('%s' % value['doc_number'])
             if journal_type in ['sale', 'purchase_refund'] and (any(x in ['41', '41.1', '42', '43', '44', '48.2'] for x in value['tax_codes_l'])) and (value['partner_fpos'] and (check_fpos(value['partner_fpos'], 'LR_VAT_payer') or check_fpos(value['partner_fpos'], 'LR_VAT_non-payer'))):
                 # PVN1-III tag:
                 partner_data[key]['tag_name'] = 'PVN1-III'
