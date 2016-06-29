@@ -14,4 +14,3 @@ access_account_fidavista_imported_statements,account.fidavista.imported.statemen
 access_account_fidavista_importing_statements,account.fidavista.importing.statements,model_account_fidavista_importing_statements,account.group_account_user,1,1,1,1
 ,,,,,,,
 access_account_fidavista_export,account.fidavista.export,model_account_fidavista_export,account.group_account_user,1,1,1,1
-access_account_fidavista_export_payments,account.fidavista.export.payments,model_account_fidavista_export_payments,account.group_account_user,1,1,1,1
