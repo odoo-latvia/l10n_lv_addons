@@ -143,6 +143,8 @@ class payslip_eds_export(osv.osv_memory):
         year, month = self.get_year_month(cr, uid, context=context)
         if len(year) == 1 and len(month) == 1:
             name += ('_' + str(year[0]) + '-' + "%02d" % (month[0]))
+        if len(name) > 28:
+            name = name[:28]
         name += '.xml'
         return name
 
@@ -222,10 +224,7 @@ class payslip_eds_export(osv.osv_memory):
             if data_exp.responsible_id.work_phone:
                 data_of_file += ("\n      <Talrunis>" + data_exp.responsible_id.work_phone + "</Talrunis>")
             if not data_exp.responsible_id.work_phone:
-                if data_exp.responsible_id.work_mobile:
-                    data_of_file += ("\n      <Talrunis>" + data_exp.responsible_id.work_mobile + "</Talrunis>")
-                if not data_exp.responsible_id.work_mobile:
-                    data_of_file += ("\n      <Talrunis/>")
+                data_of_file += ("\n      <Talrunis/>")
             date_prep = datetime.strftime(datetime.now(pytz.timezone(context.get('tz','Europe/Riga'))), '%Y-%m-%dT%H:%M:%S')
             data_of_file += ("\n      <DatumsAizp>" + date_prep + "</DatumsAizp>")
 
