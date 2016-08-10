@@ -346,4 +346,51 @@ class AccountBankStatementImport(models.TransientModel):
                     if line_amount_cur_tag:
                         line_amount_cur = line_amount_cur_tag[0].toxml().replace('<Amt>','').replace('</Amt>','').replace('<Amt/>','')
 
+                # values, if there is no <CPartySet> in the document:
+                if not cPartySet:
+                    partner_name = False
+                    partner_reg_id = False
+                    partner_bank_account = False
+                    partner_id = False
+
+                # getting Transaction Types
+                type_code_tag = line.getElementsByTagName('TypeCode')
+                type_code = False
+                if type_code_tag:
+                    type_code = type_code_tag[0].toxml().replace('<TypeCode>','').replace('</TypeCode>','')
+                if not type_code_tag:
+                    type_name_tag = line.getElementsByTagName('TypeName')
+                    if type_name_tag:
+                        type_code = type_name_tag[0].toxml().replace('<TypeName>','').replace('</TypeName>','')
+                    if not type_name_tag:
+                        raise UserError(_('There are no tags for Transaction Types!'))
+
+                # getting configuration types for Accounts, it there is no Partner:
+                if partner_id == False:
+                    config_obj = self.env['account.bank.transaction.type']
+                    config = config_obj.search([('name','=',type_code)], limit=1)
+                    if config:
+                        account_id = config.account_id.id
+
+                if account_id == False:
+                    raise UserError(_("There is no Partner found in the system, that has a Bank Account or Registration Number as in the FiDAViSta file (if there are any); there is also no Configuration found for the Transaction Type '%s'. Please create either a Partner or a Transaction Type Configuration!") %(type_code))
+
+                # creating account.bank.statement.line:
+                self.env['account.bank.statement.line'].create({
+                    'statement_id': statement,
+                    'name': line_name,
+                    'date': line_date,
+                    'ref': line_ref,
+                    'partner_name': partner_name, # ?
+                    'partner_reg_id': partner_reg_id, # ?
+                    'partner_bank_account': partner_bank_account, # ?
+                    'transaction_type': type_code, # ?
+                    'partner_id': partner_id,
+                    'account_id': account_id,
+                    'amount': line_amount,
+                    'currency_id': line_cur,
+                    'amount_currency': line_amount_cur,
+                    'bank_account_id': bank_account_id
+                })
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
