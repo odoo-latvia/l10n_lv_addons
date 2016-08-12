@@ -23,8 +23,7 @@
                     <separator/>
                 </field>
                 <field name="data_file" position="after">
-                    <group col="4" attrs="{'invisible': ['|', ('format','!=','fidavista'), '&amp;', ('format','=','fidavista'), ('data_file','=',False)]}">
-                        <field name="journal_id" context="{'default_type': 'bank', 'default_currency_id': currency_id}" colspan="2" attrs="{'required': [('format','=','fidavista')]}"/>
+                    <group col="4" invisible="1">
                         <field name="currency_id" invisible="1" colspan="2"/>
                         <field name="wrong_balance" invisible="1" colspan="2"/>
                     </group>

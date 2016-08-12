@@ -37,6 +37,7 @@ Latvian Localization for Bank Statement data import
     'depends': ['account_bank_statement_import', 'l10n_lv'],
     'data': [
         'views/account_bank_config_view.xml',
+        'views/account_bank_statement_view.xml',
         'wizard/account_bank_statement_import_view.xml',
         'data/account_bank_config.xml'
     ],

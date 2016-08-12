@@ -24,9 +24,12 @@
 
 from openerp import api, fields, models, _
 
-class AccountBankStatement(models.Model):
-    _inherit = 'account.bank.statement'
+class AccountBankStatementLine(models.Model):
+    _inherit = "account.bank.statement.line"
 
-    bank_account_id = fields.Many2one('res.partner.bank', 'Bank Account', ondelete='restrict')
+    transaction_type = fields.Char('Trans. Type Code', readonly=True)
+    partner_name = fields.Char('Partner Name', readonly=True)
+    partner_reg_id = fields.Char('Partner Registration Number', readonly=True)
+    partner_bank_account = fields.Char('Partner Bank Account', readonly=True)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

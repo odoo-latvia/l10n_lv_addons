@@ -63,21 +63,14 @@ class AccountBankStatementImporting(models.TransientModel):
 class AccountBankStatementImport(models.TransientModel):
     _inherit = 'account.bank.statement.import'
 
-    @api.model
-    def _default_journal(self):
-        journals = self.env['account.journal'].search([('type','=','bank')])
-        journal_id = journals and journals[0].id or False
-        return journal_id
-
     format = fields.Selection([('ofx','.OFX'), ('fidavista','FiDAViSta')], string='Format', required=True)
-    journal_id = fields.Many2one('account.journal', string='Journal', domain=[('type','=','bank')], default=_default_journal)
     currency_id = fields.Many2one('res.currency', string='Currency')
     flag = fields.Boolean('Continue Anyway', help='If checked, continues without comparing balances.', default=False)
     wrong_balance = fields.Boolean('Wrong Balance', default=False)
     imported_statement_ids = fields.One2many('account.bank.statement.imported', 'wizard_id', string='Imported Statements')
     importing_statement_ids = fields.One2many('account.bank.statement.importing', 'wizard_id', string='Statements to Import')
 
-    @api.onchange('format', 'data_file', 'journal_id')
+    @api.onchange('format', 'data_file')
     def _onchange_data_file(self):
         try:
             datafile = self.data_file
@@ -89,308 +82,283 @@ class AccountBankStatementImport(models.TransientModel):
             dom = parseString(record)
 
             # getting date values:
-            prep_date = dom.getElementsByTagName('PrepDate')[0].toxml().replace('<PrepDate>','').replace('</PrepDate>','')
             start_date = dom.getElementsByTagName('StartDate')[0].toxml().replace('<StartDate>','').replace('</StartDate>','')
             end_date = dom.getElementsByTagName('EndDate')[0].toxml().replace('<EndDate>','').replace('</EndDate>','')
 
             # getting the accountsets to browse through and giving start values for fields:
-            accountsets = dom.getElementsByTagName('AccountSet')
+            accountset = dom.getElementsByTagName('AccountSet')[0]
             wrong_balance = False
             result_imported = []
-            result_importing = []
-            currencies = []
             bank_obj = self.env['res.partner.bank']
             statement_obj = self.env['account.bank.statement']
+            journal_obj = self.env['account.journal']
             cur_obj = self.env['res.currency']
-            for company_account in accountsets:
-                latest_bank_statement = False
-                latest_bank_statement_name = False
-                latest_bank_statement_balance_end = False
-                latest_bank_statement_currency = False
 
-                # testing, whether the Company's bank account is defined in the system:
-                company_acc_no = company_account.getElementsByTagName('AccNo')[0].toxml().replace('<AccNo>','').replace('</AccNo>','')
-                company_acc_no_list = list(company_acc_no)
-                company_acc_no_list.insert(4,' ')
-                company_acc_no_list.insert(9,' ')
-                company_acc_no_list.insert(14,' ')
-                company_acc_no_list.insert(19,' ')
-                company_acc_no_list.insert(24,' ')
-                company_acc_no_2 = "".join(company_acc_no_list)
-                test_acc_no = bank_obj.search([('acc_number','=',company_acc_no)])
-                if not test_acc_no:
-                    test_acc_no = bank_obj.search([('acc_number','=',company_acc_no_2)])
+            # testing, whether the Company's bank account is defined in the system:
+            acc_no = accountset.getElementsByTagName('AccNo')[0].toxml().replace('<AccNo>','').replace('</AccNo>','')
+            test_bnk_acc = bank_obj.search([('acc_number','=',acc_no)])
+            if not test_bnk_acc:
+                acc_no_list = list(acc_no)
+                acc_no_list.insert(4,' ')
+                acc_no_list.insert(9,' ')
+                acc_no_list.insert(14,' ')
+                acc_no_list.insert(19,' ')
+                acc_no_list.insert(24,' ')
+                acc_no_2 = "".join(acc_no_list)
 
-                # getting Statement Reference:
-                statement_name = company_acc_no + ' ' + start_date+ ':' + end_date
+                test_bnk_acc = bank_obj.search([('acc_number','=',acc_no_2)])
 
-                # getting and checking balances:
-                balance_start = company_account.getElementsByTagName('OpenBal')[0].toxml().replace('<OpenBal>','').replace('</OpenBal>','')
-                if test_acc_no:
-                    bank_statements = statement_obj.search([('bank_account_id', '=', test_acc_no[0].id)], order='date asc')
-                    if bank_statements:
-                        latest_bank_statement = bank_statements[-1]
-                        latest_bank_statement_name = latest_bank_statement.name
-                        latest_bank_statement_balance_end = latest_bank_statement.balance_end_real
-                        latest_bank_statement_currency = latest_bank_statement.currency_id
+            # getting Statement Reference:
+            statement_name = acc_no + ' ' + start_date+ ':' + end_date
 
-                        if latest_bank_statement.balance_end_real != float(balance_start):
-                            wrong_balance = True
-
-                # creating values for already imported data:
-                if latest_bank_statement:
+            # getting and checking balances:
+            balance_start = accountset.getElementsByTagName('OpenBal')[0].toxml().replace('<OpenBal>','').replace('</OpenBal>','')
+            if test_bnk_acc:
+                journals = journal_obj.search([('bank_account_id','=',test_bnk_acc.id)])
+                bank_statement = statement_obj.search([('journal_id', 'in', [j.id for j in journals])], order='date desc', limit=1)
+                if bank_statement:
+                    if bank_statement.balance_end_real != float(balance_start):
+                        wrong_balance = True
                     datas_imported = {
-                        'last_statement': latest_bank_statement_name,
-                        'last_balance_end': latest_bank_statement_balance_end,
+                        'last_statement': bank_statement.name,
+                        'last_balance_end': bank_statement.balance_end_real,
                         'wrong_balance': wrong_balance
                     }
-                    if latest_bank_statement_currency:
+                    if bank_statement.currency_id:
                         datas_imported.update({
-                            'currency_id': latest_bank_statement_currency.id
+                            'currency_id': bank_statement.currency_id.id
                         })
                     result_imported.append((0, 0, datas_imported))
 
-                datas_importing = {
-                    'current_statement': statement_name,
-                    'current_balance_start': float(balance_start),
-                    'wrong_balance': wrong_balance
-                }
+            # creating values for already imported data:
 
-                # get importing currency
-                currency = company_account.getElementsByTagName('Ccy')[0].toxml().replace('<Ccy>','').replace('</Ccy>','')
-                currencies_c = cur_obj.search([('name','=',currency)])
-                if not currencies_c:
-                    currencies_c = cur_obj.search([('name','=',currency), ('active','=',False)])
-                    if currencies_c:
-                        currencies_c.write({'active': True})
-                if currencies_c:
-                    if currencies_c[0] not in currencies:
-                        currencies.append(currencies_c[0])
-                    datas_importing.update({
-                        'currency_id': currencies_c[0].id
-                    })
+            datas_importing = {
+                'current_statement': statement_name,
+                'current_balance_start': float(balance_start),
+                'wrong_balance': wrong_balance
+            }
 
-                result_importing.append((0, 0, datas_importing))
+            # get importing currency
+            currency = accountset.getElementsByTagName('Ccy')[0].toxml().replace('<Ccy>','').replace('</Ccy>','')
+            currency_c = cur_obj.search([('name','=',currency)], limit=1)
+            if not currency_c:
+                currency_c = cur_obj.search([('name','=',currency), ('active','=',False)], limit=1)
+                if currency_c:
+                    currency_c.write({'active': True})
+            if currency_c:
+                datas_importing.update({
+                    'currency_id': currency_c.id
+                })
+                self.currency_id = currency_c.id
 
             self.imported_statement_ids = result_imported 
-            self.importing_statement_ids = result_importing
+            self.importing_statement_ids = [(0, 0, datas_importing)]
             self.wrong_balance = wrong_balance
 
-            j_domain = [('type','=','bank')]
-            if currencies:
-                cur_ids = [c.id for c in currencies]
-                j_domain = [('type','=','bank'), '|', '&', ('currency_id','!=',False), ('currency_id','in',cur_ids), '&', ('currency_id','=',False), ('company_id.currency_id','in',cur_ids)]
-                self.currency_id = currencies[0].id
-                
-            j_test_ids = self.env['account.journal'].search(j_domain)
-            j_id = self.journal_id.id
-            if j_id not in [j.id for j in j_test_ids]:
-                j_id = j_test_ids and j_test_ids[0].id or False
-                self.journal_id = j_id
 
-            return {'domain': {'journal_id': j_domain}}
-
-    @api.multi
-    def fidavista_parsing(self):
-        self.ensure_one()
-        try:
-            datafile = self.data_file
-        except:
-            raise UserError(_('Wizard in incorrect state. Please hit the Cancel button'))
+    def fidavista_parsing(self, data_file):
 
         # decoding and encoding for string parsing; parseString() method:
-        record = unicode(base64.decodestring(datafile), 'iso8859-4', 'strict').encode('iso8859-4','strict')
+        record = unicode(data_file, 'iso8859-4', 'strict').encode('iso8859-4','strict')
         dom = parseString(record)
 
+        journal_obj = self.env['account.journal']
+        bs_obj = self.env['account.bank.statement']
+        cur_obj = self.env['res.currency']
+        bank_obj = self.env['res.partner.bank']
+
         # getting start values:
-        prep_date = dom.getElementsByTagName('PrepDate')[0].toxml().replace('<PrepDate>','').replace('</PrepDate>','')
         start_date = dom.getElementsByTagName('StartDate')[0].toxml().replace('<StartDate>','').replace('</StartDate>','')
         end_date = dom.getElementsByTagName('EndDate')[0].toxml().replace('<EndDate>','').replace('</EndDate>','')
 
-        # going through information about the accounts:
-        bank_obj = self.env['res.partner.bank']
-        bank_statement_obj = self.env['account.bank.statement']
-        bank_statement_line_obj = self.env['account.bank.statement.line']
-        partner_obj = self.env['res.partner']
-        cur_obj = self.env['res.currency']
-        accountsets = dom.getElementsByTagName('AccountSet')
-        for company_account in accountsets:
+        accountset = dom.getElementsByTagName('AccountSet')[0]
+        account_number = accountset.getElementsByTagName('AccNo')[0].toxml().replace('<AccNo>','').replace('</AccNo>','')
+        currency_code = accountset.getElementsByTagName('Ccy')[0].toxml().replace('<Ccy>','').replace('</Ccy>','')
+        balance_start = accountset.getElementsByTagName('OpenBal')[0].toxml().replace('<OpenBal>','').replace('</OpenBal>','')
+        balance_end_real = accountset.getElementsByTagName('CloseBal')[0].toxml().replace('<CloseBal>','').replace('</CloseBal>','')
 
-            # testing, whether the Company's bank account is defined in the system:
-            company_acc_no = company_account.getElementsByTagName('AccNo')[0].toxml().replace('<AccNo>','').replace('</AccNo>','')
-            company_acc_no_list = list(company_acc_no)
-            company_acc_no_list.insert(4,' ')
-            company_acc_no_list.insert(9,' ')
-            company_acc_no_list.insert(14,' ')
-            company_acc_no_list.insert(19,' ')
-            company_acc_no_list.insert(24,' ')
-            company_acc_no_2 = "".join(company_acc_no_list)
-            test_acc_no = bank_obj.search([('acc_number','=',company_acc_no)])
-            if not test_acc_no:
-                test_acc_no = bank_obj.search([('acc_number','=',company_acc_no_2)])
-                if not test_acc_no:
-                    raise UserError(_("There is no bank account with number '%s' defined in the system. Please define such account and try again!") %(company_acc_no))
+        # checking balances:
+        test_bnk_acc = bank_obj.search([('acc_number','=',account_number)], limit=1)
+        if not test_bnk_acc:
+            account_number_list = list(account_number)
+            account_number_list.insert(4,' ')
+            account_number_list.insert(9,' ')
+            account_number_list.insert(14,' ')
+            account_number_list.insert(19,' ')
+            account_number_list.insert(24,' ')
+            account_number_2 = "".join(account_number_list)
+            test_bnk_acc = bank_obj.search([('acc_number','=',account_number_2)], limit=1)
+        if test_bnk_acc:
+            journals = journal_obj.search([('bank_account_id','=',test_bnk_acc.id)])
+            test_bs = bs_obj.search([('journal_id','in',[j.id for j in journals])], order='date desc', limit=1)
+            if test_bs and test_bs.balance_end_real != float(balance_start) and self.flag == False:
+                raise UserError(_("The Ending Balance of the last Bank Statement (by date) imported for the Bank Account '%s' is not equal to the Starting Balance of this document. If this is OK with you, check the 'Continue Anyway' box and try to import again.") %(account_number))
 
-            # getting Statement Reference and Date:
-            statement_name = company_acc_no + ' ' + start_date+ ':' + end_date
-            statement_date = end_date
+        svals = {
+            'name': account_number + ' ' + start_date + ':' + end_date,
+            'date': end_date,
+            'balance_start': float(balance_start),
+            'balance_end_real': float(balance_end_real),
+            'transactions': []
+        }
 
-            # getting currency:
-            currency = company_account.getElementsByTagName('Ccy')[0].toxml().replace('<Ccy>','').replace('</Ccy>','')
+        # getting elements for account.bank.statement.line:
+        statement_lines = accountset.getElementsByTagName('TrxSet')
+        for line in statement_lines:
+            # checking transaction types:
+            type_name_tag = line.getElementsByTagName('TypeName')
 
-            # getting and checking balances:
-            balance_start = company_account.getElementsByTagName('OpenBal')[0].toxml().replace('<OpenBal>','').replace('</OpenBal>','')
-            balance_end_real = company_account.getElementsByTagName('CloseBal')[0].toxml().replace('<CloseBal>','').replace('</CloseBal>','')
-            bank_statements = bank_statement_obj.search([('bank_account_id', '=', test_acc_no[0].id)], order='date asc')
-            if bank_statements and bank_statements[-1].balance_end_real != float(balance_start) and self.flag == False:
-                raise UserError(_("The Ending Balance of the last Bank Statement (by date) imported for the Bank Account '%s' is not equal to the Starting Balance of this document. If this is OK with you, check the 'Continue Anyway' box and try to import again.") %(company_acc_no))
+            # getting date, name, ref and amount
+            line_date = line.getElementsByTagName('BookDate')[0].toxml().replace('<BookDate>','').replace('</BookDate>','')
+            pmt_info = line.getElementsByTagName('PmtInfo')
+            if pmt_info:
+                line_name = pmt_info[0].toxml().replace('<PmtInfo>','').replace('</PmtInfo>','')
+            if (not pmt_info) and type_name_tag:
+                line_name = type_name_tag[0].toxml().replace('<TypeName>','').replace('</TypeName>','')
+            line_ref = line.getElementsByTagName('BankRef')[0].toxml().replace('<BankRef>','').replace('</BankRef>','')
+            line_amount = float(line.getElementsByTagName('AccAmt')[0].toxml().replace('<AccAmt>','').replace('</AccAmt>',''))
+            cord = line.getElementsByTagName('CorD')[0].toxml().replace('<CorD>','').replace('</CorD>','')
+            if cord == 'D':
+                line_amount *= (-1)
 
-            # creating account.bank.statement
-            statement = bank_statement_obj.create({
-                'name': statement_name,
-                'date': statement_date,
-                'journal_id': self.journal_id.id,
-                'balance_start': balance_start,
-                'balance_end_real': balance_end_real,
-                'bank_account_id': test_acc_no[0].id
+            # getting Partner and Currency data
+            line_cur = False
+            line_amount_cur = 0.0
+            partner = False
+            partner_name = False
+            partner_reg_id = False
+            partner_bank_account = False
+            bank_account = False
+            account_id = False
+            bank_name = False
+            bank_bic = False
+            cPartySet = line.getElementsByTagName('CPartySet')
+            if cPartySet:
+                # currency data:
+                line_cur_tag = cPartySet[0].getElementsByTagName('Ccy')
+                if line_cur_tag:
+                    line_cur_txt = line_cur_tag[0].toxml().replace('<Ccy>','').replace('</Ccy>','').replace('<Ccy/>','')
+                    if line_cur_txt:
+                        line_cur = cur_obj.search([('name','=',line_cur_txt)], limit=1)
+                line_amount_cur_tag = cPartySet[0].getElementsByTagName('Amt')
+                if line_amount_cur_tag:
+                    line_amount_cur = line_amount_cur_tag[0].toxml().replace('<Amt>','').replace('</Amt>','').replace('<Amt/>','')
+                    line_amount_cur = float(line_amount_cur)
+
+                # partner data:
+                partner_name_tag = cPartySet[0].getElementsByTagName('Name')
+                if partner_name_tag:
+                    partner_name = partner_name_tag[0].toxml().replace('<Name>','').replace('</Name>','').replace('<Name/>','').replace("&quot;","'")
+                partner_reg_id_tag = cPartySet[0].getElementsByTagName('LegalId')
+                if partner_reg_id_tag:
+                    partner_reg_id = partner_reg_id_tag[0].toxml().replace('<LegalId>','').replace('</LegalId>','').replace('<LegalId/>','')
+                partner_bank_account_tag = cPartySet[0].getElementsByTagName('AccNo')
+                if partner_bank_account_tag:
+                    partner_bank_account = partner_bank_account_tag[0].toxml().replace('<AccNo>','').replace('</AccNo>','').replace('<AccNo/>','')
+
+                # testing, whether it's possible to get partner (also type and account) from the system:
+                bank_account = bank_obj.search([('acc_number','=',partner_bank_account)], limit=1)
+                if (not bank_account) and partner_bank_account:
+                    partner_bank_account_list = list(partner_bank_account)
+                    partner_bank_account_list.insert(4,' ')
+                    partner_bank_account_list.insert(9,' ')
+                    partner_bank_account_list.insert(14,' ')
+                    partner_bank_account_list.insert(19,' ')
+                    partner_bank_account_list.insert(24,' ')
+                    partner_bank_account_2 = "".join(partner_bank_account_list)
+                    bank_account = bank_obj.search([('acc_number','=',partner_bank_account_2)], limit=1)
+                if bank_account:
+                    partner = bank_account.partner_id
+                if (not bank_account) and (partner_reg_id):
+                    partners = self.env['res.partner'].search([('vat','ilike',partner_reg_id)])
+                    if len([p.id for p in partners]) == 1:
+                        partner = partners
+                # setting account if partner found:
+                if partner:
+                    if cord == 'C':
+                        account_id = partner.property_account_receivable_id.id
+                    if cord == 'D':
+                        account_id = partner.property_account_payable_id.id
+                # getting bank data:
+                bank_name_tag = cPartySet[0].getElementsByTagName('BankName')
+                if bank_name_tag:
+                    bank_name = bank_name_tag[0].toxml().replace('<BankName>','').replace('</BankName>','').replace('<BankName/>','')
+                bank_bic_tag = cPartySet[0].getElementsByTagName('BankCode')
+                if bank_bic_tag:
+                    bank_bic = bank_bic_tag[0].toxml().replace('<BankCode>','').replace('</BankCode>','').replace('<BankCode/>','')
+
+            # getting Transaction Types
+            type_code = False
+            type_code_tag = line.getElementsByTagName('TypeCode')
+            if type_code_tag:
+                type_code = type_code_tag[0].toxml().replace('<TypeCode>','').replace('</TypeCode>','')
+            if (not type_code_tag) and type_name_tag:
+                type_code = type_name_tag[0].toxml().replace('<TypeName>','').replace('</TypeName>','')
+            if not partner:
+                config_obj = self.env['account.bank.transaction.type']
+                config = config_obj.search([('name','=',type_code)], limit=1)
+                if config:
+                    account_id = config.account_id.id
+
+            svals['transactions'].append({
+                'date': line_date,
+                'name': line_name,
+                'ref': line_ref,
+                'amount': line_amount,
+                'amount_currency': line_amount_cur,
+                'currency_id': line_cur and line_cur.id or False,
+                'partner_name': partner_name,
+                'account_number': partner_bank_account,
+                'partner_bank_account': partner_bank_account,
+                'partner_reg_id': partner_reg_id,
+                'partner_id': partner and partner.id or False,
+                'transaction_type': type_code,
+                'bank_account_id': bank_account and bank_account.id or False,
+                'account_id': account_id,
+                'bank_name': bank_name,
+                'bank_bic': bank_bic
             })
 
-            # getting elements for account.bank.statement.line and creating the lines:
-            statement_lines = company_account.getElementsByTagName('TrxSet')
-            count = 0
-            for line in statement_lines:
+        stmts_vals = [svals]
+        return currency_code, account_number, stmts_vals
 
-                # getting and testing the dates:
-                count += 1
-                line_date = line.getElementsByTagName('BookDate')[0].toxml().replace('<BookDate>','').replace('</BookDate>','')
-                if count == 1:
-                    statement_lines = statement_line_obj.search([('statement_id.bank_account_id','=',test_acc_no[0].id)])
-                    if statement_lines and (statement_lines[-1].date > line_date):
-                        raise UserError(_("The Date of the last Bank Statment Line posted for this Bank Account should not come after the date of the first transaction described in the FiDAViSta file!"))
 
-                # getting OBI:
-                pmt_info = line.getElementsByTagName('PmtInfo')
-                if pmt_info:
-                    line_name = pmt_info[0].toxml().replace('<PmtInfo>','').replace('</PmtInfo>','')
-                if not pmt_info:
-                    line_name = line.getElementsByTagName('TypeName')[0].toxml().replace('<TypeName>','').replace('</TypeName>','')
+    def _complete_stmts_vals(self, stmts_vals, journal, account_number):
+        res = super(AccountBankStatementImport, self)._complete_stmts_vals(stmts_vals, journal, account_number)
+        ba_obj = self.env['res.partner.bank']
+        bank_obj = self.env['res.bank']
+        for st_vals in res:
+            for line_vals in st_vals['transactions']:
+                # update bank account and save partner if possible:
+                if (not line_vals.get('partner_id', False)) and line_vals.get('partner_reg_id'):
+                    partners = self.env['res.partner'].search([('vat','ilike',line_vals['partner_reg_id'])])
+                    if len([p.id for p in partners]) == 1:
+                        line_vals['partner_id'] = partners.id
+                if line_vals.get('bank_account_id', False):
+                    bank_account = ba_obj.browse(line_vals['bank_account_id'])
+                    if (not bank_account.partner_id) and line_vals.get('partner_id', False):
+                        bank_account.write({'partner_id': line_vals['partner_id']})
+                    if (not bank_account.bank_id) and (line_vals.get('bank_name', False) or line_vals.get('bank_bic', False)):
+                        bank_name = line_vals.get('bank_name', False) or line_vals.get('bank_bic', False)
+                        bank_bic = line_vals.get('bank_bic', False)
+                        bank = bank_obj.search([('bic','=',bank_bic)], limit=1)
+                        if not bank:
+                            bank = bank_obj.search([('name','=',bank_name)], limit=1)
+                        if not bank:
+                            bank = bank_obj.create({
+                                'name': bank_name,
+                                'bic': bank_bic
+                            })
+                        bank_account.write({'bank_id': bank.id})
+                line_vals.pop('bank_name')
+                line_vals.pop('bank_bic')
+        return res
 
-                # getting Reference:
-                line_ref = line.getElementsByTagName('BankRef')[0].toxml().replace('<BankRef>','').replace('</BankRef>','')
 
-                # getting Amount:
-                cord = line.getElementsByTagName('CorD')[0].toxml().replace('<CorD>','').replace('</CorD>','')
-                if cord == 'C':
-                    line_amount = line.getElementsByTagName('AccAmt')[0].toxml().replace('<AccAmt>','').replace('</AccAmt>','')
-                if cord == 'D':
-                    line_amount = float(line.getElementsByTagName('AccAmt')[0].toxml().replace('<AccAmt>','').replace('</AccAmt>','')) * (-1)
-
-                # getting Partner info:
-                account_id = False
-                bank_account_id = False
-                line_cur = False
-                line_amount_cur = False
-                cPartySet = line.getElementsByTagName('CPartySet')
-                if cPartySet:
-                    partner_name_tag = cPartySet[0].getElementsByTagName('Name')
-                    if partner_name_tag:
-                        partner_name = partner_name_tag[0].toxml().replace('<Name>','').replace('</Name>','').replace('<Name/>','').replace("&quot;","'")
-                    if not partner_name_tag:
-                        partner_name = False
-                    partner_reg_id_tag = cPartySet[0].getElementsByTagName('LegalId')
-                    if partner_reg_id_tag:
-                        partner_reg_id = partner_reg_id_tag[0].toxml().replace('<LegalId>','').replace('</LegalId>','').replace('<LegalId/>','')
-                    if not partner_reg_id_tag:
-                        partner_reg_id = False
-                    partner_bank_account_tag = cPartySet[0].getElementsByTagName('AccNo')
-                    if partner_bank_account_tag:
-                        partner_bank_account = partner_bank_account_tag[0].toxml().replace('<AccNo>','').replace('</AccNo>','').replace('<AccNo/>','')
-                    if not partner_bank_account_tag:
-                        partner_bank_account = False
-
-                    # testing, whether it's possible to get partner_id (also type and account) from the system:
-                    partner_id = False
-                    bank_account = bank_obj.search([('acc_number','=',partner_bank_account)])
-                    if (not bank_account) and partner_bank_account:
-                        partner_bank_account_list = list(partner_bank_account)
-                        partner_bank_account_list.insert(4,' ')
-                        partner_bank_account_list.insert(9,' ')
-                        partner_bank_account_list.insert(14,' ')
-                        partner_bank_account_list.insert(19,' ')
-                        partner_bank_account_list.insert(24,' ')
-                        partner_bank_account_2 = "".join(partner_bank_account_list)
-                        bank_account = bank_obj.search([('acc_number','=',partner_bank_account_2)])
-                    if bank_account:
-                        bank_account_id = bank_account[0]
-                        bank_acc_1 = bank_account_obj.browse(cr, uid, bank_account[0])
-                        partner_id = bank_account[0].partner_id.id
-                        if cord == 'C':
-                            account_id = bank_account[0].partner_id.property_account_receivable.id
-                        if cord == 'D':
-                            account_id = bank_account[0].partner_id.property_account_payable.id
-                    if (not bank_account) and (partner_reg_id):
-                        partners = partner_obj.search([('vat','ilike',partner_reg_id)])
-                        if len(partners) == 1:
-                            if cord == 'C':
-                                account_id = partners[0].property_account_receivable.id
-                            if cord == 'D':
-                                account_id = partners[0].property_account_payable.id
-                    line_cur_tag = cPartySet[0].getElementsByTagName('Ccy')
-                    if line_cur_tag:
-                        line_cur_txt = line_cur_tag[0].toxml().replace('<Ccy>','').replace('</Ccy>','').replace('<Ccy/>','')
-                        if line_cur_txt:
-                            line_curs = cur_obj.search([('name','=',line_cur_txt)])
-                            if line_curs:
-                                line_cur = line_curs[0].id
-                    line_amount_cur_tag = cPartySet[0].getElementsByTagName('Amt')
-                    if line_amount_cur_tag:
-                        line_amount_cur = line_amount_cur_tag[0].toxml().replace('<Amt>','').replace('</Amt>','').replace('<Amt/>','')
-
-                # values, if there is no <CPartySet> in the document:
-                if not cPartySet:
-                    partner_name = False
-                    partner_reg_id = False
-                    partner_bank_account = False
-                    partner_id = False
-
-                # getting Transaction Types
-                type_code_tag = line.getElementsByTagName('TypeCode')
-                type_code = False
-                if type_code_tag:
-                    type_code = type_code_tag[0].toxml().replace('<TypeCode>','').replace('</TypeCode>','')
-                if not type_code_tag:
-                    type_name_tag = line.getElementsByTagName('TypeName')
-                    if type_name_tag:
-                        type_code = type_name_tag[0].toxml().replace('<TypeName>','').replace('</TypeName>','')
-                    if not type_name_tag:
-                        raise UserError(_('There are no tags for Transaction Types!'))
-
-                # getting configuration types for Accounts, it there is no Partner:
-                if partner_id == False:
-                    config_obj = self.env['account.bank.transaction.type']
-                    config = config_obj.search([('name','=',type_code)], limit=1)
-                    if config:
-                        account_id = config.account_id.id
-
-                if account_id == False:
-                    raise UserError(_("There is no Partner found in the system, that has a Bank Account or Registration Number as in the FiDAViSta file (if there are any); there is also no Configuration found for the Transaction Type '%s'. Please create either a Partner or a Transaction Type Configuration!") %(type_code))
-
-                # creating account.bank.statement.line:
-                self.env['account.bank.statement.line'].create({
-                    'statement_id': statement,
-                    'name': line_name,
-                    'date': line_date,
-                    'ref': line_ref,
-                    'partner_name': partner_name, # ?
-                    'partner_reg_id': partner_reg_id, # ?
-                    'partner_bank_account': partner_bank_account, # ?
-                    'transaction_type': type_code, # ?
-                    'partner_id': partner_id,
-                    'account_id': account_id,
-                    'amount': line_amount,
-                    'currency_id': line_cur,
-                    'amount_currency': line_amount_cur,
-                    'bank_account_id': bank_account_id
-                })
+    def _parse_file(self, data_file):
+        if self.format == 'fidavista':
+            return self.fidavista_parsing(data_file)
+        else:
+            return super(AccountBankStatementImport, self)._parse_file()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
