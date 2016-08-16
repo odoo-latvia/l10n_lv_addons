@@ -27,6 +27,7 @@ import base64
 from openerp import api, fields, models, _
 from openerp.exceptions import UserError
 from openerp.addons.base.res.res_bank import sanitize_account_number
+from datetime import datetime
 
 from xml.dom.minidom import getDOMImplementation, parseString
 
@@ -63,7 +64,7 @@ class AccountBankStatementImporting(models.TransientModel):
 class AccountBankStatementImport(models.TransientModel):
     _inherit = 'account.bank.statement.import'
 
-    format = fields.Selection([('ofx','.OFX'), ('fidavista','FiDAViSta')], string='Format', required=True)
+    format = fields.Selection([('ofx','.OFX'), ('fidavista','FiDAViSta'), ('iso20022', 'ISO 20022')], string='Format', required=True)
     currency_id = fields.Many2one('res.currency', string='Currency')
     flag = fields.Boolean('Continue Anyway', help='If checked, continues without comparing balances.', default=False)
     wrong_balance = fields.Boolean('Wrong Balance', default=False)
@@ -157,7 +158,6 @@ class AccountBankStatementImport(models.TransientModel):
 
 
     def fidavista_parsing(self, data_file):
-
         # decoding and encoding for string parsing; parseString() method:
         record = unicode(data_file, 'iso8859-4', 'strict').encode('iso8859-4','strict')
         dom = parseString(record)
@@ -323,6 +323,200 @@ class AccountBankStatementImport(models.TransientModel):
         return currency_code, account_number, stmts_vals
 
 
+    def iso20022_parsing(self, data_file):
+        # decoding and encoding for string parsing; parseString() method:
+        record = unicode(data_file, 'iso8859-4', 'strict').encode('iso8859-4','strict')
+        dom = parseString(record)
+
+        statements = dom.getElementsByTagName('Stmt') or []
+        if not statements:
+            statements = dom.getElementsByTagName('Rpt') or []
+
+        cur_obj = self.env['res.currency']
+
+        currency_code = False
+        account_number = False
+        stmts_vals = []
+        for statement in statements:
+            # getting start values:
+            account_tag = statement.getElementsByTagName('Acct')[0]
+            account_number = account_tag.getElementsByTagName('IBAN')[0].toxml().replace('<IBAN>','').replace('</IBAN>','')
+            name = account_number
+            cur_tag = account_tag.getElementsByTagName('Ccy')
+            if cur_tag:
+                currency_code = cur_tag[0].toxml().replace('<Ccy>','').replace('</Ccy>','')
+            start_date = False
+            end_date = False
+            ft_date_tag = statement.getElementsByTagName('FrDtTm')
+            if ft_date_tag:
+                start_datetime = ft_date_tag[0].getElementsByTagName('FrDtTm')[0].toxml().replace('<FrDtTm>','').replace('</FrDtTm>','')
+                end_datetime = ft_date_tag[0].getElementsByTagName('ToDtTm')[0].toxml().replace('<ToDtTm>','').replace('</ToDtTm>','')
+                start_date = datetime.strftime(datetime.strptime(start_datetime, '%Y-%m-%dT%H:%M:%SZ').date(), '%Y-%m-%d')
+                end_date = datetime.strftime(datetime.strptime(end_datetime, '%Y-%m-%dT%H:%M:%SZ').date(), '%Y-%m-%d')
+                name += (' ' + start_date + ':' + end_date)
+
+            # getting balances:
+            balance_start = 0.0
+            balance_end_real = 0.0
+            balances = statement.getElementsByTagName('Bal')
+            for b in balances:
+                balance_amount = 0.0
+                amount_tags = b.getElementsByTagName('Amt')
+                cl_amount_tag = False
+                credit_line = b.getElementsByTagName('CdtLine')
+                if credit_line:
+                    cl_amount_tag = credit_line[0].getElementsByTagName('Amt')
+                    cl_amount_tag = cl_amount_tag and cl_amount_tag[0] or False
+                for amt in amount_tags:
+                    if amt != cl_amount_tag:
+                        balance_amount = float(amt.toxml().replace('<Amt>','').replace('</Amt>',''))
+                cd_ind = b.getElementsByTagName('CdtDbtInd')[0].replace('<CdtDbtInd>','').replace('</CdtDbtInd>','')
+                if cd_ind == 'DBIT':
+                    balance_amount *= (-1)
+                btype = b.getElementsByTagName('Tp')[0]
+                type_code = btype.getElementsByTagName('CdOrPrtry')[0].getElementsByTagName('Cd')[0].toxml().replace('<Cd>','').replace('</Cd>','')
+                found = False
+                if type_code == 'OPBD':
+                    balance_start = balance_amount
+                    found = True
+                if type_code == 'CLBD':
+                    balance_end_real = balance_amount
+                    found = True
+                if not found:
+                    bsubtype = btype.getElementsByTagName('SubType')
+                    if bsubtype:
+                        subtype_code = bsubtype[0].getElementsByTagName('Cd')[0].toxml().replace('<Cd>','').replace('</Cd>','')
+                        if subtype_code == 'OPBD':
+                            balance_start = balance_amount
+                        if subtype_code == 'CLBD':
+                            balance_end_real = balance_amount
+
+            svals = {
+                'name': name,
+                'date': end_date,
+                'balance_start': balance_start,
+                'balance_end_real': balance_end_real,
+                'transactions': []
+            }
+
+            # getting line data:
+            entries = statement.getElementsByTagName('Ntry')
+            for entry in entries:
+                # getting date:
+                line_date = False
+                date_tag = entry.getElementsByTagName('BookgDt')
+                if not date_tag:
+                    date_tag = entry.getElementsByTagName('ValDt')
+                if date_tag:
+                    line_date = date_tag[0].getElementsByTagName('Dt')[0].toxml().replace('<Dt>','').replace('</Dt>','')
+
+                # getting reference and unique id:
+                line_ref = False
+                unique_import_id = False
+                ref_tag = entry.getElementsByTagName('NtryRef')
+                if ref_tag:
+                    line_ref = ref_tag[0].toxml().replace('<NtryRef>','').replace('</NtryRef>','')
+                refs_uref_tag = False
+                refs_tag = entry.getElementsByTagName('Refs')
+                if refs_tag:
+                    refs_uref_tag = refs_tag[0].getElementsByTagName('AcctSvcrRef')
+                    refs_uref_tag = refs_uref_tag and refs_uref_tag[0] or False
+                    refs_ref_tag = refs_tag[0].getElementsByTagName('Reference')
+                    if refs_ref_tag and (not line_ref):
+                        line_ref = refs_ref_tag[0].toxml().replace('<Reference>','').replace('</Reference>','')
+                uref_tags = entry.getElementsByTagName('AcctSvcrRef')
+                for urt in uref_tags:
+                    if urt != refs_uref_tag:
+                        unique_import_id = urt.toxml().replace('<AcctSvcrRef>','').replace('</AcctSvcrRef>','')
+                if (not unique_import_id) and refs_uref_tag:
+                    unique_import_id = refs_uref_tag.toxml().replace('<AcctSvcrRef>','').replace('</AcctSvcrRef>','')
+                cdtr_refs_tag = entry.getElementsByTagName('CdtrRefInf')
+                if cdtr_refs_tag:
+                    cref_tag = cdtr_refs_tag[0].getElementsByTagName('Ref')
+                    if cref_tag:
+                        line_ref = cref_tag[0].toxml().replace('<Ref>','').replace('</Ref>','')
+                if (not line_ref) and unique_import_id:
+                    line_ref = unique_import_id
+
+                # getting transaction type:
+                type_code = False
+                tx_dtls_btc_tag = False
+                tx_dtls_tag = entry.getElementsByTagName('TxDtls')
+                if tx_dtls_tag:
+                    tx_dtls_btc_tag = tx_dtls_tag[0].getElementsByTagName('BkTxCd')
+                    tx_dtls_btc_tag = tx_dtls_btc_tag and tx_dtls_btc_tag[0] or False
+                btc_tags = entry.getElementsByTagName('BkTxCd')
+                for btc in btc_tags:
+                    if btc != tx_dtls_btc_tag:
+                        type_code_tag = btc.getElementsByTagName('SubFmlyCd')
+                        if type_code_tag:
+                            type_code = type_code_tag[0].toxml().replace('<SubFmlyCd>','').replace('</SubFmlyCd>','')
+
+                # getting amount and currency:
+                line_cd_ind = False
+                entr_details_tag = entry.getElementsByTagName('NtryDtls')
+                edt_cd_tgs = []
+                if entr_details_tag:
+                    edt_cd_tags = entr_details_tag[0].getElementsByTagName('CdtDbtInd')
+                    edt_cd_tgs = [ecdt for ecdt in edt_cd_tags]
+                entry_cd_tags = entry.getElementsByTagName('CdtDbtInd')
+                for ecd in entry_cd_tags:
+                    if ecd not in edt_cd_tgs:
+                        line_cd_ind = ecdt.toxml().replace('<CdtDbtInd>','').replace('</CdtDbtInd>','')
+                line_amount = 0.0
+                line_amount_cur = 0.0
+                line_cur = False
+                amt_tag = False
+                amt_details_tag = entry.getElementsByTagName('AmtDtls')
+                if amt_details_tag:
+                    inst_amt_tag = amt_details_tag[0].getElementsByTagName('InstdAmt')
+                    if inst_amt_tag:
+                        amt_cur_tag = inst_amt_tag[0].getElementsByTagName('Amt')[0]
+                        line_amount_cur = float(amt_cur_tag.firstChild.nodeValue)
+                        if line_cd_ind == 'DBIT':
+                            line_amount_cur *= (-1)
+                        line_cur_code = amt_cur_tag.attributes['Ccy'].value
+                        line_cur = cur_obj.search([('name','=',line_cur_code)], limit=1)
+                    trans_amt_tag = amt_details_tag[0].getElementsByTagName('TxAmt')
+                    if trans_amt_tag:
+                        amt_tag = trans_amt_tag[0].getElementsByTagName('Amt')
+                if (not amt_details_tag) or (amt_details_tag and (not amt_tag)):
+                    amt_tag = entry.getElementsByTagName('Amt')
+                if amt_tag:
+                    line_amount = float(amt_tag[0].firstChild.nodeValue)
+                    if line_cd_ind == 'DBIT':
+                        line_amount *= (-1)
+
+                # getting bank account:
+
+
+
+
+                svals['transactions'].append({
+                    'unique_import_id': unique_import_id,
+                    'date': line_date,
+#                    'name': line_name,
+                    'ref': line_ref,
+                    'amount': line_amount,
+                    'amount_currency': line_amount_cur,
+                    'currency_id': line_cur and line_cur.id or False,
+#                    'partner_name': partner_name,
+#                    'account_number': partner_bank_account,
+#                    'partner_bank_account': partner_bank_account,
+#                    'partner_reg_id': partner_reg_id,
+#                    'partner_id': partner and partner.id or False,
+                    'transaction_type': type_code,
+#                    'bank_account_id': bank_account and bank_account.id or False,
+#                    'account_id': account_id,
+#                    'bank_name': bank_name,
+#                    'bank_bic': bank_bic
+                })
+
+            stmts_vals.append(svals)
+
+        return currency_code, account_number, stmts_vals
+
+
     def _complete_stmts_vals(self, stmts_vals, journal, account_number):
         res = super(AccountBankStatementImport, self)._complete_stmts_vals(stmts_vals, journal, account_number)
         ba_obj = self.env['res.partner.bank']
@@ -358,6 +552,8 @@ class AccountBankStatementImport(models.TransientModel):
     def _parse_file(self, data_file):
         if self.format == 'fidavista':
             return self.fidavista_parsing(data_file)
+        elif self.format == 'iso20022':
+            return self.iso20022_parsing(data_file)
         else:
             return super(AccountBankStatementImport, self)._parse_file()
 
