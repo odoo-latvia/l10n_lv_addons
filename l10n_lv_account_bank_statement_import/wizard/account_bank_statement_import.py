@@ -333,6 +333,7 @@ class AccountBankStatementImport(models.TransientModel):
             statements = dom.getElementsByTagName('Rpt') or []
 
         cur_obj = self.env['res.currency']
+        ba_obj = self.env['res.partner.bank']
 
         currency_code = False
         account_number = False
@@ -452,7 +453,7 @@ class AccountBankStatementImport(models.TransientModel):
                         if type_code_tag:
                             type_code = type_code_tag[0].toxml().replace('<SubFmlyCd>','').replace('</SubFmlyCd>','')
 
-                # getting amount and currency:
+                # getting debit or credit info:
                 line_cd_ind = False
                 entr_details_tag = entry.getElementsByTagName('NtryDtls')
                 edt_cd_tgs = []
@@ -463,6 +464,8 @@ class AccountBankStatementImport(models.TransientModel):
                 for ecd in entry_cd_tags:
                     if ecd not in edt_cd_tgs:
                         line_cd_ind = ecdt.toxml().replace('<CdtDbtInd>','').replace('</CdtDbtInd>','')
+
+                # getting amount and currency:
                 line_amount = 0.0
                 line_amount_cur = 0.0
                 line_cur = False
@@ -487,8 +490,31 @@ class AccountBankStatementImport(models.TransientModel):
                     if line_cd_ind == 'DBIT':
                         line_amount *= (-1)
 
-                # getting bank account:
-
+                # getting bank account and bank data:
+                # NtryDtls/TxDtls/RltdPties/DbtrAcct/Id/IBAN incoming payment (+)
+                # NtryDtls/TxDtls/RltdPties/CdtrAcct/Id/IBAN outgoing payment (-)
+                partner_bank_account = False
+                bank_account = False
+                bank_name = False
+                bank_bic = False
+                entry_ba_tag = False
+                entry_b_tag = False
+                if line_cd_ind == 'CRDT':
+                    entry_ba_tag = entry.getElementsByTagName('DbtrAcct')
+                    entry_b_tag = entry.getElementsByTagName('DbtrAgt')
+                if line_cd_ind == 'DBIT':
+                    entry_ba_tag = entry.getElementsByTagName('CdtrAcct')
+                    entry_b_tag = entry.getElementsByTagName('CdtrAgt')
+                if entry_ba_tag:
+                    partner_bank_account = entry_ba_tag[0].getElementsByTagName('IBAN')[0].toxml().replace('<IBAN>','').replace('</IBAN>','')
+                    bank_account = ba_obj.search([('acc_number','=',partner_bank_account)], limit=1)
+                if entry_b_tag:
+                    entry_b_name_tag = entry_b_tag[0].getElementsByTagName('Name')
+                    if entry_b_name_tag:
+                        bank_name = entry_b_name_tag[0].toxml().replace('<Name>','').replace('</Name>','')
+                    entry_b_bic_tag = entry_b_tag[0].getElementsByTagName('BIC')
+                    if entry_b_bic_tag:
+                        bank_bic = entry_b_bic_tag[0].toxml().replace('<BIC>','').replace('</BIC>','')
 
 
 
@@ -501,15 +527,15 @@ class AccountBankStatementImport(models.TransientModel):
                     'amount_currency': line_amount_cur,
                     'currency_id': line_cur and line_cur.id or False,
 #                    'partner_name': partner_name,
-#                    'account_number': partner_bank_account,
-#                    'partner_bank_account': partner_bank_account,
+                    'account_number': partner_bank_account,
+                    'partner_bank_account': partner_bank_account,
 #                    'partner_reg_id': partner_reg_id,
 #                    'partner_id': partner and partner.id or False,
                     'transaction_type': type_code,
-#                    'bank_account_id': bank_account and bank_account.id or False,
+                    'bank_account_id': bank_account and bank_account.id or False,
 #                    'account_id': account_id,
-#                    'bank_name': bank_name,
-#                    'bank_bic': bank_bic
+                    'bank_name': bank_name,
+                    'bank_bic': bank_bic
                 })
 
             stmts_vals.append(svals)
