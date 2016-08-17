@@ -340,6 +340,10 @@ class AccountBankStatementImport(models.TransientModel):
         stmts_vals = []
         for statement in statements:
             # getting start values:
+            # Acct/Id/IBAN
+            # Acct/Ccy
+            # FrToDt/FrDtTm
+            # FrToDt/ToDtTm
             account_tag = statement.getElementsByTagName('Acct')[0]
             account_number = account_tag.getElementsByTagName('IBAN')[0].toxml().replace('<IBAN>','').replace('</IBAN>','')
             name = account_number
@@ -348,7 +352,7 @@ class AccountBankStatementImport(models.TransientModel):
                 currency_code = cur_tag[0].toxml().replace('<Ccy>','').replace('</Ccy>','')
             start_date = False
             end_date = False
-            ft_date_tag = statement.getElementsByTagName('FrDtTm')
+            ft_date_tag = statement.getElementsByTagName('FrToDt')
             if ft_date_tag:
                 start_datetime = ft_date_tag[0].getElementsByTagName('FrDtTm')[0].toxml().replace('<FrDtTm>','').replace('</FrDtTm>','')
                 end_datetime = ft_date_tag[0].getElementsByTagName('ToDtTm')[0].toxml().replace('<ToDtTm>','').replace('</ToDtTm>','')
@@ -357,6 +361,9 @@ class AccountBankStatementImport(models.TransientModel):
                 name += (' ' + start_date + ':' + end_date)
 
             # getting balances:
+            # Bal/Amt
+            # Bal/CdtDbtInd
+            # Bal/Tp/CdOrPrtry/Cd or Bal/Tp/SubType/Cd
             balance_start = 0.0
             balance_end_real = 0.0
             balances = statement.getElementsByTagName('Bal')
@@ -401,9 +408,11 @@ class AccountBankStatementImport(models.TransientModel):
             }
 
             # getting line data:
+            # Ntry
             entries = statement.getElementsByTagName('Ntry')
             for entry in entries:
                 # getting date:
+                # BookgDt or ValDt
                 line_date = False
                 date_tag = entry.getElementsByTagName('BookgDt')
                 if not date_tag:
@@ -412,6 +421,8 @@ class AccountBankStatementImport(models.TransientModel):
                     line_date = date_tag[0].getElementsByTagName('Dt')[0].toxml().replace('<Dt>','').replace('</Dt>','')
 
                 # getting reference and unique id:
+                # NtryDtls/TxDtls/RmtInf/Strd/CdtrRefInf/Ref or NtryDtls/TxDtls/Refs/Reference or NtryRef or AcctSvcrRef
+                # AcctSvcrRef
                 line_ref = False
                 unique_import_id = False
                 ref_tag = entry.getElementsByTagName('NtryRef')
@@ -440,6 +451,7 @@ class AccountBankStatementImport(models.TransientModel):
                     line_ref = unique_import_id
 
                 # getting transaction type:
+                # BkTxCd/Domn/Fmly/SubFmlyCd
                 type_code = False
                 tx_dtls_btc_tag = False
                 tx_dtls_tag = entry.getElementsByTagName('TxDtls')
@@ -454,6 +466,7 @@ class AccountBankStatementImport(models.TransientModel):
                             type_code = type_code_tag[0].toxml().replace('<SubFmlyCd>','').replace('</SubFmlyCd>','')
 
                 # getting debit or credit info:
+                # CdtDbtInd
                 line_cd_ind = False
                 entr_details_tag = entry.getElementsByTagName('NtryDtls')
                 edt_cd_tgs = []
@@ -466,6 +479,8 @@ class AccountBankStatementImport(models.TransientModel):
                         line_cd_ind = ecdt.toxml().replace('<CdtDbtInd>','').replace('</CdtDbtInd>','')
 
                 # getting amount and currency:
+                # NtryDtls/TxDtls/AmtDtls/TxAmt/Amt or Amt
+                # NtryDtls/TxDtls/AmtDtls/InstdAmt/Amt
                 line_amount = 0.0
                 line_amount_cur = 0.0
                 line_cur = False
@@ -516,12 +531,35 @@ class AccountBankStatementImport(models.TransientModel):
                     if entry_b_bic_tag:
                         bank_bic = entry_b_bic_tag[0].toxml().replace('<BIC>','').replace('</BIC>','')
 
+                # getting name:
+                # NtryDtls/TxDtls/Purp/Prtry (+)
+                # NtryDtls/TxDtls/RmtInf/Ustrd (+/-)
+                line_name = False
+                if line_cd_ind == 'CRDT':
+                    purp_tag = entry.getElementsByTagName('Purp')
+                    if purp_tag:
+                        line_name = purp_tag[0].getElementsByTagName('Prtry')[0].toxml().replace('<Prtry>','').replace('</Prtry>','')
+                if line_cd_ind == 'DBIT' or (line_cd_ind == 'CRDT' and (not line_name)):
+                    rmt_inf_tag = entry.getElementsByTagName('RmtInf')
+                    if rmt_inf_tag:
+                        ustruct_tags = rmt_inf_tag[0].getElementsByTagName('Ustrd')
+                        uc = 0
+                        for ustruct_tag in ustruct_tags:
+                            uc += 1
+                            utxt = ustruct_tag.toxml().replace('<Ustrd>','').replace('</Ustrd>','')
+                            if uc == 1:
+                                line_name = utxt
+                            else:
+                                line_name += ('\n' + utxt)
+                if not line_name:
+                    line_name = type_code
+
 
 
                 svals['transactions'].append({
                     'unique_import_id': unique_import_id,
                     'date': line_date,
-#                    'name': line_name,
+                    'name': line_name,
                     'ref': line_ref,
                     'amount': line_amount,
                     'amount_currency': line_amount_cur,
