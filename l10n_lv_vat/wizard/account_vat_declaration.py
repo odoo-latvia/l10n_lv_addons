@@ -33,8 +33,8 @@ from xml.etree import ElementTree
 from cStringIO import StringIO
 from openerp import SUPERUSER_ID
 
-#import logging
-#_logger = logging.getLogger('PVN1-III')
+import logging
+_logger = logging.getLogger('PVN')
 
 EU_list = ['AT', 'BE', 'BG', 'CY', 'HR', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'EL', 'HU', 'IE', 'IT', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB']
 
@@ -642,6 +642,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
             d_p_s = {}
             r_p_s = []
             if r_purchase != []:
+                pvn1i_doc_no_list = [] #temp
                 data_of_file += "\n    <PVN1I>"
                 for p in r_purchase:
                     # getting document types "A", "N" and "I":
@@ -662,6 +663,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
 
                     # summing up, what's left for each partner:
                     if ((p['amount_untaxed'] >= 0.0 and p['amount_untaxed'] < p['limit_val']) or (p['amount_untaxed'] < 0.0 and (p['amount_untaxed'] * (-1.0)) < p['limit_val'])) and p['partner_id']:
+                        pvn1i_doc_no_list.append(p['doc_number']) #temp
                         partner_id = p['partner_id']
                         partner_country = p['partner_country']
                         partner_vat = p['partner_vat']
@@ -686,6 +688,9 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                                 'limit_val': p['limit_val']
                             }
                         r_p_s.append(d_p_s[(partner_id)])
+
+                _logger.info('------------PVN1-I V and T doc numbers----------------')
+                _logger.info('%s' % ", ".join(pvn1i_doc_no_list))
 
                 r_p_s_t = []
                 for object in r_p_s:
