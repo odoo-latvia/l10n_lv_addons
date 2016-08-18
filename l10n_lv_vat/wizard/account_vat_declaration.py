@@ -33,8 +33,8 @@ from xml.etree import ElementTree
 from cStringIO import StringIO
 from openerp import SUPERUSER_ID
 
-import logging
-_logger = logging.getLogger('PVN')
+#import logging
+#_logger = logging.getLogger('PVN')
 
 EU_list = ['AT', 'BE', 'BG', 'CY', 'HR', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'EL', 'HU', 'IE', 'IT', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB']
 
@@ -73,7 +73,9 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         'amount_overpaid': fields.float('Amount Overpaid', digits_compute=dp.get_precision('Account'), readonly=True),
         'transfer': fields.boolean('Transfer'),
         'amount_to_transfer': fields.float('Amount To Transfer', digits_compute=dp.get_precision('Account')),
-        'bank_account_id': fields.many2one('res.partner.bank', 'Bank Account')
+        'bank_account_id': fields.many2one('res.partner.bank', 'Bank Account'),
+        'info_file_name': fields.char('Info File Name'),
+        'info_file_save': fields.binary('Save Information File', filters='*.csv', readonly=True, help='This file contains information about the documents used in VAT declaration.')
     }
 
     def _get_tax_code(self, cr, uid, context=None):
@@ -92,7 +94,8 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         'msg': 'Save the File.',
         'name': 'vat_declaration.xml',
         'tax_code_id': _get_tax_code,
-        'partner_id': _get_partner
+        'partner_id': _get_partner,
+        'info_file_name': 'info.csv'
     }
 
     def onchange_tax_code(self, cr, uid, ids, tax_code_id, context=None):
@@ -638,11 +641,13 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         if value['tag_name'] == 'PVN2':
                             sale_EU.append(value)
 
+            info_data = {}
+
             # processing purchase and purchase_refund journal types:
             d_p_s = {}
             r_p_s = []
             if r_purchase != []:
-                pvn1i_doc_no_list = [] #temp
+                info_data.update({'PVN1-I': []}) # info
                 data_of_file += "\n    <PVN1I>"
                 for p in r_purchase:
                     # getting document types "A", "N" and "I":
@@ -660,10 +665,10 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         data_of_file += ("\n            <DokNumurs>" + unicode(p['doc_number']) + "</DokNumurs>")
                         data_of_file += ("\n            <DokDatums>" + str(p['doc_date']) + "</DokDatums>")
                         data_of_file += ("\n        </R>")
+                        info_data['PVN1-I'].append(p) # info
 
                     # summing up, what's left for each partner:
                     if ((p['amount_untaxed'] >= 0.0 and p['amount_untaxed'] < p['limit_val']) or (p['amount_untaxed'] < 0.0 and (p['amount_untaxed'] * (-1.0)) < p['limit_val'])) and p['partner_id']:
-                        pvn1i_doc_no_list.append(p['doc_number']) #temp
                         partner_id = p['partner_id']
                         partner_country = p['partner_country']
                         partner_vat = p['partner_vat']
@@ -689,9 +694,6 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                             }
                         r_p_s.append(d_p_s[(partner_id)])
 
-                _logger.info('------------PVN1-I V and T doc numbers----------------')
-                _logger.info('%s' % ", ".join(pvn1i_doc_no_list))
-
                 r_p_s_t = []
                 for object in r_p_s:
                     if object != {}:
@@ -713,6 +715,13 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         data_of_file += ("\n            <VertibaBezPvn>" + str(rpst['amount_untaxed']) + "</VertibaBezPvn>")
                         data_of_file += ("\n            <PvnVertiba>" + str(rpst['amount_tax']) + "</PvnVertiba>")
                         data_of_file += ("\n        </R>")
+                        # info:
+                        for info_rpv in r_purchase:
+                            if info_rpv['partner_id'] == rpst['partner_id'] and (info_rpv['amount_untaxed'] < rpst['limit_val'] or (info_rpv['amount_untaxed'] < 0.0 and (info_rpv['amount_untaxed'] * (-1.0)) < rpst['limit_val'])):
+                                irpv = info_rpv.copy()
+                                irpv['deal_type'] = 'V'
+                                info_data['PVN1-I'].append(irpv)
+                            
                     # summing up, what's left:
                     if (rpst['amount_untaxed'] >= 0.0 and rpst['amount_untaxed'] < rpst['limit_val']) or (rpst['amount_untaxed'] < 0.0 and (rpst['amount_untaxed'] * (-1.0)) < rpst['limit_val']):
                         amount_untaxed_a += rpst['amount_untaxed']
@@ -731,11 +740,18 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                     data_of_file += ("\n            <VertibaBezPvn>" + str(d_p_a['amount_untaxed']) + "</VertibaBezPvn>")
                     data_of_file += ("\n            <PvnVertiba>" + str(d_p_a['amount_tax']) + "</PvnVertiba>")
                     data_of_file += ("\n        </R>")
+                    # info:
+                    for info_rpt in r_purchase:
+                        if info_rpt not in info_data['PVN1-I']:
+                            irpt = info_rpt.copy()
+                            irpt['deal_type'] = 'T'
+                            info_data['PVN1-I'].append(irpt)
 
                 data_of_file += "\n    </PVN1I>"
 
             # getting purchases from EU:
             if purchase_EU != []:
+                info_data.update({'PVN1-II': purchase_EU}) # info
                 data_of_file += "\n    <PVN1II>"
 
                 for p_EU in purchase_EU:
@@ -758,6 +774,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
 
             # processing sale and sale_refund journal types:
             if r_sale != []:
+                info_data.update({'PVN1-III': []})
                 data_of_file += "\n    <PVN1III>"
 
                 amount_untaxed_x = 0.0
@@ -781,11 +798,16 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                             data_of_file += ("\n            <DokNumurs>" + unicode(s['doc_number']) + "</DokNumurs>")
                             data_of_file += ("\n            <DokDatums>" + str(s['doc_date']) + "</DokDatums>")
                             data_of_file += "\n        </R>"
+                            info_data['PVN1-III'].append(s) # info
                         # "X" document types:
                         if check_fpos(s['partner_fpos'], 'LR_VAT_non-payer') or (not s['partner_vat']):
                             amount_untaxed_x += s['amount_untaxed']
                             amount_tax_x += s['amount_tax']
                             amount_taxed_x += s['amount_taxed']
+                            # info:
+                            si = s.copy()
+                            si['doc_type'] = 'X'
+                            info_data['PVN1-III'].append(si)
                     # summing up values for each partner:
                     if (s['amount_untaxed'] >= 0.0 and s['amount_untaxed'] < s['limit_val']) or (s['amount_untaxed'] < 0.0 and (s['amount_untaxed'] * (-1.0)) < s['limit_val']):
                         partner_id = s['partner_id']
@@ -835,6 +857,12 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         data_of_file += ("\n            <PvnVertiba>" + str(rsst['amount_tax']) + "</PvnVertiba>")
                         data_of_file += ("\n            <DokVeids>" + "V" + "</DokVeids>")
                         data_of_file += ("\n        </R>")
+                        # info:
+                        for info_rsv in r_sale:
+                            if info_rsv['partner_id'] == rsst['partner_id'] and (info_rsv['amount_untaxed'] < rsst['limit_val'] or (info_rsv['amount_untaxed'] < 0.0 and (info_rsv['amount_untaxed'] * (-1.0)) < rsst['limit_val'])):
+                                irsv = info_rsv.copy()
+                                irsv['doc_type'] = 'V'
+                                info_data['PVN1-III'].append(irsv)
                     # summing up, what's left:
                     if (rsst['amount_untaxed'] >= 0.0 and rsst['amount_untaxed'] < rsst['limit_val']) or (rsst['amount_untaxed'] < 0.0 and (rsst['amount_untaxed'] * (-1.0)) < rsst['limit_val']):
                         amount_untaxed_t += rsst['amount_untaxed']
@@ -866,11 +894,18 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                     data_of_file += ("\n            <PvnVertiba>" + str(d_s_x['amount_tax']) + "</PvnVertiba>")
                     data_of_file += ("\n            <DokVeids>" + "X" + "</DokVeids>")
                     data_of_file += ("\n        </R>")
+                    # info:
+                    for info_rst in r_sale:
+                        if info_rst not in info_data['PVN1-III']:
+                            irst = info_rst.copy()
+                            irst['doc_type'] = 'T'
+                            info_data['PVN1-III'].append(irst)
 
                 data_of_file += "\n    </PVN1III>"
 
             # getting sales from EU:
             if sale_EU != []:
+                info_data.update({'PVN2': sale_EU}) # info
                 data_of_file += "\n    <PVN2>"
 
                 s_EU_group = []
@@ -925,10 +960,30 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         data_of_file += "\n</DokPVNv4>"
 
         data_of_file_real = base64.encodestring(data_of_file.encode('utf8'))
+
+        # info:
+        info_file_columns = [_("Document Number"), _("Deal Type"), _("Document Type"), _("Partner"), _("Untaxed Amount"), _("Tax Amount")]
+        info_file_data = u",".join(info_file_columns)
+        info_file_data += u"\n"
+        for ikey, ivalue in info_data.iteritems():
+            info_file_data += (",,,,,\n")
+            info_file_data += (ikey + ",,,,,\n")
+            for ival in ivalue:
+                info_file_data += ((ival['doc_number'] and ('"' + ival['doc_number'].replace('"', '') + '"') or "") + ",")
+                info_file_data += ((ival['deal_type'] and ('"' + ival['deal_type'].replace('"', '') + '"') or "") + ",")
+                info_file_data += ((ival['doc_type'] and ('"' + ival['doc_type'].replace('"', '') + '"') or "") + ",")
+                info_file_data += ((ival['partner_name'] and ('"' + ival['partner_name'].replace('"', '') + '"') or "") + ",")
+                info_file_data += ((ival['amount_untaxed'] and str(ival['amount_untaxed']) or "") + ",")
+                info_file_data += ((ival['amount_tax'] and str(ival['amount_tax']) or "") + "\n")
+        info_file_data_real = base64.encodestring(info_file_data.encode('utf8'))
+
         self.write(cr, uid, ids, {
             'file_save': data_of_file_real,
-            'name': data_tax.name
+            'name': data_tax.name,
+            'info_file_name': data_tax.info_file_name,
+            'info_file_save': info_file_data_real
         }, context=context)
+
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'l10n_lv.vat.declaration',

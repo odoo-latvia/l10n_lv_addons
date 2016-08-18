@@ -161,3 +161,49 @@ msgstr "Partnerim %s nav norādīts PVN reģistrācijas numurs, taču šis partn
 #, python-format
 msgid "No TIN or Company Registry number associated with your company."
 msgstr "Jūsu uzņēmumam nav norādīts ne PVN reģistrācijas numurs, ne uzņēmuma reģistrācijas numurs."
+
+#. module: l10n_lv_vat
+#: field:l10n_lv.vat.declaration,info_file_save:0
+msgid "Save Information File"
+msgstr "Saglabāt informācijas failu"
+
+#. module: l10n_lv_vat
+#: help:l10n_lv.vat.declaration,info_file_save:0
+msgid "This file contains information about the documents used in VAT declaration."
+msgstr "Šis fails satur informāciju par PVN deklarācijā izmantotajiem dokumentiem."
+
+#. module: l10n_lv_vat
+#: code:addons/l10n_lv_vat/wizard/account_vat_declaration.py:965
+#, python-format
+msgid "Document Number"
+msgstr "Dokumenta numurs"
+
+#. module: l10n_lv_vat
+#: code:addons/l10n_lv_vat/wizard/account_vat_declaration.py:965
+#, python-format
+msgid "Deal Type"
+msgstr "Darījuma veids"
+
+#. module: l10n_lv_vat
+#: code:addons/l10n_lv_vat/wizard/account_vat_declaration.py:965
+#, python-format
+msgid "Document Type"
+msgstr "Dokumenta veids"
+
+#. module: l10n_lv_vat
+#: code:addons/l10n_lv_vat/wizard/account_vat_declaration.py:965
+#, python-format
+msgid "Partner"
+msgstr "Partneris"
+
+#. module: l10n_lv_vat
+#: code:addons/l10n_lv_vat/wizard/account_vat_declaration.py:965
+#, python-format
+msgid "Untaxed Amount"
+msgstr "Summa bez nodokļiem"
+
+#. module: l10n_lv_vat
+#: code:addons/l10n_lv_vat/wizard/account_vat_declaration.py:965
+#, python-format
+msgid "Tax Amount"
+msgstr "Nodokļu summa"
