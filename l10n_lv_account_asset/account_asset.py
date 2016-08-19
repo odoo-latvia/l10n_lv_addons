@@ -393,6 +393,7 @@ class account_asset_asset(osv.osv):
             'confirmation_date': time.strftime('%Y-%m-%d')
         }, context=context)
         self.compute_depreciation_board(cr, uid, ids, context=context)
+        self.compute_depreciation_board_tax(cr, uid, ids, context=context)
         return super(account_asset_asset, self).validate(cr, uid, ids, context=context)
 
     def set_to_close(self, cr, uid, ids, context=None):
