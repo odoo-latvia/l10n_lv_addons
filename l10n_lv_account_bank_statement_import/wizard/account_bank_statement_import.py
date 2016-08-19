@@ -168,158 +168,163 @@ class AccountBankStatementImport(models.TransientModel):
         bank_obj = self.env['res.partner.bank']
 
         # getting start values:
+        currency_code = False
+        account_number = False
+        stmts_vals = []
         start_date = dom.getElementsByTagName('StartDate')[0].toxml().replace('<StartDate>','').replace('</StartDate>','')
         end_date = dom.getElementsByTagName('EndDate')[0].toxml().replace('<EndDate>','').replace('</EndDate>','')
 
-        accountset = dom.getElementsByTagName('AccountSet')[0]
-        account_number = accountset.getElementsByTagName('AccNo')[0].toxml().replace('<AccNo>','').replace('</AccNo>','')
-        currency_code = accountset.getElementsByTagName('Ccy')[0].toxml().replace('<Ccy>','').replace('</Ccy>','')
-        balance_start = accountset.getElementsByTagName('OpenBal')[0].toxml().replace('<OpenBal>','').replace('</OpenBal>','')
-        balance_end_real = accountset.getElementsByTagName('CloseBal')[0].toxml().replace('<CloseBal>','').replace('</CloseBal>','')
+        accountsets = dom.getElementsByTagName('AccountSet')
+        for accountset in accountsets:
+            account_number = accountset.getElementsByTagName('AccNo')[0].toxml().replace('<AccNo>','').replace('</AccNo>','')
+            currency_code = accountset.getElementsByTagName('Ccy')[0].toxml().replace('<Ccy>','').replace('</Ccy>','')
+            balance_start = accountset.getElementsByTagName('OpenBal')[0].toxml().replace('<OpenBal>','').replace('</OpenBal>','')
+            balance_end_real = accountset.getElementsByTagName('CloseBal')[0].toxml().replace('<CloseBal>','').replace('</CloseBal>','')
 
-        # checking balances:
-        test_bnk_acc = bank_obj.search([('acc_number','=',account_number)], limit=1)
-        if not test_bnk_acc:
-            account_number_list = list(account_number)
-            account_number_list.insert(4,' ')
-            account_number_list.insert(9,' ')
-            account_number_list.insert(14,' ')
-            account_number_list.insert(19,' ')
-            account_number_list.insert(24,' ')
-            account_number_2 = "".join(account_number_list)
-            test_bnk_acc = bank_obj.search([('acc_number','=',account_number_2)], limit=1)
-        if test_bnk_acc:
-            journals = journal_obj.search([('bank_account_id','=',test_bnk_acc.id)])
-            test_bs = bs_obj.search([('journal_id','in',[j.id for j in journals])], order='date desc', limit=1)
-            if test_bs and test_bs.balance_end_real != float(balance_start) and self.flag == False:
-                raise UserError(_("The Ending Balance of the last Bank Statement (by date) imported for the Bank Account '%s' is not equal to the Starting Balance of this document. If this is OK with you, check the 'Continue Anyway' box and try to import again.") %(account_number))
+            # checking balances:
+            test_bnk_acc = bank_obj.search([('acc_number','=',account_number)], limit=1)
+            if not test_bnk_acc:
+                account_number_list = list(account_number)
+                account_number_list.insert(4,' ')
+                account_number_list.insert(9,' ')
+                account_number_list.insert(14,' ')
+                account_number_list.insert(19,' ')
+                account_number_list.insert(24,' ')
+                account_number_2 = "".join(account_number_list)
+                test_bnk_acc = bank_obj.search([('acc_number','=',account_number_2)], limit=1)
+            if test_bnk_acc:
+                journals = journal_obj.search([('bank_account_id','=',test_bnk_acc.id)])
+                test_bs = bs_obj.search([('journal_id','in',[j.id for j in journals])], order='date desc', limit=1)
+                if test_bs and test_bs.balance_end_real != float(balance_start) and self.flag == False:
+                    raise UserError(_("The Ending Balance of the last Bank Statement (by date) imported for the Bank Account '%s' is not equal to the Starting Balance of this document. If this is OK with you, check the 'Continue Anyway' box and try to import again.") %(account_number))
 
-        svals = {
-            'name': account_number + ' ' + start_date + ':' + end_date,
-            'date': end_date,
-            'balance_start': float(balance_start),
-            'balance_end_real': float(balance_end_real),
-            'transactions': []
-        }
+            svals = {
+                'name': account_number + ' ' + start_date + ':' + end_date,
+                'date': end_date,
+                'balance_start': float(balance_start),
+                'balance_end_real': float(balance_end_real),
+                'transactions': []
+            }
 
-        # getting elements for account.bank.statement.line:
-        statement_lines = accountset.getElementsByTagName('TrxSet')
-        for line in statement_lines:
-            # checking transaction types:
-            type_name_tag = line.getElementsByTagName('TypeName')
+            # getting elements for account.bank.statement.line:
+            statement_lines = accountset.getElementsByTagName('TrxSet')
+            for line in statement_lines:
+                # checking transaction types:
+                type_name_tag = line.getElementsByTagName('TypeName')
 
-            # getting date, name, ref and amount
-            line_date = line.getElementsByTagName('BookDate')[0].toxml().replace('<BookDate>','').replace('</BookDate>','')
-            pmt_info = line.getElementsByTagName('PmtInfo')
-            if pmt_info:
-                line_name = pmt_info[0].toxml().replace('<PmtInfo>','').replace('</PmtInfo>','')
-            if (not pmt_info) and type_name_tag:
-                line_name = type_name_tag[0].toxml().replace('<TypeName>','').replace('</TypeName>','')
-            line_ref = line.getElementsByTagName('BankRef')[0].toxml().replace('<BankRef>','').replace('</BankRef>','')
-            line_amount = float(line.getElementsByTagName('AccAmt')[0].toxml().replace('<AccAmt>','').replace('</AccAmt>',''))
-            cord = line.getElementsByTagName('CorD')[0].toxml().replace('<CorD>','').replace('</CorD>','')
-            if cord == 'D':
-                line_amount *= (-1)
+                # getting date, name, ref and amount
+                line_date = line.getElementsByTagName('BookDate')[0].toxml().replace('<BookDate>','').replace('</BookDate>','')
+                pmt_info = line.getElementsByTagName('PmtInfo')
+                if pmt_info:
+                    line_name = pmt_info[0].toxml().replace('<PmtInfo>','').replace('</PmtInfo>','')
+                if (not pmt_info) and type_name_tag:
+                    line_name = type_name_tag[0].toxml().replace('<TypeName>','').replace('</TypeName>','')
+                line_ref = line.getElementsByTagName('BankRef')[0].toxml().replace('<BankRef>','').replace('</BankRef>','')
+                line_amount = float(line.getElementsByTagName('AccAmt')[0].toxml().replace('<AccAmt>','').replace('</AccAmt>',''))
+                cord = line.getElementsByTagName('CorD')[0].toxml().replace('<CorD>','').replace('</CorD>','')
+                if cord == 'D':
+                    line_amount *= (-1)
 
-            # getting Partner and Currency data
-            line_cur = False
-            line_amount_cur = 0.0
-            partner = False
-            partner_name = False
-            partner_reg_id = False
-            partner_bank_account = False
-            bank_account = False
-            account_id = False
-            bank_name = False
-            bank_bic = False
-            cPartySet = line.getElementsByTagName('CPartySet')
-            if cPartySet:
-                # currency data:
-                line_cur_tag = cPartySet[0].getElementsByTagName('Ccy')
-                if line_cur_tag:
-                    line_cur_txt = line_cur_tag[0].toxml().replace('<Ccy>','').replace('</Ccy>','').replace('<Ccy/>','')
-                    if line_cur_txt:
-                        line_cur = cur_obj.search([('name','=',line_cur_txt)], limit=1)
-                line_amount_cur_tag = cPartySet[0].getElementsByTagName('Amt')
-                if line_amount_cur_tag:
-                    line_amount_cur = line_amount_cur_tag[0].toxml().replace('<Amt>','').replace('</Amt>','').replace('<Amt/>','')
-                    line_amount_cur = float(line_amount_cur)
+                # getting Partner and Currency data
+                line_cur = False
+                line_amount_cur = 0.0
+                partner = False
+                partner_name = False
+                partner_reg_id = False
+                partner_bank_account = False
+                bank_account = False
+                account_id = False
+                bank_name = False
+                bank_bic = False
+                cPartySet = line.getElementsByTagName('CPartySet')
+                if cPartySet:
+                    # currency data:
+                    line_cur_tag = cPartySet[0].getElementsByTagName('Ccy')
+                    if line_cur_tag:
+                        line_cur_txt = line_cur_tag[0].toxml().replace('<Ccy>','').replace('</Ccy>','').replace('<Ccy/>','')
+                        if line_cur_txt:
+                            line_cur = cur_obj.search([('name','=',line_cur_txt)], limit=1)
+                    line_amount_cur_tag = cPartySet[0].getElementsByTagName('Amt')
+                    if line_amount_cur_tag:
+                        line_amount_cur = line_amount_cur_tag[0].toxml().replace('<Amt>','').replace('</Amt>','').replace('<Amt/>','')
+                        line_amount_cur = float(line_amount_cur)
 
-                # partner data:
-                partner_name_tag = cPartySet[0].getElementsByTagName('Name')
-                if partner_name_tag:
-                    partner_name = partner_name_tag[0].toxml().replace('<Name>','').replace('</Name>','').replace('<Name/>','').replace("&quot;","'")
-                partner_reg_id_tag = cPartySet[0].getElementsByTagName('LegalId')
-                if partner_reg_id_tag:
-                    partner_reg_id = partner_reg_id_tag[0].toxml().replace('<LegalId>','').replace('</LegalId>','').replace('<LegalId/>','')
-                partner_bank_account_tag = cPartySet[0].getElementsByTagName('AccNo')
-                if partner_bank_account_tag:
-                    partner_bank_account = partner_bank_account_tag[0].toxml().replace('<AccNo>','').replace('</AccNo>','').replace('<AccNo/>','')
+                    # partner data:
+                    partner_name_tag = cPartySet[0].getElementsByTagName('Name')
+                    if partner_name_tag:
+                        partner_name = partner_name_tag[0].toxml().replace('<Name>','').replace('</Name>','').replace('<Name/>','').replace("&quot;","'")
+                    partner_reg_id_tag = cPartySet[0].getElementsByTagName('LegalId')
+                    if partner_reg_id_tag:
+                        partner_reg_id = partner_reg_id_tag[0].toxml().replace('<LegalId>','').replace('</LegalId>','').replace('<LegalId/>','')
+                    partner_bank_account_tag = cPartySet[0].getElementsByTagName('AccNo')
+                    if partner_bank_account_tag:
+                        partner_bank_account = partner_bank_account_tag[0].toxml().replace('<AccNo>','').replace('</AccNo>','').replace('<AccNo/>','')
 
-                # testing, whether it's possible to get partner (also type and account) from the system:
-                bank_account = bank_obj.search([('acc_number','=',partner_bank_account)], limit=1)
-                if (not bank_account) and partner_bank_account:
-                    partner_bank_account_list = list(partner_bank_account)
-                    partner_bank_account_list.insert(4,' ')
-                    partner_bank_account_list.insert(9,' ')
-                    partner_bank_account_list.insert(14,' ')
-                    partner_bank_account_list.insert(19,' ')
-                    partner_bank_account_list.insert(24,' ')
-                    partner_bank_account_2 = "".join(partner_bank_account_list)
-                    bank_account = bank_obj.search([('acc_number','=',partner_bank_account_2)], limit=1)
-                if bank_account:
-                    partner = bank_account.partner_id
-                if (not bank_account) and (partner_reg_id):
-                    partners = self.env['res.partner'].search([('vat','ilike',partner_reg_id)])
-                    if len([p.id for p in partners]) == 1:
-                        partner = partners
-                # setting account if partner found:
-                if partner:
-                    if cord == 'C':
-                        account_id = partner.property_account_receivable_id.id
-                    if cord == 'D':
-                        account_id = partner.property_account_payable_id.id
-                # getting bank data:
-                bank_name_tag = cPartySet[0].getElementsByTagName('BankName')
-                if bank_name_tag:
-                    bank_name = bank_name_tag[0].toxml().replace('<BankName>','').replace('</BankName>','').replace('<BankName/>','')
-                bank_bic_tag = cPartySet[0].getElementsByTagName('BankCode')
-                if bank_bic_tag:
-                    bank_bic = bank_bic_tag[0].toxml().replace('<BankCode>','').replace('</BankCode>','').replace('<BankCode/>','')
+                    # testing, whether it's possible to get partner (also type and account) from the system:
+                    bank_account = bank_obj.search([('acc_number','=',partner_bank_account)], limit=1)
+                    if (not bank_account) and partner_bank_account:
+                        partner_bank_account_list = list(partner_bank_account)
+                        partner_bank_account_list.insert(4,' ')
+                        partner_bank_account_list.insert(9,' ')
+                        partner_bank_account_list.insert(14,' ')
+                        partner_bank_account_list.insert(19,' ')
+                        partner_bank_account_list.insert(24,' ')
+                        partner_bank_account_2 = "".join(partner_bank_account_list)
+                        bank_account = bank_obj.search([('acc_number','=',partner_bank_account_2)], limit=1)
+                    if bank_account:
+                        partner = bank_account.partner_id
+                    if (not bank_account) and (partner_reg_id):
+                        partners = self.env['res.partner'].search([('vat','ilike',partner_reg_id)])
+                        if len([p.id for p in partners]) == 1:
+                            partner = partners
+                    # setting account if partner found:
+                    if partner:
+                        if cord == 'C':
+                            account_id = partner.property_account_receivable_id.id
+                        if cord == 'D':
+                            account_id = partner.property_account_payable_id.id
+                    # getting bank data:
+                    bank_name_tag = cPartySet[0].getElementsByTagName('BankName')
+                    if bank_name_tag:
+                        bank_name = bank_name_tag[0].toxml().replace('<BankName>','').replace('</BankName>','').replace('<BankName/>','')
+                    bank_bic_tag = cPartySet[0].getElementsByTagName('BankCode')
+                    if bank_bic_tag:
+                        bank_bic = bank_bic_tag[0].toxml().replace('<BankCode>','').replace('</BankCode>','').replace('<BankCode/>','')
 
-            # getting Transaction Types
-            type_code = False
-            type_code_tag = line.getElementsByTagName('TypeCode')
-            if type_code_tag:
-                type_code = type_code_tag[0].toxml().replace('<TypeCode>','').replace('</TypeCode>','')
-            if (not type_code_tag) and type_name_tag:
-                type_code = type_name_tag[0].toxml().replace('<TypeName>','').replace('</TypeName>','')
-            if not partner:
-                config_obj = self.env['account.bank.transaction.type']
-                config = config_obj.search([('name','=',type_code)], limit=1)
-                if config:
-                    account_id = config.account_id.id
+                # getting Transaction Types
+                type_code = False
+                type_code_tag = line.getElementsByTagName('TypeCode')
+                if type_code_tag:
+                    type_code = type_code_tag[0].toxml().replace('<TypeCode>','').replace('</TypeCode>','')
+                if (not type_code_tag) and type_name_tag:
+                    type_code = type_name_tag[0].toxml().replace('<TypeName>','').replace('</TypeName>','')
+                if not partner:
+                    config_obj = self.env['account.bank.transaction.type']
+                    config = config_obj.search([('name','=',type_code)], limit=1)
+                    if config:
+                        account_id = config.account_id.id
 
-            svals['transactions'].append({
-                'date': line_date,
-                'name': line_name,
-                'ref': line_ref,
-                'amount': line_amount,
-                'amount_currency': line_amount_cur,
-                'currency_id': line_cur and line_cur.id or False,
-                'partner_name': partner_name,
-                'account_number': partner_bank_account,
-                'partner_bank_account': partner_bank_account,
-                'partner_reg_id': partner_reg_id,
-                'partner_id': partner and partner.id or False,
-                'transaction_type': type_code,
-                'bank_account_id': bank_account and bank_account.id or False,
-                'account_id': account_id,
-                'bank_name': bank_name,
-                'bank_bic': bank_bic
-            })
+                svals['transactions'].append({
+                    'date': line_date,
+                    'name': line_name,
+                    'ref': line_ref,
+                    'amount': line_amount,
+                    'amount_currency': line_amount_cur,
+                    'currency_id': line_cur and line_cur.id or False,
+                    'partner_name': partner_name,
+                    'account_number': partner_bank_account,
+                    'partner_bank_account': partner_bank_account,
+                    'partner_reg_id': partner_reg_id,
+                    'partner_id': partner and partner.id or False,
+                    'transaction_type': type_code,
+                    'bank_account_id': bank_account and bank_account.id or False,
+                    'account_id': account_id,
+                    'bank_name': bank_name,
+                    'bank_bic': bank_bic
+                })
 
-        stmts_vals = [svals]
+            stmts_vals.append(svals)
+
         return currency_code, account_number, stmts_vals
 
 
@@ -334,6 +339,8 @@ class AccountBankStatementImport(models.TransientModel):
 
         cur_obj = self.env['res.currency']
         ba_obj = self.env['res.partner.bank']
+        partner_obj = self.env['res.partner']
+        config_obj = self.env['account.bank.transaction.type']
 
         currency_code = False
         account_number = False
@@ -377,8 +384,8 @@ class AccountBankStatementImport(models.TransientModel):
                     cl_amount_tag = cl_amount_tag and cl_amount_tag[0] or False
                 for amt in amount_tags:
                     if amt != cl_amount_tag:
-                        balance_amount = float(amt.toxml().replace('<Amt>','').replace('</Amt>',''))
-                cd_ind = b.getElementsByTagName('CdtDbtInd')[0].replace('<CdtDbtInd>','').replace('</CdtDbtInd>','')
+                        balance_amount = float(amt.firstChild.nodeValue)
+                cd_ind = b.getElementsByTagName('CdtDbtInd')[0].toxml().replace('<CdtDbtInd>','').replace('</CdtDbtInd>','')
                 if cd_ind == 'DBIT':
                     balance_amount *= (-1)
                 btype = b.getElementsByTagName('Tp')[0]
@@ -476,7 +483,7 @@ class AccountBankStatementImport(models.TransientModel):
                 entry_cd_tags = entry.getElementsByTagName('CdtDbtInd')
                 for ecd in entry_cd_tags:
                     if ecd not in edt_cd_tgs:
-                        line_cd_ind = ecdt.toxml().replace('<CdtDbtInd>','').replace('</CdtDbtInd>','')
+                        line_cd_ind = ecd.toxml().replace('<CdtDbtInd>','').replace('</CdtDbtInd>','')
 
                 # getting amount and currency:
                 # NtryDtls/TxDtls/AmtDtls/TxAmt/Amt or Amt
@@ -523,6 +530,15 @@ class AccountBankStatementImport(models.TransientModel):
                 if entry_ba_tag:
                     partner_bank_account = entry_ba_tag[0].getElementsByTagName('IBAN')[0].toxml().replace('<IBAN>','').replace('</IBAN>','')
                     bank_account = ba_obj.search([('acc_number','=',partner_bank_account)], limit=1)
+                    if (not bank_account) and partner_bank_account:
+                        partner_bank_account_list = list(partner_bank_account)
+                        partner_bank_account_list.insert(4,' ')
+                        partner_bank_account_list.insert(9,' ')
+                        partner_bank_account_list.insert(14,' ')
+                        partner_bank_account_list.insert(19,' ')
+                        partner_bank_account_list.insert(24,' ')
+                        partner_bank_account_2 = "".join(partner_bank_account_list)
+                        bank_account = ba_obj.search([('acc_number','=',partner_bank_account_2)], limit=1)
                 if entry_b_tag:
                     entry_b_name_tag = entry_b_tag[0].getElementsByTagName('Name')
                     if entry_b_name_tag:
@@ -554,7 +570,48 @@ class AccountBankStatementImport(models.TransientModel):
                 if not line_name:
                     line_name = type_code
 
+                # getting partner data:
+                # NtryDtls/TxDtls/RltdPties/Dbtr (+) Nm and Id/OrgId/Othr/Id or Id/PrvtId/Othr/Id
+                # NtryDtls/TxDtls/RltdPties/Cdtr (-) Nm and Id/OrgId/Othr/Id or Id/PrvtId/Othr/Id
+                partner = False
+                if bank_account:
+                    partner = bank_account.partner_id
+                partner_name = False
+                partner_reg_id = False
+                partner_tag = False
+                if line_cd_ind == 'CRDT':
+                    partner_tag = entry.getElementsByTagName('Dbtr')
+                if line_cd_ind == 'DBIT':
+                    partner_tag = entry.getElementsByTagName('Cdtr')
+                if partner_tag:
+                    partner_name_tag = partner_tag[0].getElementsByTagName('Nm')
+                    if partner_name_tag:
+                        partner_name = partner_name_tag[0].toxml().replace('<Nm>','').replace('</Nm>','')
+                    partner_reg_tag = partner_tag[0].getElementsByTagName('OrgId')
+                    if not partner_reg_tag:
+                        partner_reg_tag = partner_tag[0].getElementsByTagName('PrvtId')
+                    if partner_reg_tag:
+                        partner_reg_id_tag = partner_reg_tag[0].getElementsByTagName('Id')
+                        if partner_reg_id_tag:
+                            partner_reg_id = partner_reg_id_tag[0].toxml().replace('<Id>','').replace('</Id>','')
+                    if (not partner_name) and partner_reg_id:
+                        partner_name = partner_reg_id
+                if (not bank_account) and (partner_reg_id):
+                    partners = partner_obj.search([('vat','ilike',partner_reg_id)])
+                    if len([p.id for p in partners]) == 1:
+                        partner = partners
 
+                # getting account:
+                account_id = False
+                if partner:
+                    if line_cd_ind == 'CRDT':
+                        account_id = partner.property_account_receivable_id.id
+                    if line_cd_ind == 'DBIT':
+                        account_id = partner.property_account_payable_id.id
+                if (not partner) and type_code:
+                    config = config_obj.search([('name','=',type_code)], limit=1)
+                    if config:
+                        account_id = config.account_id.id
 
                 svals['transactions'].append({
                     'unique_import_id': unique_import_id,
@@ -564,14 +621,14 @@ class AccountBankStatementImport(models.TransientModel):
                     'amount': line_amount,
                     'amount_currency': line_amount_cur,
                     'currency_id': line_cur and line_cur.id or False,
-#                    'partner_name': partner_name,
+                    'partner_name': partner_name,
                     'account_number': partner_bank_account,
                     'partner_bank_account': partner_bank_account,
-#                    'partner_reg_id': partner_reg_id,
-#                    'partner_id': partner and partner.id or False,
+                    'partner_reg_id': partner_reg_id,
+                    'partner_id': partner and partner.id or False,
                     'transaction_type': type_code,
                     'bank_account_id': bank_account and bank_account.id or False,
-#                    'account_id': account_id,
+                    'account_id': account_id,
                     'bank_name': bank_name,
                     'bank_bic': bank_bic
                 })
