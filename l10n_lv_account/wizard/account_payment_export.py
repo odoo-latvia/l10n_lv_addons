@@ -23,6 +23,7 @@
 ##############################################################################
 
 from openerp import api, fields, models, _
+from datetime import datetime
 
 class AccountPaymentExport(models.TransientModel):
     _name = 'account.payment.export'
@@ -61,7 +62,37 @@ class AccountPaymentExport(models.TransientModel):
             'target': 'new'
         }
 
+    def _get_company(self, active_ids):
+        companies = []
+        for payment in self.env['account.payment'].browse(active_ids):
+            if payment.company_id not in companies:
+                companies.append(payment.company_id)
+        company = False
+        if len(companies) == 1 and False not in companies:
+            company = companies[0]
+        if not company:
+            company = self.env.user.company_id
+        return company
+
     def form_fidavista_data(self, active_ids):
+        def format_string(strval):
+            return strval.replace('&', '&amp;').replace('>', '&gt;').replace('<', '&lt;').replace("'", "&apos;").replace('"', '&quot;')
+        data_of_file = """<?xml version="1.0" encoding="UTF-8" ?>
+<FIDAVISTA xmlns="http://bankasoc.lv/fidavista/fidavista0101.xsd">"""
+        data_of_file += "\n    <Header>"
+        data_of_file += ("\n        <Timestamp>" + datetime.now().strftime('%Y%m%d%H%M%S%f')[:-3] + "</Timestamp>")
+        company = self._get_company(active_ids)
+        data_of_file += ("\n        <From>" + format_string(company.name) + "</From>")
+        data_of_file += "\n    </Header>"
+        for payment in self.env['account.payment'].browse(active_ids):
+            data_of_file += "\n    <Payment>"
+            payment_name = len(payment.name) > 10 and payment.name[-10:] or payment.name
+            data_of_file += ("\n        <DocNo>" + payment_name + "</DocNo>")
+            payment_date = len(payment.payment_date) > 10 and payment.payment_date[0:10] or payment.payment_date
+            data_of_file += ("\n        <RegDate>" + payment_date + "</RegDate>")
+            if payment.communication:
+                payment_communication = len(payment.communication) > 140 and payment.communication[0:140] or payment.communication
+                data_of_file += ("\n        <PmtInfo>" + payment_communication + "</PmtInfo>")
         return False
 
     def form_iso20022_data(self, active_ids):
