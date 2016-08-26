@@ -15,11 +15,11 @@
                 table.depr {
                     border: 1px solid black;
                 }
-                table.depr td, th {
+                table.depr td {
                     border: 1px solid black;
                     font-weight: normal;
                 }
-                table.depr th {
+                table.depr td.header {
                     text-align: center;
                     vertical-align: middle;
                 }
@@ -50,7 +50,7 @@
 			        <tr>
 				        <td colspan="2">Location</td>
 				        <td style="border-left: 1px solid black;">Count</td>
-				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;">1</td>
+				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;"></td>
 				        <td colspan="2"></td>
 			        </tr>
                     <t t-set="amort_percent" t-value="(o.purchase_value != 0.0 and o.method_period != 0 and o.method_number != 0) and (((o.purchase_value/((o.method_period*o.method_number)/12))*100)/o.purchase_value) or 0.0"></t>
@@ -112,39 +112,37 @@
 				        <td>Disposal date</td>
 				        <td style="border:thin solid; background-color: #F2F2F2;"></td>
 				        <td colspan="2"></td>
-				        <td colspan="2" style="border:thin solid; background-color: #F2F2F2;"></td>
+				        <td colspan="2" rowspan="3" style="border:thin solid; background-color: #F2F2F2;" t-esc="o.note"/>
 			        </tr>
 			        <tr>
 				        <td colspan="2">and justification</td>
 				        <td style="border-left: 1px solid black; border-right: 1px solid black;" colspan="2"></td>
-				        <td colspan="2" style="border:thin solid; background-color: #F2F2F2;"></td>
+<!--				        <td colspan="2" style="border:thin solid; background-color: #F2F2F2;">2</td> -->
 			        </tr>
 			        <tr>
 				        <td colspan="2" style="border:thin solid; background-color: #F2F2F2;"><font color="#F2F2F2">just.</font></td>
 				        <td colspan="2"></td>
-				        <td colspan="2" style="border:thin solid; background-color: #F2F2F2;"></td>
+<!--				        <td colspan="2" style="border:thin solid; background-color: #F2F2F2;">3</td> -->
 			        </tr>
 		        </tbody>
 	        </table>
 	        <br/>
 	        <table class="depr" width="100%" t-if="o.state != 'draft'">
-		        <thead>
-			        <tr>
-				        <th rowspan="2" width="10%">Date</th>
-				        <th rowspan="2">Description of business transaction and document number and date</th>
-				        <th rowspan="2">Purchase or production cost</th>
-				        <th rowspan="2">Reconstruction</th>
-				        <th colspan="2">Revaluation</th>
-				        <th rowspan="2">Book value</th>
-				        <th rowspan="2">Depreciation</th>
-				        <th rowspan="2">Residual value</th>
-			        </tr>
-			        <tr>
-				        <th width="10%">increase</th>
-				        <th width="10%">decrease</th>
-			        </tr>
-		        </thead>
 		        <tbody>
+			        <tr>
+				        <td class="header" rowspan="2" width="10%">Date</td>
+				        <td class="header" rowspan="2">Description of business transaction and document number and date</td>
+				        <td class="header" rowspan="2">Purchase or production cost</td>
+				        <td class="header" rowspan="2">Reconstruction</td>
+				        <td class="header" colspan="2">Revaluation</td>
+				        <td class="header" rowspan="2">Book value</td>
+				        <td class="header" rowspan="2">Depreciation</td>
+				        <td class="header" rowspan="2">Residual value</td>
+			        </tr>
+			        <tr>
+				        <td class="header" width="10%">increase</td>
+				        <td class="header" width="10%">decrease</td>
+			        </tr>
 			        <tr style="background-color: #F2F2F2;">
 				        <td t-esc="formatLang(o.purchase_date, date=True)"/>
 				        <td>Asset commissioning</td>
