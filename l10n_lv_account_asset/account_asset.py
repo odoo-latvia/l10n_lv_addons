@@ -37,7 +37,7 @@ class account_asset_category(osv.osv):
     _columns = {
         'next_month': fields.boolean('Compute from Next Month', help='Indicates that the first depreciation entry for this asset has to be done from the start of the next month following the month of the purchase date.'),
         # depreciation for taxes:
-        'account_depreciation_tax_id': fields.many2one('account.account', 'Depreciation Account for Taxes', required=True, domain=[('type','=','other')]),
+        'account_depreciation_tax_id': fields.many2one('account.account', 'Depreciation Account for Taxes', domain=[('type','=','other')]),
         'method_tax': fields.selection([('linear','Linear'),('degressive','Degressive')], 'Computation Method', required=True, help="Choose the method to use to compute the amount of depreciation lines.\n"\
             "  * Linear: Calculated on basis of: Gross Value / Number of Depreciations\n" \
             "  * Degressive: Calculated on basis of: Residual Value * Degressive Factor"),
@@ -737,6 +737,8 @@ class account_asset_depreciation_tax_line(osv.osv):
         created_move_ids = []
         asset_ids = []
         for line in self.browse(cr, uid, ids, context=context):
+            if not line.asset_id.category_id.account_depreciation_tax_id:
+                raise osv.except_osv(_("No depreciation account for tax depreciation!"), (_("Please set Depreciation Account for Taxes for asset category %s.") % line.asset_id.category_id.name))
             depreciation_date = context.get('depreciation_date') or line.depreciation_date or time.strftime('%Y-%m-%d')
             period_ids = period_obj.find(cr, uid, depreciation_date, context=context)
             company_currency = line.asset_id.company_id.currency_id.id

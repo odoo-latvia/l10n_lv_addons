@@ -1192,6 +1192,18 @@ msgid "Asset"
 msgstr "Pamatlīdzeklis"
 
 #. module: l10n_lv_account_asset
+#: code:addons/l10n_lv_account_asset/account_asset.py:741
+#, python-format
+msgid "No depreciation account for tax depreciation!"
+msgstr "Nolietojumam nodokļu vajadzībām nav konta!"
+
+#. module: l10n_lv_account_asset
+#: code:addons/l10n_lv_account_asset/account_asset.py:741
+#, python-format
+msgid "Please set Depreciation Account for Taxes for asset category %s."
+msgstr "Lūdzu, norādiet Nolietojuma kontu nodokļu vajadzībām pamatlīdzekļu kategorijai %s."
+
+#. module: l10n_lv_account_asset
 #: view:website:l10n_lv_account_asset.asset_card_report_document
 msgid "Company name, company registry"
 msgstr "Firmas nosaukums, reģistrācijas Nr."
