@@ -21,7 +21,7 @@
                     vertical-align: middle;
                     font-size: 14px;
                 }
-                td, th {
+                td {
                     padding-left: 8px;
                     padding-right: 8px;
                     padding-top: 6px;
@@ -35,11 +35,11 @@
                     padding-left: 0px;
                     padding-right: 0px;
                 }
-                table.descr td, th {
+                table.descr td {
                     border: 1px solid black;
                     font-weight: normal;
                 }
-                table.descr th {
+                table.descr td.header {
                     text-align: center;
                 }
             </style>
@@ -67,22 +67,20 @@
 	        <br/>
 	        <br/>
 	        <table width="100%" class="descr">
-		        <thead>
+		        <tbody>
 			        <tr>
-				        <th width="20%">Name</th>
-				        <th width="10%">Purchase value</th>
-				        <th width="15%">
+				        <td class="header" width="20%">Name</td>
+				        <td class="header" width="10%">Purchase value</td>
+				        <td class="header" width="15%">
                             <span>Depreciation deduction norm per year (%)</span>
                             <span>/</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol or ''"/>)
                             <span>per month</span>
-                        </th>
-				        <th width="15%">Putting into service (date)</th>
-				        <th width="15%">Full depreciation period (months)</th>
-				        <th width="25%">Notes</th>
+                        </td>
+				        <td class="header" width="15%">Putting into service (date)</td>
+				        <td class="header" width="15%">Full depreciation period (months)</td>
+				        <td class="header" width="25%">Notes</td>
 			        </tr>
-		        </thead>
-		        <tbody>
                     <t t-set="depr_norm" t-value="(o.purchase_value != 0.0 and o.method_period != 0.0 and o.method_number != 0.0) and (((o.purchase_value/((o.method_period*o.method_number)/12))*100)/o.purchase_value) or 0.0"></t>
                     <t t-set="depr_norm_val" t-value="(o.method_period != 0 and o.method_number != 0) and (o.purchase_value/(o.method_period*o.method_number)) or 0.0"></t>
 			        <tr>
