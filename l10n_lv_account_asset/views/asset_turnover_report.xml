@@ -22,13 +22,10 @@
                     margin-top: 20px; 
                     margin-bottom: 20px;
                 }
-                table.list_table thead {
-                    border: 1px solid black;
-                }
-                table.list_table th {
+                table.list_table td.header {
                     font-weight: normal;
                 }
-                table.list_table td, th {
+                table.list_table td {
                     padding-top: 2px;
                     padding-bottom: 2px;
                     padding-left: 4px;
@@ -58,28 +55,26 @@
 	        <br/>
 	        <br/>
 	        <table class="list_table" width="100%">
-		        <thead>
-			        <tr>
-                        <th></th>
-				        <th colspan="2">Transaction</th>
-				        <th>Book value</th>
-				        <th>Depreciation</th>
-				        <th>Residual value</th>
-			        </tr>
-		        </thead>
-                <t t-set="purchase_total_amount_1" t-value="0.0"></t>
-                <t t-set="purchase_total_amount_2" t-value="0.0"></t>
-                <t t-set="purchase_total_amount_3" t-value="0.0"></t>
-                <t t-set="depr_total_amount_1" t-value="0.0"></t>
-                <t t-set="depr_total_amount_2" t-value="0.0"></t>
-                <t t-set="depr_total_amount_3" t-value="0.0"></t>
-                <t t-set="left_total_amount_1" t-value="0.0"></t>
-                <t t-set="left_total_amount_2" t-value="0.0"></t>
-                <t t-set="left_total_amount_3" t-value="0.0"></t>
-                <t t-set="count" t-value="0"></t>
-                <t t-set="form" t-value="data and data['form'] or {}"></t>
-                <t t-set="asset_list" t-value="lines(form)"></t>
 		        <tbody>
+			        <tr style="border: 1px solid black;">
+                        <td class="header"></td>
+				        <td class="header" colspan="2">Transaction</td>
+				        <td class="header">Book value</td>
+				        <td class="header">Depreciation</td>
+				        <td class="header">Residual value</td>
+			        </tr>
+                    <t t-set="purchase_total_amount_1" t-value="0.0"></t>
+                    <t t-set="purchase_total_amount_2" t-value="0.0"></t>
+                    <t t-set="purchase_total_amount_3" t-value="0.0"></t>
+                    <t t-set="depr_total_amount_1" t-value="0.0"></t>
+                    <t t-set="depr_total_amount_2" t-value="0.0"></t>
+                    <t t-set="depr_total_amount_3" t-value="0.0"></t>
+                    <t t-set="left_total_amount_1" t-value="0.0"></t>
+                    <t t-set="left_total_amount_2" t-value="0.0"></t>
+                    <t t-set="left_total_amount_3" t-value="0.0"></t>
+                    <t t-set="count" t-value="0"></t>
+                    <t t-set="form" t-value="data and data['form'] or {}"></t>
+                    <t t-set="asset_list" t-value="lines(form)"></t>
                     <t t-foreach="asset_list" t-as="asset">
                         <t t-set="count" t-value="count + 1"></t>
 			            <tr>
