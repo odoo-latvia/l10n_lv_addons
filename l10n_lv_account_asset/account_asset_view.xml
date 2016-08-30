@@ -179,6 +179,7 @@
                     <attribute name="sum">Residual</attribute>
                 </field>
                 <field name="value_residual" position="before">
+                    <field name="salvage_value" sum="Salvage"/>
                     <field name="accumulated_depreciation" sum="Accumulated"/>
                 </field>
             </field>
