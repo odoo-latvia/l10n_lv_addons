@@ -874,6 +874,11 @@ msgstr "Grāmatots"
 msgid "Posted"
 msgstr "Grāmatots"
 
+#. module: l10n_lv_account_asset
+#: field:account.asset.depreciation_tax.line,confirmed_check:0
+msgid "Confirmed"
+msgstr "Apstiprināts"
+
 #. module: account_asset
 #: model:ir.actions.act_window,help:account_asset.action_asset_asset_report
 msgid "<p>\n"
@@ -998,6 +1003,11 @@ msgstr "Nolietojumu skaits (nod.)"
 #: view:account.asset.asset:0
 msgid "Create Move"
 msgstr "Veidot ierakstu"
+
+#. module: l10n_lv_account_asset
+#: view:account.asset.asset:0
+msgid "Confirm"
+msgstr "Apstiprināt"
 
 #. module: account_asset
 #: view:account.asset.asset:0

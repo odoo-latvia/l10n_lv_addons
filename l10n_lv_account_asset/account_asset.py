@@ -372,7 +372,7 @@ class account_asset_asset(osv.osv):
                      'sequence': i,
                      'name': str(asset.id) +'/' + str(i),
                      'remaining_value': residual_amount,
-                     'depreciated_value': (asset.purchase_value - asset.salvage_value) - (residual_amount + amount),
+                     'depreciated_value': asset.purchase_value - (residual_amount + amount),
                      'depreciation_date': depreciation_date.strftime('%Y-%m-%d'),
                 }
                 depreciation_lin_obj.create(cr, uid, vals, context=context)
@@ -437,22 +437,18 @@ class account_asset_asset(osv.osv):
     def _amount_residual_tax(self, cr, uid, ids, name, args, context=None):
         depr_l_obj = self.pool.get('account.asset.depreciation_tax.line')
         depr_l_ids = depr_l_obj.search(cr, uid, [('asset_id','in',ids)], context=context)
-        a_ml_ids = []
-        for l in depr_l_obj.browse(cr, uid, depr_l_ids, context=context):
-            for ml in l.move_id.line_id:
-                if ml.asset_id:
-                    a_ml_ids.append(ml.id)
         res = {}
-        if a_ml_ids:
+        if depr_l_ids:
             cr.execute("""SELECT
-                    l.asset_id as id, SUM(abs(l.debit-l.credit)) AS amount
+                    l.asset_id as id, SUM(amount) AS amount
                 FROM
-                    account_move_line l
+                    account_asset_depreciation_tax_line l
                 WHERE
-                    l.id IN %s GROUP BY l.asset_id """, (tuple(a_ml_ids),))
+                    l.id IN %s and l.confirmed_check = True
+                GROUP BY l.asset_id """, (tuple(depr_l_ids),))
             res=dict(cr.fetchall())
         for asset in self.browse(cr, uid, ids, context):
-            res[asset.id] = asset.purchase_value - res.get(asset.id, 0.0) - asset.salvage_value - asset.accumulated_depreciation_tax #---- accumulated_depreciation_tax
+            res[asset.id] = asset.purchase_value - res.get(asset.id, 0.0) - asset.accumulated_depreciation_tax #---- accumulated_depreciation_tax
         for id in ids:
             res.setdefault(id, 0.0)
         return res
@@ -722,9 +718,17 @@ class account_asset_depreciation_tax_line(osv.osv):
         'remaining_value': fields.float('Remaining Value', digits_compute=dp.get_precision('Account'),required=True),
         'depreciated_value': fields.float('Amount Already Depreciated', required=True),
         'depreciation_date': fields.date('Depreciation Date', select=1),
+        'confirmed_check': fields.boolean('Confirmed', readonly=True),
         'move_id': fields.many2one('account.move', 'Depreciation Entry'),
         'move_check': fields.function(_get_move_check, method=True, type='boolean', string='Posted', store=True)
     }
+
+    _defaults = {
+        'confirmed_check': False
+    }
+
+    def confirm_depreciation(self, cr, uid, ids, context=None):
+        return self.write(cr, uid, ids, {'confirmed_check': True}, context=context)
 
     def create_move(self, cr, uid, ids, context=None):
         context = dict(context or {})
@@ -816,6 +820,12 @@ class account_asset_depreciation_tax_line(osv.osv):
                 'context': ctx,
             }
         return created_move_ids
+
+    def write(self, cr, uid, ids, vals, context=None):
+        vals = dict(vals or {})
+        if 'move_id' in vals:
+            self.confirm_depreciation(cr, uid, ids, context=context)
+        return super(account_asset_depreciation_tax_line, self).write(cr, uid, ids, vals, context=context)
 
 class account_asset_history(osv.osv):
     _inherit = 'account.asset.history'
