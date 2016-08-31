@@ -81,7 +81,7 @@
 				        <td class="header" width="15%">Full depreciation period (months)</td>
 				        <td class="header" width="25%">Notes</td>
 			        </tr>
-                    <t t-set="depr_norm" t-value="(o.purchase_value != 0.0 and o.method_period != 0.0 and o.method_number != 0.0) and (((o.purchase_value/((o.method_period*o.method_number)/12))*100)/o.purchase_value) or 0.0"></t>
+                    <t t-set="depr_norm" t-value="(o.purchase_value != 0.0 and o.method_period != 0.0 and o.method_number != 0.0) and (((o.purchase_value/((o.method_period*o.method_number)/12.0))*100.0)/o.purchase_value) or 0.0"></t>
                     <t t-set="depr_norm_val" t-value="(o.method_period != 0 and o.method_number != 0) and (o.purchase_value/(o.method_period*o.method_number)) or 0.0"></t>
 			        <tr>
 				        <td t-esc="o.name"/>

@@ -53,14 +53,14 @@
 				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;"></td>
 				        <td colspan="2"></td>
 			        </tr>
-                    <t t-set="amort_percent" t-value="(o.purchase_value != 0.0 and o.method_period != 0 and o.method_number != 0) and (((o.purchase_value/((o.method_period*o.method_number)/12))*100)/o.purchase_value) or 0.0"></t>
+                    <t t-set="amort_percent" t-value="(o.purchase_value != 0.0 and o.method_period != 0 and o.method_number != 0) and (((o.purchase_value/((o.method_period*o.method_number)/12.0))*100.0)/o.purchase_value) or 0.0"></t>
 			        <tr>
 				        <td colspan="2" style="border:thin solid; background-color: #F2F2F2;"></td>
 				        <td style="border-right: 1px solid black;" colspan="2"></td>
 				        <td>Amortization rate per year, %</td>
 				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="amort_percent and formatLang(amort_percent) or ''"/>
 			        </tr>
-                    <t t-set="amort_val" t-value="(o.method_period != 0 and o.method_number != 0) and (o.purchase_value/((o.method_period*o.method_number)/12)) or 0.0"></t>
+                    <t t-set="amort_val" t-value="(o.method_period != 0 and o.method_number != 0) and (o.purchase_value/((o.method_period*o.method_number)/12.0)) or 0.0"></t>
 			        <tr>
 				        <td>Put into service date</td>
 				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="formatLang(o.purchase_date, date=True)"/>
@@ -75,7 +75,7 @@
                         </td>
 				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="amort_val and formatLang(amort_val) or ''"/>
 			        </tr>
-                    <t t-set="usage_years" t-value="(o.method_period*o.method_number)/12"></t>
+                    <t t-set="usage_years" t-value="(o.method_period*o.method_number)/12.0"></t>
                     <t t-set="amort_month_perc" t-value="(o.purchase_value != 0.0 and o.method_period != 0 and o.method_number != 0) and (((o.purchase_value/(o.method_period*o.method_number))*100)/o.purchase_value) or 0.0"></t>
 			        <tr>
 				        <td>Time of valid usage (years)</td>
