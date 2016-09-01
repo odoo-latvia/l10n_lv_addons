@@ -53,17 +53,16 @@
 				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;"></td>
 				        <td colspan="2"></td>
 			        </tr>
-                    <t t-set="amort_percent" t-value="(o.purchase_value != 0.0 and o.method_period != 0 and o.method_number != 0) and (((o.purchase_value/((o.method_period*o.method_number)/12.0))*100.0)/o.purchase_value) or 0.0"></t>
+			        <t t-set="time_depr_data" t-value="get_time_depr_data(o)"></t>
 			        <tr>
 				        <td colspan="2" style="border:thin solid; background-color: #F2F2F2;"></td>
 				        <td style="border-right: 1px solid black;" colspan="2"></td>
 				        <td>Amortization rate per year, %</td>
-				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="amort_percent and formatLang(amort_percent) or ''"/>
+				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="time_depr_data['amort_percent'] and formatLang(time_depr_data['amort_percent']) or ''"/>
 			        </tr>
-                    <t t-set="amort_val" t-value="(o.method_period != 0 and o.method_number != 0) and (o.purchase_value/((o.method_period*o.method_number)/12.0)) or 0.0"></t>
 			        <tr>
 				        <td>Put into service date</td>
-				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="formatLang(o.purchase_date, date=True)"/>
+				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="formatLang(time_depr_data['service_date'], date=True)"/>
 				        <td>
                             <span>Initial book value</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol or ''"/>)
@@ -73,25 +72,22 @@
                             <span>amount</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol or ''"/>)
                         </td>
-				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="amort_val and formatLang(amort_val) or ''"/>
+				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="time_depr_data['amort_val'] and formatLang(time_depr_data['amort_val']) or ''"/>
 			        </tr>
-                    <t t-set="usage_years" t-value="(o.method_period*o.method_number)/12.0"></t>
-                    <t t-set="amort_month_perc" t-value="(o.purchase_value != 0.0 and o.method_period != 0 and o.method_number != 0) and (((o.purchase_value/(o.method_period*o.method_number))*100)/o.purchase_value) or 0.0"></t>
 			        <tr>
 				        <td>Time of valid usage (years)</td>
-				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="usage_years and formatLang(usage_years) or ''"/>
+				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="time_depr_data['usage_years'] and formatLang(time_depr_data['usage_years']) or ''"/>
 				        <td>
                             <span>Liquidation (scrap) value</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol or ''"/>)
                         </td>
 				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="formatLang(o.salvage_value)"/>
 				        <td>The same per month, %</td>
-				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="amort_month_perc and formatLang(amort_month_perc) or ''"/>
+				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="time_depr_data['amort_month_perc'] and formatLang(time_depr_data['amort_month_perc']) or ''"/>
 			        </tr>
-                    <t t-set="amort_month_val" t-value="(o.method_period != 0 and o.method_number != 0) and (o.purchase_value/(o.method_period*o.method_number)) or 0.0"></t>
 			        <tr>
 				        <td>The same in months</td>
-				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="int(o.method_period*o.method_number) or ''"/>
+				        <td style="border:thin solid; text-align:center; background-color: #F2F2F2;" t-esc="int(time_depr_data['usage_months']) or ''"/>
 				        <td>
                             <span>Depreciation amount for one month</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol"/>)
@@ -101,7 +97,7 @@
                             <span>amount</span>
                             (<span t-esc="o.currency_id and o.currency_id.symbol"/>)
                         </td>
-				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="amort_month_val and formatLang(amort_month_val) or ''"/>
+				        <td style="border:thin solid; text-align:right; background-color: #F2F2F2;" t-esc="time_depr_data['amort_month_val'] and formatLang(time_depr_data['amort_month_val']) or ''"/>
 			        </tr>
 			        <tr>
 				        <td colspan="2"></td>
@@ -144,7 +140,7 @@
 				        <td class="header" width="10%">decrease</td>
 			        </tr>
 			        <tr style="background-color: #F2F2F2;">
-				        <td t-esc="formatLang(o.purchase_date, date=True)"/>
+				        <td t-esc="formatLang(time_depr_data['service_date'], date=True)"/>
 				        <td>Asset commissioning</td>
 				        <td style="text-align:right" t-esc="formatLang(o.purchase_value)"/>
 				        <td style="color: #F2F2F2;">...</td>
