@@ -1516,6 +1516,11 @@ msgid "Depreciation"
 msgstr "Nolietojums"
 
 #. module: l10n_lv_account_asset
+#: view:website:l10n_lv_account_asset.asset_list_report_document
+msgid "Salvage value"
+msgstr "Likvidācijas vērtība"
+
+#. module: l10n_lv_account_asset
 #: view:website:l10n_lv_account_asset.asset_turnover_report_document
 #: view:website:l10n_lv_account_asset.asset_list_report_document
 msgid "Residual value"

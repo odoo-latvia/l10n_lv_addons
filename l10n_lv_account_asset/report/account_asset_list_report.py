@@ -52,23 +52,27 @@ class account_asset_list(report_sxw.rml_parse):
             account_code = asset.category_id.account_asset_id.code
             account_name = asset.category_id.account_asset_id.name
             book = asset.purchase_value
-            depr = 0.0
+            salvage = asset.salvage_value
+            depr = asset.accumulated_depreciation
             for l in asset.depreciation_line_ids:
                 if l.move_check == True and ((not form) or l.depreciation_date <= form['date']):
                     depr += l.amount
-            left = book - depr
+            left = round((book - depr - salvage), 2) + 0
             acc_book = book
             acc_depr = depr
+            acc_salvage = salvage
             acc_res = left
             asset_list = [{
                 'name': asset.name,
                 'book': book,
                 'depr': depr,
+                'salvage': salvage,
                 'left': left
             }]
             if datas.get((account_id)):
                 acc_book += datas[(account_id)]['acc_book']
                 acc_depr += datas[(account_id)]['acc_depr']
+                acc_salvage += datas[(account_id)]['acc_salvage']
                 acc_res += datas[(account_id)]['acc_res']
                 asset_list += datas[(account_id)]['asset_list']
                 datas[(account_id)].clear()
@@ -78,6 +82,7 @@ class account_asset_list(report_sxw.rml_parse):
                     'account_name': account_name,
                     'acc_book': acc_book,
                     'acc_depr': acc_depr,
+                    'acc_salvage': acc_salvage,
                     'acc_res': acc_res,
                     'asset_list': asset_list
                 }

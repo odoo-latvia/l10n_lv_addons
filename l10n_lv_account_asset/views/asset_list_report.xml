@@ -58,10 +58,12 @@
 				        <td class="header" colspan="3"></td>
 				        <td class="header">Book value</td>
 				        <td class="header">Depreciation</td>
+				        <td class="header">Salvage value</td>
 				        <td class="header">Residual value</td>
 			        </tr>
                     <t t-set="total_purchase" t-value="0.0"></t>
                     <t t-set="total_depr" t-value="0.0"></t>
+                    <t t-set="total_salvage" t-value="0.0"></t>
                     <t t-set="total_left" t-value="0.0"></t>
                     <t t-set="form" t-value="data and data['form'] or {}"></t>
                     <t t-set="account_list" t-value="lines(form)"></t>
@@ -96,6 +98,9 @@
                                 <span t-esc="formatLang(asset['depr'])"/>
                             </td>
 			                <td style="text-align:right">
+                                <span t-esc="formatLang(asset['salvage'])"/>
+                            </td>
+			                <td style="text-align:right">
                                 <span t-esc="formatLang(asset['left'])"/>
                             </td>
 			            </tr>
@@ -110,11 +115,15 @@
 				                <span t-esc="formatLang(account['acc_depr'])"/>
 			                </td>
 			                <td style="border-top:1px solid; text-align:right;">
+				                <span t-esc="formatLang(account['acc_salvage'])"/>
+			                </td>
+			                <td style="border-top:1px solid; text-align:right;">
 				                <span t-esc="formatLang(account['acc_res'])"/>
 			                </td>
 		                </tr>
                         <t t-set="total_purchase" t-value="total_purchase + account['acc_book']"></t>
                         <t t-set="total_depr" t-value="total_depr + account['acc_depr']"></t>
+                        <t t-set="total_salvage" t-value="total_salvage + account['acc_salvage']"></t>
                         <t t-set="total_left" t-value="total_left + account['acc_res']"></t>
     	                <tr t-if="test_count == len(account_list)">
 			                <td colspan="3" style="border-top:1px solid; font-weight: bold;">
@@ -125,6 +134,9 @@
 			                </td>
 			                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
 				                <span t-esc="formatLang(total_depr)"/>
+			                </td>
+			                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
+				                <span t-esc="formatLang(total_salvage)"/>
 			                </td>
 			                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
 				                <span t-esc="formatLang(total_left)"/>
