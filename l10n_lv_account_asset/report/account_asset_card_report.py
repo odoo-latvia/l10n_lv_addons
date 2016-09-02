@@ -77,8 +77,6 @@ class account_asset_card_report(report_sxw.rml_parse):
                 base_amount = amount
                 break
             if base_amount != 0.0:
-                print '-------------'
-                print base_amount
                 if o.method == 'linear':
                     method_number += int(o.accumulated_depreciation / base_amount)
                 if o.method == 'degressive':
@@ -91,9 +89,7 @@ class account_asset_card_report(report_sxw.rml_parse):
                         i += 1
                         if i == 1:
                             residual_amount -= base_amount
-                    method_number = i
-            print '-----------------------'
-            print method_number
+                    method_number += i
         usage_years = (o.method_period * method_number) / 12.0
         usage_months = o.method_period * method_number
         amort_month_val = (o.method_period != 0 and method_number != 0) and (o.purchase_value/(o.method_period*method_number)) or 0.0

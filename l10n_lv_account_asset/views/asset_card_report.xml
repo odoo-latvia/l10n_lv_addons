@@ -150,6 +150,17 @@
 				        <td style="color: #F2F2F2;">...</td>
 				        <td style="text-align:right" t-esc="formatLang(o.purchase_value)"/>
 			        </tr>
+			        <tr t-if="o.accumulated_depreciation != 0.0" style="background-color: #F2F2F2;">
+				        <td t-esc="o.confirmation_date and formatLang(o.confirmation_date, date=True) or formatLang(time_depr_data['service_date'], date=True)"/>
+				        <td>Accumulated depreciation</td>
+				        <td style="text-align:right" t-esc="formatLang(o.purchase_value)"/>
+				        <td style="color: #F2F2F2;">...</td>
+				        <td style="color: #F2F2F2;">...</td>
+				        <td style="color: #F2F2F2;">...</td>
+				        <td style="text-align:right" t-esc="formatLang(o.purchase_value)"/>
+				        <td style="text-align:right" t-esc="formatLang(o.accumulated_depreciation)"/>
+			            <td style="text-align:right" t-esc="formatLang(float('%0.2f' % (o.purchase_value - o.accumulated_depreciation)))"/>
+			        </tr>
 			        <tr t-foreach="o.depreciation_line_ids" t-as="line" style="background-color: #F2F2F2;">
                         <t t-if="line.move_check">
 				            <td t-esc="formatLang(line.depreciation_date, date=True)"/>
