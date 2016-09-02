@@ -37,6 +37,7 @@ class account_asset_card_report(report_sxw.rml_parse):
             'uid': uid,
             'get_time_depr_data': self.get_time_depr_data
         })
+        self.context = context
 
     def get_time_depr_data(self, o):
         method_number = o.method_number
@@ -59,7 +60,7 @@ class account_asset_card_report(report_sxw.rml_parse):
         year = date_val.year
         total_days = (year % 4) and 365 or 366
 
-        undone_dotation_number = asset_obj._compute_board_undone_dotation_nb(self.cr, self.uid, o, date_val, total_days, context=self.localcontext)
+        undone_dotation_number = asset_obj._compute_board_undone_dotation_nb(self.cr, self.uid, o, date_val, total_days, context=self.context)
         if o.method_time == 'end':
             method_number = undone_dotation_number
 
@@ -68,7 +69,7 @@ class account_asset_card_report(report_sxw.rml_parse):
             base_amount = 0.0
             for x in range(0, undone_dotation_number):
                 i = x + 1
-                amount = asset_obj._compute_board_amount(self.cr, self.uid, o, i, residual_amount, amount_to_depr, undone_dotation_number, [], total_days, date_val, context=self.localcontext)
+                amount = asset_obj._compute_board_amount(self.cr, self.uid, o, i, residual_amount, amount_to_depr, undone_dotation_number, [], total_days, date_val, context=self.context)
                 residual_amount -= amount
                 date_val = (datetime(year, month, day) + relativedelta(months=+o.method_period))
                 day = date_val.day

@@ -26,6 +26,7 @@ import time
 from datetime import datetime
 from openerp.report import report_sxw
 from openerp.osv import osv
+from openerp.addons.l10n_lv_account_asset.report.account_asset_card_report import account_asset_card_report
 
 class account_asset_confirmation_report(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
@@ -34,8 +35,13 @@ class account_asset_confirmation_report(report_sxw.rml_parse):
             'time': time,
             'cr':cr,
             'uid': uid,
+            'get_time_depr_data': self.get_time_depr_data
         })
-        
+        self.context = context
+
+    def get_time_depr_data(self, o):
+        return account_asset_card_report(self.cr, self.uid, self.name, self.context).get_time_depr_data(o)
+
 class acf_report(osv.AbstractModel):
     _name = 'report.l10n_lv_account_asset.asset_confirmation_report'
     _inherit = 'report.abstract_report'
