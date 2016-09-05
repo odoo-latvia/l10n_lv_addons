@@ -106,7 +106,7 @@
 			        </tr>
 			        <tr>
 				        <td>Disposal date</td>
-				        <td style="border:thin solid; background-color: #F2F2F2;"></td>
+				        <td style="border:thin solid; background-color: #F2F2F2;" t-esc="o.close_date and formatLang(o.close_date, date=True) or ''"/>
 				        <td colspan="2"></td>
 				        <td colspan="2" rowspan="3" style="border:thin solid; background-color: #F2F2F2;" t-esc="o.note"/>
 			        </tr>
