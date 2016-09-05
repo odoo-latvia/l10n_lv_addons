@@ -109,10 +109,10 @@ class account_asset_turnover(report_sxw.rml_parse):
                 left4 = - asset.salvage_value
             purchase_total1 = purchase2 + purchase3 + purchase4
             depr_total1 = depr2 + depr3 + depr4
-            left_total1 = left2 + left3 + left4 - asset.accumulated_depreciation
+            left_total1 = round((left2 + left3 + left4 - asset.accumulated_depreciation), 2) + 0
             purchase_total2 = purchase1 + purchase2 + purchase3 + purchase4
             depr_total2 = depr1 + depr2 + depr3 + depr4
-            left_total2 = left1 + left2 + left3 + left4
+            left_total2 = round((left1 + left2 + left3 + left4), 2) + 0
             if datas1.get((account_id)):
                 purchase1 += datas1[(account_id)]['purchase1']
                 left1 += datas1[(account_id)]['left1']
