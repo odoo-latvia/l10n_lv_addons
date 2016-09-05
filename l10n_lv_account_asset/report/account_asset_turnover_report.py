@@ -102,7 +102,7 @@ class account_asset_turnover(report_sxw.rml_parse):
                         depr += line.amount
                 purchase4 = - asset.purchase_value
                 depr4 = - depr
-                left4 = - (asset.purchase_value - depr) - asset.salvage_value
+                left4 = - (asset.purchase_value - depr)
             else:
                 purchase4 = 0.0
                 depr4 = 0.0
