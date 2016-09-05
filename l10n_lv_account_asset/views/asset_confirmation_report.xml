@@ -91,7 +91,7 @@
                             <span t-esc="formatLang(time_depr_data['amort_month_val'])"/>
                         </td>
 				        <td style="text-align:center" t-esc="formatLang(time_depr_data['service_date'], date=True)"/>
-				        <td style="text-align:center" t-esc="o.method_period*o.method_number"/>
+				        <td style="text-align:center" t-esc="time_depr_data['usage_months']"/>
 				        <td t-esc="o.note or ''"/>
 			        </tr>
 		        </tbody>
