@@ -795,14 +795,13 @@ msgstr "Nodokļu vajadzībām"
 #. module: account_asset
 #: field:account.asset.depreciation.line,amount:0
 #: field:account.asset.depreciation_tax.line,amount:0
-#: field:account.asset.asset,current_depreciation:0
 msgid "Current Depreciation"
 msgstr "Tekošais nolietojums"
 
 #. module: account_asset
 #: field:account.asset.asset,current_depreciation_tax:0
-msgid "Current Depreciation Tax"
-msgstr "Tekošais nolietojums nodokļiem"
+msgid "Depreciation Tax"
+msgstr "Nolietojums nodokļiem"
 
 #. module: account_asset
 #: field:account.asset.asset,name:0
@@ -1346,7 +1345,10 @@ msgid "Book value"
 msgstr "Uzskaites vērtība"
 
 #. module: l10n_lv_account_asset
+#: field:account.asset.asset,current_depreciation:0
 #: view:website:l10n_lv_account_asset.asset_card_report_document
+#: view:website:l10n_lv_account_asset.asset_turnover_report_document
+#: view:website:l10n_lv_account_asset.asset_list_report_document
 msgid "Depreciation"
 msgstr "Nolietojums"
 
@@ -1510,12 +1512,6 @@ msgstr "Operācija"
 #: view:website:l10n_lv_account_asset.asset_list_report_document
 msgid "Book value"
 msgstr "Uzskaites vērtība"
-
-#. module: l10n_lv_account_asset
-#: view:website:l10n_lv_account_asset.asset_turnover_report_document
-#: view:website:l10n_lv_account_asset.asset_list_report_document
-msgid "Depreciation"
-msgstr "Nolietojums"
 
 #. module: l10n_lv_account_asset
 #: view:website:l10n_lv_account_asset.asset_list_report_document

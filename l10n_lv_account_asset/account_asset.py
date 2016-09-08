@@ -520,8 +520,8 @@ class account_asset_asset(osv.osv):
         'accumulated_depreciation_tax': fields.float('Accumulated Depreciation', readonly=True, states={'draft':[('readonly',False)]}),
         'value_residual_tax': fields.function(_amount_residual_tax, method=True, digits_compute=dp.get_precision('Account'), string='Residual Value'),
         'depreciation_tax_line_ids': fields.one2many('account.asset.depreciation_tax.line', 'asset_id', 'Depreciation Tax Lines', readonly=True, states={'draft':[('readonly',False)],'open':[('readonly',False)]}),
-        'current_depreciation': fields.function(_current_depreciation, type='float', string='Current Depreciation'),
-        'current_depreciation_tax': fields.function(_current_depreciation_tax, type='float', string='Current Depreciation Tax')
+        'current_depreciation': fields.function(_current_depreciation, type='float', string='Depreciation'),
+        'current_depreciation_tax': fields.function(_current_depreciation_tax, type='float', string='Depreciation Tax')
     }
 
     _defaults = {
