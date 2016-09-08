@@ -453,6 +453,49 @@ class account_asset_asset(osv.osv):
             res.setdefault(id, 0.0)
         return res
 
+    def _current_depreciation(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        depr_l_obj = self.pool.get('account.asset.depreciation.line')
+        depr_l_ids = depr_l_obj.search(cr, uid, [('asset_id','in',ids)], context=context)
+        a_ml_ids = []
+        for l in depr_l_obj.browse(cr, uid, depr_l_ids, context=context):
+            for ml in l.move_id.line_id:
+                if ml.asset_id:
+                    a_ml_ids.append(ml.id)
+        res = {}
+        if a_ml_ids:
+            cr.execute("""SELECT
+                    l.asset_id as id, SUM(abs(l.debit-l.credit)) AS amount
+                FROM
+                    account_move_line l
+                WHERE
+                    l.id IN %s GROUP BY l.asset_id """, (tuple(a_ml_ids),))
+            res=dict(cr.fetchall())
+        for asset in self.browse(cr, uid, ids, context):
+            res[asset.id] = res.get(asset.id, 0.0) + asset.accumulated_depreciation
+        for id in ids:
+            res.setdefault(id, 0.0)
+        return res
+
+    def _current_depreciation_tax(self, cr, uid, ids, name, args, context=None):
+        depr_l_obj = self.pool.get('account.asset.depreciation_tax.line')
+        depr_l_ids = depr_l_obj.search(cr, uid, [('asset_id','in',ids)], context=context)
+        res = {}
+        if depr_l_ids:
+            cr.execute("""SELECT
+                    l.asset_id as id, SUM(amount) AS amount
+                FROM
+                    account_asset_depreciation_tax_line l
+                WHERE
+                    l.id IN %s and l.confirmed_check = True
+                GROUP BY l.asset_id """, (tuple(depr_l_ids),))
+            res=dict(cr.fetchall())
+        for asset in self.browse(cr, uid, ids, context):
+            res[asset.id] = res.get(asset.id, 0.0) + asset.accumulated_depreciation_tax
+        for id in ids:
+            res.setdefault(id, 0.0)
+        return res
+
     _columns = {
         'next_month': fields.boolean('Compute from Next Month', readonly=True, states={'draft':[('readonly',False)]}, help='Indicates that the first depreciation entry for this asset has to be done from the start of the next month following the month of the purchase date.'),
         'start_date': fields.date('Date Depreciation Started'),
@@ -477,6 +520,8 @@ class account_asset_asset(osv.osv):
         'accumulated_depreciation_tax': fields.float('Accumulated Depreciation', readonly=True, states={'draft':[('readonly',False)]}),
         'value_residual_tax': fields.function(_amount_residual_tax, method=True, digits_compute=dp.get_precision('Account'), string='Residual Value'),
         'depreciation_tax_line_ids': fields.one2many('account.asset.depreciation_tax.line', 'asset_id', 'Depreciation Tax Lines', readonly=True, states={'draft':[('readonly',False)],'open':[('readonly',False)]}),
+        'current_depreciation': fields.function(_current_depreciation, type='float', string='Current Depreciation'),
+        'current_depreciation_tax': fields.function(_current_depreciation_tax, type='float', string='Current Depreciation Tax')
     }
 
     _defaults = {

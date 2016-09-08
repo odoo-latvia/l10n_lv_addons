@@ -116,6 +116,12 @@
                         </group>
                     </group>
                 </xpath>
+                <button name="compute_depreciation_board" position="after">
+                    <group class="oe_subtotal_footer oe_right">
+                        <field name="current_depreciation" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    </group>
+                    <separator/>
+                </button>
                 <page string="Depreciation Board" position="after">
                     <page string="Depreciation Board for Taxes">
                         <field name="depreciation_tax_line_ids">
@@ -153,6 +159,10 @@
                             </form>
                         </field>
                         <button type="object" name="compute_depreciation_board_tax" string="Compute" icon="terp-stock_format-scientific" colspan="2" attrs="{'invisible':[('state','=','close')]}"/>
+                        <group class="oe_subtotal_footer oe_right">
+                            <field name="current_depreciation_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                        <separator/>
                     </page>
                 </page>
             </field>
@@ -183,7 +193,7 @@
                 </field>
                 <field name="value_residual" position="before">
                     <field name="salvage_value" sum="Salvage"/>
-                    <field name="accumulated_depreciation" sum="Accumulated"/>
+                    <field name="current_depreciation" sum="Current"/>
                 </field>
             </field>
         </record>
