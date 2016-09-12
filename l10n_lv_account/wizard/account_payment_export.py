@@ -80,7 +80,7 @@ class AccountPaymentExport(models.TransientModel):
         def format_string(strval):
             return strval.replace('&', '&amp;').replace('>', '&gt;').replace('<', '&lt;').replace("'", "&apos;").replace('"', '&quot;')
         bank_acc_obj = self.env['res.partner.bank']
-        data_of_file = """<?xml version="1.0" encoding="UTF-8" ?>
+        data_of_file = """<?xml version="1.0" encoding="UTF-8"?>
 <FIDAVISTA xmlns="http://bankasoc.lv/fidavista/fidavista0101.xsd">"""
         data_of_file += "\n    <Header>"
         data_of_file += ("\n        <Timestamp>" + datetime.now().strftime('%Y%m%d%H%M%S%f')[:-3] + "</Timestamp>")
@@ -216,6 +216,34 @@ class AccountPaymentExport(models.TransientModel):
         return base64.encodestring(data_of_file.encode('utf8'))
 
     def form_iso20022_data(self, active_ids):
+        data_of_file = """<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <CstmrCdtTrfInitn>"""
+        data_of_file += "\n        <GrpHdr>"
+
+        # <MsgId>
+        data_of_file += ("\n            <CreDtTm>" + datetime.now().strftime('%Y-%m-%dT%H:%M:%S') + "</CreDtTm>")
+        payments = self.env['account.payment'].search([('id','in',active_ids), ('payment_type','in',['outbound', 'transfer'])])
+        data_of_file += ("\n            <NbOfTxs>" + str(len([p.id for p in payments])) + "<NbOfTxs>")
+        control_sum = 0.0
+        for ps in payments:
+            control_sum += ps.amount
+        data_of_file += ("\n            <CtrlSum>" + str(control_sum) + "</CtrlSum>")
+
+        company = self._get_company(active_ids)
+        data_of_file += "\n            <InitgPty>"
+        data_of_file += ("\n               <Nm>" + company.name + "</Nm>")
+        if company.company_registry:
+            data_of_file += "\n               <Id>"
+            data_of_file += "\n                   <OrgId>"
+            data_of_file += "\n                       <Othr>"
+            data_of_file += ("\n                           <Id>" + company.company_registry + "</Id>")
+            data_of_file += "\n                       </Othr>"
+            data_of_file += "\n                   </OrgId>"
+            data_of_file += "\n               </Id>"
+        data_of_file += "\n            </InitgPty>"
+        print '--------------------'
+        print data_of_file
         return False
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
