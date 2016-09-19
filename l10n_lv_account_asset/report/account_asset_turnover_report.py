@@ -96,7 +96,7 @@ class account_asset_turnover(report_sxw.rml_parse):
             depr3 = depr_3
             left3 = purchase3 - depr3
             if ((not form) or asset.close_date <= form['to_date']) and asset.close_date != False:
-                depr = asset.accumulated_depreciation
+                depr = asset.salvage_value + asset.accumulated_depreciation
                 for line in asset.depreciation_line_ids:
                     if line.move_check == True:
                         depr += line.amount
