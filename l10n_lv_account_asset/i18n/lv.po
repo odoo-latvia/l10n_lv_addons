@@ -51,9 +51,13 @@ msgstr "Atlikusī vērtība"
 
 #. module: l10n_lv_account_asset
 #: field:account.asset.asset,value_residual:0
-#: field:account.asset.asset,value_residual_tax:0
 msgid "Residual Value"
 msgstr "Atlikusī vērtība"
+
+#. module: l10n_lv_account_asset
+#: field:account.asset.asset,value_residual_tax:0
+msgid "Residual Value Tax"
+msgstr "Atlikusī vērtība nodokļiem"
 
 #. module: account_asset
 #: field:account.asset.category,account_expense_depreciation_id:0

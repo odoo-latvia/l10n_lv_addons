@@ -195,6 +195,10 @@
                     <field name="salvage_value" sum="Salvage"/>
                     <field name="current_depreciation" sum="Current"/>
                 </field>
+                <field name="value_residual" position="after">
+                    <field name="current_depreciation_tax" sum="Current Tax"/>
+                    <field name="value_residual_tax" sum="Residual Tax"/>
+                </field>
             </field>
         </record>
 

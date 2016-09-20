@@ -518,7 +518,7 @@ class account_asset_asset(osv.osv):
         'method_progress_factor_tax': fields.float('Degressive Factor', readonly=True, states={'draft':[('readonly',False)]}),
         'method_end_tax': fields.date('Ending Date', readonly=True, states={'draft':[('readonly',False)]}),
         'accumulated_depreciation_tax': fields.float('Accumulated Depreciation', readonly=True, states={'draft':[('readonly',False)]}),
-        'value_residual_tax': fields.function(_amount_residual_tax, method=True, digits_compute=dp.get_precision('Account'), string='Residual Value'),
+        'value_residual_tax': fields.function(_amount_residual_tax, method=True, digits_compute=dp.get_precision('Account'), string='Residual Value Tax'),
         'depreciation_tax_line_ids': fields.one2many('account.asset.depreciation_tax.line', 'asset_id', 'Depreciation Tax Lines', readonly=True, states={'draft':[('readonly',False)],'open':[('readonly',False)]}),
         'current_depreciation': fields.function(_current_depreciation, type='float', string='Depreciation'),
         'current_depreciation_tax': fields.function(_current_depreciation_tax, type='float', string='Depreciation Tax')
