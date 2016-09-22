@@ -49,93 +49,122 @@ class account_asset_turnover(report_sxw.rml_parse):
         datas1 = {}
         result1 = []
 
-        purchase1 = 0.0
-        depr1 = 0.0
-        left1 = 0.0
-        purchase2 = 0.0
-        depr2 = 0.0
-        left2 = 0.0
-        purchase3 = 0.0
-        depr3 = 0.0
-        left3 = 0.0
-        purchase4 = 0.0
-        depr4 = 0.0
-        left4 = 0.0
-        purchase_total1 = 0.0
-        depr_total1 = 0.0
-        left_total1 = 0.0
-        purchase_total2 = 0.0
-        depr_total2 = 0.0
-        left_total2 = 0.0
-
         for asset in assets:
             account_id = asset.category_id.account_asset_id.id
             account_code = asset.category_id.account_asset_id.code
             account_name = asset.category_id.account_asset_id.name
-            depr_1 = asset.accumulated_depreciation
+
+            # Opening balances:
+            purchase1 = 0.0
+            if asset.confirmation_date != False and form and asset.confirmation_date < form['from_date']:
+                purchase1 = asset.purchase_value
+            depr1 = asset.accumulated_depreciation
             for line in asset.depreciation_line_ids:
                 if line.move_check == True and (form and line.depreciation_date < form['from_date']):
-                    depr_1 += line.amount
-            depr1 = depr_1
-            if form and asset.confirmation_date < form['from_date']:
-                purchase1 = asset.purchase_value
-                left1 = asset.purchase_value - depr1
-            else:
-                purchase1 = 0.0
-                left1 = - depr1
-            if (not form) or asset.confirmation_date >= form['from_date']:
+                    depr1 += line.amount
+            salvage1 = 0.0
+            if asset.close_date != False and form and asset.close_date < form['from_date']:
+                salvage1 = asset.salvage_value
+            left1 = purchase1 - depr1 - salvage1
+
+            # Purchase:
+            purchase2 = 0.0
+            if (not form) or (asset.confirmation_date != False and asset.confirmation_date >= form['from_date'] and asset.confirmation_date <= form['to_date']):
                 purchase2 = asset.purchase_value
-                left2 = asset.purchase_value
-            else:
-                purchase2 = 0.0
-                left2 = 0.0
-            depr_3 = 0.0
+            depr2 = 0.0
+            salvage2 = 0.0
+            left2 = purchase2 - depr2 - salvage2
+
+            # Asset depreciation:
+            purchase3 = 0.0
+            depr3 = 0.0
             for line in asset.depreciation_line_ids:
                 if line.move_check == True and ((not form) or (line.depreciation_date >= form['from_date'] and line.depreciation_date <= form['to_date'])):
-                    depr_3 += line.amount
-            depr3 = depr_3
-            left3 = purchase3 - depr3
-            if ((not form) or asset.close_date <= form['to_date']) and asset.close_date != False:
-                depr = asset.salvage_value + asset.accumulated_depreciation
+                    depr3 += line.amount
+            salvage3 = 0.0
+            left3 = purchase3 - depr3 - salvage3
+
+            # Liquidation:
+            purchase4 = 0.0
+            depr4 = 0.0
+            salvage4 = 0.0
+            if asset.close_date != False and ((not form) or (asset.close_date <= form['to_date'] and asset.close_date >= form['from_date'])):
+                purchase4 = - asset.purchase_value
+                depr4 = - asset.accumulated_depreciation
                 for line in asset.depreciation_line_ids:
                     if line.move_check == True:
-                        depr += line.amount
-                purchase4 = - asset.purchase_value
-                depr4 = - depr
-                left4 = - (asset.purchase_value - depr)
-            else:
-                purchase4 = 0.0
-                depr4 = 0.0
-                left4 = - asset.salvage_value
+                        depr4 -= line.amount
+                salvage4 = asset.salvage_value
+            left4 = purchase4 - depr4 - salvage4
+
+            # Totals:
             purchase_total1 = purchase2 + purchase3 + purchase4
             depr_total1 = depr2 + depr3 + depr4
+            salvage_total1 = salvage2 + salvage3 + salvage4
             left_total1 = round((left2 + left3 + left4 - asset.accumulated_depreciation), 2) + 0
             purchase_total2 = purchase1 + purchase2 + purchase3 + purchase4
             depr_total2 = depr1 + depr2 + depr3 + depr4
+            salvage_total2 = salvage1 + salvage3 + salvage3 + salvage4
             left_total2 = round((left1 + left2 + left3 + left4), 2) + 0
             if datas1.get((account_id)):
                 purchase1 += datas1[(account_id)]['purchase1']
-                left1 += datas1[(account_id)]['left1']
                 depr1 += datas1[(account_id)]['depr1']
+                salvage1 += datas1[(account_id)]['salvage1']
+                left1 += datas1[(account_id)]['left1']
                 purchase2 += datas1[(account_id)]['purchase2']
+                depr2 += datas1[(account_id)]['depr2']
+                salvage2 += datas1[(account_id)]['salvage2']
                 left2 += datas1[(account_id)]['left2']
+                purchase3 += datas1[(account_id)]['purchase3']
                 depr3 += datas1[(account_id)]['depr3']
+                salvage3 += datas1[(account_id)]['salvage3']
                 left3 += datas1[(account_id)]['left3']
                 purchase4 += datas1[(account_id)]['purchase4']
                 depr4 += datas1[(account_id)]['depr4']
+                depr4 += datas1[(account_id)]['salvage4']
                 left4 += datas1[(account_id)]['left4']
                 purchase_total1 += datas1[(account_id)]['purchase_total1']
                 depr_total1 += datas1[(account_id)]['depr_total1']
+                salvage_total1 += datas1[(account_id)]['salvage_total1']
                 left_total1 += datas1[(account_id)]['left_total1']
                 purchase_total2 += datas1[(account_id)]['purchase_total2']
                 depr_total2 += datas1[(account_id)]['depr_total2']
+                salvage_total2 += datas1[(account_id)]['salvage_total2']
                 left_total2 += datas1[(account_id)]['left_total2']
                 datas1[(account_id)].clear()
             if not datas1.get((account_id)):
-                datas1[(account_id)] = {'account_id': account_id, 'account_code': account_code, 'account_name': account_name, 'purchase1': purchase1, 'depr1': depr1, 'left1': left1, 'purchase2': purchase2, 'depr2': depr2, 'left2': left2, 'purchase3': purchase3, 'depr3': depr3, 'left3': left3, 'purchase4': purchase4, 'depr4': depr4, 'left4': left4, 'purchase_total1': purchase_total1, 'depr_total1': depr_total1, 'left_total1': left_total1, 'purchase_total2': purchase_total2, 'depr_total2': depr_total2, 'left_total2': left_total2}
+                datas1[(account_id)] = {
+                    'account_id': account_id,
+                    'account_code': account_code,
+                    'account_name': account_name,
+                    'purchase1': purchase1,
+                    'depr1': depr1,
+                    'salvage1': salvage1,
+                    'left1': left1,
+                    'purchase2': purchase2,
+                    'depr2': depr2,
+                    'salvage2': salvage2,
+                    'left2': left2,
+                    'purchase3': purchase3,
+                    'depr3': depr3,
+                    'salvage3': salvage3,
+                    'left3': left3,
+                    'purchase4': purchase4,
+                    'depr4': depr4,
+                    'salvage4': salvage4,
+                    'left4': left4,
+                    'purchase_total1': purchase_total1,
+                    'depr_total1': depr_total1,
+                    'salvage_total1': salvage_total1,
+                    'left_total1': left_total1,
+                    'purchase_total2': purchase_total2,
+                    'depr_total2': depr_total2,
+                    'salvage_total2': salvage_total2,
+                    'left_total2': left_total2
+                }
             result1.append(datas1[(account_id)])
         
-        for object in result1:
+        for object in result1:  
             if object != {}:
                 self.result_asset.append(object)
 

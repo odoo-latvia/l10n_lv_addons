@@ -61,6 +61,7 @@
 				        <td class="header" colspan="2">Transaction</td>
 				        <td class="header">Book value</td>
 				        <td class="header">Depreciation</td>
+				        <td class="header">Liquidation</td>
 				        <td class="header">Residual value</td>
 			        </tr>
                     <t t-set="purchase_total_amount_1" t-value="0.0"></t>
@@ -69,6 +70,9 @@
                     <t t-set="depr_total_amount_1" t-value="0.0"></t>
                     <t t-set="depr_total_amount_2" t-value="0.0"></t>
                     <t t-set="depr_total_amount_3" t-value="0.0"></t>
+                    <t t-set="salvage_total_amount_1" t-value="0.0"></t>
+                    <t t-set="salvage_total_amount_2" t-value="0.0"></t>
+                    <t t-set="salvage_total_amount_3" t-value="0.0"></t>
                     <t t-set="left_total_amount_1" t-value="0.0"></t>
                     <t t-set="left_total_amount_2" t-value="0.0"></t>
                     <t t-set="left_total_amount_3" t-value="0.0"></t>
@@ -97,6 +101,9 @@
                                 <span t-esc="formatLang(asset['depr1'])"/>
                             </td>
 				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['salvage1'])"/>
+                            </td>
+				            <td style="text-align:right">
                                 <span t-esc="formatLang(asset['left1'])"/>
                             </td>
 			            </tr>
@@ -110,6 +117,9 @@
                             </td>
 				            <td style="text-align:right">
                                 <span t-esc="formatLang(asset['depr2'])"/>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['salvage2'])"/>
                             </td>
 				            <td style="text-align:right">
                                 <span t-esc="formatLang(asset['left2'])"/>
@@ -127,6 +137,9 @@
                                 <span t-esc="formatLang(asset['depr3'])"/>
                             </td>
 				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['salvage3'])"/>
+                            </td>
+				            <td style="text-align:right">
                                 <span t-esc="formatLang(asset['left3'])"/>
                             </td>
 			            </tr>
@@ -140,6 +153,9 @@
                             </td>
 				            <td style="text-align:right">
                                 <span t-esc="formatLang(asset['depr4'])"/>
+                            </td>
+				            <td style="text-align:right">
+                                <span t-esc="formatLang(asset['salvage4'])"/>
                             </td>
 				            <td style="text-align:right">
                                 <span t-esc="formatLang(asset['left4'])"/>
@@ -162,6 +178,9 @@
                                 <span t-esc="formatLang(asset['depr_total1'])"/>
                             </td>
 				            <td style="text-align:right; border-top: 1px solid black;">
+                                <span t-esc="formatLang(asset['salvage_total1'])"/>
+                            </td>
+				            <td style="text-align:right; border-top: 1px solid black;">
                                 <span t-esc="formatLang(asset['left_total1'])"/>
                             </td>
 			            </tr>
@@ -177,17 +196,23 @@
                                 <span t-esc="formatLang(asset['depr_total2'])"/>
                             </td>
 				            <td style="border-style:none;text-align:right">
+                                <span t-esc="formatLang(asset['salvage_total2'])"/>
+                            </td>
+				            <td style="border-style:none;text-align:right">
                                 <span t-esc="formatLang(asset['left_total2'])"/>
                             </td>
 			            </tr>
                         <t t-set="purchase_total_amount_1" t-value="purchase_total_amount_1 + asset['purchase1']"></t>
                         <t t-set="depr_total_amount_1" t-value="depr_total_amount_1 + asset['depr1']"></t>
+                        <t t-set="salvage_total_amount_1" t-value="salvage_total_amount_1 + asset['salvage1']"></t>
                         <t t-set="left_total_amount_1" t-value="left_total_amount_1 + asset['left1']"></t>
                         <t t-set="purchase_total_amount_2" t-value="purchase_total_amount_2 + asset['purchase_total1']"></t>
                         <t t-set="depr_total_amount_2" t-value="depr_total_amount_2 + asset['depr_total1']"></t>
+                        <t t-set="salvage_total_amount_2" t-value="salvage_total_amount_2 + asset['salvage_total1']"></t>
                         <t t-set="left_total_amount_2" t-value="left_total_amount_2 + asset['left_total1']"></t>
                         <t t-set="purchase_total_amount_3" t-value="purchase_total_amount_3 + asset['purchase_total2']"></t>
                         <t t-set="depr_total_amount_3" t-value="depr_total_amount_3 + asset['depr_total2']"></t>
+                        <t t-set="salvage_total_amount_3" t-value="salvage_total_amount_3 + asset['salvage_total2']"></t>
                         <t t-set="left_total_amount_3" t-value="left_total_amount_3 + asset['left_total2']"></t>
                         <t t-if="count == len(asset_list)">
 			                <tr>
@@ -205,6 +230,9 @@
                                     <span t-esc="formatLang(depr_total_amount_1)"/>
                                 </td>
 				                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
+                                    <span t-esc="formatLang(salvage_total_amount_1)"/>
+                                </td>
+				                <td style="border-top:1px solid; text-align:right; font-weight: bold;">
                                     <span t-esc="formatLang(left_total_amount_1)"/>
                                 </td>
 			                </tr>
@@ -220,6 +248,9 @@
                                     <span t-esc="formatLang(depr_total_amount_2)"/>
                                 </td>
 				                <td style="border-style:none; text-align:right; font-weight: bold;">
+                                    <span t-esc="formatLang(salvage_total_amount_2)"/>
+                                </td>
+				                <td style="border-style:none; text-align:right; font-weight: bold;">
                                     <span t-esc="formatLang(left_total_amount_2)"/>
                                 </td>
 			                </tr>
@@ -233,6 +264,9 @@
                                 </td>
 				                <td style="border-style:none; text-align:right; font-weight: bold;">
                                     <span t-esc="formatLang(depr_total_amount_3)"/>
+                                </td>
+				                <td style="border-style:none; text-align:right; font-weight: bold;">
+                                    <span t-esc="formatLang(salvage_total_amount_3)"/>
                                 </td>
 				                <td style="border-style:none; text-align:right; font-weight: bold;">
                                     <span t-esc="formatLang(left_total_amount_3)"/>
