@@ -121,7 +121,7 @@ class account_asset_turnover(report_sxw.rml_parse):
                 left3 += datas1[(account_id)]['left3']
                 purchase4 += datas1[(account_id)]['purchase4']
                 depr4 += datas1[(account_id)]['depr4']
-                depr4 += datas1[(account_id)]['salvage4']
+                salvage4 += datas1[(account_id)]['salvage4']
                 left4 += datas1[(account_id)]['left4']
                 purchase_total1 += datas1[(account_id)]['purchase_total1']
                 depr_total1 += datas1[(account_id)]['depr_total1']
