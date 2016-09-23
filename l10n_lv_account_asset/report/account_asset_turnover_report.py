@@ -90,12 +90,12 @@ class account_asset_turnover(report_sxw.rml_parse):
             salvage4 = 0.0
             if asset.close_date != False and ((not form) or (asset.close_date <= form['to_date'] and asset.close_date >= form['from_date'])):
                 purchase4 = - asset.purchase_value
-                depr4 = - asset.accumulated_depreciation - asset.salvage_value
+                depr4 = - asset.accumulated_depreciation
                 for line in asset.depreciation_line_ids:
                     if line.move_check == True:
                         depr4 -= line.amount
                 salvage4 = - asset.salvage_value
-            left4 = - (purchase4 - depr4 - salvage4) + 0
+            left4 = round((- (purchase4 - depr4 - salvage4)), 2) + 0
 
             # Totals:
             purchase_total1 = purchase2 + purchase3 + purchase4
