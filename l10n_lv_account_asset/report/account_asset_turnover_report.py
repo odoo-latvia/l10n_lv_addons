@@ -101,7 +101,7 @@ class account_asset_turnover(report_sxw.rml_parse):
             purchase_total1 = purchase2 + purchase3 + purchase4
             depr_total1 = depr2 + depr3 + depr4
             salvage_total1 = salvage2 + salvage3 + salvage4
-            left_total1 = round((left2 + left3 + left4 - asset.accumulated_depreciation), 2) + 0
+            left_total1 = round((left2 + left3 + left4), 2) + 0
             purchase_total2 = purchase1 + purchase2 + purchase3 + purchase4
             depr_total2 = depr1 + depr2 + depr3 + depr4
             salvage_total2 = salvage1 + salvage3 + salvage3 + salvage4
