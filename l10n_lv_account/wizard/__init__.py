@@ -26,5 +26,6 @@ import account_chart_report
 import account_invoice_list_report
 import account_cash_order_report
 import account_move_line_export
+import account_balance_comparison_report
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

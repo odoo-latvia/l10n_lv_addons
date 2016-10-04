@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="account_balance_comparison_report_l10n_lv_view" model="ir.ui.view">
+            <field name="name">Partner Balance Comparison</field>
+            <field name="model">account.balance.comparison.report</field>
+            <field name="arch" type="xml">
+            	<form string="Report Options">
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="accountant_id"/>
+                        </group>
+                        <group>
+                            <field name="format"/>
+                        </group>
+                    </group>
+                	<footer>
+						<button name="open_report" string="Open" type="object" default_focus="1" class="oe_highlight"/>
+                	    <button special="cancel" string="Cancel" class="oe_link"/>
+                	</footer>
+                </form>
+            </field>
+        </record>
+
+         <act_window name="Balance Comparison"
+            res_model="account.balance.comparison.report"
+            src_model="res.partner"
+            view_mode="form"
+            target="new"
+            key2="client_print_multi"
+            id="action_view_account_balance_comparison_report_l10n_lv"/>
+
+    </data>
+</openerp>

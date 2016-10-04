@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+<template id="balance_comparison_document">
+    <t t-if="o and 'company_id' in o">
+        <t t-set="company" t-value="o.company_id"></t>
+    </t>
+    <t t-if="not o or not 'company_id' in o">
+        <t t-set="company" t-value="res_company"></t>
+    </t>
+    <t>
+        <div class="page" style="font-size:10px;">
+            <style type="text/css">
+                h2.title {
+                    font-weight:bold;
+                    font-size:18px;
+                    text-align:center;
+                    margin-bottom:40px;
+                }
+                table.info_table {
+                    border:1px solid BLACK;
+                    margin-bottom:15px;
+                    width:100%;
+                }
+                table.info_table td {
+                    padding:4px;
+                }
+                table.list_table {
+                    border:1px solid BLACK;
+                    margin-bottom:15px;
+                    width:100%;
+                }
+                table.list_table td {
+                    border:1px solid black;
+                    padding:4px;
+                }
+            </style>
+            <h2 class="title">Mutual payment comparison statement</h2>
+            <table class="info_table">
+                <tr>
+                    <td style="border:1px solid black; font-size:14px;" width="49%">
+                        <span>Company:</span>
+                        <span style="font-weight:bold;" t-esc="company.name"/>
+                    </td>
+                    <td width="2%"></td>
+                    <td style="border:1px solid black; font-size:14px;" width="49%">
+                        <span>Company:</span>
+                        <span style="font-weight:bold;" t-esc="o.name"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black; padding:4px;" width="49%">
+                        <div t-if="form_address(company)">
+                            <span t-esc="form_address(company)"/>
+                        </div>
+                        <div t-if="company.phone">
+                            <span>Phone:</span>
+                            <span t-field="company.phone"/>
+                        </div>
+                        <div t-if="company.email">
+                            <span>E-mail:</span>
+                            <span t-field="company.email"/>
+                        </div>
+                    </td>
+                    <td width="2%"></td>
+                    <td style="border:1px solid black;" width="49%">
+                        <div t-if="form_address(o)">
+                            <span t-esc="form_address(o)"/>
+                        </div>
+                        <div t-if="o.phone">
+                            <span>Phone:</span>
+                            <span t-field="o.phone"/>
+                        </div>
+                        <div t-if="o.email">
+                            <span>E-mail:</span>
+                            <span t-field="o.email"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black;" width="49%">
+                        <span>TIN:</span>
+                        <span t-field="company.vat"/>
+                    </td>
+                    <td width="2%"></td>
+                    <td style="border:1px solid black;" width="49%">
+                        <span>TIN:</span>
+                        <span t-field="o.vat"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black;" width="49%">
+                        <div>
+                            <span>Accountant:</span>
+                            <span t-esc="data and get_accountant(data['form']['accountant_id']) or ''"/>
+                        </div>
+                        <div style="height:40px; width:80%; margin-bottom:2px;"></div>
+                    </td>
+                    <td width="2%"></td>
+                    <td style="border:1px solid black;" width="49%">
+                        <div>
+                            <span>Accountant:</span>
+                        </div>
+                        <div style="height:40px; width:80%; margin-bottom:2px; border-bottom:1px dashed #d9d9d9;"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black; font-size:14px;" width="49%">
+                        <div>
+                            <span style="font-weight:bold;">Date:</span>
+                        </div>
+                        <div>
+                            <span t-esc="formatLang(time.strftime('%Y-%m-%d'), date=True)"/>
+                        </div>
+                    </td>
+                    <td width="2%"></td>
+                    <td style="border:1px solid black; font-size:14px;" width="49%">
+                        <div>
+                            <span style="font-weight:bold;">Date:</span>
+                        </div>
+                        <div>
+                            <span>20</span><span><div style="width:40px; border-bottom:1px dashed #d9d9d9; display:inline-block;"></div></span><span>"</span><span><div style="width:50px; border-bottom:1px dashed #d9d9d9; display:inline-block;"></div></span><span>".</span><span><div style="width:160px; border-bottom:1px dashed #d9d9d9; display:inline-block;"></div></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black; font-size:14px;" colspan="3">
+                        <span>The turnover check</span>
+                        <span style="font-weight:bold;">recognised</span><span>:</span>
+                    </td>
+                </tr>
+            </table>
+            <table class="list_table">
+                <tr>
+                    <td colspan="2" width="33%">
+                        <span style="font-weight:bold;">According to:</span>
+                    </td>
+                    <td width="34%">
+                        <span style="font-weight:bold;">Balance on:</span>
+                    </td>
+                    <td colspan="2" width="33%">
+                        <span style="font-weight:bold;">According to:</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" width="33%">
+                        <span style="font-weight:bold;" t-field="company.name"/>
+                    </td>
+                    <td style="text-align:center; vertical-align:middle;" rowspan="3" width="34%">
+                            <span style="font-size:14px;" t-esc="formatLang((data and data['form']['date'] or time.strftime('%Y-%m-%d')), date=True)"/>
+                    </td>
+                    <td colspan="2" width="33%"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" width="33%">
+                        <span style="font-weight:bold;">Currency:</span>
+                        <span style="font-weight:bold;" t-field="company.currency_id.name"/>
+                    </td>
+                    <td colspan="2" width="33%">
+                        <span style="font-weight:bold;">Currency:</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size:14px;" width="16.5%">
+                        <span style="font-weight:bold;">Debit</span>
+                    </td>
+                    <td style="font-size:14px;" width="16.5%">
+                        <span style="font-weight:bold;">Credit</span>
+                    </td>
+                    <td style="font-size:14px;" width="16.5%">
+                        <span style="font-weight:bold;">Debit</span>
+                    </td>
+                    <td style="font-size:14px;" width="16.5%">
+                        <span style="font-weight:bold;">Credit</span>
+                    </td>
+                </tr>
+                <t t-set="line_data" t-value="get_line_data(data and data['form']['date'] or time.strftime('%Y-%m-%d'), o)"/>
+                <tr>
+                    <td style="font-size:14px;" width="16.5%">
+                        <span style="font-weight:bold;" t-esc="formatLang(line_data['total_debit'])"/>
+                    </td>
+                    <td style="font-size:14px;" width="16.5%">
+                        <span style="font-weight:bold;" t-esc="formatLang(line_data['total_credit'])"/>
+                    </td>
+                    <td width="34%"></td>
+                    <td style="font-size:14px;" width="16.5%"></td>
+                    <td style="font-size:14px;" width="16.5%"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center; background-color:#d9d9d9;" colspan="5">
+                        <div>
+                            <span style="font-weight:bold;">To prevent disagreements the following additional journal entries need to be made</span>
+                        </div>
+                        <div>
+                            <span style="font-weight:bold;">(declare disagreement and substantiation - document numbers and dates)</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="16.5%">
+                        <span style="font-weight:bold;">Debit</span>
+                    </td>
+                    <td width="16.5%">
+                        <span style="font-weight:bold;">Credit</span>
+                    </td>
+                    <td style="text-align:center;" width="34%">
+                            <span style="font-weight:bold;">Substantiation</span>
+                    </td>
+                    <td width="16.5%">
+                        <span style="font-weight:bold;">Debit</span>
+                    </td>
+                    <td width="16.5%">
+                        <span style="font-weight:bold;">Credit</span>
+                    </td>
+                </tr>
+                <tr t-foreach="line_data['lines']" t-as="line">
+                    <td style="text-align:center;" width="16.5%">
+                        <span t-esc="formatLang(line['debit'])"/>
+                    </td>
+                    <td style="text-align:center;" width="16.5%">
+                        <span t-esc="formatLang(line['credit'])"/>
+                    </td>
+                    <td style="text-align:center;" width="34%">
+                        <span t-esc="line['name']"/>
+                    </td>
+                    <td style="text-align:center;;" width="16.5%"></td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center; color:white;" width="16.5%">|</td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                    <td style="text-align:center;" width="34%"></td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center; color:white;" width="16.5%">|</td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                    <td style="text-align:center;" width="34%"></td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center; color:white;" width="16.5%">|</td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                    <td style="text-align:center;" width="34%"></td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center; color:white;" width="16.5%">|</td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                    <td style="text-align:center;" width="34%"></td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center; color:white;" width="16.5%">|</td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                    <td style="text-align:center;" width="34%"></td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center;" width="16.5%"></td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                    <td style="text-align:center;" width="34%">
+                        <span style="font-weight:bold;">Additional journal entries total</span>
+                    </td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                    <td style="text-align:center;" width="16.5%"></td>
+                </tr>
+                <tr>
+                    <td style="text-align:center; background-color:#d9d9d9;" width="16.5%">
+                        <span style="font-weight:bold;" t-esc="formatLang(line_data['total_debit'])"/>
+                    </td>
+                    <td style="text-align:center; background-color:#d9d9d9;" width="16.5%">
+                        <span style="font-weight:bold;" t-esc="formatLang(line_data['total_credit'])"/>
+                    </td>
+                    <td style="text-align:center; background-color:#d9d9d9;" width="34%">
+                        <span style="font-weight:bold;">Balance total</span>
+                    </td>
+                    <td style="text-align:center; background-color:#d9d9d9;" width="16.5%"></td>
+                    <td style="text-align:center; background-color:#d9d9d9;" width="16.5%"></td>
+                </tr>
+            </table>
+            <p style="font-weight:bold; margin-bottom:30px;">Please compare mutual payments, sign and send back one copy of the comparison statement. If the comparison statement is not received within 10 days, mutual payments will be considered compared.</p>
+            <p style="font-weight:bold; font-size:14px; margin-bottom:20px;"><span t-field="company.name"/></p>
+            <p style="font-weight:bold; font-size:14px; margin-bottom:30px;"><span>Chief accountant:</span><span style="padding-left:4px;" t-esc="data and get_accountant(data['form']['accountant_id']) or ''"/></p>
+            <p style="font-weight:bold; font-size:14px; margin-bottom:20px;"><span t-field="o.name"/></p>
+            <div style="display:table; width:100%; font-weight:bold; font-size:14px;">
+                <div style="display:table-cell; width:50%;">Accountant:</div>
+                <div style="display:table-cell; width:50%;">Signature:</div>
+            </div>
+        </div>
+    </t>
+</template>
+
+<template id="balance_comparison">
+    <t t-call="report.html_container">
+        <t t-foreach="doc_ids" t-as="doc_id">
+            <t t-raw="translate_doc(doc_id, doc_model, 'lang', 'l10n_lv_account.balance_comparison_document')"/>
+        </t>
+    </t>
+</template>
+
+</data>
+</openerp>

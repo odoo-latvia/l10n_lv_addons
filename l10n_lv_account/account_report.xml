@@ -98,5 +98,19 @@
             <field name="paperformat_id" ref="l10n_lv_account.report_paperformat_account_portrait"/>
         </record>
 
+        <!-- Partner Balance Comparison -->
+
+        <report auto="False"
+                id="report_account_balance_comparison_l10n_lv"
+                string="Partner Balance Comparison"
+                model="res.partner"
+                name="l10n_lv_account.balance_comparison"
+                file="l10n_lv_account.balance_comparison"
+                report_type="qweb-pdf"/>
+
+        <record id="l10n_lv_account.report_account_balance_comparison_l10n_lv" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="l10n_lv_account.report_paperformat_account_portrait"/>
+        </record>
+
     </data>
 </openerp>

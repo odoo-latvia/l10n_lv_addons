@@ -28,5 +28,6 @@ import report_account_cash_order
 import report_account_cash_book
 import report_account_invoice
 import report_account_invoice_out
+import report_account_balance_comparison
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
