@@ -136,6 +136,7 @@ msgstr "Kases Orderis"
 #: view:account.bank.statement.line:0
 #: selection:account.move.line.export,sort_selection:0
 #: view:website:l10n_lv_account.invoice_lv_document
+#: field:account.balance.comparison.report,date:0
 msgid "Date"
 msgstr "Datums"
 
@@ -283,6 +284,7 @@ msgstr "Rēķins"
 #: view:account.chart.report:0
 #: view:account.invoice.list.report:0
 #: view:account.move.line.export:0
+#: view:account.balance.comparison.report:0
 msgid "Cancel"
 msgstr "Atcelt"
 
@@ -305,6 +307,7 @@ msgstr "Visi Ieraksti"
 
 #. module: l10n_lv_account
 #: field:account.move.line.export,format:0
+#: field:account.balance.comparison.report,format:0
 msgid "Format"
 msgstr "Formāts"
 
@@ -322,6 +325,16 @@ msgstr "Saglabāt dokumentu"
 #: model:ir.actions.report.xml,name:l10n_lv_account.report_account_invoice_out_l10n_lv
 msgid "Invoice ITS-1"
 msgstr "Rēķins ITS-1"
+
+#. module: l10n_lv_account
+#: model:ir.actions.act_window,name:l10n_lv_account.action_view_account_balance_comparison_report_l10n_lv
+msgid "Payment Comparison"
+msgstr "Norēķinu salīdzināšana"
+
+#. module: l10n_lv_account
+#: view:account.balance.comparison.report:l10n_lv_account.account_balance_comparison_report_l10n_lv_view
+msgid "Open"
+msgstr "Atvērt"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
@@ -390,6 +403,7 @@ msgstr "izdevumu orderi"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document
+#: view:website:l10n_lv_account.balance_comparison_document
 msgid "Accountant:"
 msgstr "Grāmatvedis:"
 
@@ -474,6 +488,7 @@ msgstr "Vadītājs"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_order_document
+#: field:account.balance.comparison.report,accountant_id:0
 msgid "Accountant"
 msgstr "Grāmatvedis"
 
@@ -829,4 +844,109 @@ msgstr "Maksājuma mērķī lūdzam norādīt rēķina numuru."
 #: view:website:l10n_lv_account.invoice_out_document
 msgid "In accordance with Law &quot;On Accounting&quot; article 7.1 this invoice is prepared electronically and is valid without signature and stamp."
 msgstr "Saskaņā ar Likuma &quot;Par grāmatvedību&quot; 7.1 pantu šis rēķins ir sagatavots elektroniski un ir derīgs bez paraksta un zīmoga."
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "Mutual payment comparison statement"
+msgstr "Akts par norēķinu savstarpējo salīdzināšanu"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "Company:"
+msgstr "Uzņēmums:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "Phone:"
+msgstr "Telefons:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "E-mail:"
+msgstr "E-pasts:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "TIN:"
+msgstr "PVN reģ. Nr.:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "Date:"
+msgstr "Datums:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "The turnover check"
+msgstr "Pārbaudot apgrozījumu,"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "recognised"
+msgstr "konstatējām"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "According to:"
+msgstr "Saskaņā ar:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "Balance on:"
+msgstr "Saldo uz:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "Currency:"
+msgstr "Valūta:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "Debit"
+msgstr "Debets"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "Credit"
+msgstr "Kredīts"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "To prevent disagreements the following additional journal entries need to be made"
+msgstr "Nesaskaņu novēršanai izdarāmi šādi papildgrāmatojumi"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "(declare disagreement and substantiation - document numbers and dates)"
+msgstr "(uzrādīt nesaskaņu un pamatojumu - dokumentu numurus un datumus)"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "Substantiation"
+msgstr "Pamatojums"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "Additional journal entries total"
+msgstr "Papildgrāmatojumu kopsumma"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "Balance total"
+msgstr "Saldo summa"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "Please compare mutual payments, sign and send back one copy of the comparison statement. If the comparison statement is not received within 10 days, mutual payments will be considered compared."
+msgstr "Lūdzam salīdzināt savstarpējos norēķinus, parakstīt un atsūtīt atpakaļ salīdzināšanas akta vienu eksemplāru. Ja salīdzināšanas akts netiks saņemts 10 dienu laikā, savstarpējos norēķinus uzskatīsim par salīdzinātiem."
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "Chief accountant:"
+msgstr "Galvenais grāmatvedis:"
+
+#. module: l10n_lv_account
+#: view:website:l10n_lv_account.balance_comparison_document
+msgid "Signature:"
+msgstr "Paraksts:"
 

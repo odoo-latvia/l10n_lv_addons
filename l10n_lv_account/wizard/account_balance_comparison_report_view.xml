@@ -24,7 +24,7 @@
             </field>
         </record>
 
-         <act_window name="Balance Comparison"
+         <act_window name="Payment Comparison"
             res_model="account.balance.comparison.report"
             src_model="res.partner"
             view_mode="form"
