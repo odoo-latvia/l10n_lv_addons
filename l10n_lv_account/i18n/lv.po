@@ -92,6 +92,7 @@ msgstr "Grāmatojuma numurs"
 
 #. module: l10n_lv_account
 #: field:account.invoice.list.report,invoice_type:0
+#: field:account.balance.comparison.report,type:0
 msgid "Type"
 msgstr "Tips"
 
@@ -119,6 +120,7 @@ msgstr "Kases Grāmatas Rindiņas"
 
 #. module: l10n_lv_account
 #: field:account.move.line.export,file_save:0
+#: field:account.balance.comparison.report,file_save:0
 msgid "Save File"
 msgstr "Saglabāt failu"
 
@@ -254,6 +256,7 @@ msgstr "Rēķins sūtīšanai"
 
 #. module: l10n_lv_account
 #: field:account.move.line.export,name:0
+#: field:account.balance.comparison.report,file_name:0
 msgid "File Name"
 msgstr "Faila Nosaukums"
 
@@ -335,6 +338,16 @@ msgstr "Norēķinu salīdzināšana"
 #: view:account.balance.comparison.report:l10n_lv_account.account_balance_comparison_report_l10n_lv_view
 msgid "Open"
 msgstr "Atvērt"
+
+#. module: l10n_lv_account
+#: selection:account.balance.comparison.report,type:0
+msgid "Receivable"
+msgstr "Ieņēmumu"
+
+#. module: l10n_lv_account
+#: selection:account.balance.comparison.report,type:0
+msgid "Payable"
+msgstr "Izdevumu"
 
 #. module: l10n_lv_account
 #: view:website:l10n_lv_account.cash_book_document

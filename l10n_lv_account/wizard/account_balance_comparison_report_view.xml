@@ -7,14 +7,19 @@
             <field name="model">account.balance.comparison.report</field>
             <field name="arch" type="xml">
             	<form string="Report Options">
-                    <group>
+                    <group attrs="{'invisible': [('file_save','!=',False)]}">
                         <group>
                             <field name="date"/>
+                            <field name="type"/>
                             <field name="accountant_id"/>
                         </group>
                         <group>
                             <field name="format"/>
+                            <field name="file_name" attrs="{'invisible': [('format','=','pdf')]}"/>
                         </group>
+                    </group>
+                    <group attrs="{'invisible': [('file_save','=',False)]}">
+                        <field name="file_save" filename="file_name"/>
                     </group>
                 	<footer>
 						<button name="open_report" string="Open" type="object" default_focus="1" class="oe_highlight"/>

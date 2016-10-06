@@ -175,7 +175,7 @@
                         <span style="font-weight:bold;">Credit</span>
                     </td>
                 </tr>
-                <t t-set="line_data" t-value="get_line_data(data and data['form']['date'] or time.strftime('%Y-%m-%d'), o)"/>
+                <t t-set="line_data" t-value="get_line_data(data and data['form']['date'] or time.strftime('%Y-%m-%d'), data and data['form']['type'] or False, o)"/>
                 <tr>
                     <td style="font-size:14px;" width="16.5%">
                         <span style="font-weight:bold;" t-esc="formatLang(line_data['total_debit'])"/>

@@ -58,16 +58,19 @@ class report_account_balance_comparison(report_sxw.rml_parse):
     def get_accountant(self, a_id):
         return self.pool.get('hr.employee').browse(self.cr, self.uid, a_id, context=self.context).name
 
-    def get_line_data(self, date, partner):
+    def get_line_data(self, date, type, partner):
         res = {
             'lines': [],
             'total_debit': 0.0,
             'total_credit': 0.0
         }
+        type_list = ['receivable','payable']
+        if type:
+            type_list = [type]
         ml_obj = self.pool.get('account.move.line')
         # ['&', ('reconcile_id', '=', False), '&', 
 #                            ('account_id.active','=', True), '&', ('account_id.type', '=', 'receivable'), ('state', '!=', 'draft')]
-        ml_ids = ml_obj.search(self.cr, self.uid, [('partner_id','=',partner.id), ('account_id.active','=',True), ('account_id.type','in',['receivable','payable']), ('state','!=','draft'), ('date','<=',date), '|', ('reconcile_id','=',False), ('reconcile_id.create_date','>',date)], context=self.context)
+        ml_ids = ml_obj.search(self.cr, self.uid, [('partner_id','=',partner.id), ('account_id.active','=',True), ('account_id.type','in',type_list), ('state','!=','draft'), ('date','<=',date), '|', ('reconcile_id','=',False), ('reconcile_id.create_date','>',date)], context=self.context)
         for ml in ml_obj.browse(self.cr, self.uid, ml_ids, context=self.context):
             res['lines'].append({
                 'debit': ml.debit,
