@@ -24,9 +24,16 @@
 
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
+import time
 import base64
 import StringIO
 import xlwt
+import docx
+from docx.shared import Pt, Inches, RGBColor
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.section import WD_SECTION
+from openerp.addons.l10n_lv_account.report.report_account_balance_comparison import report_account_balance_comparison as rabc
+from openerp.report.report_sxw import rml_parse
 
 class account_balance_comparison_report(osv.osv_memory):
     _name = "account.balance.comparison.report"
@@ -36,7 +43,7 @@ class account_balance_comparison_report(osv.osv_memory):
         'date': fields.date('Date', required=True),
         'type': fields.selection([('receivable', 'Receivable'), ('payable', 'Payable')], string='Type', required=True),
         'accountant_id': fields.many2one('hr.employee', 'Accountant', required=True),
-        'format': fields.selection([('pdf','PDF')], string='Format', required=True),
+        'format': fields.selection([('pdf','PDF'), ('docx','DOCX')], string='Format', required=True),
         'file_name': fields.char('File Name'),
         'file_save': fields.binary('Save File', readonly=True)
     }
@@ -73,7 +80,7 @@ class account_balance_comparison_report(osv.osv_memory):
         'type': _get_default_type,
         'accountant_id': _get_default_accountant,
         'format': 'pdf',
-        'file_name': 'Payment_Comparison.xls'
+        'file_name': 'Payment_Comparison.docx'
     }
 
     def _build_contexts(self, cr, uid, ids, data, context=None):
@@ -100,36 +107,164 @@ class account_balance_comparison_report(osv.osv_memory):
             return transl.value
         return string
 
-#    def make_xls_data(self, cr, uid, partner_ids, data, context=None):
-#        if context is None:
-#            context = {}
-#        user = self.pool.get('res.users').browse(cr, uid, uid, context=context)
-#        user_company = user.company_id
-#        partner_obj = self.pool.get('res.partner')
-#        wbk = xlwt.Workbook(encoding='iso8859-4')
-#        for partner in partner_obj.browse(cr, uid, partner_ids, context=context):
-#            sheet = wbk.add_sheet(partner.name)
-            # font heigth = size*20
-            # cell width = int((1+len(text)*256)
-            # cell height = px*20
+    def make_docx_data(self, cr, uid, partner_ids, data, context=None):
+        if context is None:
+            context = {}
+        user = self.pool.get('res.users').browse(cr, uid, uid, context=context)
+        user_company = user.company_id
+        partner_obj = self.pool.get('res.partner')
+        document = docx.Document()
+        for partner in partner_obj.browse(cr, uid, partner_ids, context=context):
+            company = partner.company_id and partner.company_id or user_company
+            section = document.sections[-1]
+            section.start_type = WD_SECTION.ODD_PAGE
+            section.left_margin = Inches(0.55)
+            section.right_margin = Inches(0.55)
+            h2_str = self.get_transl(cr, uid, "Mutual payment comparison statement", partner.lang, context=context)
+            h2 = document.add_paragraph()
+            h2.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            h2_run = h2.add_run(h2_str)
+            h2_run.bold = True
+            h2_run.font.name = 'Liberation Sans'
+            h2_run.font.size = Pt(14)
+            space1 = document.add_paragraph()
+            space1.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            space1_run = space1.add_run()
+            space1_run.bold = True
+            space1_run.font.name = 'Liberation Sans'
+            space1_run.font.size = Pt(14)
+#            space2 = document.add_paragraph()
+#            space2_run = space1.add_run()
+#            space2_run.font.name = 'Liberation Sans'
+#            space2_run.font.size = Pt(12)
 
-#            h2_str = self.get_transl(cr, uid, "Mutual payment comparison statement", partner.lang, context=context)
-#            style_h2 = xlwt.easyxf("font: bold 1, height 360; align: horiz center, vert center;")
-#            sheet.write_merge(r1=0, c1=0, r2=0, c2=5, label=h2_str, style=style_h2)
-#            sheet.row(0).height = 1960
-#            for i in range(6):
-#                sheet.col(i).width = 5000
+            # Info Table:
+            info_table = document.add_table(rows=6, cols=3)
+            info_table.style = 'TableGrid'
+            info_table.columns[0].width = Inches(3.67)
+            info_table.columns[1].width = Inches(0.07)
+            info_table.columns[2].width = Inches(3.74)
+            # row0 column0:
+            itr0c0 = info_table.rows[0].cells[0].add_paragraph()
+            itr0c0_run1_str = self.get_transl(cr, uid, "Company:", partner.lang, context=context) + ' '
+            itr0c0_run1 = itr0c0.add_run(itr0c0_run1_str)
+            itr0c0_run1.font.name = 'Liberation Sans'
+            itr0c0_run1.font.size = Pt(12)
+            itr0c0_run2 = itr0c0.add_run(company.name)
+            itr0c0_run2.bold = True
+            itr0c0_run2.font.name = 'Liberation Sans'
+            itr0c0_run2.font.size = Pt(12)
+            # row0 column2:
+            itr0c2 = info_table.rows[0].cells[2].add_paragraph()
+            itr0c2_run1 = itr0c2.add_run(itr0c0_run1_str)
+            itr0c2_run1.font.name = 'Liberation Sans'
+            itr0c2_run1.font.size = Pt(12)
+            itr0c2_run2 = itr0c2.add_run(partner.name)
+            itr0c2_run2.bold = True
+            itr0c2_run2.font.name = 'Liberation Sans'
+            itr0c2_run2.font.size = Pt(12)
+            # row1 column0:
+            itr1c0_1 = info_table.rows[1].cells[0].add_paragraph()
+            itr1c0_1_run_str = rabc(cr, uid, '', context).form_address(company)
+            itr1c0_1_run = itr1c0_1.add_run(itr1c0_1_run_str)
+            itr1c0_1_run.font.name = 'Tahoma'
+            itr1c0_1_run.font.size = Pt(10)
+            if company.phone:
+                itr1c0_2 = info_table.rows[1].cells[0].add_paragraph()
+                itr1c0_2_run_str = self.get_transl(cr, uid, "Phone:", partner.lang, context=context) + ' ' + company.phone
+                itr1c0_2_run = itr1c0_2.add_run(itr1c0_2_run_str)
+                itr1c0_2_run.font.name = 'Tahoma'
+                itr1c0_2_run.font.size = Pt(10)
+            if company.email:
+                itr1c0_3 = info_table.rows[1].cells[0].add_paragraph()
+                itr1c0_3_run_str = self.get_transl(cr, uid, "E-mail:", partner.lang, context=context) + ' ' + company.email
+                itr1c0_3_run = itr1c0_3.add_run(itr1c0_3_run_str)
+                itr1c0_3_run.font.name = 'Tahoma'
+                itr1c0_3_run.font.size = Pt(10)
 
-#            t1r1c1_str1 = self.get_transl(cr, uid, "Company:", partner.lang, context=context) + ' '
-#            t1r1c1_str2 = partner.company_id and partner.company_id.name or user_company.name
-#            style_t1r1c1_r = xlwt.easyxf("font: height 280;")
-#            style_t1r1c1_b = xlwt.easyxf("font: bold 1, height 280;")
-#            sheet.write_rich_text(
+            # row1 column2:
+            itr1c2_1 = info_table.rows[1].cells[2].add_paragraph()
+            itr1c2_1_run_str = rabc(cr, uid, '', context).form_address(partner)
+            itr1c2_1_run = itr1c2_1.add_run(itr1c2_1_run_str)
+            itr1c2_1_run.font.name = 'Tahoma'
+            itr1c2_1_run.font.size = Pt(10)
+            if partner.phone:
+                itr1c2_2 = info_table.rows[1].cells[2].add_paragraph()
+                itr1c2_2_run_str = self.get_transl(cr, uid, "Phone:", partner.lang, context=context) + ' ' + partner.phone
+                itr1c2_2_run = itr1c2_2.add_run(itr1c2_2_run_str)
+                itr1c2_2_run.font.name = 'Tahoma'
+                itr1c2_2_run.font.size = Pt(10)
+            if partner.email:
+                itr1c2_3 = info_table.rows[1].cells[2].add_paragraph()
+                itr1c2_3_run_str = self.get_transl(cr, uid, "E-mail:", partner.lang, context=context) + ' ' + partner.email
+                itr1c2_3_run = itr1c2_3.add_run(itr1c2_3_run_str)
+                itr1c2_3_run.font.name = 'Tahoma'
+                itr1c2_3_run.font.size = Pt(10)
 
-#        file_data = StringIO.StringIO()
-#        wbk.save(file_data)
-#        file_data.seek(0)
-#        return file_data.read().decode('iso8859-4')
+            # row2 column0:
+            itr2c0 = info_table.rows[2].cells[0].add_paragraph()
+            itr2c0_run_str = self.get_transl(cr, uid, "TIN:", partner.lang, context=context) + ' ' + company.vat
+            itr2c0_run = itr2c0.add_run(itr2c0_run_str)
+            itr2c0_run.font.name = 'Liberation Sans'
+            itr2c0_run.font.size = Pt(10)
+
+            # row2 column2:
+            itr2c2 = info_table.rows[2].cells[2].add_paragraph()
+            itr2c2_run_str = self.get_transl(cr, uid, "TIN:", partner.lang, context=context) + ' ' + partner.vat
+            itr2c2_run = itr2c2.add_run(itr2c2_run_str)
+            itr2c2_run.font.name = 'Liberation Sans'
+            itr2c2_run.font.size = Pt(10)
+
+            # row3 column0:
+            itr3c0_1 = info_table.rows[3].cells[0].add_paragraph()
+            itr3c0_1_run_str = self.get_transl(cr, uid, "Accountant:", partner.lang, context=context) + ' ' + rabc(cr, uid, '', context).get_accountant(data['form']['accountant_id'])
+            itr3c0_1_run = itr3c0_1.add_run(itr3c0_1_run_str)
+            itr3c0_1_run.font.name = 'Liberation Sans'
+            itr3c0_1_run.font.size = Pt(10)
+
+            # row3 column2:
+            itr3c2_1 = info_table.rows[3].cells[2].add_paragraph()
+            itr3c2_1_run_str = self.get_transl(cr, uid, "Accountant:", partner.lang, context=context)
+            itr3c2_1_run = itr3c2_1.add_run(itr3c2_1_run_str)
+            itr3c2_1_run.font.name = 'Liberation Sans'
+            itr3c2_1_run.font.size = Pt(10)
+            itr3c2_2 = info_table.rows[3].cells[2].add_paragraph()
+            itr3c2_2_run = itr3c2_2.add_run()
+            itr3c2_2_run.font.name = 'Liberation Sans'
+            itr3c2_2_run.font.size = Pt(10)
+            itr3c2_3 = info_table.rows[3].cells[2].add_paragraph()
+            itr3c2_3.paragraph_format.line_spacing = Pt(18)
+            itr3c2_3_run_str = "_______________________________________"
+            itr3c2_3_run = itr3c2_3.add_run(itr3c2_3_run_str)
+            itr3c2_3_run.font.name = 'Liberation Sans'
+            itr3c2_3_run.font.size = Pt(10)
+            itr3c2_3_run.font.color.rgb = RGBColor(0xD9, 0xD9, 0xD9)
+
+            # row4 column0:
+            itr4c0_1 = info_table.rows[4].cells[0].add_paragraph()
+            itr4c0_1_run_str = self.get_transl(cr, uid, "Date:", partner.lang, context=context)
+            itr4c0_1_run = itr4c0_1.add_run(itr4c0_1_run_str)
+            itr4c0_1_run.bold = True
+            itr4c0_1_run.font.name = 'Liberation Sans'
+            itr4c0_1_run.font.size = Pt(12)
+            itr4c0_2 = info_table.rows[4].cells[0].add_paragraph()
+            itr4c0_2_run_str = rml_parse(cr, uid, '', context).formatLang(time.strftime('%Y-%m-%d'), date=True)
+            itr4c0_2_run = itr4c0_2.add_run(itr4c0_2_run_str)
+            itr4c0_2_run.font.name = 'Liberation Sans'
+            itr4c0_2_run.font.size = Pt(12)
+
+            # row4 column2:
+            itr4c2_1 = info_table.rows[4].cells[2].add_paragraph()
+            itr4c2_1_run_str = self.get_transl(cr, uid, "Date:", partner.lang, context=context)
+            itr4c2_1_run = itr4c2_1.add_run(itr4c2_1_run_str)
+            itr4c2_1_run.bold = True
+            itr4c2_1_run.font.name = 'Liberation Sans'
+            itr4c2_1_run.font.size = Pt(12)
+
+        file_data = StringIO.StringIO()
+        document.save(file_data)
+        file_data.seek(0)
+        return file_data.read().decode('iso8859-4')
 
     def open_report(self, cr, uid, ids, context=None):
         data = {}
@@ -151,34 +286,34 @@ class account_balance_comparison_report(osv.osv_memory):
                     'active_model': 'res.partner'
                 }
             }
-#        if data['form']['format'] == 'xls':
-#            file_save = self.make_xls_data(cr, uid, context.get('active_ids',[]), data, context=context)
-#            file_save_data = base64.encodestring(file_save.encode('iso8859-4'))
-#            if data['form']['file_name']:
-#                file_name_list = data['form']['file_name'].split('.')
-#                format = file_name_list[-1]
-#                if format != 'xls':
-#                    if len(file_name_list) == 1:
-#                        file_name_list.append('xls')
-#                    else:
-#                        file_name_list[-1] = 'xls'
-#                file_name = '.'.join(file_name_list)
-#            else:
-#                file_name = 'Payment_Comparison.xls'
-#            self.write(cr, uid, ids[0], {
-#                'file_name': file_name,
-#                'file_save': file_save_data
-#            }, context=context)
-#            return {
-#                'name': _('Save document For Payment Comparison'),
-#                'res_id': ids[0],
-#                'context': context,
-#                'view_type': 'form',
-#                'view_mode': 'form',
-#                'res_model': 'account.balance.comparison.report',
-#                'views': [(False,'form')],
-#                'type': 'ir.actions.act_window',
-#                'target': 'new',
-#            }
+        if data['form']['format'] == 'docx':
+            file_save = self.make_docx_data(cr, uid, context.get('active_ids',[]), data, context=context)
+            file_save_data = base64.encodestring(file_save.encode('iso8859-4'))
+            if data['form']['file_name']:
+                file_name_list = data['form']['file_name'].split('.')
+                format = file_name_list[-1]
+                if format != 'docx':
+                    if len(file_name_list) == 1:
+                        file_name_list.append('docx')
+                    else:
+                        file_name_list[-1] = 'docx'
+                file_name = '.'.join(file_name_list)
+            else:
+                file_name = 'Payment_Comparison.docx'
+            self.write(cr, uid, ids[0], {
+                'file_name': file_name,
+                'file_save': file_save_data
+            }, context=context)
+            return {
+                'name': _('Save document For Payment Comparison'),
+                'res_id': ids[0],
+                'context': context,
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'account.balance.comparison.report',
+                'views': [(False,'form')],
+                'type': 'ir.actions.act_window',
+                'target': 'new',
+            }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
