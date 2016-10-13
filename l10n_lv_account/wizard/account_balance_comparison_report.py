@@ -118,8 +118,10 @@ class account_balance_comparison_report(osv.osv_memory):
             company = partner.company_id and partner.company_id or user_company
             section = document.sections[-1]
             section.start_type = WD_SECTION.ODD_PAGE
-            section.left_margin = Inches(0.55)
-            section.right_margin = Inches(0.55)
+            section.left_margin = Inches(0.6)
+            section.right_margin = Inches(0.6)
+            section.top_margin = Inches(0.7)
+            section.bottom_margin = Inches(0.7)
             h2_str = self.get_transl(cr, uid, "Mutual payment comparison statement", partner.lang, context=context)
             h2 = document.add_paragraph()
             h2.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -233,7 +235,6 @@ class account_balance_comparison_report(osv.osv_memory):
             itr3c2_2_run.font.name = 'Liberation Sans'
             itr3c2_2_run.font.size = Pt(10)
             itr3c2_3 = info_table.rows[3].cells[2].add_paragraph()
-            itr3c2_3.paragraph_format.line_spacing = Pt(18)
             itr3c2_3_run_str = "_______________________________________"
             itr3c2_3_run = itr3c2_3.add_run(itr3c2_3_run_str)
             itr3c2_3_run.font.name = 'Liberation Sans'
@@ -260,6 +261,44 @@ class account_balance_comparison_report(osv.osv_memory):
             itr4c2_1_run.bold = True
             itr4c2_1_run.font.name = 'Liberation Sans'
             itr4c2_1_run.font.size = Pt(12)
+            itr4c2_2 = info_table.rows[4].cells[2].add_paragraph()
+            itr4c2_2_run1 = itr4c2_2.add_run('20')
+            itr4c2_2_run1.font.name = 'Liberation Sans'
+            itr4c2_2_run1.font.size = Pt(12)
+            itr4c2_2_run2 = itr4c2_2.add_run('______')
+            itr4c2_2_run2.font.name = 'Liberation Sans'
+            itr4c2_2_run2.font.size = Pt(12)
+            itr4c2_2_run2.font.color.rgb = RGBColor(0xD9, 0xD9, 0xD9)
+            itr4c2_2_run3 = itr4c2_2.add_run(' "')
+            itr4c2_2_run3.font.name = 'Liberation Sans'
+            itr4c2_2_run3.font.size = Pt(12)
+            itr4c2_2_run4 = itr4c2_2.add_run('_______')
+            itr4c2_2_run4.font.color.rgb = RGBColor(0xD9, 0xD9, 0xD9)
+            itr4c2_2_run4.font.name = 'Liberation Sans'
+            itr4c2_2_run4.font.size = Pt(12)
+            itr4c2_2_run5 = itr4c2_2.add_run('".')
+            itr4c2_2_run5.font.name = 'Liberation Sans'
+            itr4c2_2_run5.font.size = Pt(12)
+            itr4c2_2_run6 = itr4c2_2.add_run('_____________________\n')
+            itr4c2_2_run6.font.name = 'Liberation Sans'
+            itr4c2_2_run6.font.size = Pt(12)
+            itr4c2_2_run6.font.color.rgb = RGBColor(0xD9, 0xD9, 0xD9)
+
+            # row5 column0:
+            itr5c0 = info_table.rows[5].cells[0].add_paragraph()
+            itr5c0_run1_str = self.get_transl(cr, uid, "The turnover check", partner.lang, context=context) + ' '
+            itr5c0_run1 = itr5c0.add_run(itr5c0_run1_str)
+            itr5c0_run1.font.name = 'Liberation Sans'
+            itr5c0_run1.font.size = Pt(12)
+            itr5c0_run2_str = self.get_transl(cr, uid, "recognised", partner.lang, context=context)
+            itr5c0_run2 = itr5c0.add_run(itr5c0_run2_str)
+            itr5c0_run2.bold = True
+            itr5c0_run2.font.name = 'Liberation Sans'
+            itr5c0_run2.font.size = Pt(12)
+            itr5c0_run3 = itr5c0.add_run(':')
+            itr5c0_run3.font.name = 'Liberation Sans'
+            itr5c0_run3.font.size = Pt(12)
+            info_table.rows[5].cells[0].merge(info_table.rows[5].cells[1]).merge(info_table.rows[5].cells[2])
 
         file_data = StringIO.StringIO()
         document.save(file_data)
