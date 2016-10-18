@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-<data noupdate="0">
+<odoo>
 
     <record id="base.main_company" model="res.company">
         <field name="bank_account_code_prefix">262</field>
@@ -8,5 +7,4 @@
         <field name="accounts_code_digits">4</field>
     </record>
 
-</data>
-</openerp>
+</odoo>

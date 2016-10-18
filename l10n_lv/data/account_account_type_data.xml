@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-<data noupdate="0">
+<odoo>
 
     <record id="lv_account_type_1_1" model="account.account.type">
         <field name="name">1.1 Nemateriālie ieguldījumi</field>
@@ -107,5 +106,4 @@
         <field name="type">other</field>
     </record>
 
-</data>
-</openerp>
+</odoo>
