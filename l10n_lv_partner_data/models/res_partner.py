@@ -28,6 +28,7 @@ class Partner(models.Model):
     _inherit = "res.partner"
 
     partner_registry = fields.Char(string='Registration No. / Personal No.')
+    individual_registry = fields.Char(string='Personal No.', related='partner_registry')
 
 class Company(models.Model):
     _inherit = "res.company"
