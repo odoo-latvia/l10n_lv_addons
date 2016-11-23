@@ -32,6 +32,8 @@ import docx
 from docx.shared import Pt, Inches, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.section import WD_SECTION
+from docx.oxml.ns import nsdecls
+from docx.oxml import parse_xml
 from openerp.addons.l10n_lv_account.report.report_account_balance_comparison import report_account_balance_comparison as rabc
 from openerp.report.report_sxw import rml_parse
 
@@ -218,7 +220,7 @@ class account_balance_comparison_report(osv.osv_memory):
 
             # row2 column2:
             itr2c2 = info_table.rows[2].cells[2].add_paragraph()
-            itr2c2_run_str = self.get_transl(cr, uid, "TIN:", partner.lang, context=context) + ' ' + partner.vat
+            itr2c2_run_str = self.get_transl(cr, uid, "TIN:", partner.lang, context=context) + ' ' + (partner.vat or '')
             itr2c2_run = itr2c2.add_run(itr2c2_run_str)
             itr2c2_run.font.name = 'Liberation Sans'
             itr2c2_run.font.size = Pt(10)
@@ -469,6 +471,9 @@ class account_balance_comparison_report(osv.osv_memory):
             ltr4c4_run.font.size = Pt(11)
 
             # row5 column0:
+            ltr5c0_shading_elm = parse_xml(r'<w:shd {} w:fill="d9d9d9"/>'.format(nsdecls('w')))
+            ltr5c0_child = list_table.rows[5].cells[0]._tc.getchildren()[0]
+            ltr5c0_child.append(ltr5c0_shading_elm)
             ltr5c0_1 = list_table.rows[5].cells[0].add_paragraph()
             ltr5c0_1.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
             ltr5c0_1_run_str = self.get_transl(cr, uid, "To prevent disagreements the following additional journal entries need to be made", partner.lang, context=context)
@@ -525,6 +530,218 @@ class account_balance_comparison_report(osv.osv_memory):
             ltr6c4_run.bold = True
             ltr6c4_run.font.name = 'Liberation Sans'
             ltr6c4_run.font.size = Pt(10)
+
+            for line in line_data['lines']:
+                ltrX = list_table.add_row()
+
+                # rowX column0:
+                ltrXc0 = ltrX.cells[0].add_paragraph()
+                ltrXc0.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                ltrXc0_run_str = rml_parse(cr, uid, '', context).formatLang(line['debit'])
+                ltrXc0_run = ltrXc0.add_run(ltrXc0_run_str)
+                ltrXc0_run.font.name = 'Liberation Sans'
+                ltrXc0_run.font.size = Pt(10)
+
+                # rowX column1:
+                ltrXc1 = ltrX.cells[1].add_paragraph()
+                ltrXc1.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                ltrXc1_run_str = rml_parse(cr, uid, '', context).formatLang(line['credit'])
+                ltrXc1_run = ltrXc1.add_run(ltrXc1_run_str)
+                ltrXc1_run.font.name = 'Liberation Sans'
+                ltrXc1_run.font.size = Pt(10)
+
+                # rowX column2:
+                ltrXc2 = ltrX.cells[2].add_paragraph()
+                ltrXc2.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                ltrXc2_run = ltrXc2.add_run(line['name'])
+                ltrXc2_run.font.name = 'Liberation Sans'
+                ltrXc2_run.font.size = Pt(10)
+
+                # rowX column3:
+                ltrXc3 = ltrX.cells[3].add_paragraph()
+                ltrXc3.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                ltrXc3_run = ltrXc3.add_run()
+                ltrXc3_run.font.name = 'Liberation Sans'
+                ltrXc3_run.font.size = Pt(10)
+
+                # rowX column4:
+                ltrXc4 = ltrX.cells[4].add_paragraph()
+                ltrXc4.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                ltrXc4_run = ltrXc4.add_run()
+                ltrXc4_run.font.name = 'Liberation Sans'
+                ltrXc4_run.font.size = Pt(10)
+
+            for i in range(5):
+                ltrY = list_table.add_row()
+
+                for j in range(5):
+                    # rowY columnZ:
+                    ltrYcZ = ltrY.cells[j].add_paragraph()
+                    ltrYcZ.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    ltrYcZ_run = ltrYcZ.add_run()
+                    ltrYcZ_run.font.name = 'Liberation Sans'
+                    ltrYcZ_run.font.size = Pt(10)
+
+            ltr9 = list_table.add_row()
+
+            # row9 column0:
+            ltr9c0 = ltr9.cells[0].add_paragraph()
+            ltr9c0.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            ltr9c0_run = ltr9c0.add_run()
+            ltr9c0_run.bold = True
+            ltr9c0_run.font.name = 'Liberation Sans'
+            ltr9c0_run.font.size = Pt(10)
+
+            # row9 column1:
+            ltr9c1 = ltr9.cells[1].add_paragraph()
+            ltr9c1.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            ltr9c1_run = ltr9c1.add_run()
+            ltr9c1_run.bold = True
+            ltr9c1_run.font.name = 'Liberation Sans'
+            ltr9c1_run.font.size = Pt(10)
+
+            # row9 column2:
+            ltr9c2 = ltr9.cells[2].add_paragraph()
+            ltr9c2.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            ltr9c2_run_str = self.get_transl(cr, uid, "Additional journal entries total", partner.lang, context=context)
+            ltr9c2_run = ltr9c2.add_run(ltr9c2_run_str)
+            ltr9c2_run.bold = True
+            ltr9c2_run.font.name = 'Liberation Sans'
+            ltr9c2_run.font.size = Pt(10)
+
+            # row9 column3:
+            ltr9c3 = ltr9.cells[3].add_paragraph()
+            ltr9c3.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            ltr9c3_run = ltr9c3.add_run()
+            ltr9c3_run.bold = True
+            ltr9c3_run.font.name = 'Liberation Sans'
+            ltr9c3_run.font.size = Pt(10)
+
+            # row9 column4:
+            ltr9c4 = ltr9.cells[4].add_paragraph()
+            ltr9c4.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            ltr9c4_run = ltr9c4.add_run()
+            ltr9c4_run.bold = True
+            ltr9c4_run.font.name = 'Liberation Sans'
+            ltr9c4_run.font.size = Pt(10)
+
+            ltr10 = list_table.add_row()
+
+            # row10 column0:
+            ltr10c0_shading_elm = parse_xml(r'<w:shd {} w:fill="d9d9d9"/>'.format(nsdecls('w')))
+            ltr10c0_child = ltr10.cells[0]._tc.getchildren()[0]
+            ltr10c0_child.append(ltr10c0_shading_elm)
+            ltr10c0 = ltr10.cells[0].add_paragraph()
+            ltr10c0.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            ltr10c0_run_str = rml_parse(cr, uid, '', context).formatLang(line_data['total_debit'])
+            ltr10c0_run = ltr10c0.add_run(ltr10c0_run_str)
+            ltr10c0_run.bold = True
+            ltr10c0_run.font.name = 'Liberation Sans'
+            ltr10c0_run.font.size = Pt(10)
+
+            # row10 column1:
+            ltr10c1_shading_elm = parse_xml(r'<w:shd {} w:fill="d9d9d9"/>'.format(nsdecls('w')))
+            ltr10c1_child = ltr10.cells[1]._tc.getchildren()[0]
+            ltr10c1_child.append(ltr10c1_shading_elm)
+            ltr10c1 = ltr10.cells[1].add_paragraph()
+            ltr10c1.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            ltr10c1_run_str = rml_parse(cr, uid, '', context).formatLang(line_data['total_credit'])
+            ltr10c1_run = ltr10c1.add_run(ltr10c1_run_str)
+            ltr10c1_run.bold = True
+            ltr10c1_run.font.name = 'Liberation Sans'
+            ltr10c1_run.font.size = Pt(10)
+
+            # row10 column2:
+            ltr10c2_shading_elm = parse_xml(r'<w:shd {} w:fill="d9d9d9"/>'.format(nsdecls('w')))
+            ltr10c2_child = ltr10.cells[2]._tc.getchildren()[0]
+            ltr10c2_child.append(ltr10c2_shading_elm)
+            ltr10c2 = ltr10.cells[2].add_paragraph()
+            ltr10c2.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            ltr10c2_run_str = self.get_transl(cr, uid, "Balance total", partner.lang, context=context)
+            ltr10c2_run = ltr10c2.add_run(ltr10c2_run_str)
+            ltr10c2_run.bold = True
+            ltr10c2_run.font.name = 'Liberation Sans'
+            ltr10c2_run.font.size = Pt(10)
+
+            # row10 column3:
+            ltr10c3_shading_elm = parse_xml(r'<w:shd {} w:fill="d9d9d9"/>'.format(nsdecls('w')))
+            ltr10c3_child = ltr10.cells[3]._tc.getchildren()[0]
+            ltr10c3_child.append(ltr10c3_shading_elm)
+            ltr10c3 = ltr10.cells[3].add_paragraph()
+            ltr10c3.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            ltr10c3_run = ltr10c3.add_run()
+            ltr10c3_run.bold = True
+            ltr10c3_run.font.name = 'Liberation Sans'
+            ltr10c3_run.font.size = Pt(10)
+
+            # row10 column4:
+            ltr10c4_shading_elm = parse_xml(r'<w:shd {} w:fill="d9d9d9"/>'.format(nsdecls('w')))
+            ltr10c4_child = ltr10.cells[4]._tc.getchildren()[0]
+            ltr10c4_child.append(ltr10c4_shading_elm)
+            ltr10c4 = ltr10.cells[4].add_paragraph()
+            ltr10c4.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            ltr10c4_run = ltr10c4.add_run()
+            ltr10c4_run.bold = True
+            ltr10c4_run.font.name = 'Liberation Sans'
+            ltr10c4_run.font.size = Pt(10)
+
+            space2 = document.add_paragraph()
+            space2_run = space2.add_run()
+            space2_run.font.name = 'Liberation Sans'
+            space2_run.font.size = Pt(12)
+            p1_str = self.get_transl(cr, uid, "Please compare mutual payments, sign and send back one copy of the comparison statement. If the comparison statement is not received within 10 days, mutual payments will be considered compared.", partner.lang, context=context)
+            p1 = document.add_paragraph()
+            p1_run = p1.add_run(p1_str)
+            p1_run.bold = True
+            p1_run.font.name = 'Liberation Sans'
+            p1_run.font.size = Pt(10)
+            space3 = document.add_paragraph()
+            space3_run = space3.add_run()
+            space3_run.font.name = 'Liberation Sans'
+            space3_run.font.size = Pt(12)
+
+            p2 = document.add_paragraph()
+            p2_run = p2.add_run(company.name)
+            p2_run.bold = True
+            p2_run.font.name = 'Liberation Sans'
+            p2_run.font.size = Pt(12)
+
+            p3 = document.add_paragraph()
+            p3_run_str = self.get_transl(cr, uid, "Chief accountant:", partner.lang, context=context) + ' ' + rabc(cr, uid, '', context).get_accountant(data['form']['accountant_id'])
+            p3_run = p3.add_run(p3_run_str)
+            p3_run.bold = True
+            p3_run.font.name = 'Liberation Sans'
+            p3_run.font.size = Pt(12)
+            space4 = document.add_paragraph()
+            space4_run = space4.add_run()
+            space4_run.font.name = 'Liberation Sans'
+            space4_run.font.size = Pt(12)
+
+            p4 = document.add_paragraph()
+            p4_run = p4.add_run(partner.name)
+            p4_run.bold = True
+            p4_run.font.name = 'Liberation Sans'
+            p4_run.font.size = Pt(12)
+
+            sign_table = document.add_table(rows=1, cols=2)
+            sign_table.columns[0].width = Inches(3.74)
+            sign_table.columns[1].width = Inches(3.74)
+
+            str0c0 = sign_table.rows[0].cells[0].add_paragraph()
+            str0c0_run_str = self.get_transl(cr, uid, "Accountant:", partner.lang, context=context)
+            str0c0_run = str0c0.add_run(str0c0_run_str)
+            str0c0_run.bold = True
+            str0c0_run.font.name = 'Liberation Sans'
+            str0c0_run.font.size = Pt(12)
+
+            str0c1 = sign_table.rows[0].cells[1].add_paragraph()
+            str0c1_run_str = self.get_transl(cr, uid, "Signature:", partner.lang, context=context)
+            str0c1_run = str0c1.add_run(str0c1_run_str)
+            str0c1_run.bold = True
+            str0c1_run.font.name = 'Liberation Sans'
+            str0c1_run.font.size = Pt(12)
+
+            document.add_page_break()
 
         file_data = StringIO.StringIO()
         document.save(file_data)
