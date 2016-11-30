@@ -48,18 +48,21 @@ class report_stock_inventory(report_sxw.rml_parse):
         return data
 
     def get_cost(self, line):
-        if line.product_qty > line.theoretical_qty:
-            cost = line.product_id.standard_price
-        else:
+        cost = line.product_id.standard_price
+        if line.product_qty <= line.theoretical_qty:
             inv_line_obj = self.pool.get('stock.inventory.line')
             quant_ids = inv_line_obj._get_quants(self.cr, self.uid, line, context=self.context)
-            quant_obj = self.pool.get('stock.quant')
-            total_cost = 0.0
-            total_qty = 0.0
-            for quant in quant_obj.browse(self.cr, self.uid, quant_ids, context=self.context):
-                total_cost += (quant.cost * quant.qty)
-                total_qty += quant.qty
-            cost = total_qty != 0.0 and total_cost / total_qty or 0.0
+            if quant_ids:
+                quant_obj = self.pool.get('stock.quant')
+                uom_obj = self.pool.get('product.uom')
+                total_cost = 0.0
+                total_qty = 0.0
+                for quant in quant_obj.browse(self.cr, self.uid, quant_ids, context=self.context):
+                    total_cost += (quant.cost * quant.qty)
+                    total_qty += quant.qty
+                if line.product_uom_id and line.product_id.uom_id.id != line.product_uom_id.id:
+                    total_qty = uom_obj._compute_qty_obj(self.cr, self.uid, line.product_id.uom_id, total_qty, line.product_uom_id, context=self.context)
+                cost = total_qty != 0.0 and total_cost / total_qty or 0.0
         return cost
 
     def get_totals(self, lines):
