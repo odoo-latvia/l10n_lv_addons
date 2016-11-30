@@ -1,0 +1,122 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* l10n_lv_stock
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-30 12:03+0000\n"
+"PO-Revision-Date: 2016-11-30 12:03+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "A total of listed material values:"
+msgstr "Pavisam uzskaitītās materiālās vērtības:"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "Cost"
+msgstr "Pašizmaksa"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "Determination of residue was held with the participation of a commission in the following composition:"
+msgstr "Atlikumu noteikšana notika, piedaloties komisijai sekojošā sastāvā:"
+
+#. module: l10n_lv_stock
+#: field:report.stock.report_inventory,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "In words:"
+msgstr "Vārdiem:"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "List started with No."
+msgstr "Saraksts sākts ar Nr."
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "No."
+msgstr "Nr."
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "Notes"
+msgstr "Piezīmes"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "Number of units:"
+msgstr "Produktu vienību skaits:"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "Product Code"
+msgstr "Produkta kods"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "Product Name"
+msgstr "Produkta nosaukums"
+
+#. module: l10n_lv_stock
+#: field:stock.production.lot,qty_available:0
+msgid "Quantity On Hand"
+msgstr "Skaits noliktavā"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "Real"
+msgstr "Reāli"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "Total"
+msgstr "Summa"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "UoM"
+msgstr "Mērv."
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "and finished with No."
+msgstr "un pabeigts ar Nr."
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "commission members:"
+msgstr "komisijas locekļi:"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "financially responsible persons:"
+msgstr "materiāli atbildīgās personas:"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "name"
+msgstr "vārds"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "signature"
+msgstr "paraksts"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "surname"
+msgstr "uzvārds"
+

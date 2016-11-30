@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="report_paperformat_stock_inventory" model="report.paperformat">
+            <field name="name">Inventory Landscape</field>
+            <field name="margin_top" eval="40"/>
+            <field name="margin_left" eval="7"/>
+            <field name="margin_bottom" eval="20"/>
+            <field name="margin_right" eval="7"/>
+            <field name="header_spacing" eval="39"/>
+            <field name="format">A4</field>
+            <field name="orientation">Landscape</field>
+        </record>
+
+        <record id="stock.action_report_inventory" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="report_paperformat_stock_inventory"/>
+        </record>
+
+    </data>
+</openerp>

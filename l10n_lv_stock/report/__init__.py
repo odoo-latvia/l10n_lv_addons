@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2015 ITS-1 (<http://www.its1.lv/>)
+#    Copyright (C) 2016 ITS-1 (<http://www.its1.lv/>)
 #                       E-mail: <info@its1.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
 #                       Phone: +371 66116534
@@ -22,25 +22,6 @@
 #
 ##############################################################################
 
-{
-    'name': 'Latvian Localization for Stock',
-    'version': '1.0',
-    'description': """
-Latvian localization for Stock.
-=====================================
-""",
-    'author': 'ITS-1',
-    'website': 'http://www.its1.lv/',
-    'category': 'Localization',
-    'depends': ['stock'],
-    'data': [
-        'stock_view.xml',
-        'stock_report.xml',
-        'wizard/stock_transfer_details_view.xml',
-        'views/report_inventory.xml'
-    ],
-    'auto_install': False,
-    'installable': True,
-}
+import report_inventory
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

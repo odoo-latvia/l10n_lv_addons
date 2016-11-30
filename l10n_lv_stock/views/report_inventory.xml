@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <template id="report_inventory_l10n_lv" inherit_id="stock.report_inventory">
+
+            <!-- Remove last empty line -->
+            <xpath expr="//table[2]/tr[last()]" position="replace"/>
+
+            <!-- Row number -->
+            <xpath expr="//table[2]" position="before">
+                <t t-set="numbers" t-value="get_numbers(o.line_ids)"></t>
+            </xpath>
+            <xpath expr="//table[2]/thead/tr/th[1]" position="before">
+                <th><strong>No.</strong></th>
+            </xpath>
+            <xpath expr="//table[2]/tr/td[1]" position="before">
+                <td class="text-center"><span t-esc="numbers[line.id]"/></td>
+            </xpath>
+
+            <!-- Product Name and Code -->
+            <xpath expr="//table[2]/thead/tr/th/strong[text()='Product']/parent::th" position="before">
+                <th><strong>Product Code</strong></th>
+            </xpath>
+            <xpath expr="//table[2]/tr/td/span[@t-field='line.product_id']/parent::td" position="before">
+                <td><span t-field="line.product_id.default_code"/></td>
+            </xpath>
+            <xpath expr="//table[2]/thead/tr/th/strong[text()='Product']" position="replace">
+                <strong>Product Name</strong>
+            </xpath>
+            <xpath expr="//table[2]/tr/td/span[@t-field='line.product_id']" position="replace">
+                <span t-field="line.product_id.name"/>
+            </xpath>
+
+            <!-- Remove Package -->
+            <xpath expr="//table[2]/thead/tr/th/strong[text()='Package']/parent::th" position="replace"/>
+            <xpath expr="//table[2]/tr/td/span[@t-field='line.package_id']/parent::td" position="replace"/>
+
+            <!-- Unit of Measure -->
+            <xpath expr="//table[2]/tr/td/span[@t-field='line.product_uom_id']" position="replace"/>
+            <xpath expr="//table[2]/thead/tr/th/strong[text()='Production Lot']/parent::th" position="after">
+                <th><strong>UoM</strong></th>
+            </xpath>
+            <xpath expr="//table[2]/tr/td/span[@t-field='line.prod_lot_id']/parent::td" position="after">
+                <td><span t-field="line.product_uom_id"/></td>
+            </xpath>
+
+            <!-- Quantities -->
+            <xpath expr="//table[2]/thead/tr/th/strong[text()='Quantity']/parent::th" position="before">
+                <th class="text-right"><strong>Real</strong></th>
+            </xpath>
+            <xpath expr="//table[2]/tr/td/span[@t-field='line.product_qty']/parent::td" position="before">
+                <td class="text-right"><span t-field="line.product_qty"/></td>
+            </xpath>
+            <xpath expr="(//table[2]/tr/td/span[@t-field='line.product_qty'])[2]" position="replace">
+                <span t-field="line.theoretical_qty"/>
+            </xpath>
+
+            <!-- Cost and Notes -->
+            <xpath expr="//table[2]/thead/tr/th[last()]" position="after">
+                <th class="text-right"><strong>Cost</strong></th>
+                <th class="text-right"><strong>Total</strong></th>
+                <th width="15%%"><strong>Notes</strong></th>
+            </xpath>
+            <xpath expr="//table[2]/tr/td[last()]" position="after">
+                <td class="text-right"><span t-esc="formatLang(get_cost(line))"/></td>
+                <td class="text-right"><span t-esc="formatLang(get_cost(line)*line.theoretical_qty+0)"/></td>
+                <td></td>
+            </xpath>
+
+            <!-- Totals and signatures -->
+            <xpath expr="//div[@class='page']" position="inside">
+                <t t-set="totals" t-value="get_totals(o.line_ids)"/>
+                <div class="row" style="padding: 2px; border: 1px solid black;">
+                    <p>
+                        <span>List started with No.</span>
+                        <span t-esc="o.line_ids and numbers[o.line_ids[0].id] or 0"/>
+                        <span>and finished with No.</span>
+                        <span t-esc="o.line_ids and numbers[o.line_ids[-1].id] or 0"/>
+                    </p>
+                    <p>
+                        <div style="display: inline-block; padding-bottom: 10px;">
+                            <span>Number of units:</span>
+                            <span t-esc="totals['quantity']"/>
+                        </div>
+                        <div style="display: inline-block; padding-bottom: 10px; padding-left: 50px;">
+                            <span>In words:</span>
+                        </div>
+                    </p>
+                    <p>
+                        <strong><span>A total of listed material values:</span></strong>
+                        <strong><span t-esc="formatLang(totals['value'])"/></strong>
+                        <strong><span t-field="o.company_id.currency_id"/></strong>
+                    </p>
+                </div>
+                <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
+                    <strong><span>Determination of residue was held with the participation of a commission in the following composition:</span></strong>
+                </div>
+                <table style="width: 100%%; margin-bottom: 60px;">
+                    <tr>
+                        <td style="padding: 2px; border-bottom: 1px solid black; width: 40%%;">
+                            <span>commission members:</span>
+                        </td>
+                        <td style="padding: 2px; border-bottom: 1px solid black; border-left: 1px solid black; width: 20%%;">
+                            <span>name</span>
+                        </td>
+                        <td style="padding: 2px; border-bottom: 1px solid black; border-left: 1px solid black; width: 20%%;">
+                            <span>surname</span>
+                        </td>
+                        <td style="padding: 2px; border-bottom: 1px solid black; border-left: 1px solid black; width: 20%%;">
+                            <span>signature</span>
+                        </td>
+                    </tr>
+                </table>
+                <table style="width: 100%%; margin-bottom: 60px;">
+                    <tr>
+                        <td style="padding: 2px; border-bottom: 1px solid black; width: 40%%;">
+                            <span>financially responsible persons:</span>
+                        </td>
+                        <td style="padding: 2px; border-bottom: 1px solid black; border-left: 1px solid black; width: 20%%;">
+                            <span>name</span>
+                        </td>
+                        <td style="padding: 2px; border-bottom: 1px solid black; border-left: 1px solid black; width: 20%%;">
+                            <span>surname</span>
+                        </td>
+                        <td style="padding: 2px; border-bottom: 1px solid black; border-left: 1px solid black; width: 20%%;">
+                            <span>signature</span>
+                        </td>
+                    </tr>
+                </table>
+            </xpath>
+        </template>
+
+    </data>
+</openerp>
