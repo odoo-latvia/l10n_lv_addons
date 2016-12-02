@@ -78,7 +78,12 @@ msgstr "Skaits noliktavā"
 #. module: l10n_lv_stock
 #: view:website:stock.report_inventory
 msgid "Real"
-msgstr "Reāli"
+msgstr "Faktiskais"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "Theoretical"
+msgstr "Teorētiskais"
 
 #. module: l10n_lv_stock
 #: view:website:stock.report_inventory
@@ -119,4 +124,9 @@ msgstr "paraksts"
 #: view:website:stock.report_inventory
 msgid "surname"
 msgstr "uzvārds"
+
+#. module: l10n_lv_stock
+#: view:website:stock.report_inventory
+msgid "Warehouse"
+msgstr "Noliktava"
 

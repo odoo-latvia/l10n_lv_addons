@@ -18,6 +18,14 @@
                 <td class="text-center"><span t-esc="numbers[line.id]"/></td>
             </xpath>
 
+            <!-- Replace Location with Warehouse -->
+            <xpath expr="//table[2]/thead/tr/th/strong[text()='Location']" position="replace">
+                <strong>Warehouse</strong>
+            </xpath>
+            <xpath expr="//table[2]/tr/td/span[@t-field='line.location_id']" position="replace">
+                <span t-esc="get_warehouse(line.location_id)"/>
+            </xpath>
+
             <!-- Product Name and Code -->
             <xpath expr="//table[2]/thead/tr/th/strong[text()='Product']/parent::th" position="before">
                 <th><strong>Product Code</strong></th>
@@ -46,14 +54,14 @@
             </xpath>
 
             <!-- Quantities -->
-            <xpath expr="//table[2]/thead/tr/th/strong[text()='Quantity']/parent::th" position="before">
-                <th class="text-right"><strong>Real</strong></th>
+            <xpath expr="//table[2]/thead/tr/th/strong[text()='Quantity']/parent::th" position="after">
+                <th class="text-right">Theoretical</th>
             </xpath>
-            <xpath expr="//table[2]/tr/td/span[@t-field='line.product_qty']/parent::td" position="before">
-                <td class="text-right"><span t-field="line.product_qty"/></td>
+            <xpath expr="//table[2]/tr/td/span[@t-field='line.product_qty']/parent::td" position="after">
+                <td class="text-right"><span t-field="line.theoretical_qty"/></td>
             </xpath>
-            <xpath expr="(//table[2]/tr/td/span[@t-field='line.product_qty'])[2]" position="replace">
-                <span t-field="line.theoretical_qty"/>
+            <xpath expr="//table[2]/thead/tr/th/strong[text()='Quantity']" position="replace">
+                <strong>Real</strong>
             </xpath>
 
             <!-- Cost and Notes -->

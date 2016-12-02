@@ -34,6 +34,7 @@ class report_stock_inventory(report_sxw.rml_parse):
             'cr':cr,
             'uid': uid,
             'get_numbers': self.get_numbers,
+            'get_warehouse': self.get_warehouse,
             'get_cost': self.get_cost,
             'get_totals': self.get_totals
         })
@@ -46,6 +47,14 @@ class report_stock_inventory(report_sxw.rml_parse):
             n += 1
             data.update({l.id: n})
         return data
+
+    def get_warehouse(self, location):
+        wh_id = self.pool.get('stock.location').get_warehouse(self.cr, self.uid, location, context=self.context)
+        wh_name = ''
+        if wh_id:
+            wh = self.pool.get('stock.warehouse').browse(self.cr, self.uid, wh_id, context=self.context)
+            wh_name = wh.name
+        return wh_name
 
     def get_cost(self, line):
         cost = line.product_id.standard_price
