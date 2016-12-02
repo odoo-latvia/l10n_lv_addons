@@ -54,10 +54,10 @@
             </xpath>
 
             <!-- Quantities -->
-            <xpath expr="//table[2]/thead/tr/th/strong[text()='Quantity']/parent::th" position="after">
+            <xpath expr="//table[2]/thead/tr/th/strong[text()='Quantity']/parent::th" position="before">
                 <th class="text-right">Theoretical</th>
             </xpath>
-            <xpath expr="//table[2]/tr/td/span[@t-field='line.product_qty']/parent::td" position="after">
+            <xpath expr="//table[2]/tr/td/span[@t-field='line.product_qty']/parent::td" position="before">
                 <td class="text-right"><span t-field="line.theoretical_qty"/></td>
             </xpath>
             <xpath expr="//table[2]/thead/tr/th/strong[text()='Quantity']" position="replace">
@@ -72,7 +72,7 @@
             </xpath>
             <xpath expr="//table[2]/tr/td[last()]" position="after">
                 <td class="text-right"><span t-esc="formatLang(get_cost(line))"/></td>
-                <td class="text-right"><span t-esc="formatLang(get_cost(line)*line.theoretical_qty+0)"/></td>
+                <td class="text-right"><span t-esc="formatLang(get_cost(line)*line.product_qty+0)"/></td>
                 <td></td>
             </xpath>
 

@@ -58,10 +58,9 @@ class report_stock_inventory(report_sxw.rml_parse):
 
     def get_cost(self, line):
         cost = line.product_id.standard_price
-        # need to recalculate if real qty will be used and greater than theoretical (diff * standard_price):
         inv_line_obj = self.pool.get('stock.inventory.line')
         quant_ids = inv_line_obj._get_quants(self.cr, self.uid, line, context=self.context)
-        if quant_ids:
+        if quant_ids and line.theoretical_qty >= 0.0:
             quant_obj = self.pool.get('stock.quant')
             uom_obj = self.pool.get('product.uom')
             total_cost = 0.0
@@ -71,6 +70,10 @@ class report_stock_inventory(report_sxw.rml_parse):
                 total_qty += quant.qty
             if line.product_uom_id and line.product_id.uom_id.id != line.product_uom_id.id:
                 total_qty = uom_obj._compute_qty_obj(self.cr, self.uid, line.product_id.uom_id, total_qty, line.product_uom_id, context=self.context)
+            if total_qty < line.product_qty:
+                diff = line.product_qty - total_qty
+                total_qty += diff
+                total_cost += (line.product_id.standard_price * diff)
             cost = total_qty != 0.0 and total_cost / total_qty or 0.0
         return cost
 
@@ -78,9 +81,9 @@ class report_stock_inventory(report_sxw.rml_parse):
         qty = 0.0
         value = 0.0
         for l in lines:
-            qty += l.theoretical_qty
+            qty += l.product_qty
             cost = self.get_cost(l)
-            value += (cost * l.theoretical_qty)
+            value += (cost * l.product_qty)
         return {'quantity': qty, 'value': value}
 
 class report_inventory(osv.AbstractModel):
