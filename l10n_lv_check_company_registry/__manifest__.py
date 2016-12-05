@@ -38,7 +38,11 @@ When the data loading checkbox is checked, the loaded data is not saved, so that
     'depends': ['l10n_lv_partner_data'],
     'demo_xml': [],
     'data': [
-        'res_partner_check_view.xml'
+        'res_partner_check_view.xml',
+        'templates/registry_backend_assets.xml',
+    ],
+    'qweb': [
+        'static/src/xml/registry_check.xml',
     ],
     'auto_install': False,
     'installable': True,

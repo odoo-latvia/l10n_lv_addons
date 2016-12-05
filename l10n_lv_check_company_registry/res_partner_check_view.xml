@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
 
         <!-- Partner Form View -->
@@ -8,44 +8,12 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <field name="name"/>
-                <field name="email" position="after">
-	                <field name="identification_id" attrs="{'invisible': [('is_company','=',True)]}"/>
-                    <group>
-                        <div>
-                            <field name="load_from_registry" nolabel="1" class="oe_inline"/>
-                            <label for="load_from_registry"/>
-                        </div>
-                    </group>
-	            </field>
-                <!--
-                <xpath expr="/form/sheet/div[@class='oe_title oe_left']/h1" position="after">
-                    <field name="allow_creation" class="oe_edit_only"/>
-                    <label for="allow_creation" class="oe_inline oe_edit_only"/>
-                </xpath>
-                <xpath expr="//notebook/page[@string='Contacts']/field[@name='child_ids']/form[@string='Contact']/sheet/div[@class='oe_title']/h1" position="after">
-                    <field name="allow_creation" class="oe_edit_only"/>
-                    <label for="allow_creation" class="oe_inline oe_edit_only"/>
-                </xpath>
-                -->
+                <field name="name" position="after">
+                    <field name="registry_valid" invisible="1"/>
+                    <widget type="registry_check_btn"/>
+                </field>
             </field>
         </record>
-
-        <!--
-        <record id="view_partner_simple_form_inherit_check" model="ir.ui.view">
-            <field name="name">res.partner.simplified.form.inherit.check</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_simple_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="/form/div[@class='oe_title']/h1" position="after">
-                    <field name="allow_creation" class="oe_edit_only"/>
-                    <label for="allow_creation" class="oe_inline oe_edit_only"/>
-                </xpath>
-            </field>
-        </record>
-        -->
-
-
 
     </data>
-</openerp>
+</odoo>
