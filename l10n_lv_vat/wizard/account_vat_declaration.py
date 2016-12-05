@@ -310,7 +310,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
             if value['tax_codes'] == [] and value['tax_codes_l'] == [] and value['amount_taxed'] != 0.0:
                 partner_data[key]['amount_taxed'] = value['amount_taxed'] * 0.5
                 partner_data[key]['amount_taxed_cur'] = value['amount_taxed_cur'] * 0.5
-            if '61' in value['tax_codes']:
+            if '61' in value['tax_codes'] or ('62' in value['tax_codes'] and '52' in value['tax_codes']):
                 partner_data[key]['amount_tax'] = value['amount_tax'] * 0.5
                 partner_data[key]['amount_tax_cur'] = value['amount_tax_cur'] * 0.5
             if value['amount_untaxed'] == 0.0 and value['amount_tax'] == 0.0:
@@ -354,18 +354,23 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 if '61' in value['tax_codes']:
                     deal_type = "I"
                 if '65' in value['tax_codes']:
-                    deal_type == "K"
+                    deal_type = "K"
+                if '62' in value['tax_codes'] and '52' in value['tax_codes']:
+                    deal_type = "R4"
                 partner_data[key]['deal_type'] = deal_type
 
                 # PVN1-I doc type:
                 doc_type = "1"
-                if value['invoices'] and journal_type == 'sale_refund':
-                    doc_type = "4"
-                    partner_data[key]['limit_val'] = 0.0
-                    key2_list = ['amount_untaxed', 'amount_untaxed_cur', 'amount_tax', 'amount_tax_cur', 'amount_taxed', 'amount_taxed_cur']
-                    for key2 in key2_list:
-                        if partner_data[key][key2] < 0.0:
-                            partner_data[key][key2] = partner_data[key][key2] * (-1.0)
+                if value['invoices']:
+                    if partner_data[key]['deal_type'] == 'R4':
+                        partner_data[key]['limit_val'] = 0.0
+                    if journal_type == 'sale_refund':
+                        doc_type = "4"
+                        partner_data[key]['limit_val'] = 0.0
+                        key2_list = ['amount_untaxed', 'amount_untaxed_cur', 'amount_tax', 'amount_tax_cur', 'amount_taxed', 'amount_taxed_cur']
+                        for key2 in key2_list:
+                            if partner_data[key][key2] < 0.0:
+                                partner_data[key][key2] = partner_data[key][key2] * (-1.0)
                 if (not value['invoices']) and journal_type != 'expense':
                     doc_type = "5"
                     if '61' in value['tax_codes']:
