@@ -275,7 +275,6 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                     partner_data[partner_id]['tax_codes'].append(line.tax_code_id.tax_code)
                     if line.tax_code_id.tax_code == '61' and line.move_id.ref:
                         partner_data[partner_id]['doc_number'] = line.move_id.ref
-
             if (line.tax_code_id and self._check_tax_base_code(cr, uid, line.tax_code_id.id, context=context)) or ((not line.tax_code_id) and line.tax_amount != 0.0):
                 sign = line.tax_code_id and line.tax_code_id.sign or 1.0
                 currency_data = self._get_amount_data(cr, uid, line, (line.tax_amount * sign), partner_data[partner_id]['partner_country'], context=context)
@@ -310,7 +309,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
             if value['tax_codes'] == [] and value['tax_codes_l'] == [] and value['amount_taxed'] != 0.0:
                 partner_data[key]['amount_taxed'] = value['amount_taxed'] * 0.5
                 partner_data[key]['amount_taxed_cur'] = value['amount_taxed_cur'] * 0.5
-            if '61' in value['tax_codes'] or ('62' in value['tax_codes'] and '52' in value['tax_codes']):
+            if '61' in value['tax_codes']:
                 partner_data[key]['amount_tax'] = value['amount_tax'] * 0.5
                 partner_data[key]['amount_tax_cur'] = value['amount_tax_cur'] * 0.5
             if value['amount_untaxed'] == 0.0 and value['amount_tax'] == 0.0:
@@ -357,20 +356,19 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                     deal_type = "K"
                 if '62' in value['tax_codes'] and '52' in value['tax_codes']:
                     deal_type = "R4"
+                    partner_data[key]['limit_val'] = 0.0
+                    partner_data[key]['amount_tax'] *= 0.5
                 partner_data[key]['deal_type'] = deal_type
 
                 # PVN1-I doc type:
                 doc_type = "1"
-                if value['invoices']:
-                    if partner_data[key]['deal_type'] == 'R4':
-                        partner_data[key]['limit_val'] = 0.0
-                    if journal_type == 'sale_refund':
-                        doc_type = "4"
-                        partner_data[key]['limit_val'] = 0.0
-                        key2_list = ['amount_untaxed', 'amount_untaxed_cur', 'amount_tax', 'amount_tax_cur', 'amount_taxed', 'amount_taxed_cur']
-                        for key2 in key2_list:
-                            if partner_data[key][key2] < 0.0:
-                                partner_data[key][key2] = partner_data[key][key2] * (-1.0)
+                if value['invoices'] and journal_type == 'sale_refund':
+                    doc_type = "4"
+                    partner_data[key]['limit_val'] = 0.0
+                    key2_list = ['amount_untaxed', 'amount_untaxed_cur', 'amount_tax', 'amount_tax_cur', 'amount_taxed', 'amount_taxed_cur']
+                    for key2 in key2_list:
+                        if partner_data[key][key2] < 0.0:
+                            partner_data[key][key2] = partner_data[key][key2] * (-1.0)
                 if (not value['invoices']) and journal_type != 'expense':
                     doc_type = "5"
                     if '61' in value['tax_codes']:
@@ -447,6 +445,105 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                         if partner_data[key][key2] > 0.0:
                             partner_data[key][key2] = partner_data[key][key2] * (-1.0)
         return partner_data
+
+    def _process_r4_move(self, cr, uid, move, context=None):
+        if context is None:
+            context = {}
+
+        it_obj = self.pool.get('account.invoice.tax')
+        data_52 = {}
+        data_62 = {}
+        invoices = []
+        for line in move.line_id:
+            if line.tax_code_id:
+                it_ids = it_obj.search(cr, uid, [('invoice_id','=',line.invoice.id), ('tax_code_id','=',line.tax_code_id.id)], context=context)
+                if it_ids:
+                    it = it_obj.browse(cr, uid, it_ids[0], context=context)
+                    if line.tax_code_id.tax_code == '52':
+                        it = it_obj.browse(cr, uid, it_ids[0], context=context)
+                        data_52.update({
+                            'line_id': line.id,
+                            'amount_untaxed': it.base_amount,
+                            'amount_tax': it.tax_amount < 0.0 and it.tax_amount * (-1.0) or it.tax_amount
+                        })
+                    if line.tax_code_id.tax_code == '62':
+                        data_62.update({
+                            'line_id': line.id,
+                            'amount_untaxed': it.base_amount,
+                            'amount_tax': it.tax_amount
+                        })
+            if line.invoice and line.invoice not in invoices:
+                invoices.append(line.invoice)
+        if data_62['amount_tax'] == data_52['amount_tax']:
+            proc_line = self._process_line(cr, uid, move.line_id, context=context)
+            return [v for k,v in proc_line.iteritems()]
+        if data_62['amount_tax'] != data_52['amount_tax']:
+            data_62['amount_tax'] -= data_52['amount_tax']
+            data_62['amount_untaxed'] -= data_52['amount_untaxed']
+        data_52.update({'amount_taxed': data_52['amount_untaxed'] + data_52['amount_tax']})
+        data_62.update({'amount_taxed': data_62['amount_untaxed'] + data_62['amount_tax']})
+
+        data_list = []
+        for inv in invoices:
+            partner_country = inv.partner_id and inv.partner_id.country_id and inv.partner_id.country_id.code or False
+            vat_no = inv.partner_id and inv.partner_id.vat or False
+            partner_vat = False
+            if vat_no:
+                vat_no = vat_no.replace(' ','').upper()
+                if vat_no[:2].isalpha():
+                    partner_vat = vat_no[2:]
+                    partner_country = vat_no[:2]
+                else:
+                    partner_vat = vat_no
+            if partner_country == 'GR':
+                partner_country = 'EL'
+            if inv.partner_id and (not partner_vat) and hasattr(inv.partner_id, 'company_registry'):
+                partner_vat = inv.partner_id.company_registry
+            d = {
+                'partner_id': inv.partner_id and inv.partner_id.id or False,
+                'partner_name': inv.partner_id and inv.partner_id.name or '',
+                'partner_country': partner_country,
+                'partner_vat': partner_vat,
+                'partner_fpos': inv.partner_id and inv.partner_id.property_account_position and inv.partner_id.property_account_position.name or False,
+                'currency': inv.currency_id.name,
+                'doc_number': inv.number,
+                'doc_date': inv.date_invoice,
+                'doc_type': inv.type in ['in_refund', 'out_refund'] and "4" or "1"
+            }
+            limit_val = 1000.0
+            if inv.date_invoice > datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
+                limit_val = 1430.0
+            d.update({'limit_val': limit_val})
+            deal_type = ""
+            if d['partner_vat'] and (d['partner_fpos'] and (check_fpos(d['partner_fpos'], 'LR_VAT_payer') or check_fpos(d['partner_fpos'], 'EU_VAT_payer'))):
+                deal_type = "A"
+            if (not d['partner_vat']) and d['partner_fpos'] and (check_fpos(d['partner_fpos'], 'LR_VAT_payer') or check_fpos(d['partner_fpos'], 'EU_VAT_payer')):
+                raise osv.except_osv(_('Insufficient data!'), _('No TIN defined for Partner %s, but this partner is defined as a VAT payer. Please define the TIN!') % (d['partner_name']))
+            if (not d['partner_vat']) or check_fpos(d['partner_fpos'], 'LR_VAT_non-payer') or check_fpos(d['partner_fpos'], 'EU_VAT_non-payer'):
+                deal_type = "N"
+            d.update({'deal_type': deal_type})
+            for itax in inv.tax_line:
+                data = d.copy()
+                if itax.tax_code_id:
+                    if itax.tax_code_id.tax_code == '52':
+                        data.update(data_52)
+                        data.update({
+                            'limit_val': 0.0,
+                            'deal_type': "R4"
+                        })
+                        data_list.append(data)
+                    elif itax.tax_code_id.tax_code == '62':
+                        data.update(data_62)
+                        data_list.append(data)
+                    else:
+                        data.update({
+                            'amount_untaxed': itax.base_amount,
+                            'amount_tax': itax.tax_amount
+                        })
+                        data_list.append(data)
+
+        return data_list
+                
 
     def create_xml(self, cr, uid, ids, context=None):
         if context is None:
@@ -638,7 +735,11 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                     lines = self._process_line(cr, uid, account_move.line_id, context=context)
                     for key, value in lines.iteritems():
                         if value['tag_name'] == 'PVN1-I':
-                            r_purchase.append(value)
+                            if '62' in value['tax_codes'] and '52' in value['tax_codes']:
+                                add_r_purchase = self._process_r4_move(cr, uid, account_move, context=context)
+                                r_purchase += add_r_purchase
+                            else:
+                                r_purchase.append(value)
                         if value['tag_name'] == 'PVN1-II':
                             purchase_EU.append(value)
                         if value['tag_name'] == 'PVN1-III':
