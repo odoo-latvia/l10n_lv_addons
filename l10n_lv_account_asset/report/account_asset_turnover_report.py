@@ -56,15 +56,17 @@ class account_asset_turnover(report_sxw.rml_parse):
 
             # Opening balances:
             purchase1 = 0.0
-            if asset.confirmation_date != False and form and asset.confirmation_date < form['from_date']:
-                purchase1 = asset.purchase_value
-            depr1 = asset.accumulated_depreciation
-            for line in asset.depreciation_line_ids:
-                if line.move_check == True and (form and line.depreciation_date < form['from_date']):
-                    depr1 += line.amount
+            depr1 = 0.0
             salvage1 = 0.0
-            if asset.close_date != False and form and asset.close_date < form['from_date']:
-                salvage1 = asset.salvage_value
+            if (not asset.close_date) or (asset.close_date != False and form and asset.close_date >= form['from_date']):
+                if asset.confirmation_date != False and form and asset.confirmation_date < form['from_date']:
+                    purchase1 = asset.purchase_value
+                depr1 = asset.accumulated_depreciation
+                for line in asset.depreciation_line_ids:
+                    if line.move_check == True and (form and line.depreciation_date < form['from_date']):
+                        depr1 += line.amount
+                if asset.close_date != False and form and asset.close_date < form['from_date']:
+                    salvage1 = asset.salvage_value
             left1 = purchase1 - depr1 - salvage1
 
             # Purchase:
