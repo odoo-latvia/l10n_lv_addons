@@ -84,6 +84,8 @@ class account_asset_turnover(report_sxw.rml_parse):
                 if line.move_check == True and ((not form) or (line.depreciation_date >= form['from_date'] and line.depreciation_date <= form['to_date'])):
                     depr3 += line.amount
             salvage3 = 0.0
+            if asset.close_date != False and ((not form) or (asset.close_date <= form['to_date'] and asset.close_date >= form['from_date'])):
+                salvage3 = asset.salvage_value
             left3 = purchase3 - depr3 - salvage3
 
             # Liquidation:
@@ -106,7 +108,7 @@ class account_asset_turnover(report_sxw.rml_parse):
             left_total1 = round((left2 + left3 + left4), 2) + 0
             purchase_total2 = purchase1 + purchase2 + purchase3 + purchase4
             depr_total2 = depr1 + depr2 + depr3 + depr4
-            salvage_total2 = salvage1 + salvage3 + salvage3 + salvage4
+            salvage_total2 = salvage1 + salvage2 + salvage3 + salvage4
             left_total2 = round((left1 + left2 + left3 + left4), 2) + 0
             if datas1.get((account_id)):
                 purchase1 += datas1[(account_id)]['purchase1']
