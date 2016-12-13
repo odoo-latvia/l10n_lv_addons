@@ -117,15 +117,15 @@ class account_fidavista_export(osv.osv_memory):
 #                benextid = len(benextid) > 5 and benextid[-5:] and benextid
 #                data_of_file += ("\n            <BenExtId>" + benextid + "</BenExtId>")
             data_of_file += ("\n            <Priority>" + "N" + "</Priority>")
-            payment_amount_currency = str(payment.amount_currency)
-            payment_amount_currency = len(payment_amount_currency) > 12 and payment_amount_currency[-12:] or payment_amount_currency
-            data_of_file += ("\n            <Amt>") + payment_amount_currency + ("</Amt>")
             if not payment.bank_id:
                 raise osv.except_osv(_('Not enough Data Error !'), _('Destination Bank account not defined for payment %s!' % payment.name))
             commission = "SHA"
             if payment.bank_id.state != 'iban':
                 commission = "OUR"
             data_of_file += ("\n            <Comm>" + commission + "</Comm>")
+            payment_amount_currency = str(payment.amount_currency)
+            payment_amount_currency = len(payment_amount_currency) > 12 and payment_amount_currency[-12:] or payment_amount_currency
+            data_of_file += ("\n            <Amt>") + payment_amount_currency + ("</Amt>")
             payment_bank_acc_number = (payment.bank_id.acc_number).replace(' ','').upper()
             payment_bank_acc_number = len(payment_bank_acc_number) > 34 and payment_bank_acc_number[0:34] or payment_bank_acc_number
             data_of_file += ("\n            <BenAccNo>" + payment_bank_acc_number + "</BenAccNo>")
