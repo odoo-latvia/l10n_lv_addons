@@ -122,7 +122,7 @@ class account_fidavista_export(osv.osv_memory):
             data_of_file += ("\n            <Amt>") + payment_amount_currency + ("</Amt>")
             if not payment.bank_id:
                 raise osv.except_osv(_('Not enough Data Error !'), _('Destination Bank account not defined for payment %s!' % payment.name))
-            commision = "SHA"
+            commission = "SHA"
             if payment.bank_id.state != 'iban':
                 commission = "OUR"
             data_of_file += ("\n            <Comm>" + commission + "</Comm>")
