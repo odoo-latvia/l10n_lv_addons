@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Partner Form View -->
+        <record id="view_partner_form_inherit_check" model="ir.ui.view">
+            <field name="name">partner.form.inherit.check</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="registry_valid" invisible="1"/>
+                    <widget type="registry_check_btn"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>
