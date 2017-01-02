@@ -197,7 +197,7 @@ class VerboseConverter(models.AbstractModel):
 
     @api.model
     def value_to_html(self, value, options):
-        display_currency = options['display_currency']
+        display_currency = options.get('display_currency', False)
         lang_code = self.env.context.get('lang', self.user_lang().code)
         verb = ''
         if display_currency:
