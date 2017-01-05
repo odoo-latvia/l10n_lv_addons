@@ -23,35 +23,22 @@
 ##############################################################################
 
 {
-    'name': 'Latvia - Accounting',
+    'name': 'Latvian Localization for VAT declaration',
     'version': '1.0',
     'description': """
-Latvian Accounting
-====================
+Latvian localization, which allows you to export XML data for VAT declarations.
+=====================================
 
-This is the base module for Latvian localization of :
-
-* Account Codes
-* Chart of Accounts
-* Tax Codes
-* Chart of Taxes
-* Fiscal Positions
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
     'category': 'Localization',
-    'depends': ['account', 'base_vat', 'base_iban'],
+    'depends': ['l10n_lv'],
     'data': [
-        'data/res_company_data.xml',
-        'data/account_account_type_data.xml',
-        'data/account_account_tag_data.xml',
-        'data/account_chart_template_data.xml',
-        'data/account_account_template_data.xml',
-        'data/account_tax_template_data.xml',
-        'data/account_fiscal_position_template_data.xml'
+        'wizard/account_vat_declaration_view.xml',
     ],
     'auto_install': False,
-    'installable': True,
+    'installable': False,
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -66,7 +66,7 @@ class ResPartner(models.Model):
             'street': u'{street} {housenr}{housepart}'.format(
                 street=luresoft_data['address']['street'],
                 housenr=luresoft_data['address']['house'],
-                housepart=luresoft_data['address'].get('housepart', ''))
+                housepart=luresoft_data['address'].get('housepart', '')),
             }
 
         title = self.env['res.partner.title'].search(

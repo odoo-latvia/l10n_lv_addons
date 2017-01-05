@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Part of Odoo.
-#    Copyright (C) 2016 ITS-1 (<http://www.its1.lv/>)
+#    Copyright (C) 2017 ITS-1 (<http://www.its1.lv/>)
 #                       E-mail: <info@its1.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
 #                       Phone: +371 67289467
@@ -23,33 +23,18 @@
 ##############################################################################
 
 {
-    'name': 'Latvia - Accounting',
+    'name': 'Latvian localization tools for reports',
     'version': '1.0',
     'description': """
-Latvian Accounting
-====================
-
-This is the base module for Latvian localization of :
-
-* Account Codes
-* Chart of Accounts
-* Tax Codes
-* Chart of Taxes
-* Fiscal Positions
+Atsakišu palīgfunkcijas Latvijas lokalizācijai 
+------------------------------------
+-Skaitlisko naudas vērtību pārveidošana tekstā
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
-    'category': 'Localization',
-    'depends': ['account', 'base_vat', 'base_iban'],
-    'data': [
-        'data/res_company_data.xml',
-        'data/account_account_type_data.xml',
-        'data/account_account_tag_data.xml',
-        'data/account_chart_template_data.xml',
-        'data/account_account_template_data.xml',
-        'data/account_tax_template_data.xml',
-        'data/account_fiscal_position_template_data.xml'
-    ],
+    'category': 'Reporting',
+    'depends': ['base'],
+    'data': [],
     'auto_install': False,
     'installable': True,
 }
