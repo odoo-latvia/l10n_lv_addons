@@ -56,6 +56,25 @@ hazard_map_codes = {'lubri_weight':'1.',
                  'oil_filt_weight':'5',
                 }
 
+# method for fiscal position checking:
+def check_fpos(fpos, fpos_need):
+    result = False
+    if fpos:
+        fpos_list = fpos.split(' ')
+        check1 = False
+        check2 = False
+        check3 = False
+        for fl in fpos_list:
+            if ('LR' in fpos_need.split('_') and 'LR' in fl) or ('EU' in fpos_need.split('_') and ('EU' in fl or 'ES' in fl)):
+                check1 = True
+            if 'VAT' in fpos_need.split('_') and ('PVN' in fl or 'VAT' in fl):
+                check2 = True
+            if ('payer' in fpos_need.split('_') and ((u'maksātājs' in (u'' + fl) and u'nemaksātājs' not in (u'' + fl)) or ('payer' in fl and 'non-payer' not in fl))) or ('non-payer' in fpos_need.split('_') and (u'nemaksātājs' in (u'' + fl) or 'non-payer' in fl)):
+                check3 = True
+        if check1 and check2 and check3:
+            result = True
+    return result
+
 LR_PVN_1 = u'LR PVN maksātājs'
 LR_PVN_2 = u'LR PVN nemaksātājs'
 
@@ -129,10 +148,19 @@ class drn_return_wizard(osv.osv_memory):
         message = ''
         for picking in pick_obj.browse(cr, uid, picking_ids, context=context):
             pick_move_lines_done = filter(lambda ml: ml.state=='done' and ml.picking_id.partner_id and \
-                    ml.picking_id.partner_id.property_account_position.name in (LR_PVN_1, LR_PVN_2) or \
-                    not ml.picking_id.partner_id.property_account_position, picking.move_lines)
+            (ml.picking_id.partner_id.property_account_position and \
+            (check_fpos(ml.picking_id.partner_id.property_account_position.name, 'LR_VAT_payer') or \
+            check_fpos(ml.picking_id.partner_id.property_account_position.name, 'LR_VAT_non-payer'))) or \
+            ((not ml.partner_id.property_account_position) and ml.partner_id.parent_id and ml.partner_id.parent_id.property_account_position and \
+            (check_fpos(ml.picking_id.partner_id.parent_id.property_account_position.name, 'LR_VAT_payer') or \
+            check_fpos(ml.picking_id.partner_id.parent_id.property_account_position.name, 'LR_VAT_non-payer'))) or \
+            ((not ml.picking_id.partner_id.property_account_position) and ((not ml.picking_id.partner_id.parent_id) or \
+            (not ml.picking_id.partner_id.parent_id.property_account_position))), picking.move_lines)
             pick_out_stock_move.extend(pick_move_lines_done)
-            bad_move_lines = filter(lambda ml: not ml.picking_id.partner_id.property_account_position, pick_move_lines_done) # check Fiscal position for customer
+            bad_move_lines = filter(lambda ml: \
+                (not ml.picking_id.partner_id.property_account_position) and \
+                ((not ml.picking_id.partner_id.parent_id) or \
+                (not ml.picking_id.partner_id.parent_id.property_account_position)), pick_move_lines_done) # check Fiscal position for customer
             for bml in bad_move_lines:
                 log_rec = (0,0,{'type':'error',
                                 'name':bml.name,
@@ -169,7 +197,10 @@ class drn_return_wizard(osv.osv_memory):
                         ml_ids = self.pool.get('stock.move').search(cr, uid, [('reserved_quant_ids','in',quant_ids)], context=context)
                     prodlot_moves = [m for m in self.pool.get('stock.move').browse(cr, uid, ml_ids, context=context)]
                     pick_in_stock_move = filter(lambda ml: ml.picking_id and ml.picking_id.picking_type_id.code == 'incoming', prodlot_moves)
-                    bad_move_lines = filter(lambda ml: not ml.picking_id.partner_id.property_account_position, pick_in_stock_move) # check Fiscal position for supplier
+                    bad_move_lines = filter(lambda ml: \
+                        (not ml.picking_id.partner_id.property_account_position) and \
+                        ((not ml.picking_id.partner_id.parent_id) or \
+                        (not ml.picking_id.partner_id.parent_id.property_account_position)), pick_in_stock_move) # check Fiscal position for supplier
                     if this.state != 'warning':
                         for bml in bad_move_lines:
                             log_rec = (0,0,{'type':'error',
@@ -178,7 +209,19 @@ class drn_return_wizard(osv.osv_memory):
                             if log_rec not in error_logs:
                                 error_logs.append(log_rec)
                     if not bad_move_lines:
-                        in_lines = filter(lambda ml: ml.picking_id.partner_id.property_account_position.name in (EU_PVN_1, EU_PVN_2, EU_OTHER), pick_in_stock_move)
+                        in_lines = filter(lambda ml: \
+                        (ml.picking_id.partner_id.property_account_position and \
+                        (check_fpos(ml.picking_id.partner_id.property_account_position.name, 'EU_VAT_payer') or \
+                        check_fpos(ml.picking_id.partner_id.property_account_position.name, 'EU_VAT_non-payer') or \
+                        ((not check_fpos(ml.picking_id.partner_id.property_account_position.name, 'LR_vat_payer')) and \
+                        (not check_fpos(ml.picking_id.partner_id.property_account_position.name, 'LR_vat_non-payer'))))) or \
+                        ((not ml.picking_id.partner_id.property_account_position) and \
+                        ml.picking_id.partner_id.parent_id and \
+                        ml.picking_id.partner_id.parent_id.property_account_position and \
+                        (check_fpos(ml.picking_id.partner_id.parent_id.property_account_position.name, 'EU_VAT_payer') or \
+                        check_fpos(ml.picking_id.partner_id.parent_id.property_account_position.name, 'EU_VAT_non-payer') or \
+                        ((not check_fpos(ml.picking_id.partner_id.parent_id.property_account_position.name, 'LR_vat_payer')) and \
+                        (not check_fpos(ml.picking_id.partner_id.parent_id.property_account_position.name, 'LR_vat_non-payer'))))), pick_in_stock_move)
                         if not in_lines:
                             out_stock_move_none_in.append(ml)
                         else:
