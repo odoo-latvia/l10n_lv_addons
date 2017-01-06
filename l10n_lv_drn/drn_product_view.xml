@@ -16,20 +16,22 @@
                             <field name="drn_prod_categ_id" colspan="2" domain="[('type', '=', 'electronics')]" attrs="{'required':[('is_eei','=',True)]}"/>
                             <field name="drn_prod_pack_categ_id" colspan="4" domain="[('type', '=', 'package')]"/>
                         </group>
-                        <group col="4" string="Hazardous Subproducts included in this product (kg)">
-                            <field name="lubri_weight" colspan="2"/>
-                            <newline/>
-                            <field name="accu_lead_weight" colspan="2"/>
-                            <newline/>
-                            <field name="accu_nicd_weight" colspan="2"/>
-                            <newline/>
-                            <field name="accu_pri_weight" colspan="2"/>
-                            <newline/>
-                            <field name="accu_oth_weight" colspan="2"/>
-                            <newline/>
-                            <field name="tires_weight" colspan="2"/>
-                            <newline/>
-                            <field name="oil_filt_weight" colspan="2"/>
+                        <group string="Hazardous Subproducts included in this product (kg)">
+                            <group>
+                                <field name="lubri_weight"/>
+                                <field name="accu_lead_weight"/>
+                                <field name="accu_nicd_weight"/>
+                                <field name="accu_pri_weight"/>
+                                <field name="accu_oth_weight"/>
+                                <field name="tires_weight"/>
+                                <field name="oil_filt_weight"/>
+                            </group>
+                            <group>
+                                <field name="narcotic_drug_standard"/>
+                                <field name="drug_precursors"/>
+                                <field name="ionising_radiation_source"/>
+                                <field name="biocide"/>
+                            </group>
                         </group>
                     </page>
                 </notebook>

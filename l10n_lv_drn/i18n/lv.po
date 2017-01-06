@@ -448,3 +448,38 @@ msgstr "Brīdinājums"
 #: model:ir.ui.menu,name:stock.menu_stock_report
 msgid "Reports"
 msgstr "Atskaites"
+
+#. module: l10n_lv_drn
+#: field:product.template,narcotic_drug_standard:0
+msgid "Narcotic Drug Standard"
+msgstr "Narkotisko vielu standarts"
+
+#. module: l10n_lv_drn
+#: field:product.template,drug_precursors:0
+msgid "Drug Precursors"
+msgstr "Narkotisko vielu prekursori"
+
+#. module: l10n_lv_drn
+#: selection:product.template,drug_precursors:0
+msgid "Category 1"
+msgstr "Kategorija 1"
+
+#. module: l10n_lv_drn
+#: selection:product.template,drug_precursors:0
+msgid "Category 2"
+msgstr "Kategorija 2"
+
+#. module: l10n_lv_drn
+#: selection:product.template,drug_precursors:0
+msgid "Category 3"
+msgstr "Kategorija 3"
+
+#. module: l10n_lv_drn
+#: field:product.template,ionising_radiation_source:0
+msgid "Source of Ionising Radiation"
+msgstr "Jonizējošā starojuma avots"
+
+#. module: l10n_lv_drn
+#: field:product.template,biocide:0
+msgid "Biocide"
+msgstr "Biocīds"

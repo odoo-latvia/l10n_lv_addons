@@ -66,6 +66,10 @@ class product_template(osv.osv):
         'drn_prod_categ_id': fields.many2one('product.category.drn', 'EEI Category for NRT', ondelete='set null', help='This is for Natural Resources Tax only:  \nenter here weight (kgs) of hazardous unit included in product.'),
         'drn_prod_pack_categ_id': fields.many2one('product.category.drn', 'Primary Package Category for NRT', ondelete='set null', help='This is for Natural Resources Tax only:  \nenter here weight (kgs) of hazardous unit included in product.'),
         'is_eei': fields.boolean('Is EEI subject?'),
+        'narcotic_drug_standard': fields.boolean('Narcotic Drug Standard'),
+        'drug_precursors': fields.selection([('category1','Category 1'), ('category2','Category 2'), ('category3','Category 3')], string='Drug Precursors'),
+        'ionising_radiation_source': fields.boolean('Source of Ionising Radiation'),
+        'biocide': fields.boolean('Biocide')
     }
 
 class product_packaging(osv.osv):
