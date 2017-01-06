@@ -483,3 +483,33 @@ msgstr "Jonizējošā starojuma avots"
 #: field:product.template,biocide:0
 msgid "Biocide"
 msgstr "Biocīds"
+
+#. module: l10n_lv_drn
+#: view:stock.move:l10n_lv_drn.view_move_search_drn
+msgid "Narcotic Drug Standards"
+msgstr "Narkotisko vielu standarti"
+
+#. module: l10n_lv_drn
+#: view:stock.move:l10n_lv_drn.view_move_search_drn
+msgid "Drug Precursors Category 1"
+msgstr "Narkotisko vielu prekursoru kategorija 1"
+
+#. module: l10n_lv_drn
+#: view:stock.move:l10n_lv_drn.view_move_search_drn
+msgid "Drug Precursors Category 2"
+msgstr "Narkotisko vielu prekursoru kategorija 2"
+
+#. module: l10n_lv_drn
+#: view:stock.move:l10n_lv_drn.view_move_search_drn
+msgid "Drug Precursors Category 3"
+msgstr "Narkotisko vielu prekursoru kategorija 3"
+
+#. module: l10n_lv_drn
+#: view:stock.move:l10n_lv_drn.view_move_search_drn
+msgid "Ionising Radiation Sources"
+msgstr "Jonizējošā starojuma avoti"
+
+#. module: l10n_lv_drn
+#: view:stock.move:l10n_lv_drn.view_move_search_drn
+msgid "Biocides"
+msgstr "Biocīdi"

@@ -34,5 +34,21 @@
             </field>
         </record>
 
+        <record id="view_move_search_drn" model="ir.ui.view">
+            <field name="name">stock.move.search.drn</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_search"/>
+            <field name="arch" type="xml">
+                <filter name="done" position="after">
+                    <filter name="narcotic_drug_standards" string="Narcotic Drug Standards" domain="[('product_id.narcotic_drug_standard','=',True)]"/>
+                    <filter name="drug_precursors_categ1" string="Drug Precursors Category 1" domain="[('product_id.drug_precursors','=','category1')]"/>
+                    <filter name="drug_precursors_categ2" string="Drug Precursors Category 2" domain="[('product_id.drug_precursors','=','category2')]"/>
+                    <filter name="drug_precursors_categ3" string="Drug Precursors Category 3" domain="[('product_id.drug_precursors','=','category3')]"/>
+                    <filter name="ionising_ratiation_sources" string="Ionising Radiation Sources" domain="[('product_id.ionising_radiation_source','=',True)]"/>
+                    <filter name="biocides" string="Biocides" domain="[('product_id.biocide','=',True)]"/>
+                </filter>
+            </field>
+        </record>
+
     </data>
 </openerp>
