@@ -1,6 +1,11 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 #	* l10n_lv_partner_data
+#	* base
+#	* mail
+#	* stock
+#	* account
+#	* payment
 #
 msgid ""
 msgstr ""
@@ -33,4 +38,313 @@ msgstr "Reģistrācijas Nr."
 #: model:ir.model.fields,field_description:l10n_lv_partner_data.field_res_partner_partner_registry
 msgid "Registration No. / Personal No."
 msgstr "Reģistrācijas Nr. / Personas kods"
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_website
+msgid "Website"
+msgstr "Tīkla vietne"
+
+#. module: base
+#: model:ir.model.fields,help:base.field_res_partner_website
+msgid "Website of Partner or Company"
+msgstr "Partnera vai uzņēmuma tīkla vietne"
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_category_id
+msgid "Tags"
+msgstr "Birkas"
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_phone
+msgid "Phone"
+msgstr "Tālrunis"
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_mobile
+msgid "Mobile"
+msgstr "Mobilais tālr."
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_fax
+msgid "Fax"
+msgstr "Fakss"
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_email
+msgid "Email"
+msgstr "E-pasts"
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_lang
+msgid "Language"
+msgstr "Valoda"
+
+#. module: base
+#: model:ir.model.fields,help:base.field_res_partner_lang
+msgid "If the selected language is loaded in the system, all documents related to this contact will be printed in this language. If not, it will be English."
+msgstr "Ja izvēlētā valoda ir ielādēta sistēmā, visi ar šo kontaktu saistītie dokumenti tiks drukāti šajā valodā. Ja nē, valoda būs angļu."
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_customer
+msgid "Is a Customer"
+msgstr "Klients"
+
+#. module: base
+#: model:ir.model.fields,help:base.field_res_partner_customer
+msgid "Check this box if this contact is a customer."
+msgstr "Atzīmējiet šo lodziņu, ja šis kontakts ir klients."
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_supplier
+msgid "Is a Vendor"
+msgstr "Piegādātājs"
+
+#. module: base
+#: model:ir.model.fields,help:base.field_res_partner_supplier
+msgid "Check this box if this contact is a vendor. If it's not checked, purchase people will not see it when encoding a purchase order."
+msgstr "Atzīmējiet šo lodziņu, ja šis kontakts ir piegādātājs. Ja šis lauks nebūs atzīmēts, kontaktu nebūs iespējams izvēlēties, veidojot iepirkumu."
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_user_id
+msgid "Salesperson"
+msgstr "Pārdevējs"
+
+#. module: base
+#: model:ir.model.fields,help:base.field_res_partner_user_id
+msgid "The internal user that is in charge of communicating with this contact if any."
+msgstr "Iekšējais lietotājs, kas ir atbildīgs par komunikāciju ar šo kontaktu, ja tāds pastāv."
+
+#. module: mail
+#: model:ir.model.fields,field_description:mail.field_res_partner_notify_email
+msgid "Email Messages and Notifications"
+msgstr "E-pasta ziņojumi un paziņojumi"
+
+#. module: mail
+#: model:ir.model.fields,help:mail.field_res_partner_notify_email
+msgid "Policy to receive emails for new messages pushed to your personal Inbox:
+- Never: no emails are sent
+- All Messages: for every notification you receive in your Inbox"
+msgstr "E-pastu saņemšanas noteikumi jauniem ziņojumiem, kas saņemti jūsu personīgajā iesūtnē:
+- Nekad: e-pasti netiek sūtīti
+- Visi ziņojumi: par katru jūsu iesūtnē saņemto paziņojumu"
+
+#. module: mail
+#: selection:res.partner,notify_email:0
+msgid "All Messages"
+msgstr "Visi ziņojumi"
+
+#. module: mail
+#: model:ir.ui.view,arch_db:mail.view_emails_partner_info_form
+msgid "Mailing Opt-Out"
+msgstr "Adresātu atrakstīšanas nosacījumi"
+
+#. module: mail
+#: model:ir.model.fields,help:mail.field_res_partner_opt_out
+msgid "If opt-out is checked, this contact has refused to receive emails for mass mailing and marketing campaign. Filter 'Available for Mass Mailing' allows users to filter the partners when performing mass mailing."
+msgstr "Ja atrakstīšanas nosacījumi ir atzīmēti, šis kontakts ir atteicies no e-pastu saņemšanas masveida pasta vai mārketinga kampaņas gadījumā. Filtrs 'Pieejams masveida pastam' ļauj lietotājiem atlasīt partnerus, sūtot masveida pastu."
+
+#. module: mail
+#: model:ir.model.fields,field_description:mail.field_res_partner_message_bounce
+msgid "Bounce"
+msgstr "Atmesti"
+
+#. module: mail
+#: model:ir.model.fields,help:mail.field_res_partner_message_bounce
+msgid "Counter of the number of bounced emails for this contact"
+msgstr "Atmesto e-pastu skaits šim kontaktam"
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_ref
+msgid "Internal Reference"
+msgstr "Kods"
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_title
+msgid "Title"
+msgstr "Uzruna"
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_function
+msgid "Job Position"
+msgstr "Amats"
+
+#. module: stock
+#: model:ir.model.fields,field_description:stock.field_res_partner_property_stock_supplier
+msgid "Vendor Location"
+msgstr "Piegādātāja noliktava"
+
+#. module: stock
+#: model:ir.model.fields,help:stock.field_res_partner_property_stock_supplier
+msgid "This stock location will be used, instead of the default one, as the source location for goods you receive from the current partner"
+msgstr "Noliktavas postenis, kas tiks izmantots preču saņemšanai no šī partnera"
+
+#. module: account
+#: model:ir.model.fields,field_description:account.field_res_partner_credit
+msgid "Total Receivable"
+msgstr "Kopā saņemams"
+
+#. module: account
+#: model:ir.model.fields,help:account.field_res_partner_credit
+msgid "Total amount this customer owes you."
+msgstr "Šī klienta parāda kopsumma."
+
+#. module: account
+#: model:ir.model.fields,field_description:account.field_res_partner_debit
+msgid "Total Payable"
+msgstr "Kopā maksājams"
+
+#. module: account
+#: model:ir.model.fields,help:account.field_res_partner_debit
+msgid "Total amount you have to pay to this vendor."
+msgstr "Kopējā summa, kas maksājama šim piegādātājam."
+
+#. module: account
+#: model:ir.model.fields,field_description:account.field_res_partner_trust
+msgid "Degree of trust you have in this debtor"
+msgstr "Uzticamības pakāpe šim debitoram"
+
+#. module: account
+#: selection:res.partner,trust:0
+msgid "Normal Debtor"
+msgstr "Normāls debitors"
+
+#. module: account
+#: selection:res.partner,trust:0
+msgid "Good Debtor"
+msgstr "Labs debitors"
+
+#. module: account
+#: selection:res.partner,trust:0
+msgid "Bad Debtor"
+msgstr "Slikts debitors"
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_vat
+msgid "TIN"
+msgstr "PVN reģ. Nr."
+
+#. module: account
+#: model:ir.model.fields,help:account.field_res_partner_vat
+msgid "Tax Identification Number. Fill it if the company is subjected to taxes. Used by the some of the legal statements."
+msgstr "Nodokļu maksātāja reģistrācijas numurs. Aizpildiet lauku, ja uzņēmums ir nodokļu maksātājs. Tiek izmantots dažos juridiskajos ierakstos."
+
+#. module: account
+#: model:ir.model.fields,help:account.field_res_partner_property_payment_term_id
+msgid "This payment term will be used instead of the default one for sale orders and customer invoices"
+msgstr "Šis samaksas termiņš tiks izmantots tirdzniecības pasūtījumos un izejošajos rēķinos noklusētā samaksas termiņa vietā"
+
+#. module: account
+#: model:ir.model.fields,field_description:account.field_res_partner_property_supplier_payment_term_id
+msgid "Vendor Payment Terms"
+msgstr "Piegādātāja samaksas termiņš"
+
+#. module: account
+#: model:ir.model.fields,help:account.field_res_partner_property_supplier_payment_term_id
+msgid "This payment term will be used instead of the default one for purchase orders and vendor bills"
+msgstr "Šis samaksas termiņš tiks izmantots iepirkumos un piegādātāju rēķinos noklusētā samaksas termiņa vietā"
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_form
+msgid "Contacts & Addresses"
+msgstr "Kontakti un adreses"
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_form
+msgid "Internal Notes"
+msgstr "Iekšējās piezīmes"
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_form
+msgid "Internal note..."
+msgstr "Iekšējā piezīme..."
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_form
+msgid "Sales & Purchases"
+msgstr "Pārdošana un iepirkumi"
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_form
+msgid "Sale"
+msgstr "Pārdošana"
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_form
+msgid "Purchase"
+msgstr "Iepirkums"
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_form
+msgid "Misc"
+msgstr "Dažādi"
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_form
+msgid "Street..."
+msgstr "Iela..."
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_form
+msgid "Street 2..."
+msgstr "Iela 2..."
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_form
+msgid "State"
+msgstr "Štats"
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_form
+msgid "ZIP"
+msgstr "Pasta ind."
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_form
+msgid "Tags..."
+msgstr "Birkas..."
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_form
+msgid "e.g. www.odoo.com"
+msgstr "piem. www.odoo.com"
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_form
+msgid "e.g. Sales Director"
+msgstr "piem. pārdošanas vadītājs"
+
+#. module: account
+#: model:ir.ui.view,arch_db:account.view_partner_property_form
+msgid "Sale"
+msgstr "Pārdošana"
+
+#. module: account
+#: model:ir.ui.view,arch_db:account.view_partner_property_form
+msgid "Purchase"
+msgstr "Iepirkums"
+
+#. module: account
+#: model:ir.ui.view,arch_db:account.view_partner_property_form
+msgid "Fiscal Information"
+msgstr "Fiskālā informācija"
+
+#. module: account
+#: model:ir.ui.view,arch_db:account.partner_view_buttons
+msgid "Payments"
+msgstr "Maksājumi"
+
+#. module: account
+#: model:ir.ui.view,arch_db:account.partner_view_buttons
+msgid "Bank account(s)"
+msgstr "Bankas konts(-i)"
+
+#. module: account
+#: model:ir.ui.view,arch_db:account.partner_view_buttons
+msgid "<span class=\"o_stat_text\">Invoiced</span>"
+msgstr "<span class=\"o_stat_text\">Rēķini</span>"
+
+#. module: payment
+#: model:ir.ui.view,arch_db:payment.view_partners_form_payment_defaultcreditcard
+msgid "Credit card(s)"
+msgstr "Kredītkarte(s)"
 
