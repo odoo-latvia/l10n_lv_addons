@@ -29,7 +29,7 @@
 Additional Partner data for Latvia.
 =====================================
 Adds Registration No. and Personal No. to Partner.
-Adds additional translations for Partner fields, views, actions and menus for modules base, mail, stock, account, payment and purchase.
+Adds additional translations for Partner fields, views, actions and menus for modules base, mail, stock, account, payment, purchase and sales_team.
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',

@@ -7,6 +7,7 @@
 #	* account
 #	* payment
 #	* purchase
+#	* sales_team
 #
 msgid ""
 msgstr ""
@@ -434,3 +435,8 @@ msgstr "Cita adrese"
 #: model:ir.model.fields,field_description:base.field_res_partner_comment
 msgid "Notes"
 msgstr "Piezīmes"
+
+#. module: sales_team
+#: model:ir.ui.menu,name:sales_team.menu_partner_form
+msgid "Customers"
+msgstr "Klienti"
