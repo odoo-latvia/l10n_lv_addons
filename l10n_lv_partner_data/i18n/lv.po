@@ -6,6 +6,7 @@
 #	* stock
 #	* account
 #	* payment
+#	* purchase
 #
 msgid ""
 msgstr ""
@@ -50,7 +51,7 @@ msgid "Website of Partner or Company"
 msgstr "Partnera vai uzņēmuma tīkla vietne"
 
 #. module: base
-#: model:ir.model.fields,field_description:base.field_res_partner_category_id
+#: model:ir.model.fields,field_description:base.field_res_partner_category_id_970
 msgid "Tags"
 msgstr "Birkas"
 
@@ -106,6 +107,7 @@ msgstr "Atzīmējiet šo lodziņu, ja šis kontakts ir piegādātājs. Ja šis l
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_partner_user_id
+#: model:ir.ui.view,arch_db:base.view_res_partner_filter
 msgid "Salesperson"
 msgstr "Pārdevējs"
 
@@ -260,6 +262,11 @@ msgstr "Iekšējā piezīme..."
 
 #. module: base
 #: model:ir.ui.view,arch_db:base.view_partner_form
+msgid "internal note..."
+msgstr "iekšējā piezīme..."
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_form
 msgid "Sales & Purchases"
 msgstr "Pārdošana un iepirkumi"
 
@@ -348,3 +355,82 @@ msgstr "<span class=\"o_stat_text\">Rēķini</span>"
 msgid "Credit card(s)"
 msgstr "Kredītkarte(s)"
 
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_partner_tree
+msgid "Name"
+msgstr "Nosaukums"
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_res_partner_filter
+msgid "My Partners"
+msgstr "Mani partneri"
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_res_partner_filter
+msgid "Vendors"
+msgstr "Piegādātāji"
+
+#. module: base
+#: model:ir.ui.view,arch_db:base.view_res_partner_filter
+msgid "Archived"
+msgstr "Arhivēti"
+
+#. module: mail
+#: model:ir.ui.view,arch_db:mail.res_partner_opt_out_search
+msgid "Available for mass mailing"
+msgstr "Pieejams masveida pastam"
+
+#. module: purchase
+#: model:ir.ui.view,arch_db:purchase.res_partner_view_purchase_account_buttons
+msgid "Vendor Bills"
+msgstr "Piegādātāju rēķini"
+
+#. module: purchase
+#: model:ir.ui.view,arch_db:purchase.res_partner_view_purchase_account_buttons
+msgid "Vendor Bills."
+msgstr "Pieg. rēķini"
+
+#. module: account
+#: model:ir.ui.menu,name:account.menu_account_supplier
+msgid "Vendors"
+msgstr "Piegādātāji"
+
+#. module: base
+#: model:ir.actions.act_window,name:base.action_partner_supplier_form
+msgid "Vendors"
+msgstr "Piegādātāji"
+
+#. module: purchase
+#: model:ir.ui.menu,name:purchase.menu_procurement_management_supplier_name
+msgid "Vendors"
+msgstr "Piegādātāji"
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_type
+msgid "Address Type"
+msgstr "Adreses tips"
+
+#. module: base
+#: model:ir.model.fields,help:base.field_res_partner_type
+msgid "Used to select automatically the right address according to the context in sales and purchases documents."
+msgstr "Tiek izmantots pareizas adreses automātiskai izvēlei, balstoties uz kontekstu, pārdošanas un iepirkumu dokumentos."
+
+#. module: base
+#: selection:res.partner,type:0
+msgid "Invoice address"
+msgstr "Rēķina adrese"
+
+#. module: base
+#: selection:res.partner,type:0
+msgid "Shipping address"
+msgstr "Piegādes adrese"
+
+#. module: base
+#: selection:res.partner,type:0
+msgid "Other address"
+msgstr "Cita adrese"
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_res_partner_comment
+msgid "Notes"
+msgstr "Piezīmes"
