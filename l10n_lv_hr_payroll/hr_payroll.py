@@ -28,6 +28,7 @@ from openerp.tools.translate import _
 import datetime
 from dateutil.relativedelta import relativedelta
 from datetime import timedelta
+from openerp.tools import float_round
 
 def compute_dmy(date_from, date_to):
     res = {
@@ -384,6 +385,9 @@ class hr_payslip(osv.osv):
                             wd_vals.update({'payslip_id': payslip.id})
                             wd_line_obj.create(cr, uid, wd_vals, context=context)
         return True
+
+    def round_float(self, cr, uid, value, precision_digits=None, precision_rounding=None, rounding_method='HALF-UP'):
+        return float_round(value, precision_digits=precision_digits, precision_rounding=precision_rounding, rounding_method=rounding_method)
 
 class hr_salary_rule(osv.osv):
     _inherit = 'hr.salary.rule'

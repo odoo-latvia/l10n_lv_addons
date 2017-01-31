@@ -75,6 +75,9 @@ class report_stock_inventory(report_sxw.rml_parse):
                 total_qty += diff
                 total_cost += (line.product_id.standard_price * diff)
             cost = total_qty != 0.0 and total_cost / total_qty or 0.0
+        f1 = open('/home/santa/log.txt', 'a')
+        f1.write((str(line.id) + ',' + str(cost) + '\n'))
+        f1.close()
         return cost
 
     def get_totals(self, lines):
