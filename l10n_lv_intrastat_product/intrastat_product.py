@@ -863,12 +863,12 @@ class report_intrastat_product(osv.osv):
 
             row_number += 1
 
-        cell_value_node = xmldoc.createElement("CellValue")
-        currNode.appendChild(cell_value_node)
-        currNode = currNode.lastChild
-        currNode = createTextNode(xmldoc, currNode, "RowNumber", "Laiks")
-        currNode = createTextNode(xmldoc, currNode, "ColumnNumber", "2")
-        currNode = createTextNode(xmldoc, currNode, "Value", str(int(round((time.time() - start_time)/60, 0))))
+#        cell_value_node = xmldoc.createElement("CellValue")
+#        currNode.appendChild(cell_value_node)
+#        currNode = currNode.lastChild
+#        currNode = createTextNode(xmldoc, currNode, "RowNumber", "Laiks")
+#        currNode = createTextNode(xmldoc, currNode, "ColumnNumber", "2")
+#        currNode = createTextNode(xmldoc, currNode, "Value", str(int(round((time.time() - start_time)/60, 0))))
 
         uglyXml = xmldoc.toprettyxml(indent='  ')
         text_re = re.compile('>\n\s+([^<>\s].*?)\n\s+</', re.DOTALL)
