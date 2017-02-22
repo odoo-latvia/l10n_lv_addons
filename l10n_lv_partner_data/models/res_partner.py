@@ -29,6 +29,7 @@ class Partner(models.Model):
 
     partner_registry = fields.Char(string='Registration No. / Personal No.')
     individual_registry = fields.Char(string='Personal No.', related='partner_registry')
+    code = fields.Char()
 
     @api.onchange('individual_registry')
     def _change_individual_registry(self):
