@@ -27,6 +27,7 @@ import base64
 import odoo.addons.decimal_precision as dp
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from odoo.exceptions import UserError
 
 EU_list = ['AT', 'BE', 'BG', 'CY', 'HR', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'EL', 'HU', 'IE', 'IT', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB']
 
@@ -126,28 +127,38 @@ class L10nLvVatDeclaration(models.TransientModel):
             'PVN1-III': [],
             'PVN2': []
         }
+        base_tags = ['50', '51', '41', '42', '45', '48.2']
         ml_obj = self.env['account.move.line']
         for m in moves:
-            invoices = list(set([ml.invoice_id for ml in m.line_ids]))
-            inv_type = invoices and invoices[0].type or False
-            j_type = m.journal_id.type
+            if m.journal_id.type not in ['sale', 'purchase', 'expense']:
+                continue
+#            invoices = list(set([ml.invoice_id for ml in m.line_ids]))
+#            inv_type = invoices and invoices[0].type or False
+#            j_type = m.journal_id.type
             tax_amt_data = []
             for line in m.line_ids:
                 if line.tax_ids:
+                    refund = False
+                    if (m.journal_id.type in ['purchase', 'expense'] and line.credit != 0.0) or (m.journal_id.type == 'sale' and line.debit != 0.0):
+                        refund = True
                     for tax in line.tax_ids:
-                        t_tags = [t.name for t in tax.tag_ids]
                         if tax.amount_type == 'group':
+                            tax_dict = {
+                                'tax': tax,
+                                'base': line.debit or line.credit,
+                                'refund': refund,
+                                'child_taxes': []
+                            }
                             for ctax in tax.children_tax_ids:
                                 tax_mls = ml_obj.search([('move_id','=',m.id), ('tax_line_id','=',ctax.id)])
                                 tax_amount = 0.0
                                 for tm in tax_mls:
                                     tax_amount += (tm.debit or tm.credit)
-                                tax_amt_data.append({
+                                tax_dict['child_taxes'].append({
                                     'tax': ctax,
-                                    'parent_tax': tax,
-                                    'base': line.debit or line.credit,
                                     'amount': tax_amount
                                 })
+                            tax_amt_data.append(tax_dict)
                         else:
                             tax_mls = ml_obj.search([('move_id','=',m.id), ('tax_line_id','=',tax.id)])
                             tax_amount = 0.0
@@ -156,8 +167,88 @@ class L10nLvVatDeclaration(models.TransientModel):
                             tax_amt_data.append({
                                 'tax': tax,
                                 'base': line.debit or line.credit,
+                                'refund': refund,
                                 'amount': tax_amount
                             })
+
+            tax_result = []
+            tax_datas = {}
+            for ta in tax_amt_data:
+                tax = ta['tax']
+                base = ta['base']
+                refund = ta['refund']
+                amount = 'amount' in ta and ta['amount'] or 0.0
+                child_taxes = 'child_taxes' in ta and ta['child_taxes'] or []
+                if tax_datas.get((tax.id)):
+                    base += tax_datas[(tax.id)]['base']
+                    tax_datas[(tax.id)].clear()
+                if not tax_datas.get((tax.id)):
+                    tax_datas[(tax.id)] = {
+                        'tax': tax,
+                        'base': base,
+                        'refund': refund,
+                        'amount': amount,
+                        'child_taxes': child_taxes
+                    }
+                tax_result.append(tax_datas[(tax.id)])
+            tax_result2 = []
+            for object in tax_result:
+                if object != {}:
+                    tax_result2.append(object)
+
+            for tr in tax_result2:
+                sect_tags = [t.name for t in tr['tax'].tag_ids if t.name in ['PVN1-I', 'PVN1-II', 'PVN1-III', 'PVN2']]
+                row_tags = []
+                if not tr['child_taxes']:
+                    row_tags = [t.name for t in tr['tax'].tag_ids if t.name not in ['PVN1-I', 'PVN1-II', 'PVN1-III', 'PVN2']]
+                if not tr['refund']:
+                    if 'PVN1-I' in sect_tags:
+                        md['PVN1-I'].append(tr)
+                        if (not tr['child_taxes']) and '62' in row_tags:
+                            md['62'] += tr['amount']
+                        if tr['child_taxes']:
+                            for ct in tr['child_taxes']:
+                                row_tags = [t.name for t in ct['tax'].tag_ids if t.name not in ['PVN1-I', 'PVN1-II', 'PVN1-III', 'PVN2']]
+                                if '62' in row_tags:
+                                    md['62'] += ct['amount']
+                                if '52' in row_tags:
+                                    md['52'] += ct['amount']
+                    if 'PVN1-II' in sect_tags:
+                        md['PVN1-II'].append(tr)
+                        if tr['child_taxes']:
+                            for ct in tr['child_taxes']:
+                                row_tags = [t.name for t in ct['tax'].tag_ids if t.name not in ['PVN1-I', 'PVN1-II', 'PVN1-III', 'PVN2']]
+                                if '64' in row_tags:
+                                    md['64'] += ct['amount']
+                                if '55' in row_tags:
+                                    md['55'] += ct['amount']
+                                if '50' in row_tags:
+                                    md['50'] += tr['base']
+                                if '56' in row_tags:
+                                    md['56'] += ct['amount']
+                                if '51' in row_tags:
+                                    md['51'] += tr['base']
+                if tr['refund']:
+                    if 'PVN1-I' in sect_tags:
+                        md['PVN1-I'].append(tr)
+                        if (not tr['child_taxes') and '67' in row_tags:
+                            md['67'] += tr['amount']
+                    if 'PVN1-II' in sect_tags:
+                        md['PVN1-II'].append(tr)
+                        if tr['child_taxes']:
+                            for ct in tr['child_taxes']:
+                                row_tags = [t.name for t in ct['tax'].tag_ids if t.name not in ['PVN1-I', 'PVN1-II', 'PVN1-III', 'PVN2']]
+                                if '64' in row_tags:
+                                    md['64'] -= ct['amount']
+                                if '55' in row_tags:
+                                    md['55'] -= ct['amount']
+                                if '50' in row_tags:
+                                    md['50'] -= tr['base']
+                                if '56' in row_tags:
+                                    md['56'] -= ct['amount']
+                                if '51' in row_tags:
+                                    md['51'] -= tr['base']
+
         return md
 
     @api.multi
@@ -175,13 +266,13 @@ class L10nLvVatDeclaration(models.TransientModel):
         # getting info for period tags:
         start_date = datetime.strptime(self.date_from, '%Y-%m-%d')
         end_date = datetime.strptime(self.date_to, '%Y-%m-%d')
-        diff_month = relativedelta.relativedelta(end_date, start_date).months
+        diff_month = relativedelta(end_date, start_date).months
         if diff_month == 1:
             data_of_file += "\n    <ParskMen>" + str(int(start_date.month)) + "</ParskMen>"
         if diff_month in [3, 6]:
             fy_end_date = datetime(start_date.year, company.fiscalyear_last_month, company.fiscalyear_last_day)
             fy_start_date = fy_end_date - relativedelta(years=1) + relativedelta(days=1)
-            diff_month_fy = relativedelta.relativedelta(start_date, fy_start_date).months
+            diff_month_fy = relativedelta(start_date, fy_start_date).months
             if diff_month == 3:
                 quarter = (diff_month_fy > 9 and 4) or (diff_month_fy > 6 and 3) or (diff_month_fy > 3 and 2) or 1
                 data_of_file += "\n    <ParskCeturksnis>" + str(quarter) + "</ParskCeturksnis>"
@@ -202,7 +293,7 @@ class L10nLvVatDeclaration(models.TransientModel):
             vat = company.company_registry
             data_of_file += "\n    <NmrKods>" + str(vat) + "</NmrKods>"
             if not vat:
-                raise osv.except_osv(_('Insufficient data!'), _('No TIN or Company Registry number associated with your company.'))
+                raise UserError(_('No TIN or Company Registry number associated with your company.'))
 
         # getting e-mail and phone:
         default_address = company.partner_id.address_get().get("default", company.partner_id)
@@ -216,6 +307,28 @@ class L10nLvVatDeclaration(models.TransientModel):
 
         moves = move_obj.search([('date','<=',self.date_to), ('date','>=',self.date_from), ('state','=','posted'), ('journal_id.type','in',['sale', 'purchase','expense'])])
         move_data = self.process_moves(moves)
-        return {}
+
+
+
+        data_of_file += "\n</DokPVNv4>"
+
+        data_of_file_real = base64.encodestring(data_of_file.encode('utf8'))
+
+        self.write({
+            'file_save': data_of_file_real,
+            'name': self.name,
+            'info_file_name': self.info_file_name,
+#            'info_file_save': info_file_data_real
+        })
+
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'l10n_lv.vat.declaration',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_id': self.id,
+            'views': [(False,'form')],
+            'target': 'new',
+        }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
