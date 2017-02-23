@@ -228,10 +228,28 @@ class L10nLvVatDeclaration(models.TransientModel):
                                     md['56'] += ct['amount']
                                 if '51' in row_tags:
                                     md['51'] += tr['base']
+                    if 'PVN1-III' in sect_tags:
+                        md['PVN1-III'].append(tr)
+                        if not tr['child_taxes']:
+                            if '52' in row_tags:
+                                md['52'] += tr['amount']
+                            if '41' in row_tags:
+                                md['41'] += tr['base']
+                            if '53' in row_tags:
+                                md['53'] += tr['amount']
+                            if '42' in row_tags:
+                                md['42'] += tr['base']
+                    if 'PVN2' in sect_tags:
+                        md['PVN2'].append(tr)
+                        if not tr['child_taxes']:
+                            if '45' in row_tags:
+                                md['45'] += tr['base']
+                            if '48.2' in row_tags:
+                                md['48.2'] += tr['base']
                 if tr['refund']:
                     if 'PVN1-I' in sect_tags:
                         md['PVN1-I'].append(tr)
-                        if (not tr['child_taxes') and '67' in row_tags:
+                        if (not tr['child_taxes']) and '67' in row_tags:
                             md['67'] += tr['amount']
                     if 'PVN1-II' in sect_tags:
                         md['PVN1-II'].append(tr)
@@ -248,6 +266,24 @@ class L10nLvVatDeclaration(models.TransientModel):
                                     md['56'] -= ct['amount']
                                 if '51' in row_tags:
                                     md['51'] -= tr['base']
+                    if 'PVN1-III' in sect_tags:
+                        md['PVN1-III'].append(tr)
+                        if (not tr['child_taxes']) and '57' in row_tags:
+                            md['57'] += tr['amount']
+                        if tr['child_taxes']:
+                            for ct in tr['child_taxes']:
+                                row_tags = [t.name for t in ct['tax'].tag_ids if t.name not in ['PVN1-I', 'PVN1-II', 'PVN1-III', 'PVN2']]
+                                if '62' in row_tags:
+                                    md['62'] -= ct['amount']
+                                if '52' in row_tags:
+                                    md['52'] -= ct['amount']
+                    if 'PVN2' in sect_tags:
+                        md['PVN2'].append(tr)
+                        if not tr['child_taxes']:
+                            if '45' in row_tags:
+                                md['45'] -= tr['base']
+                            if '48.2' in row_tags:
+                                md['48.2'] -= tr['base']
 
         return md
 
