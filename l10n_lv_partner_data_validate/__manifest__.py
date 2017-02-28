@@ -38,7 +38,7 @@ Validates the checksum of Registration No. and Personal No. to Partner.
         'views/res_partner_view.xml',
         'views/templates.xml',
     ],
-    'external_dependencies': {'python': ['python-stdnum']},
+    'external_dependencies': {'python': ['stdnum']},
     'auto_install': False,
     'installable': True,
 }
