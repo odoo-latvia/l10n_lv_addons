@@ -129,12 +129,15 @@ class L10nLvVatDeclaration(models.TransientModel):
         }
         base_tags = ['50', '51', '41', '42', '45', '48.2']
         ml_obj = self.env['account.move.line']
+        limit_val = 1430.0
         for m in moves:
             if m.journal_id.type not in ['sale', 'purchase', 'expense']:
                 continue
 #            invoices = list(set([ml.invoice_id for ml in m.line_ids]))
 #            inv_type = invoices and invoices[0].type or False
 #            j_type = m.journal_id.type
+            if m.date <= datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
+                limit_val = 1000.0
             tax_amt_data = []
             for line in m.line_ids:
                 if line.tax_ids:
@@ -147,6 +150,7 @@ class L10nLvVatDeclaration(models.TransientModel):
                                 'tax': tax,
                                 'base': line.debit or line.credit,
                                 'refund': refund,
+                                'limit_val': limit_val,
                                 'child_taxes': []
                             }
                             for ctax in tax.children_tax_ids:
@@ -168,6 +172,7 @@ class L10nLvVatDeclaration(models.TransientModel):
                                 'tax': tax,
                                 'base': line.debit or line.credit,
                                 'refund': refund,
+                                'limit_val': limit_val,
                                 'amount': tax_amount
                             })
 
@@ -177,6 +182,7 @@ class L10nLvVatDeclaration(models.TransientModel):
                 tax = ta['tax']
                 base = ta['base']
                 refund = ta['refund']
+                limit_val = ta['limit_val']
                 amount = 'amount' in ta and ta['amount'] or 0.0
                 child_taxes = 'child_taxes' in ta and ta['child_taxes'] or []
                 if tax_datas.get((tax.id)):
@@ -187,6 +193,7 @@ class L10nLvVatDeclaration(models.TransientModel):
                         'tax': tax,
                         'base': base,
                         'refund': refund,
+                        'limit_val': limit_val,
                         'amount': amount,
                         'child_taxes': child_taxes
                     }
@@ -287,6 +294,31 @@ class L10nLvVatDeclaration(models.TransientModel):
 
         return md
 
+    @api.model
+    def form_pvn1i_data(self, data, data_of_file):
+        for d in data:
+            # getting document types "A", "N" and "I":
+            if d['base'] >= d['limit_val']:
+                data_of_file += "\n        <R>"
+                
+                data_of_file += ("\n        </R>")
+        return data_of_file
+
+    @api.model
+    def form_pvn1ii_data(self, data, data_of_file):
+        
+        return data_of_file
+
+    @api.model
+    def form_pvn1iii_data(self, data, data_of_file):
+        
+        return data_of_file
+
+    @api.model
+    def form_pvn2_data(self, data, data_of_file):
+        
+        return data_of_file
+
     @api.multi
     def create_file(self):
         self.ensure_one()
@@ -344,7 +376,30 @@ class L10nLvVatDeclaration(models.TransientModel):
         moves = move_obj.search([('date','<=',self.date_to), ('date','>=',self.date_from), ('state','=','posted'), ('journal_id.type','in',['sale', 'purchase','expense'])])
         move_data = self.process_moves(moves)
 
+        add_pvn = False
+        for key, value in move_data.iteritems():
+            if value != 0.0 and value != []:
+                add_pvn = True
 
+        if add_pvn == True:
+            data_of_file += "\n    <PVN>"
+            for row, amount in move_data.iteritems():
+                if row not in ['PVN1-I', 'PVN1-II', 'PVN1-III', 'PVN2'] and amount != 0.0:
+                    tag_name = row.replace('.','')
+                    data_of_file += ("\n        <R%s>%s</R%s>" % (tag_name, amount, tag_name))
+            data_of_file += "\n    </PVN>"
+            for part, data in move_data.iteritems():
+                if part in ['PVN1-I', 'PVN1-II', 'PVN1-III', 'PVN2']:
+                    data_of_file += ("\n    <%s>" % (part))
+                    if part == 'PVN1-I':
+                        data_of_file = self.form_pvn1i_data(data, data_of_file)
+                    if part == 'PVN1-II':
+                        data_of_file = self.form_pvn1ii_data(data, data_of_file)
+                    if part == 'PVN1-III':
+                        data_of_file = self.form_pvn1iii_data(data, data_of_file)
+                    if part == 'PVN2':
+                        data_of_file = self.form_pvn2_data(data, data_of_file)
+                    data_of_file += ("\n    </%s>" %(part))
 
         data_of_file += "\n</DokPVNv4>"
 
