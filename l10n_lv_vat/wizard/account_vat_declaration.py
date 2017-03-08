@@ -129,15 +129,12 @@ class L10nLvVatDeclaration(models.TransientModel):
         }
         base_tags = ['50', '51', '41', '42', '45', '48.2']
         ml_obj = self.env['account.move.line']
-        limit_val = 1430.0
         for m in moves:
             if m.journal_id.type not in ['sale', 'purchase', 'expense']:
                 continue
 #            invoices = list(set([ml.invoice_id for ml in m.line_ids]))
 #            inv_type = invoices and invoices[0].type or False
 #            j_type = m.journal_id.type
-            if m.date <= datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
-                limit_val = 1000.0
             tax_amt_data = []
             for line in m.line_ids:
                 if line.tax_ids:
@@ -148,9 +145,12 @@ class L10nLvVatDeclaration(models.TransientModel):
                         if tax.amount_type == 'group':
                             tax_dict = {
                                 'tax': tax,
+                                'move': m,
                                 'base': line.debit or line.credit,
+                                'base_cur': line.amount_currency,
+                                'currency': line.currency_id,
                                 'refund': refund,
-                                'limit_val': limit_val,
+                                'partner': line.partner_id,
                                 'child_taxes': []
                             }
                             for ctax in tax.children_tax_ids:
@@ -170,9 +170,12 @@ class L10nLvVatDeclaration(models.TransientModel):
                                 tax_amount += (tm.debit or tm.credit)
                             tax_amt_data.append({
                                 'tax': tax,
+                                'move': m,
                                 'base': line.debit or line.credit,
+                                'base_cur': line.amount_currency,
+                                'currency': line.currency_id,
                                 'refund': refund,
-                                'limit_val': limit_val,
+                                'partner': line.partner_id,
                                 'amount': tax_amount
                             })
 
@@ -180,20 +183,27 @@ class L10nLvVatDeclaration(models.TransientModel):
             tax_datas = {}
             for ta in tax_amt_data:
                 tax = ta['tax']
+                move = ta['move']
                 base = ta['base']
+                base_cur = ta['base_cur']
+                currency = ta['currency']
                 refund = ta['refund']
-                limit_val = ta['limit_val']
+                partner = ta['partner']
                 amount = 'amount' in ta and ta['amount'] or 0.0
                 child_taxes = 'child_taxes' in ta and ta['child_taxes'] or []
                 if tax_datas.get((tax.id)):
                     base += tax_datas[(tax.id)]['base']
+                    base_cur += tax_datas[(tax.id)]['base_cur']
                     tax_datas[(tax.id)].clear()
                 if not tax_datas.get((tax.id)):
                     tax_datas[(tax.id)] = {
                         'tax': tax,
+                        'move': move,
                         'base': base,
+                        'base_cur': base_cur,
+                        'currency': currency,
                         'refund': refund,
-                        'limit_val': limit_val,
+                        'partner': partner,
                         'amount': amount,
                         'child_taxes': child_taxes
                     }
@@ -296,9 +306,12 @@ class L10nLvVatDeclaration(models.TransientModel):
 
     @api.model
     def form_pvn1i_data(self, data, data_of_file):
+        limit_val = 1430.0
         for d in data:
+            if d['move'].date <= datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
+                limit_val = 1000.0
             # getting document types "A", "N" and "I":
-            if d['base'] >= d['limit_val']:
+            if d['base'] >= limit_val:
                 data_of_file += "\n        <R>"
                 
                 data_of_file += ("\n        </R>")
