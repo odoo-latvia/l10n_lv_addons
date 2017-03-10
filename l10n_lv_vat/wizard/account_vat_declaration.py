@@ -305,15 +305,71 @@ class L10nLvVatDeclaration(models.TransientModel):
         return md
 
     @api.model
+    def form_partner_data(self, partner):
+        country = partner and partner.country_id and partner.country_id.code or False
+        vat_no = partner and partner.vat or False
+        vat = False
+        if vat_no:
+            vat_no = vat_no.replace(' ','').upper()
+            if vat_no[:2].isalpha():
+                vat = vat_no[2:]
+                country = vat_no[:2]
+            else:
+                vat = vat_no
+        if country == 'GR':
+            country = 'EL'
+        if partner and (not vat) and hasattr(partner, 'company_registry'):
+            vat = partner.company_registry
+        return {
+            'country': country,
+            'vat': vat,
+            'id': partner and partner.id or False,
+            'name': partner and partner.name or False,
+            'fpos': partner and partner.property_account_position_id and partner.property_account_position_id.name or False
+        }
+
+    @api.model
     def form_pvn1i_data(self, data, data_of_file):
         limit_val = 1430.0
         for d in data:
             if d['move'].date <= datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
                 limit_val = 1000.0
+            partner = self.form_partner_data(d['partner'])
+            deal_type = ""
+            if partner['vat'] and partner['fpos'] and (check_fpos(partner['fpos'], 'LR_VAT_payer') or check_fpos(partner['fpos'], 'EU_VAT_payer')):
+                deal_type = "A"
+            if (not partner['vat']) and partner['fpos'] and (check_fpos(partner['fpos'], 'LR_VAT_payer') or check_fpos(partner['fpos'], 'EU_VAT_payer')):
+                raise UserError(_('No TIN defined for Partner %s, but this partner is defined as a VAT payer. Please define the TIN!') % (partner['name']))
+            if (not partner['vat']) or check_fpos(partner['fpos'], 'LR_VAT_non-payer') or check_fpos(partner['fpos'], 'EU_VAT_non-payer'):
+                deal_type = "N"
+            row_tags = [tag.name for tag in d['tax'].tag_ids if tag.name not in ['PVN1-I', 'PVN1-II', 'PVN1-III', 'PVN2']]
+            if not row_tags:
+                row_tags = [tag.name for child in d['child_taxes'] for tag in child['tax'].tag_ids]
+            if '61' in row_tags:
+                deal_type = "I"
+            if '65' in row_tags:
+                deal_type = "K"
+            if '62' in row_tags and '52' in row_tags:
+                deal_type = "R4"
+                limit_val = 0.0
             # getting document types "A", "N" and "I":
             if d['base'] >= limit_val:
                 data_of_file += "\n        <R>"
-                
+                if deal_type != "I" and partner['country']:
+                    data_of_file += ("\n            <DpValsts>" + unicode(partner['country']) + "</DpValsts>")
+                if partner['vat'] and deal_type not in ["I", "N"]:
+                    data_of_file += ("\n            <DpNumurs>" + str(partner['vat']) + "</DpNumurs>")
+                data_of_file += ("\n            <DpNosaukums>" + unicode(partner['name']) + "</DpNosaukums>")
+                data_of_file += ("\n            <DarVeids>" + deal_type + "</DarVeids>")
+                data_of_file += ("\n            <VertibaBezPvn>" + str(d['base']) + "</VertibaBezPvn>")
+                if not d['child_taxes']:
+                    tax_amount = d['amount']
+                else:
+                    for c in d['child_taxes']:
+                        c_tags = [t.name for t in c['tax'].tag_ids]
+                        if '62' in c_tags:
+                            tax_amount = c['amount']
+                data_of_file += ("\n            <PvnVertiba>" + str(tax_amount) + "</PvnVertiba>")
                 data_of_file += ("\n        </R>")
         return data_of_file
 
