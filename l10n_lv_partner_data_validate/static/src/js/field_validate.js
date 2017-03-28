@@ -9,14 +9,18 @@ var _t = core._t;
 var Partner = new Model('res.partner');
 var Country = new Model('res.country');
 
-formWidget.FieldChar.include({
+// TODO: make parametarized, not dependent on specific fields in the form
+// aka. make it a widget type
+// TODO: parametarize country field
+var FieldRegistry = formWidget.FieldChar.extend({
     init: function (field_manager, node) {
         this._super(field_manager, node);
-        this.events.keyup = 'validate';
-        this.events.blur = 'validate_blur';
+        this.events.keyup = this.proxy(this.validate);
+        this.events.blur = this.proxy(this.validate_blur);
         this.show_error = true;
     },
     show_warning: function() {
+        this.trigger('invalid');
         if (this.show_error) {
             this.show_error = false;
             this.do_warn.apply(this, arguments);
@@ -26,11 +30,6 @@ formWidget.FieldChar.include({
             }).bind(this), 3000);
         }
     }, 
-    is_res_partner_registry_field: function() {
-        return (this.field_manager.model === 'res.partner'
-                && (this.name.indexOf('registry') != -1)
-                && this.$input)
-    },
     is_latvia: function() {
         return (this.field_manager.fields.country_id &&
                 this.field_manager.fields.country_code.get_value() == 'LV');
@@ -39,7 +38,7 @@ formWidget.FieldChar.include({
         return this.parse_value(this.$input.val(), '').replace('-', '');
     },
     validate_blur: function() {
-        if (this.is_res_partner_registry_field() && this.is_latvia()) {
+        if (this.is_latvia()) {
             var value = this.get_pk();
 
             if (value.length < 11 && value.length != 0) {
@@ -49,7 +48,7 @@ formWidget.FieldChar.include({
         }
     },
     validate: function() {
-        if (this.is_res_partner_registry_field() && this.is_latvia()) {
+        if (this.is_latvia()) {
 
             var value = this.get_pk();
 
@@ -65,6 +64,7 @@ formWidget.FieldChar.include({
                         this.show_warning(_t('Validation error'), _t('Invalid registry number'));
                     } else {
                         this.$input.removeClass('o_form_invalid');
+                        this.trigger('valid');
                     }
                 }).bind(this))
 
@@ -72,5 +72,10 @@ formWidget.FieldChar.include({
 		}
     }
 });
+
+core.form_widget_registry
+    .add('registry', FieldRegistry);
+
+return FieldRegistry
 
 });
