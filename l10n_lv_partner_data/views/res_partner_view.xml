@@ -25,8 +25,11 @@
                     </div>
                 </xpath>
                 <field name="function" position="before">
-                    <field name="partner_registry" placeholder="Registration No." attrs="{'invisible': [('is_company','=',False)]}"/>
-                    <field name="individual_registry" placeholder="Personal No." attrs="{'invisible': [('is_company','=',True)]}"/>
+                    <label string="Registration No" for="partner_registry"/>
+                    <div name="regno">
+                        <field name="partner_registry" placeholder="Registration No." attrs="{'invisible': [('is_company','=',False)]}"/>
+                        <field name="individual_registry" placeholder="Personal No." attrs="{'invisible': [('is_company','=',True)]}"/>
+                    </div>
                 </field>
             </field>
         </record>
@@ -42,8 +45,11 @@
                     </div>
                 </xpath>
                 <field name="type" position="before">
-                    <field name="partner_registry" placeholder="Registration No." string="Registration No." attrs="{'invisible': [('is_company','=',False)]}"/>
-                    <field name="individual_registry" placeholder="Personal No." attrs="{'invisible': [('is_company','=',True)]}"/>
+                    <label string="Registration No" for="partner_registry"/>
+                    <div name="regno">
+                        <field name="partner_registry" placeholder="Registration No." attrs="{'invisible': [('is_company','=',False)]}"/>
+                        <field name="individual_registry" placeholder="Personal No." attrs="{'invisible': [('is_company','=',True)]}"/>
+                    </div>
                 </field>
             </field>
         </record>
