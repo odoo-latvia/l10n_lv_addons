@@ -146,7 +146,14 @@ class drn_return_wizard(osv.osv_memory):
         picking_ids = pick_obj.search(cr, uid, [('picking_type_id.code','=','outgoing'), ('state','=','done')])
         pick_out_stock_move = []
         message = ''
+        last_periods = period_obj.search(cr, uid, [('date_start','>=',this.date_start),('date_stop','<=',this.date_stop)], context=context)
         for picking in pick_obj.browse(cr, uid, picking_ids, context=context):
+            current_move_lines = []
+            for ml in picking.move_lines:
+                ml_period_ids = period_obj.find(cr, uid, dt=datetime.strftime(datetime.strptime(ml.date, '%Y-%m-%d %H:%M:%S'), '%Y-%m-%d'), context=context)
+                if ml_period_ids and ml_period_ids[0] not in last_periods or not ml_period_ids:
+                    continue
+                current_move_lines.append(ml)
             pick_move_lines_done = filter(lambda ml: ml.state=='done' and ml.picking_id.partner_id and \
             (ml.picking_id.partner_id.property_account_position and \
             (check_fpos(ml.picking_id.partner_id.property_account_position.name, 'LR_VAT_payer') or \
@@ -155,7 +162,7 @@ class drn_return_wizard(osv.osv_memory):
             (check_fpos(ml.picking_id.partner_id.parent_id.property_account_position.name, 'LR_VAT_payer') or \
             check_fpos(ml.picking_id.partner_id.parent_id.property_account_position.name, 'LR_VAT_non-payer'))) or \
             ((not ml.picking_id.partner_id.property_account_position) and ((not ml.picking_id.partner_id.parent_id) or \
-            (not ml.picking_id.partner_id.parent_id.property_account_position))), picking.move_lines)
+            (not ml.picking_id.partner_id.parent_id.property_account_position))), current_move_lines)
             pick_out_stock_move.extend(pick_move_lines_done)
             bad_move_lines = filter(lambda ml: \
                 (not ml.picking_id.partner_id.property_account_position) and \
@@ -266,8 +273,6 @@ class drn_return_wizard(osv.osv_memory):
                     'target': 'new'
                 }
 
-        current_date = datetime.now().strftime("%Y-%m-%d")
-        last_periods = period_obj.search(cr, uid, [('date_start','>=',this.date_start),('date_stop','<=',this.date_stop)], context=context)
         pkg_type_list_by_product = {}
         pkg_type_list_by_product_excepted = {}
 
@@ -277,9 +282,6 @@ class drn_return_wizard(osv.osv_memory):
                 move_lines_product_sec_pkg_count = 0.0
                 primary_weight = 0.0
                 secondary_weight = 0.0
-                ml_period_ids = period_obj.find(cr, uid, ml.date, context=context)
-                if ml_period_ids and ml_period_ids[0] not in last_periods or not ml_period_ids:
-                    continue
                 if excepted:
                     data_list = pkg_type_list_by_product_excepted
                 else:
