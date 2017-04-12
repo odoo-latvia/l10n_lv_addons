@@ -40,7 +40,7 @@ This is the base module for Latvian localization of :
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
     'category': 'Localization',
-    'depends': ['account', 'base_vat', 'base_iban'],
+    'depends': ['base', 'account', 'base_vat', 'base_iban'],
     'data': [
         'data/res_company_data.xml',
         'data/account_account_type_data.xml',
