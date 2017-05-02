@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_employee_form_l10n_lv" model="ir.ui.view">
+            <field name="name">hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <field name="category_ids" position="before">
+                    <group>
+                        <group>
+                            <field name="employee_name"/>
+                            <field name="employee_surname"/>
+                        </group>
+                        <group></group>
+                    </group>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>
