@@ -23,6 +23,29 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_lv_partner_data
+#: model:ir.model.fields,field_description:l10n_lv_partner_data.field_res_partner_code
+#: model:ir.ui.view,arch_db:l10n_lv_partner_data.view_partner_form_l10n_lv
+#: model:ir.ui.view,arch_db:l10n_lv_partner_data.view_partner_simple_form_l10n_lv
+msgid "Code"
+msgstr "Kods"
+
+#. module: l10n_lv_partner_data
+#: model:ir.model,name:l10n_lv_partner_data.model_res_company
+msgid "Companies"
+msgstr "Uzņēmumi"
+
+#. module: l10n_lv_partner_data
+#: model:ir.model,name:l10n_lv_partner_data.model_res_partner
+msgid "Partner"
+msgstr "Partneris"
+
+#. module: l10n_lv_partner_data
+#: model:ir.ui.view,arch_db:l10n_lv_partner_data.view_partner_form_l10n_lv
+#: model:ir.ui.view,arch_db:l10n_lv_partner_data.view_partner_simple_form_l10n_lv
+msgid "Registration No"
+msgstr "Reģistrācijas Nr"
+
+#. module: l10n_lv_partner_data
 #: model:ir.ui.view,arch_db:l10n_lv_partner_data.view_partner_simple_form_l10n_lv
 #: model:ir.ui.view,arch_db:l10n_lv_partner_data.view_partner_form_l10n_lv
 msgid "Personal No."
