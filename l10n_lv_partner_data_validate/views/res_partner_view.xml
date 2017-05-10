@@ -5,14 +5,14 @@
         <record id="view_partner_form_l10n_lv" model="ir.ui.view">
             <field name="name">partner.form.l10n.lv</field>
             <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="inherit_id" ref="l10n_lv_partner_data.view_partner_form_l10n_lv"/>
             <field name="arch" type="xml">
                 <field name="partner_registry" position="attributes">
                     <attribute name="widget">registry</attribute>
                 </field>
-                <xpath expr="//form/sheet" position="after">
+                <field name="partner_registry" position="before">
                     <field name="country_code" invisible="1"/>
-                </xpath>
+                </field>
             </field>
         </record>
 
