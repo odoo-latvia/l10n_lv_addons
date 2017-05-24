@@ -139,7 +139,7 @@ class L10nLvVatDeclaration(models.TransientModel):
             for line in m.line_ids:
                 if line.tax_ids:
                     refund = False
-                    if (m.journal_id.type in ['purchase', 'expense'] and line.credit != 0.0) or (m.journal_id.type == 'sale' and line.debit != 0.0):
+                    if (m.journal_id.type in ['purchase', 'expense'] and line.credit not in [0.0, False]) or (m.journal_id.type == 'sale' and line.debit not in [0.0,False]):
                         refund = True
                     for tax in line.tax_ids:
                         if tax.amount_type == 'group':
@@ -219,7 +219,7 @@ class L10nLvVatDeclaration(models.TransientModel):
                 if not tr['child_taxes']:
                     row_tags = [t.name for t in tr['tax'].tag_ids if t.name not in ['PVN1-I', 'PVN1-II', 'PVN1-III', 'PVN2']]
                 if not tr['refund']:
-                    if 'PVN1-I' in sect_tags:
+                    if 'PVN1-I' in sect_tags and tr['move'].journal_id.type == 'purchase':
                         md['PVN1-I'].append(tr)
                         if (not tr['child_taxes']) and '62' in row_tags:
                             md['62'] += tr['amount']
@@ -245,7 +245,7 @@ class L10nLvVatDeclaration(models.TransientModel):
                                     md['56'] += ct['amount']
                                 if '51' in row_tags:
                                     md['51'] += tr['base']
-                    if 'PVN1-III' in sect_tags:
+                    if 'PVN1-III' in sect_tags and tr['move'].journal_id.type == 'sale':
                         md['PVN1-III'].append(tr)
                         if not tr['child_taxes']:
                             if '52' in row_tags:
@@ -264,7 +264,7 @@ class L10nLvVatDeclaration(models.TransientModel):
                             if '48.2' in row_tags:
                                 md['48.2'] += tr['base']
                 if tr['refund']:
-                    if 'PVN1-I' in sect_tags:
+                    if 'PVN1-I' in sect_tags and tr['move'].journal_id.type == 'sale':
                         md['PVN1-I'].append(tr)
                         if (not tr['child_taxes']) and '67' in row_tags:
                             md['67'] += tr['amount']
@@ -283,7 +283,7 @@ class L10nLvVatDeclaration(models.TransientModel):
                                     md['56'] -= ct['amount']
                                 if '51' in row_tags:
                                     md['51'] -= tr['base']
-                    if 'PVN1-III' in sect_tags:
+                    if 'PVN1-III' in sect_tags and tr['move'].journal_id.type == 'purchase':
                         md['PVN1-III'].append(tr)
                         if (not tr['child_taxes']) and '57' in row_tags:
                             md['57'] += tr['amount']
@@ -330,8 +330,8 @@ class L10nLvVatDeclaration(models.TransientModel):
 
     @api.model
     def form_pvn1i_data(self, data, data_of_file):
-        limit_val = 1430.0
         for d in data:
+            limit_val = 1430.0
             if d['move'].date <= datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
                 limit_val = 1000.0
             partner = self.form_partner_data(d['partner'])
