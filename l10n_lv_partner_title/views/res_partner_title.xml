@@ -20,4 +20,15 @@
             </field>
         </field>
     </record>
+
+    <record model="ir.ui.view" id="res_partner_form">
+        <field name="name">res.partner</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='child_ids']/form//field[@name='type']" position="after">
+                <field name="company_type" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>
