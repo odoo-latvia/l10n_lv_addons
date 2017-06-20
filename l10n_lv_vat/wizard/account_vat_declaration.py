@@ -330,12 +330,14 @@ class L10nLvVatDeclaration(models.TransientModel):
 
     @api.model
     def form_pvn1i_data(self, data, data_of_file):
+        partner_data = {}
         for d in data:
             limit_val = 1430.0
             if d['move'].date <= datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
                 limit_val = 1000.0
             partner = self.form_partner_data(d['partner'])
             deal_type = ""
+            doc_type = "1"
             if partner['vat'] and partner['fpos'] and (check_fpos(partner['fpos'], 'LR_VAT_payer') or check_fpos(partner['fpos'], 'EU_VAT_payer')):
                 deal_type = "A"
             if (not partner['vat']) and partner['fpos'] and (check_fpos(partner['fpos'], 'LR_VAT_payer') or check_fpos(partner['fpos'], 'EU_VAT_payer')):
@@ -347,11 +349,28 @@ class L10nLvVatDeclaration(models.TransientModel):
                 row_tags = [tag.name for child in d['child_taxes'] for tag in child['tax'].tag_ids]
             if '61' in row_tags:
                 deal_type = "I"
+                doc_type = "6"
+                limit_val = 0.0
             if '65' in row_tags:
                 deal_type = "K"
             if '62' in row_tags and '52' in row_tags:
                 deal_type = "R4"
                 limit_val = 0.0
+            if d['refund']:
+                doc_type = "4"
+                limit_val = 0.0
+            if doc_type != "6" and (not len(self.env['account.invoice'].search([('move_id','=',d['move'].id)]))) and d['move'].journal_id.type != 'expense':
+                doc_type = "5"
+            # getting tax amount:
+            if not d['child_taxes']:
+                tax_amount = d['amount']
+            else:
+                for c in d['child_taxes']:
+                    c_tags = [t.name for t in c['tax'].tag_ids]
+                    if '62' in c_tags:
+                        tax_amount = c['amount']
+            base = d['refund'] and d['base'] * (-1.0) or d['base']
+            tax_amount = d['refund'] and tax_amount * (-1.0) or tax_amount
             # getting document types "A", "N" and "I":
             if d['base'] >= limit_val:
                 data_of_file += "\n        <R>"
@@ -361,16 +380,24 @@ class L10nLvVatDeclaration(models.TransientModel):
                     data_of_file += ("\n            <DpNumurs>" + str(partner['vat']) + "</DpNumurs>")
                 data_of_file += ("\n            <DpNosaukums>" + unicode(partner['name']) + "</DpNosaukums>")
                 data_of_file += ("\n            <DarVeids>" + deal_type + "</DarVeids>")
-                data_of_file += ("\n            <VertibaBezPvn>" + str(d['base']) + "</VertibaBezPvn>")
-                if not d['child_taxes']:
-                    tax_amount = d['amount']
-                else:
-                    for c in d['child_taxes']:
-                        c_tags = [t.name for t in c['tax'].tag_ids]
-                        if '62' in c_tags:
-                            tax_amount = c['amount']
+                data_of_file += ("\n            <VertibaBezPvn>" + str(base) + "</VertibaBezPvn>")
                 data_of_file += ("\n            <PvnVertiba>" + str(tax_amount) + "</PvnVertiba>")
+                data_of_file += ("\n            <DokVeids>" + doc_type + "</DokVeids>")
+                data_of_file += ("\n            <DokNumurs>" + d['move'].name + "</DokNumurs>")
+                data_of_file += ("\n            <DokDatums>" + d['move'].date + "</DokDatums>")
                 data_of_file += ("\n        </R>")
+            if d['base'] < limit_val:
+                
+                if d['partner'] in partner_data:
+                    partner_data[d['partner']]['base'] += base
+                    partner_data[d['partner']]['tax_amount'] += tax_amount
+                    partner_data[d['partner']]['moves'].append(d['move'])
+                if d['partner'] not in partner_data:
+                    partner_data.update({d['partner']: {
+                        'base': base,
+                        'tax_amount': tax_amount,
+                        'moves': [d['move']]
+                    }})
         return data_of_file
 
     @api.model
