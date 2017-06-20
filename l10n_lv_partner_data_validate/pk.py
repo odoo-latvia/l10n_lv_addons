@@ -1,5 +1,8 @@
-from stdnum.exceptions import InvalidChecksum
-from stdnum.lv import pvn
+try:
+    from stdnum.exceptions import InvalidChecksum
+    from stdnum.lv import pvn
+except ImportError:
+    pass
 
 def validate(pk):
     """
