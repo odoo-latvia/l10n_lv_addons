@@ -33,22 +33,27 @@ class Partner(models.Model):
 
     @api.onchange('firstname')
     def change_firstname(self):
-        self.name = u'{r.firstname} {r.surname}'.format(r=self).strip()
+        if not self.is_company:
+            self.name = u'{r.firstname} {r.surname}'.format(r=self).strip()
 
     @api.onchange('surname')
     def change_surname(self):
-        if ' ' in self.surname.strip():
-            self.surname = self.surname.strip().replace(' ', '-')
-        self.name = u'{r.firstname} {r.surname}'.format(r=self).strip()
+        if not self.is_company:
+            if ' ' in self.surname.strip():
+                self.surname = self.surname.strip().replace(' ', '-')
+            self.name = u'{r.firstname} {r.surname}'.format(r=self).strip()
 
     @api.onchange('name')
     def change_name(self):
-        parts = (self.name or '').strip().rsplit(' ', 1)
-        if len(parts) == 2:
-            self.firstname, self.surname = parts
+        if self.is_company:
+            self.firstname, self.surname = ('', '')
         else:
-            self.firstname = parts[0]
-            self.surname = ''
+            parts = (self.name or '').strip().rsplit(' ', 1)
+            if len(parts) == 2:
+                self.firstname, self.surname = parts
+            else:
+                self.firstname = parts[0]
+                self.surname = ''
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

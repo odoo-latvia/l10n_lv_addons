@@ -26,10 +26,16 @@
     'name': 'LV Partner data',
     'version': '1.0',
     'description': """
-Additional Partner data for Latvia.
+Partner seporate first and last name fields.
 =====================================
-Adds Registration No. and Personal No. to Partner.
-Adds additional translations for Partner fields, views, actions and menus for modules base, mail, stock, account, payment, purchase and sales_team.
+
+A partners surname is the last complete word. Multiple surnames can be
+writen by delimiting them with a dash. "Berzins Priede" -> "Berzins-Priede".
+The conversion is automatic when writen in the surname field.
+
+First and middle names are seporated by a space 'Martins Juris Kristians'.
+
+
     """,
     'author': 'ITS-1',
     'website': 'http://www.its1.lv/',
