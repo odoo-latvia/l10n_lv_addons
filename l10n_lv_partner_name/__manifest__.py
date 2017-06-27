@@ -23,7 +23,7 @@
 ##############################################################################
 
 {
-    'name': 'LV Partner data',
+    'name': 'LV Partner name',
     'version': '1.0',
     'description': """
 Partner seporate first and last name fields.
