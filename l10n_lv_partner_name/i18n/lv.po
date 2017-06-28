@@ -34,5 +34,5 @@ msgstr "Partneris"
 #: model:ir.ui.view,arch_db:l10n_lv_partner_name.view_partner_form
 #: model:ir.ui.view,arch_db:l10n_lv_partner_name.view_partner_simple_form
 msgid "Surname"
-msgstr "Uzvāŗds"
+msgstr "Uzvārds"
 
