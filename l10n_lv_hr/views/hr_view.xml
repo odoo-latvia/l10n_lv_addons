@@ -10,8 +10,8 @@
                 <field name="category_ids" position="before">
                     <group>
                         <group>
-                            <field name="employee_name"/>
-                            <field name="employee_surname"/>
+                            <field name="firstname"/>
+                            <field name="surname"/>
                         </group>
                         <group></group>
                     </group>

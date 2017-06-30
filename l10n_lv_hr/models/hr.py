@@ -24,37 +24,92 @@
 
 from odoo import api, fields, models, _
 
+
 class Employee(models.Model):
     _inherit = "hr.employee"
 
-    employee_name = fields.Char(string='Name')
-    employee_surname = fields.Char(string='Surname')
+    firstname = fields.Char(compute='compute_firstname',
+                            inverse='inverse_firstname',
+                            store=True)
+    surname = fields.Char(compute='compute_surname',
+                          inverse='inverse_surname',
+                          store=True)
 
-    @api.onchange('employee_name', 'employee_surname')
-    def _onchange_employee_name(self):
-        if self.employee_name and self.employee_surname:
-            self.name = self.employee_name + ' ' + self.employee_surname
-        if self.employee_name and not self.employee_surname:
-            self.name = self.employee_name
-        if self.employee_surname and not self.employee_name:
-            self.name = self.employee_surname
-        if not self.employee_name and not self.employee_surname:
-            self.name = False
+    # computed functions are computed only after the record is created.
+    # Therefore we compute fullname before the records creation
+    def create(self, values):
+
+        fullname = []
+
+        try:
+            fullname.append(values.pop('firstname'))
+        except KeyError:
+            pass
+
+        try:
+            fullname.append(values.pop('surname'))
+        except KeyError:
+            pass
+
+        if not values.get('name'):
+            values.update(name=' '.join(fullname))
+
+        return super(Employee, self).create(values)
+
+    # if name is explicitly written drop firstname and lastname
+    # not to trigger inveser of fistname, surname
+    def write(self, values):
+
+        if values.get('name'):
+
+            try:
+                values.pop('firstname')
+            except KeyError:
+                pass
+
+            try:
+                values.pop('surname')
+            except KeyError:
+                pass
+
+        return super(Employee, self).write(values)
+
+    @api.depends('name')
+    def compute_firstname(self):
+        self.firstname = self.name.strip().rsplit(' ', 1)[0]
+
+    @api.depends('name')
+    def compute_surname(self):
+        name = self.name.strip().rsplit(' ', 1)
+        if len(name) > 1:
+            self.surname = name[1]
+
+    @api.model
+    def inverse_firstname(self):
+        self.name = u'{r.firstname} {r.surname}'.format(r=self)
+
+    @api.model
+    def inverse_surname(self):
+        self.name = u'{r.firstname} {r.surname}'.format(r=self)
+
+    @api.onchange('firstname')
+    def change_firstname(self):
+        self.name = u'{r.firstname} {r.surname}'.format(r=self).strip()
+
+    @api.onchange('surname')
+    def change_surname(self):
+        if ' ' in self.surname.strip():
+            self.surname = self.surname.strip().replace(' ', '-')
+        self.name = u'{r.firstname} {r.surname}'.format(r=self).strip()
 
     @api.onchange('name')
-    def _onchange_name(self):
-        if self.name:
-            name_list = self.name.strip().split(' ')
-            if len(name_list) > 1:
-                surname = name_list[-1]
-                name = ' '.join(name_list[:-1])
-            else:
-                name = name_list and name_list[0] or ''
-                surname = ''
-            self.employee_name = name
-            self.employee_surname = surname
-        if not self.name:
-            self.employee_name = False
-            self.employee_surname = False
+    def change_name(self):
+        parts = (self.name or '').strip().rsplit(' ', 1)
+        if len(parts) == 2:
+            self.firstname, self.surname = parts
+        else:
+            self.firstname = parts[0]
+            self.surname = ''
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
