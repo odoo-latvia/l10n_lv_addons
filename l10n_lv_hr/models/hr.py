@@ -37,6 +37,7 @@ class Employee(models.Model):
 
     # computed functions are computed only after the record is created.
     # Therefore we compute fullname before the records creation
+    @api.model
     def create(self, values):
 
         fullname = []
@@ -58,6 +59,7 @@ class Employee(models.Model):
 
     # if name is explicitly written drop firstname and lastname
     # not to trigger inveser of fistname, surname
+    @api.multi
     def write(self, values):
 
         if values.get('name'):
