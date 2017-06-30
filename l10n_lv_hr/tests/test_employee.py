@@ -23,3 +23,8 @@ class TestHrEmployee(TransactionCase):
         record = self.env['hr.employee'].create({'surname': 's', 'firstname': 'f'})
         record.write({'surname': 'surname', 'firstname': 'firstname'})
         self.assertEqual(record.name, 'firstname surname')
+
+    def test_inverse_missing_name_part_isnt_a_falsy_string(self):
+        record = self.env['hr.employee'].create({'name': 'f'})
+        record.write({'firstname': 'firstname'})
+        self.assertNotEqual(record.name, 'firstname False')

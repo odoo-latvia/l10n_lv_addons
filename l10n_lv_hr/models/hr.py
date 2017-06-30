@@ -29,10 +29,10 @@ class Employee(models.Model):
     _inherit = "hr.employee"
 
     firstname = fields.Char(compute='compute_firstname',
-                            inverse='inverse_firstname',
+                            inverse='inverse_name_part',
                             store=True)
     surname = fields.Char(compute='compute_surname',
-                          inverse='inverse_surname',
+                          inverse='inverse_name_part',
                           store=True)
 
     # computed functions are computed only after the record is created.
@@ -76,31 +76,34 @@ class Employee(models.Model):
 
     @api.depends('name')
     def compute_firstname(self):
-        self.firstname = self.name.strip().rsplit(' ', 1)[0]
+        self.firstname = (self.name or '').strip().rsplit(' ', 1)[0]
 
     @api.depends('name')
     def compute_surname(self):
-        name = self.name.strip().rsplit(' ', 1)
+        name = (self.name or '').strip().rsplit(' ', 1)
         if len(name) > 1:
             self.surname = name[1]
 
     @api.model
-    def inverse_firstname(self):
-        self.name = u'{r.firstname} {r.surname}'.format(r=self)
+    def inverse_name_part(self):
+        self.name = self.get_full_name()
 
     @api.model
-    def inverse_surname(self):
-        self.name = u'{r.firstname} {r.surname}'.format(r=self)
+    def get_full_name(self):
+        return u'{firstname} {surname}'.format(
+                firstname=getattr(self, 'firstname', '') or '',
+                surname=getattr(self, 'surname', '') or '',
+                ).strip()
 
     @api.onchange('firstname')
     def change_firstname(self):
-        self.name = u'{r.firstname} {r.surname}'.format(r=self).strip()
+        self.name = self.get_full_name()
 
     @api.onchange('surname')
     def change_surname(self):
         if ' ' in self.surname.strip():
             self.surname = self.surname.strip().replace(' ', '-')
-        self.name = u'{r.firstname} {r.surname}'.format(r=self).strip()
+        self.name = self.get_full_name()
 
     @api.onchange('name')
     def change_name(self):
