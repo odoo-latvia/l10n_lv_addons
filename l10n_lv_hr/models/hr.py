@@ -101,7 +101,7 @@ class Employee(models.Model):
 
     @api.onchange('surname')
     def change_surname(self):
-        if ' ' in self.surname.strip():
+        if ' ' in (self.surname or '').strip():
             self.surname = self.surname.strip().replace(' ', '-')
         self.name = self.get_full_name()
 
