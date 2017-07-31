@@ -217,7 +217,8 @@ class drn_return_wizard(osv.osv_memory):
                                 error_logs.append(log_rec)
                     if not bad_move_lines:
                         in_lines = filter(lambda ml: \
-                        (ml.picking_id.partner_id.property_account_position and \
+                        (ml.picking_id and \
+                        ((ml.picking_id.partner_id.property_account_position and \
                         (check_fpos(ml.picking_id.partner_id.property_account_position.name, 'EU_VAT_payer') or \
                         check_fpos(ml.picking_id.partner_id.property_account_position.name, 'EU_VAT_non-payer') or \
                         ((not check_fpos(ml.picking_id.partner_id.property_account_position.name, 'LR_vat_payer')) and \
@@ -228,7 +229,8 @@ class drn_return_wizard(osv.osv_memory):
                         (check_fpos(ml.picking_id.partner_id.parent_id.property_account_position.name, 'EU_VAT_payer') or \
                         check_fpos(ml.picking_id.partner_id.parent_id.property_account_position.name, 'EU_VAT_non-payer') or \
                         ((not check_fpos(ml.picking_id.partner_id.parent_id.property_account_position.name, 'LR_vat_payer')) and \
-                        (not check_fpos(ml.picking_id.partner_id.parent_id.property_account_position.name, 'LR_vat_non-payer'))))), pick_in_stock_move)
+                        (not check_fpos(ml.picking_id.partner_id.parent_id.property_account_position.name, 'LR_vat_non-payer'))))))) or \
+                        ((not ml.picking_id) and ml.inventory_id), pick_in_stock_move)
                         if not in_lines:
                             out_stock_move_none_in.append(ml)
                         else:
