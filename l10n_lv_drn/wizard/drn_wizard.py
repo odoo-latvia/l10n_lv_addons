@@ -205,10 +205,12 @@ class drn_return_wizard(osv.osv_memory):
                     prodlot_moves = [m for m in self.pool.get('stock.move').browse(cr, uid, ml_ids, context=context)]
                     pick_in_stock_move = filter(lambda ml: ml.picking_id and ml.picking_id.picking_type_id.code == 'incoming', prodlot_moves)
                     bad_move_lines = filter(lambda ml: \
-                        ml.picking_id and \
-                        (not ml.picking_id.partner_id.property_account_position) and \
+                        (ml.picking_id and \
+                        ((not ml.picking_id.partner_id) or \
+                        ((not ml.picking_id.partner_id.property_account_position) and \
                         ((not ml.picking_id.partner_id.parent_id) or \
-                        (not ml.picking_id.partner_id.parent_id.property_account_position)), pick_in_stock_move) # check Fiscal position for supplier
+                        (not ml.picking_id.partner_id.parent_id.property_account_position))))) or \
+                        ((not ml.picking_id) and (not ml.inventory_id)), pick_in_stock_move) # check Fiscal position for supplier
                     if this.state != 'warning':
                         for bml in bad_move_lines:
                             log_rec = (0,0,{'type':'error',
