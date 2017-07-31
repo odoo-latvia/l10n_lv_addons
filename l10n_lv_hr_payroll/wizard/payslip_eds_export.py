@@ -197,36 +197,30 @@ class payslip_eds_export(osv.osv_memory):
         data_exp = self.browse(cr, uid, ids[0])
         data_prep = self.prepare_data(cr, uid, context=context)
         year, month = self.get_year_month(cr, uid, context=context)
-        data_of_file = """<?xml version="1.0" encoding="utf-8"?>
-<DeclarationFile>
-  <Declaration Id="DEC">"""
+        data_of_file = """<?xml version="1.0" encoding="utf-8"?>"""
         for d in data_prep:
-            data_of_file += """\n    <DokDDZv1 xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">"""
+            data_of_file += """\n<DokDDZv2 xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">"""
 
             # top section:
             if len(year) == 1:
-                data_of_file += ("\n      <TaksGads>" + str(year[0]) + "</TaksGads>")
+                data_of_file += ("\n  <ParskGads>" + str(year[0]) + "</ParskGads>")
             if len(year) != 1:
-                data_of_file += "\n      <TaksGads/>"
+                data_of_file += "\n  <ParskGads/>"
             if len(month) == 1:
-                data_of_file += ("\n      <TaksMenesis>" + str(month[0]) + "</TaksMenesis>")
+                data_of_file += ("\n  <ParskMen>" + str(month[0]) + "</ParskMen>")
             if len(month) != 1:
-                data_of_file += "\n      <TaksMenesis/>"
+                data_of_file += "\n  <ParskMen/>"
             if d['company_reg']:
-                data_of_file += ("\n      <NmrKods>" + d['company_reg'] + "</NmrKods>")
+                data_of_file += ("\n  <NmrKods>" + d['company_reg'] + "</NmrKods>")
             if not d['company_reg']:
-                data_of_file += ("\n      <NmrKods/>")
-            company_name = d['company_name'].replace('&','&amp;').replace('<','&lt;').replace('>','&gt;').replace("'","&apos;").replace('"','&quot;')
-            data_of_file += ("\n      <NmNosaukums>" + company_name + "</NmNosaukums>")
+                data_of_file += ("\n  <NmrKods/>")
             date_pay = str(int(datetime.strftime((datetime.strptime(data_exp.date_pay, '%Y-%m-%d')), '%d')))
-            data_of_file += ("\n      <IzmaksasDatums>" + date_pay + "</IzmaksasDatums>")
-            data_of_file += ("\n      <AtbildPers>" + data_exp.responsible_id.name + "</AtbildPers>")
+            data_of_file += ("\n  <IzmaksasDatums>" + date_pay + "</IzmaksasDatums>")
+            data_of_file += ("\n  <Sagatavotajs>" + data_exp.responsible_id.name + "</Sagatavotajs>")
             if data_exp.responsible_id.work_phone:
-                data_of_file += ("\n      <Talrunis>" + data_exp.responsible_id.work_phone + "</Talrunis>")
+                data_of_file += ("\n  <Talrunis>" + data_exp.responsible_id.work_phone + "</Talrunis>")
             if not data_exp.responsible_id.work_phone:
-                data_of_file += ("\n      <Talrunis/>")
-            date_prep = datetime.strftime(datetime.now(pytz.timezone(context.get('tz','Europe/Riga'))), '%Y-%m-%dT%H:%M:%S')
-            data_of_file += ("\n      <DatumsAizp>" + date_prep + "</DatumsAizp>")
+                data_of_file += ("\n  <Talrunis/>")
 
             # tab section:
             table_dict = make_table_dict(d)
@@ -235,23 +229,15 @@ class payslip_eds_export(osv.osv_memory):
             tot_iin = 0.0
             tot_rn = 0.0
             for key, value in table_dict.iteritems():
-                data_of_file += ("\n      <Tab%s>" % key)
-                data_of_file += "\n        <Rs>"
-                n = 0
-                tab_tot_ienakumi = 0.0
-                tab_tot_iemaksas = 0.0
-                tab_tot_iin = 0.0
-                tab_tot_rn = 0.0
+                data_of_file += ("\n  <Tab%s>" % key)
                 for v in value:
-                    data_of_file += "\n          <R>"
-                    n += 1
-                    data_of_file += ("\n            <Npk>" + str(n) + "</Npk>")
+                    data_of_file += "\n    <R>"
                     if v['emp_code']:
-                        data_of_file += ("\n            <PersonasKods>" + v['emp_code'] + "</PersonasKods>")
+                        data_of_file += ("\n      <PersonasKods>" + v['emp_code'] + "</PersonasKods>")
                     if not v['emp_code']:
-                        data_of_file += "\n            <PersonasKods/>"
-                    data_of_file += ("\n            <VardsUzvards>" + v['emp_name'] + "</VardsUzvards>")
-                    data_of_file += ("\n            <SamStat>" + v['emp_stat'] + "</SamStat>")
+                        data_of_file += "\n      <PersonasKods/>"
+                    data_of_file += ("\n      <VardsUzvards>" + v['emp_name'] + "</VardsUzvards>")
+                    data_of_file += ("\n      <Statuss>" + v['emp_stat'] + "</Statuss>")
                     ienakumi = 0.0
                     iemaksas = 0.0
                     iin = 0.0
@@ -265,45 +251,32 @@ class payslip_eds_export(osv.osv_memory):
                             iin += l.total
                         if l.code == 'RN':
                             rn += l.total
-                    data_of_file += ("\n            <Ienakumi>" + str(ienakumi) + "</Ienakumi>")
-                    data_of_file += ("\n            <Iemaksas>" + str(iemaksas) + "</Iemaksas>")
-                    data_of_file += ("\n            <PrecizetieIenakumi>" + str(0.0) + "</PrecizetieIenakumi>")
-                    data_of_file += ("\n            <PrecizetasIemaksas>" + str(0.0) + "</PrecizetasIemaksas>")
-                    data_of_file += ("\n            <IetIedzNodoklis>" + str(iin) + "</IetIedzNodoklis>")
+                    data_of_file += ("\n      <Ienakumi>" + str(ienakumi) + "</Ienakumi>")
+                    data_of_file += ("\n      <Iemaksas>" + str(iemaksas) + "</Iemaksas>")
+                    data_of_file += ("\n      <PrecizetieIenakumi>" + str(0.0) + "</PrecizetieIenakumi>")
+                    data_of_file += ("\n      <PrecizetasIemaksas>" + str(0.0) + "</PrecizetasIemaksas>")
+                    data_of_file += ("\n      <IeturetaisNodoklis>" + str(iin) + "</IeturetaisNodoklis>")
                     wt = "1"
-                    data_of_file += ("\n            <DarbaVeids>" + wt + "</DarbaVeids>")
-                    data_of_file += ("\n            <RiskaNodPazime>" + (rn > 0.0 and "true" or "false") + "</RiskaNodPazime>")
-                    data_of_file += ("\n            <RiskaNod>" + str(rn) + "</RiskaNod>")
-#                    data_of_file += ("\n            <IemaksuDatums/>")
-                    data_of_file += ("\n            <Stundas>" + str(int(v['hours'])) + "</Stundas>")
-                    data_of_file += "\n          </R>"
-                    tab_tot_ienakumi += ienakumi
-                    tab_tot_iemaksas += iemaksas
-                    tab_tot_iin += iin
-                    tab_tot_rn += rn
-                data_of_file += "\n        </Rs>"
-                data_of_file += ("\n          <Ienakumi>" + str(tab_tot_ienakumi) + "</Ienakumi>")
-                data_of_file += ("\n          <Iemaksas>" + str(tab_tot_iemaksas) + "</Iemaksas>")
-                data_of_file += ("\n          <PrecizetieIenakumi>" + str(0.0) + "</PrecizetieIenakumi>")
-                data_of_file += ("\n          <PrecizetasIemaksas>" + str(0.0) + "</PrecizetasIemaksas>")
-                data_of_file += ("\n          <IetIedzNodoklis>" + str(tab_tot_iin) + "</IetIedzNodoklis>")
-                data_of_file += ("\n          <RiskaNod>" + str(tab_tot_rn) + "</RiskaNod>")
-                data_of_file += ("\n      </Tab%s>" % key)
-                tot_ienakumi += tab_tot_ienakumi
-                tot_iemaksas += tab_tot_iemaksas
-                tot_iin += tab_tot_iin
-                tot_rn += tab_tot_rn
+                    data_of_file += ("\n      <DarbaVeids>" + wt + "</DarbaVeids>")
+                    data_of_file += ("\n      <RiskaNodevasPazime>" + (rn > 0.0 and "true" or "false") + "</RiskaNodevasPazime>")
+                    data_of_file += ("\n      <RiskaNodeva>" + str(rn) + "</RiskaNodeva>")
+#                    data_of_file += ("\n      <IemaksuDatums/>")
+                    data_of_file += ("\n      <Stundas>" + str(int(v['hours'])) + "</Stundas>")
+                    data_of_file += "\n    </R>"
+                    tot_ienakumi += ienakumi
+                    tot_iemaksas += iemaksas
+                    tot_iin += iin
+                    tot_rn += rn
+                data_of_file += ("\n  </Tab%s>" % key)
 
-            data_of_file += ("\n      <Ienakumi>" + str(tot_ienakumi) + "</Ienakumi>")
-            data_of_file += ("\n      <Iemaksas>" + str(tot_iemaksas) + "</Iemaksas>")
-            data_of_file += ("\n      <PrecizetieIenakumi>" + str(0) + "</PrecizetieIenakumi>")
-            data_of_file += ("\n      <PrecizetasIemaksas>" + str(0) + "</PrecizetasIemaksas>")
-            data_of_file += ("\n      <IetIedzNodoklis>" + str(tot_iin) + "</IetIedzNodoklis>")
-            data_of_file += ("\n      <RiskaNod>" + str(tot_rn) + "</RiskaNod>")
-            data_of_file += "\n    </DokDDZv1>"
+            data_of_file += ("\n  <Ienakumi>" + str(tot_ienakumi) + "</Ienakumi>")
+            data_of_file += ("\n  <Iemaksas>" + str(tot_iemaksas) + "</Iemaksas>")
+            data_of_file += ("\n  <PrecizetieIenakumi>" + str(0) + "</PrecizetieIenakumi>")
+            data_of_file += ("\n  <PrecizetasIemaksas>" + str(0) + "</PrecizetasIemaksas>")
+            data_of_file += ("\n  <IeturetaisNodoklis>" + str(tot_iin) + "</IeturetaisNodoklis>")
+            data_of_file += ("\n  <RiskaNodeva>" + str(tot_rn) + "</RiskaNodeva>")
+            data_of_file += "\n</DokDDZv2>"
 
-        data_of_file += "\n  </Declaration>"
-        data_of_file += "\n</DeclarationFile>"
         data_of_file_real = base64.encodestring(data_of_file.encode('utf8'))
         self.write(cr, uid, ids, {'file_save': data_of_file_real, 'name': data_exp.name}, context=context)
 
