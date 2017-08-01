@@ -31,8 +31,6 @@ from odoo.exceptions import ValidationError
 class Partner(models.Model):
     _inherit = ['res.partner']
 
-    country_code = fields.Char(related='country_id.code', readonly=True)
-
     @api.one
     @api.constrains('partner_registry', 'individual_registry', 'country_id')
     def _check_registry(self):

@@ -1,5 +1,5 @@
 try:
-    from stdnum.exceptions import InvalidChecksum
+    from stdnum.exceptions import ValidationError
     from stdnum.lv import pvn
 except ImportError:
     pass
@@ -9,7 +9,7 @@ def validate(pk):
     Wrap library to preserve old API"""
     try:
         pvn.validate(pk)
-    except InvalidChecksum:
+    except ValidationError:
         return False
     return True
 

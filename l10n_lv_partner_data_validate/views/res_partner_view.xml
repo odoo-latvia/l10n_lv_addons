@@ -10,9 +10,6 @@
                 <field name="partner_registry" position="attributes">
                     <attribute name="widget">registry</attribute>
                 </field>
-                <field name="partner_registry" position="before">
-                    <field name="country_code" invisible="1"/>
-                </field>
             </field>
         </record>
 

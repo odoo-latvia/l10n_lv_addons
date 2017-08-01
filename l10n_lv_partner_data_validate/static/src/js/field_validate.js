@@ -19,8 +19,13 @@ var FieldRegistry = formWidget.FieldChar.extend({
         this.events.blur = this.proxy(this.validate_blur);
         this.show_error = true;
     },
+    start: function() {
+        this._super.apply(this, arguments);
+        if (this.get_pk().length == 11) {
+            this.validate()
+        }
+    },
     show_warning: function() {
-        this.trigger('invalid');
         if (this.show_error) {
             this.show_error = false;
             this.do_warn.apply(this, arguments);
@@ -30,46 +35,42 @@ var FieldRegistry = formWidget.FieldChar.extend({
             }).bind(this), 3000);
         }
     }, 
-    is_latvia: function() {
-        return (this.field_manager.fields.country_id &&
-                this.field_manager.fields.country_code.get_value() == 'LV');
-    },
     get_pk: function() {
         return this.parse_value(this.$input.val(), '').replace('-', '');
     },
     validate_blur: function() {
-        if (this.is_latvia()) {
-            var value = this.get_pk();
+        var value = this.get_pk();
 
-            if (value.length < 11 && value.length != 0) {
-                this.$input.addClass('o_form_invalid');
-                this.do_warn(_t('Validation error'), _t('Number too short'));
-            }
+        if (value.length < 11 && value.length != 0) {
+            this.$input.addClass('o_form_invalid');
+            this.do_warn(_t('Validation error'), _t('Number too short'));
         }
     },
     validate: function() {
-        if (this.is_latvia()) {
+        var value = this.get_pk();
 
-            var value = this.get_pk();
+        if (value.length > 11) {
+            this.$input.addClass('o_form_invalid');
+            this.show_warning(_t('Validation error'), _t('Number too long'));
+            this.set('valid', false);
+        }
+        else if (value.length == 11) {
 
-            if (value.length > 11) {
-                this.$input.addClass('o_form_invalid');
-                this.show_warning(_t('Validation error'), _t('Number too long'));
+            Partner.call('frontend_check', [value]).then((function (valid) {
+                if (!valid) {
+                    this.$input.addClass('o_form_invalid');
+                    this.show_warning(_t('Validation error'), _t('Invalid registry number'));
+                    this.set('valid', false);
+                } else {
+                    this.$input.removeClass('o_form_invalid');
+                    this.set('valid', true);
+                }
 
-            } else if (value.length == 11) {
+                console.log('is it valid')
+            }).bind(this))
 
-                Partner.call('frontend_check', [value]).then((function (valid) {
-                    if (!valid) {
-                        this.$input.addClass('o_form_invalid');
-                        this.show_warning(_t('Validation error'), _t('Invalid registry number'));
-                    } else {
-                        this.$input.removeClass('o_form_invalid');
-                        this.trigger('valid');
-                    }
-                }).bind(this))
+        }
 
-			}
-		}
     }
 });
 
