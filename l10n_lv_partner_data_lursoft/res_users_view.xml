@@ -1,0 +1,49 @@
+<odoo>
+    <record id="res_users_form" model="ir.ui.view">
+        <field name="name">res.users.form</field>
+        <field name="model">res.users</field>
+        <field name="priority">50</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" postion="inside">
+                <button name="%(l10n_lv_partner_data_lursoft.lursoft_account_setup)d" type="action" string="Change Lursoft credentials" class="oe_link"/>
+            </xpath> 
+            <xpath expr="//notebook" position="inside">
+                <page name="lursoft" string="Lursoft">
+                    <group>
+                        <group>
+                            <field name="lursoft_username" readonly="True" string="Account" attrs="{
+                                'invisible': [
+                                    ('lursoft_enabled', '=', False),
+                                ]}"/>
+                            <field name="lursoft_enabled" invisible="True"/>
+                            <button name="%(l10n_lv_partner_data_lursoft.lursoft_account_setup)d" type="action" string="Change Lursoft credentials" class="oe_link"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_users_form_simple_modif" model="ir.ui.view">
+        <field name="name">res.users.preferences.form</field>
+        <field name="model">res.users</field>
+        <field name="priority">50</field>
+        <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+        <field name="arch" type="xml">
+            <button name="preference_change_password" position="after">
+                <button name="%(l10n_lv_partner_data_lursoft.lursoft_account_setup)d" type="action" string="Change Lursoft Credentials" class="oe_link"/>
+            </button>
+
+            <xpath expr="//group[last()]" position="after">
+                <group string="Lursoft" attrs="{
+                        'invisible': [
+                            ('lursoft_enabled', '=', False),
+                        ]}">
+                    <field name="lursoft_username" readonly="True" string="Account"/>
+                    <field name="lursoft_enabled" invisible="True"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

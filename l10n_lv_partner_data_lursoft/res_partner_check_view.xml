@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Partner Form View -->
+        <record id="view_partner_form_l10n_lv" model="ir.ui.view">
+            <field name="name">partner.form.inherit.check</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="l10n_lv_partner_data.view_partner_form_l10n_lv"/>
+            <field name="arch" type="xml">
+                <field name="individual_registry" position="after">
+                    <field name="registry_valid" invisible="1"/>
+                    <widget type="registry_check_btn" class="oe_edit_only" attrs="{'invisible': [('is_company', '=', False)]}"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

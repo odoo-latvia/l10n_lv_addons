@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+
+    <t t-name="check_company_registry.RegistryCheck">
+        <div class="btn-group" role="group" aria-label="company-data">
+            <button type="button" class="btn btn-default btn-validate">
+                <span class="source"/>
+                <i class="fa fa-check-circle-o valid" style="display: inline" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="btn btn-default btn-open-website">
+                <i class="fa fa-share-square-o" aria-hidden="true"></i>
+            </button>
+        </div>
+
+    </t>
+
+</templates>

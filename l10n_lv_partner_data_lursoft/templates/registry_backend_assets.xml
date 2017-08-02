@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- Layout and common templates -->
+  <template id="assets_backend" inherit_id="web.assets_backend">
+      <xpath expr="." position="inside">
+          <link rel="stylesheet" href="/l10n_lv_partner_data_lursoft/static/src/less/registry_field.less"/>
+          <script type="text/javascript" src="/l10n_lv_partner_data_lursoft/static/src/js/registry_check.js"></script>
+      </xpath>
+  </template>
+
+</odoo>
+

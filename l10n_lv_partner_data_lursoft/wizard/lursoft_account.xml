@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="lursoft_account_wizard_view" model="ir.ui.view">
+        <field name="name">lursoft.account.wizard</field>
+        <field name="model">lursoft.account.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="msg" readonly="True"/>
+                <group>
+                    <field name="lursoft_username"/>
+                    <field name="lursoft_password"/>
+                </group>
+                <footer>
+                    <button name="validate_lursoft_credentials" type="object" string="Check"/>
+                    <button name="cancel" string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="lursoft_account_success_wizard_view" model="ir.ui.view">
+        <field name="name">lursoft.account.success.wizard</field>
+        <field name="model">lursoft.account.success.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <p>Success! Accaunt credentials valid.</p>
+                <footer>
+                    <button name="ok" string="Close" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="lursoft_account_setup" model="ir.actions.act_window">
+        <field name="name">Lursoft Account</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">lursoft.account.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="lursoft_account_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="lursoft_account_success" model="ir.actions.act_window">
+        <field name="name">Success</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">lursoft.account.success.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="lursoft_account_success_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+</odoo>
