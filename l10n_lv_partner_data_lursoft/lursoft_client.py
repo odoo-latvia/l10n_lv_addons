@@ -142,7 +142,7 @@ class LursoftClient(object):
             return self.session_id
 
     def query_by_regno(self, regno, part=None):
-        response = self.get(act='URPERSON_XML', userperscode='1', code=regno)
+        response = self.get(code=regno)
         return LursoftPerson(response)
 
 
