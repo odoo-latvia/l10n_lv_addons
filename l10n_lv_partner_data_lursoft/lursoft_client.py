@@ -66,7 +66,7 @@ class LursoftClient(object):
 
         kwargs.update(SessionId=self.session_id, utf=1)
 
-        return self._get(kwargs)
+        return self._get(**kwargs)
 
     def _get(self, **kwargs):
         response = requests.post(self.baseurl, params=kwargs)
@@ -142,7 +142,7 @@ class LursoftClient(object):
             return self.session_id
 
     def query_by_regno(self, regno, part=None):
-        response = self.get(code=regno)
+        response = self.get(act='URPERSON_XML', userperscode='1', code=regno)
         return LursoftPerson(response)
 
 
