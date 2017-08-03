@@ -56,9 +56,9 @@ class ResPartner(models.Model):
     def _normalize_company_data(self, values):
         normalized = {}
         for field, remote_key in self.field_map.iteritems():
-            normalized[field] = values[remote_key]
+            if values[remote_key]:
+                normalized[field] = values[remote_key]
 
-        # NOTE: this is probably more understandable than a cryptic lambda func
         normalized.update(
                 street='%s %s' % (values['street'], values['house']),
                 country_id=self.env.ref('base.%s' % values['country'].lower()).id
