@@ -73,18 +73,18 @@ class ResPartner(models.Model):
             response = client.query_by_regno(code)
         except ConnectionError:
             raise UserError(_('Couldnt not connect to Lursoft. Please try again later!'))
-        except AuthError:
+        except lursoft_client.AuthError:
             username = self.env.user.lursoft_username
             raise UserError(_('Login with account {} failed!'
                               'Please check your login information '
                               'and try again.').format(username))
-        except MaxLoginAttempts:
+        except lursoft_client.MaxLoginAttempts:
             raise UserError(_('Password was entered incorrectly more than 5 times'))
-        except QuotaExceed:
+        except lursoft_client.QuotaExceed:
             raise UserError(_('No requests/credit left. Please contact Lursoft'))
-        except NotFoundError:
+        except lursoft_client.NotFoundError:
             raise UserError(_('Company not found!'))
-        except LursoftException:
+        except lursoft_client.LursoftException:
             raise UserError(_('Something went wrong. Try again later'))
         else:
             return self._normalize_company_data(response)
