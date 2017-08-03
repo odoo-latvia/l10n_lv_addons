@@ -199,9 +199,9 @@ class drn_return_wizard(osv.osv_memory):
                 for prodlot in ml.lot_ids:
                     quant_ids = self.pool.get('stock.quant').search(cr, uid, [('lot_id','=',prodlot.id)], context=context)
                     if ml.state == 'done':
-                        ml_ids = self.pool.get('stock.move').search(cr, uid, [('quant_ids','in',quant_ids)], context=context)
+                        ml_ids = self.pool.get('stock.move').search(cr, uid, [('quant_ids','in',quant_ids), ('product_id','=',ml.product_id.id)], context=context)
                     else:
-                        ml_ids = self.pool.get('stock.move').search(cr, uid, [('reserved_quant_ids','in',quant_ids)], context=context)
+                        ml_ids = self.pool.get('stock.move').search(cr, uid, [('reserved_quant_ids','in',quant_ids), ('product_id','=',ml.product_id.id)], context=context)
                     prodlot_moves = [m for m in self.pool.get('stock.move').browse(cr, uid, ml_ids, context=context)]
                     pick_in_stock_move = filter(lambda ml: (ml.picking_id and ml.picking_id.picking_type_id.code == 'incoming') or \
                     ((not ml.picking_id) and ml.inventory_id and ml.location_dest_id.usage == 'internal'), prodlot_moves)
@@ -607,7 +607,7 @@ class drn_return_wizard(osv.osv_memory):
             tertiary = pkg.get('tertiary', {})
             group_keys = set(primary.keys()+secondary.keys()+tertiary.keys())
             for group in group_keys:
-                if any([primary.has_key(group), secondary.has_key(group), tertiary.has_key(group)]):
+                if any([primary.has_key(group), secondary.has_key(group), tertiary.has_key(group)]) and group:
                     primary_val = primary.get(group, 0.0)
                     secondary_val = secondary.get(group, 0.0)
                     tertiary_val = tertiary.get(group, 0.0) 
