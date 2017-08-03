@@ -78,7 +78,6 @@ var RegistryCheckBtn = form_common.FormWidget.extend(form_common.ReinitializeWid
     },
     buttons_enabled: function() {
         var pr = this.field_manager.fields.partner_registry;
-        console.log(pr.get('valid'))
         return (!this.get('effective_readonly') && pr.get('valid'))
     },
 });
