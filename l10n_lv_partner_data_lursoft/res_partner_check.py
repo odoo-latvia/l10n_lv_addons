@@ -42,8 +42,8 @@ class ResPartner(models.Model):
             'city': 'city',
             'zip': 'index',
             'name': 'firm',
-            #'website': 'www',
-            #'email': 'email',
+            'website': 'www',
+            'email': 'email',
             'phone': 'phone',
             'vat': 'vat',
             }

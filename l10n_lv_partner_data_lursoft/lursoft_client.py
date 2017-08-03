@@ -5,6 +5,7 @@ import xml.etree.ElementTree as ET
 import requests
 import logging
 
+from lxml import html
 from lxml.etree import ParseError
 from datetime import datetime as dt
 from hashlib import md5
@@ -93,8 +94,9 @@ class LursoftClient(object):
             return None
 
         else:
-            msg = respXML.find('env:Body/Fault/details/ls:ErrorMsg/font',
-                            self.ns).text
+            msg = respXML.find('env:Body/Fault/details/ls:ErrorMsg',
+                            self.ns)
+            msg = msg and msg.xpath('string()') or ''
 
             # The doc we have specifies describes 10, 11
             # similiar to a HTTP 500, but in practice 10
@@ -187,18 +189,15 @@ class LursoftPerson(dict):
         'status': 'person/statuss',
         #'statusdate': 'person/statussdate',
         'phone': 'person/phone',
-        #'www': 'person/www',
-        #'email': 'person/email',
+        'www': 'person/www',
+        'email': 'person/email',
         #'last_changed': 'person/LastChanges',
     }
 
     def __init__(self, request):
         """requests response or sql dict mapping from the db"""
-        self._request = request
-        self._xmlTree = ET.fromstring(request.content)
-        err_code = _get_error_code(self._xmlTree)
-        if err_code:
-            raise Exception('Request returned error code %s' % err_code)
+	logger.info(request)
+        self._xmlTree = ET.fromstring(request)
 
     def __getitem__(self, name):
         try:
@@ -214,12 +213,6 @@ class LursoftPerson(dict):
         for key in self.field_map.keys():
             vals[key] = self[key]
         return vals
-
-
-# todo error should be handler by the client
-def _get_error_code(etree):
-    err_code =  etree.find('env:Body/Fault/details/ls:errorCode', xmlns)
-    return None if err_code is None else int(err_code.text)
 
 
 if __name__ == '__main__':
