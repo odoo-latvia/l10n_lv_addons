@@ -63,7 +63,7 @@ class ResPartner(models.Model):
                 street='%s %s' % (values['street'], values['house']),
                 country_id=self.env.ref('base.%s' % values['country'].lower()).id
                 )
-        normalized['zip'] = values['country'] + '-' + normalized['zip']
+        normalized['zip'] = values['country'] + normalized['zip']
         return normalized
 
 
