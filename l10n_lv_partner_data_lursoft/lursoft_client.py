@@ -189,8 +189,8 @@ class LursoftPerson(dict):
         'status': 'person/statuss',
         #'statusdate': 'person/statussdate',
         'phone': 'person/phone',
-        'www': 'person/www',
-        'email': 'person/email',
+        'www': 'person/homepages',
+        'email': 'person/emails',
         #'last_changed': 'person/LastChanges',
     }
 
