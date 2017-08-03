@@ -15,12 +15,6 @@ var FieldRegistry = formWidget.FieldChar.extend({
         this.events.input = this.proxy(this.validate);
         this.show_error = true;
     },
-    start: function() {
-        this._super.apply(this, arguments);
-        if (this.get_pk().length == 11) {
-            this.validate()
-        }
-    },
     show_warning: function() {
         if (this.show_error) {
             this.show_error = false;

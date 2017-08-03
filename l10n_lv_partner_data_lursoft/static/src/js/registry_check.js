@@ -64,7 +64,6 @@ var RegistryCheckBtn = form_common.FormWidget.extend(form_common.ReinitializeWid
             var registry = this.field_manager.get_field_value('partner_registry');
             var self = this;
             this.request = ResPartner.call('check_registry', [[], registry]).then(function(res) {
-                debugger
                 self.field_manager.set_values($.extend(res, {'registry_valid': true}));
                 self.render_button()
             });
