@@ -155,7 +155,7 @@ class hr_payslip(osv.osv):
         contract = self.pool.get('hr.contract').browse(cr, uid, contract_id, context=context)
         if date_from and date_to and employee_id:
             # get date 6 months earlier:
-            date_to_6 = datetime.datetime.strftime((datetime.datetime.strptime(date_to, '%Y-%m-%d') + relativedelta(months=-6)), '%Y-%m-%d')
+            date_to_6 = datetime.datetime.strftime((datetime.datetime.strptime(date_to, '%Y-%m-%d') + relativedelta(months=-7)), '%Y-%m-%d')
             # find all payslips within these 6 months:
             prev_ps_ids = self.search(cr, uid, [('date_from','<=',date_to), ('date_to','>',date_to_6), ('employee_id','=',employee_id), ('contract_id','=',contract_id)], context=context)
             # find payslip for current date range and remove it from previous to avoid unsaved data change ignoring:
@@ -199,61 +199,63 @@ class hr_payslip(osv.osv):
                     # sum this to start values:
                     worked_days += prev_wd
                     total_salary += prev_ts
-            # get current worked days:
-            wd_lines = self.get_worked_day_lines(cr, uid, [contract_id], date_from, date_to, context=context)
-            curr_wd = 0.0
-            total_days = 0.0
-            for wd in wd_lines:
-                if wd['code'] == 'WORK100':
-                    curr_wd += wd['number_of_days']
-                total_days += wd['number_of_days']
-            # if worked days are not provided, get workdays from dates:
-            if not wd_lines:
-                oneday = datetime.timedelta(days=1)
-                test_date = datetime.datetime.strptime(date_from, '%Y-%m-%d')
-                while test_date != datetime.datetime.strptime(date_to, '%Y-%m-%d'):
-                    if test_date.weekday() in [0, 1, 2, 3, 4]:
-                        curr_wd += 1.0
-                    test_date += oneday
-                total_days = curr_wd
-            # define start total:
-            curr_ts = 0.0
-            # if current payslip ids, get payslip line computed values:
-            if curr_ps_ids:
-                for c in curr_ps_ids:
-                    ps_lines = self.get_payslip_lines(cr, uid, [contract_id], c, context)
-                    for p in ps_lines:
-                        if p['code'] in ['LD', 'PIEM', '16']:
-                            curr_ts += (float(p['quantity']) * p['amount'] * p['rate'] / 100)
-            # if no current payslip ids, compute the value:
-            if (not curr_ps_ids) and total_days != 0.0:
-                curr_ts += contract.wage * curr_wd / total_days
-                if contract.prem_deduct_ids:
-                    prem_amount = 0.0
-                    for pd in contract.prem_deduct_ids:
-                        if pd.code == 'PIEM':
-                            date_from_pd = date_from
-                            date_to_pd = date_to
-                            if pd.date_from and pd.date_from > date_from and pd.date_from <= date_to:
-                                date_from_pd = pd.date_from
-                            if pd.date_to and pd.date_to < date_to and pd.date_to >= date_from:
-                                date_to_pd = pd.date_to
-                            if date_from and date_to:
-                                dmy = compute_dmy(date_from, date_to)
-                                pd_amount = (dmy['years'] != 0 and pd.amount * 12.0 or 0.0) + (dmy['months'] != 0 and pd.amount * dmy['months'] or 0.0) + ((pd.amount / dmy['tm_days']) * dmy['days'])
-                                prem_amount += pd_amount
-                    if prem_amount != 0.0:
-                        premium = total_days and ((prem_amount * curr_wd) / total_days) or 0.0
-                        if total_days == 0.0:
-                            premium = prem_amount
-                        curr_ts += premium
-                ip_lines = self.get_inputs(cr, uid, [contract_id], date_from, date_to, context=context)
-                if ip_lines:
-                    for cil in ip_lines:
-                        if cil['code'] == 'PIEMV':
-                            curr_ts += cil.get('amount',0.0)
-            total_salary += curr_ts
-            worked_days += curr_wd
+            # if there are no previous payslips, compute from current:
+            if not prev_ps_ids:
+                # get current worked days:
+                wd_lines = self.get_worked_day_lines(cr, uid, [contract_id], date_from, date_to, context=context)
+                curr_wd = 0.0
+                total_days = 0.0
+                for wd in wd_lines:
+                    if wd['code'] == 'WORK100':
+                        curr_wd += wd['number_of_days']
+                    total_days += wd['number_of_days']
+                # if worked days are not provided, get workdays from dates:
+                if not wd_lines:
+                    oneday = datetime.timedelta(days=1)
+                    test_date = datetime.datetime.strptime(date_from, '%Y-%m-%d')
+                    while test_date != datetime.datetime.strptime(date_to, '%Y-%m-%d'):
+                        if test_date.weekday() in [0, 1, 2, 3, 4]:
+                            curr_wd += 1.0
+                        test_date += oneday
+                    total_days = curr_wd
+                # define start total:
+                curr_ts = 0.0
+                # if current payslip ids, get payslip line computed values:
+                if curr_ps_ids:
+                    for c in curr_ps_ids:
+                        ps_lines = self.get_payslip_lines(cr, uid, [contract_id], c, context)
+                        for p in ps_lines:
+                            if p['code'] in ['LD', 'PIEM', '16']:
+                                curr_ts += (float(p['quantity']) * p['amount'] * p['rate'] / 100)
+                # if no current payslip ids, compute the value:
+                if (not curr_ps_ids) and total_days != 0.0:
+                    curr_ts += contract.wage * curr_wd / total_days
+                    if contract.prem_deduct_ids:
+                        prem_amount = 0.0
+                        for pd in contract.prem_deduct_ids:
+                            if pd.code == 'PIEM':
+                                date_from_pd = date_from
+                                date_to_pd = date_to
+                                if pd.date_from and pd.date_from > date_from and pd.date_from <= date_to:
+                                    date_from_pd = pd.date_from
+                                if pd.date_to and pd.date_to < date_to and pd.date_to >= date_from:
+                                    date_to_pd = pd.date_to
+                                if date_from and date_to:
+                                    dmy = compute_dmy(date_from, date_to)
+                                    pd_amount = (dmy['years'] != 0 and pd.amount * 12.0 or 0.0) + (dmy['months'] != 0 and pd.amount * dmy['months'] or 0.0) + ((pd.amount / dmy['tm_days']) * dmy['days'])
+                                    prem_amount += pd_amount
+                        if prem_amount != 0.0:
+                            premium = total_days and ((prem_amount * curr_wd) / total_days) or 0.0
+                            if total_days == 0.0:
+                                premium = prem_amount
+                            curr_ts += premium
+                    ip_lines = self.get_inputs(cr, uid, [contract_id], date_from, date_to, context=context)
+                    if ip_lines:
+                        for cil in ip_lines:
+                            if cil['code'] == 'PIEMV':
+                                curr_ts += cil.get('amount',0.0)
+                total_salary += curr_ts
+                worked_days += curr_wd
             if worked_days != 0.0:
                 avg_salary = total_salary / worked_days
         if avg_salary != 0.0:
