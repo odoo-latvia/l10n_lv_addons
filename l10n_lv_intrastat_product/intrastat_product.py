@@ -354,12 +354,12 @@ class report_intrastat_product(osv.osv):
                 invoice_currency_id_to_write = currency_obj.id
                 unit_stat_price = self.pool.get('product.pricelist').price_get(cr, uid, [intrastat.company_id.statistical_pricelist_id.id], line.product_id.id, 1.0)[intrastat.company_id.statistical_pricelist_id.id]
                 if not unit_stat_price:
-                    raise osv.except_osv(_('Error :'), _("The Pricelist for statistical value '%s' that is set for the company '%s' gives a price of 0 for the product '%s'.") %(intrastat.company_id.statistical_pricelist_id.name, intrastat.company_id.name, line.product_id.name))
+                    raise osv.except_osv(_('Error :'), _("The Pricelist for statistical value '%s' that is set for the company '%s' gives a price of 0 for the product '%s%s'.") %(intrastat.company_id.statistical_pricelist_id.name, intrastat.company_id.name, line.product_id.default_code and '[%s] ' % line.product_id.default_code or '', line.product_id.name))
                 else:
                     amount_product_value_inv_cur_to_write = unit_stat_price * line_qty
 
             if not source_uom:
-                raise osv.except_osv(_('Error :'), _("Missing unit of measure on the line with %d product(s) '%s' on %s '%s'.") %(line_qty, line.product_id.name, src, parent_name))
+                raise osv.except_osv(_('Error :'), _("Missing unit of measure on the line with %d product(s) '%s%s' on %s '%s'.") %(line_qty, line.product_id.default_code and '[%s] ' % line.product_id.default_code or '', line.product_id.name, src, parent_name))
             else:
                 source_uom_id_to_write = source_uom.id
 
@@ -372,7 +372,7 @@ class report_intrastat_product(osv.osv):
                     source_uom, line_qty, dest_uom_kg, context=context)
             elif source_uom.category_id.id == pce_uom_categ_id:
                 if not line.product_id.weight_net:
-                    raise osv.except_osv(_('Error :'), _("Missing net weight on product '%s'.") %(line.product_id.name))
+                    raise osv.except_osv(_('Error :'), _("Missing net weight on product '%s%s'.") %(line.product_id.default_code and '[%s] ' % line.product_id.default_code or '', line.product_id.name))
                 if source_uom.id == pce_uom_id:
                     weight_to_write = line.product_id.weight_net * line_qty
                 else:
@@ -390,7 +390,7 @@ class report_intrastat_product(osv.osv):
                 # on it's related category
                 product_intrastat_code = line.product_id.categ_id.intrastat_id
                 if not product_intrastat_code:
-                    raise osv.except_osv(_('Error :'), _("Missing H.S. code on product '%s' or on it's related category '%s'.") %(line.product_id.name, line.product_id.categ_id.complete_name))
+                    raise osv.except_osv(_('Error :'), _("Missing H.S. code on product '%s%s' or on it's related category '%s'.") %(line.product_id.default_code and '[%s] ' % line.product_id.default_code or '', line.product_id.name, line.product_id.categ_id.complete_name))
             intrastat_code_id_to_write = product_intrastat_code.id
 
             if not product_intrastat_code.intrastat_code:
@@ -410,7 +410,7 @@ class report_intrastat_product(osv.osv):
                         uid, source_uom, line_qty,
                         product_intrastat_code.intrastat_uom_id, context=context)
                 else:
-                    raise osv.except_osv(_('Error :'), _("On %s '%s', the line with product '%s' has a unit of measure (%s) which can't be converted to UoM of it's intrastat code (%s).") %(src, parent_name, line.product_id.name, source_uom_id_to_write, intrastat_uom_id_to_write))
+                    raise osv.except_osv(_('Error :'), _("On %s '%s', the line with product '%s%s' has a unit of measure (%s) which can't be converted to UoM of it's intrastat code (%s).") %(src, parent_name, line.product_id.default_code and '[%s] ' % line.product_id.default_code or '', line.product_id.name, source_uom_id_to_write, intrastat_uom_id_to_write))
 
             # The origin country should only be declated on Import
             if intrastat.type == 'export':
@@ -431,16 +431,16 @@ class report_intrastat_product(osv.osv):
                         ], context=context)
                     if not supplier_ids:
                         raise osv.except_osv(_('Error :'),
-                            _("Missing country of origin on product '%s' or on it's supplier information for partner '%s'.")
-                            %(line.product_id.name, parent_values.get('origin_partner_name', 'none')))
+                            _("Missing country of origin on product '%s%s' or on it's supplier information for partner '%s'.")
+                            %(line.product_id.default_code and '[%s] ' % line.product_id.default_code or '', line.product_id.name, parent_values.get('origin_partner_name', 'none')))
                     else:
                         product_country_origin_id_to_write = supplieri_obj.read(cr, uid,
                             supplier_ids[0], ['origin_country_id'],
                             context=context)['origin_country_id'][0]
                 else:
                     raise osv.except_osv(_('Error :'),
-                        _("Missing country of origin on product '%s' (it's not possible to get the country of origin from the 'supplier information' in this case because we don't know the supplier of this product for the %s '%s').")
-                        %(line.product_id.name, src, parent_name))
+                        _("Missing country of origin on product '%s%s' (it's not possible to get the country of origin from the 'supplier information' in this case because we don't know the supplier of this product for the %s '%s').")
+                        %(line.product_id.default_code and '[%s] ' % line.product_id.default_code or '', line.product_id.name, src, parent_name))
 
             create_new_line = True
             for line_to_create in lines_to_create:

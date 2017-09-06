@@ -138,9 +138,9 @@ class product_template(orm.Model):
                     _('Error :'),
                     _("The option 'Is accessory cost?' should only be "
                         "activated on 'Service' products. You have activated "
-                        "this option for the product '%s' which is of type "
+                        "this option for the product '%s%s' which is of type "
                         "'%s'"
-                        % (product.name, product.type)))
+                        % (product.default_code and '[%s] ' % product.default_code or '', product.name, product.type)))
         return True
 
     _constraints = [(
@@ -189,11 +189,12 @@ class product_supplierinfo(orm.Model):
                         _('Error !'),
                         _("For a particular product, all supplier info "
                             "entries with the same supplier should have the "
-                            "same country of origin. But, for product '%s' "
+                            "same country of origin. But, for product '%s%s' "
                             "with supplier '%s', there is one entry with "
                             "country of origin '%s' and another entry with "
                             "country of origin '%s'.")
-                        % (supplieri.product_id.name,
+                        % (supplieri.product_id.default_code and '[%s] ' % supplieri.product_id.default_code or '', 
+                            supplieri.product_id.name,
                             supplieri.name.name,
                             supplierinfo.origin_country_id.name,
                             supplieri.origin_country_id.name))
