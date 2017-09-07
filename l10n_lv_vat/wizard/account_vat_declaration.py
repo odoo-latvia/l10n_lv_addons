@@ -387,17 +387,49 @@ class L10nLvVatDeclaration(models.TransientModel):
                 data_of_file += ("\n            <DokDatums>" + d['move'].date + "</DokDatums>")
                 data_of_file += ("\n        </R>")
             if d['base'] < limit_val:
-                
+                # summing up, what's left for each partner:
                 if d['partner'] in partner_data:
                     partner_data[d['partner']]['base'] += base
                     partner_data[d['partner']]['tax_amount'] += tax_amount
                     partner_data[d['partner']]['moves'].append(d['move'])
                 if d['partner'] not in partner_data:
                     partner_data.update({d['partner']: {
+                        'limit_val': limit_val,
                         'base': base,
                         'tax_amount': tax_amount,
                         'moves': [d['move']]
                     }})
+        other_data = {}
+        for p, p_data in partner_data.iteritems():
+            partner = self.form_partner_data(p)
+            if p_data['base'] >= p_data['limit_val']:
+                # getting document type "V":
+                data_of_file += "\n        <R>"
+                data_of_file += ("\n            <DpValsts>" + unicode(partner['country']) + "</DpValsts>")
+                if partner['vat']:
+                     data_of_file += ("\n            <DpNumurs>" + str(partner['vat']) + "</DpNumurs>")
+                data_of_file += ("\n            <DpNosaukums>" + unicode(partner['name']) + "</DpNosaukums>")
+                data_of_file += ("\n            <DarVeids>" + "V" + "</DarVeids>")
+                data_of_file += ("\n            <VertibaBezPvn>" + str(p_data['base']) + "</VertibaBezPvn>")
+                data_of_file += ("\n            <PvnVertiba>" + str(p_data['tax_amount']) + "</PvnVertiba>")
+                data_of_file += ("\n        </R>")
+            if p_data['base'] < p_data['limit_val']:
+                # summing up, what's left:
+                if 'base' in other_data:
+                    other_data['base'] += p_data['base']
+                if 'base' not in other_data:
+                    other_data.update({'base': p_data['base']})
+                if 'tax_amount' in other_data:
+                    other_data['tax_amount'] += p_data['tax_amount']
+                if 'tax_amount' not in other_data:
+                    other_data.update({'tax_amount': p_data['tax_amount']})
+        if other_data:
+            # putting in values for document type "T":
+            data_of_file += "\n        <R>"
+            data_of_file += ("\n            <DarVeids>" + "T" + "</DarVeids>")
+            data_of_file += ("\n            <VertibaBezPvn>" + str(other_data['base']) + "</VertibaBezPvn>")
+            data_of_file += ("\n            <PvnVertiba>" + str(other_data['tax_amount']) + "</PvnVertiba>")
+            data_of_file += ("\n        </R>")
         return data_of_file
 
     @api.model
