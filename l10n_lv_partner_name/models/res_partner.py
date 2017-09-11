@@ -31,17 +31,19 @@ class Partner(models.Model):
     surname = fields.Char()
 
 
-    @api.onchange('firstname')
-    def change_firstname(self):
+    @api.onchange('firstname', 'surname')
+    def change_first_last_name(self):
         if not self.is_company:
-            self.name = u'{r.firstname} {r.surname}'.format(r=self).strip()
 
-    @api.onchange('surname')
-    def change_surname(self):
-        if not self.is_company:
-            if ' ' in self.surname.strip():
-                self.surname = self.surname.strip().replace(' ', '-')
-            self.name = u'{r.firstname} {r.surname}'.format(r=self).strip()
+            old = self.browse(self.id)
+
+            if old.firstname != self.firstname:
+                self.name = u' '.join(filter(None, [self.firstname, self.surname]))
+
+            if old.surname != self.surname:
+                if ' ' in self.surname.strip():
+                    self.surname = self.surname.strip().replace(' ', '-')
+                self.name = u' '.join(filter(None, [self.firstname, self.surname]))
 
     @api.onchange('name')
     def change_name(self):
@@ -54,6 +56,46 @@ class Partner(models.Model):
             else:
                 self.firstname = parts[0]
                 self.surname = ''
+
+    @api.model
+    def server_change_name(self, values):
+        changes = []
+        change_values = values.copy()
+
+        if 'name' in values:
+            changes.append('name')
+        else:
+            if 'firstname' in values:
+                changes.append('firstname')
+            elif 'surname' in values:
+                changes.append('surname')
+
+        for field in ['name', 'firstname', 'surname']:
+            if field not in values:
+                change_values.update({field: getattr(self, field)})
+
+        if changes:
+            updates = self.onchange(
+                    change_values,
+                    changes,
+                    self._onchange_spec())
+
+            return updates.get('value', {})
+
+        else:
+            return {}
+
+    @api.model
+    def create(self, values):
+        changed = self.new({}).server_change_name(values)
+        values.update(changed)
+        return super(Partner, self).create(values)
+
+    @api.multi
+    def write(self, values):
+        changed = self.new({}).server_change_name(values)
+        values.update(changed)
+        return super(Partner, self).write(values)
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

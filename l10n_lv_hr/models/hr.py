@@ -53,7 +53,7 @@ class Employee(models.Model):
             pass
 
         if not values.get('name'):
-            values.update(name=' '.join(fullname))
+            values.update(name=' '.join(filter(None, fullname)))
 
         return super(Employee, self).create(values)
 
