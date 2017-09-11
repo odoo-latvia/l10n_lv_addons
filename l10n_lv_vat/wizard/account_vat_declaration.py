@@ -146,9 +146,10 @@ class L10nLvVatDeclaration(models.TransientModel):
                             tax_dict = {
                                 'tax': tax,
                                 'move': m,
+                                'prod_type': line.product_id and line.product_id.type or False,
                                 'base': line.debit or line.credit,
-                                'base_cur': line.amount_currency,
-                                'currency': line.currency_id,
+                                'base_cur': line.amount_currency and line.amount_currency or line.debit or line.credit,
+                                'currency': line.currency_id and line.currency_id or line.move_id.journal_id.company_id.currency_id,
                                 'refund': refund,
                                 'partner': line.partner_id,
                                 'child_taxes': []
@@ -171,6 +172,7 @@ class L10nLvVatDeclaration(models.TransientModel):
                             tax_amt_data.append({
                                 'tax': tax,
                                 'move': m,
+                                'prod_type': line.product_id and line.product_id.type or False,
                                 'base': line.debit or line.credit,
                                 'base_cur': line.amount_currency,
                                 'currency': line.currency_id,
@@ -184,6 +186,7 @@ class L10nLvVatDeclaration(models.TransientModel):
             for ta in tax_amt_data:
                 tax = ta['tax']
                 move = ta['move']
+                prod_type = ta['prod_type']
                 base = ta['base']
                 base_cur = ta['base_cur']
                 currency = ta['currency']
@@ -191,9 +194,21 @@ class L10nLvVatDeclaration(models.TransientModel):
                 partner = ta['partner']
                 amount = 'amount' in ta and ta['amount'] or 0.0
                 child_taxes = 'child_taxes' in ta and ta['child_taxes'] or []
+                prod_type_amt = {prod_type: {
+                    'base': base,
+                    'base_cur': base_cur,
+                    'currency': currency,
+                    'amount': amount,
+                    'child_taxes': child_taxes
+                }}
                 if tax_datas.get((tax.id)):
                     base += tax_datas[(tax.id)]['base']
                     base_cur += tax_datas[(tax.id)]['base_cur']
+                    if prod_type in tax_datas[(tax.id)]['prod_type_amt']:
+                        prod_type_amt[prod_type]['base'] += tax_datas[(tax.id)]['prod_type_amt']['base']
+                        prod_type_amt[prod_type]['base_cur'] += tax_datas[(tax.id)]['prod_type_amt']['base_cur']
+                        prod_type_amt[prod_type]['amount'] += tax_datas[(tax.id)]['prod_type_amt']['amount']
+                        prod_type_amt[prod_type]['child_taxes'] += tax_datas[(tax.id)]['prod_type_amt']['child_taxes']
                     tax_datas[(tax.id)].clear()
                 if not tax_datas.get((tax.id)):
                     tax_datas[(tax.id)] = {
@@ -205,7 +220,9 @@ class L10nLvVatDeclaration(models.TransientModel):
                         'refund': refund,
                         'partner': partner,
                         'amount': amount,
-                        'child_taxes': child_taxes
+                        'child_taxes': child_taxes,
+                        'prod_type': prod_type,
+                        'prod_type_amt': prod_type_amt
                     }
                 tax_result.append(tax_datas[(tax.id)])
             tax_result2 = []
@@ -231,7 +248,22 @@ class L10nLvVatDeclaration(models.TransientModel):
                                 if '52' in row_tags:
                                     md['52'] += ct['amount']
                     if 'PVN1-II' in sect_tags:
-                        md['PVN1-II'].append(tr)
+                        if len(tr['prod_type_amt'].keys()) > 1:
+                            for key, value in tr['prod_type_amt'].iteritems():
+                                md['PVN1-II'].append({
+                                    'tax': tr['tax'],
+                                    'move': tr['move'],
+                                    'base': value['base'],
+                                    'base_cur': value['base_cur'],
+                                    'currency': value['currency'],
+                                    'refund': tr['refund'],
+                                    'partner': tr['partner'],
+                                    'amount': value['amount'],
+                                    'child_taxes': value['child_taxes'],
+                                    'prod_type': key
+                                })
+                        else:
+                            md['PVN1-II'].append(tr)
                         if tr['child_taxes']:
                             for ct in tr['child_taxes']:
                                 row_tags = [t.name for t in ct['tax'].tag_ids if t.name not in ['PVN1-I', 'PVN1-II', 'PVN1-III', 'PVN2']]
@@ -269,7 +301,22 @@ class L10nLvVatDeclaration(models.TransientModel):
                         if (not tr['child_taxes']) and '67' in row_tags:
                             md['67'] += tr['amount']
                     if 'PVN1-II' in sect_tags:
-                        md['PVN1-II'].append(tr)
+                        if len(tr['prod_type_amt'].keys()) > 1:
+                            for key, value in tr['prod_type_amt'].iteritems():
+                                md['PVN1-II'].append({
+                                    'tax': tr['tax'],
+                                    'move': tr['move'],
+                                    'base': value['base'],
+                                    'base_cur': value['base_cur'],
+                                    'currency': value['currency'],
+                                    'refund': tr['refund'],
+                                    'partner': tr['partner'],
+                                    'amount': value['amount'],
+                                    'child_taxes': value['child_taxes'],
+                                    'prod_type': key
+                                })
+                        else:
+                            md['PVN1-II'].append(tr)
                         if tr['child_taxes']:
                             for ct in tr['child_taxes']:
                                 row_tags = [t.name for t in ct['tax'].tag_ids if t.name not in ['PVN1-I', 'PVN1-II', 'PVN1-III', 'PVN2']]
@@ -367,7 +414,7 @@ class L10nLvVatDeclaration(models.TransientModel):
             else:
                 for c in d['child_taxes']:
                     c_tags = [t.name for t in c['tax'].tag_ids]
-                    if '62' in c_tags:
+                    if '62' in c_tags or '67' in c_tags:
                         tax_amount = c['amount']
             base = d['refund'] and d['base'] * (-1.0) or d['base']
             tax_amount = d['refund'] and tax_amount * (-1.0) or tax_amount
@@ -434,7 +481,32 @@ class L10nLvVatDeclaration(models.TransientModel):
 
     @api.model
     def form_pvn1ii_data(self, data, data_of_file):
-        
+        for d in data:
+            deal_type = d['prod_type'] in ['service', False] and 'P' or 'G'
+            partner = self.form_partner_data(d['partner'])
+            # getting tax amount:
+            if not d['child_taxes']:
+                tax_amount = d['amount']
+            else:
+                for c in d['child_taxes']:
+                    c_tags = [t.name for t in c['tax'].tag_ids]
+                    if '64' in c_tags:
+                        tax_amount = c['amount']
+            base = d['refund'] and d['base'] * (-1.0) or d['base']
+            base_cur = d['refund'] and d['base_cur'] * (-1.0) or d['base_cur']
+            tax_amount = d['refund'] and tax_amount * (-1.0) or tax_amount
+            data_of_file += "\n        <R>"
+            data_of_file += "\n            <DpValsts>" + unicode(partner['country']) + "</DpValsts>"
+            data_of_file += "\n            <DpNumurs>" + str(partner['vat']) + "</DpNumurs>"
+            data_of_file += "\n            <DpNosaukums>" + unicode(partner['name']) + "</DpNosaukums>"
+            data_of_file += "\n            <DarVeids>" + deal_type + "</DarVeids>"
+            data_of_file += "\n            <VertibaBezPvn>" + str(base) + "</VertibaBezPvn>"
+            data_of_file += "\n            <PvnVertiba>" + str(tax_amount) + "</PvnVertiba>"
+            data_of_file += "\n            <ValVertiba>" + str(base_cur) + "</ValVertiba>"
+            data_of_file += "\n            <ValKods>" + str(d['currency'].name) + "</ValKods>"
+            data_of_file += "\n            <DokNumurs>" + unicode(d['move'].name) + "</DokNumurs>"
+            data_of_file += "\n            <DokDatums>" + str(d['move'].date) + "</DokDatums>"
+            data_of_file += "\n        </R>"
         return data_of_file
 
     @api.model
@@ -516,18 +588,22 @@ class L10nLvVatDeclaration(models.TransientModel):
                     tag_name = row.replace('.','')
                     data_of_file += ("\n        <R%s>%s</R%s>" % (tag_name, amount, tag_name))
             data_of_file += "\n    </PVN>"
-            for part, data in move_data.iteritems():
-                if part in ['PVN1-I', 'PVN1-II', 'PVN1-III', 'PVN2']:
-                    data_of_file += ("\n    <%s>" % (part))
-                    if part == 'PVN1-I':
-                        data_of_file = self.form_pvn1i_data(data, data_of_file)
-                    if part == 'PVN1-II':
-                        data_of_file = self.form_pvn1ii_data(data, data_of_file)
-                    if part == 'PVN1-III':
-                        data_of_file = self.form_pvn1iii_data(data, data_of_file)
-                    if part == 'PVN2':
-                        data_of_file = self.form_pvn2_data(data, data_of_file)
-                    data_of_file += ("\n    </%s>" %(part))
+            if move_data.get('PVN1-I', []):
+                data_of_file += "\n    <PVN1-I>"
+                data_of_file = self.form_pvn1i_data(move_data['PVN1-I'], data_of_file)
+                data_of_file += "\n    </PVN1-I>"
+            if move_data.get('PVN1-II', []):
+                data_of_file += "\n    <PVN1-II>"
+                data_of_file = self.form_pvn1ii_data(move_data['PVN1-II'], data_of_file)
+                data_of_file += "\n    </PVN1-II>"
+            if move_data.get('PVN1-III', []):
+                data_of_file += "\n    <PVN1-III>"
+                data_of_file = self.form_pvn1iii_data(move_data['PVN1-III'], data_of_file)
+                data_of_file += "\n    </PVN1-III>"
+            if move_data.get('PVN2', []):
+                data_of_file += "\n    <PVN2>"
+                data_of_file = self.form_pvn2_data(move_data['PVN2'], data_of_file)
+                data_of_file += "\n    </PVN2>"
 
         data_of_file += "\n</DokPVNv4>"
 
