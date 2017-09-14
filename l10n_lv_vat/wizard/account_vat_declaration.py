@@ -423,8 +423,10 @@ class L10nLvVatDeclaration(models.TransientModel):
         }
 
     @api.model
-    def form_pvn1i_data(self, data, data_of_file):
+    def form_pvn1i_data(self, data, data_of_file, info_data):
         partner_data = {}
+        info_data.update({'PVN1-I': []})
+        move_data = {}
         for d in data:
             limit_val = 1430.0
             if d['move'].date <= datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
@@ -480,12 +482,32 @@ class L10nLvVatDeclaration(models.TransientModel):
                 data_of_file += ("\n            <DokNumurs>" + d['move'].name + "</DokNumurs>")
                 data_of_file += ("\n            <DokDatums>" + d['move'].date + "</DokDatums>")
                 data_of_file += ("\n        </R>")
+                # updating document information:
+                info_data['PVN1-I'].append({
+                    'doc_number': d['move'].name,
+                    'deal_type': deal_type,
+                    'doc_type': doc_type,
+                    'partner_name': partner['name'],
+                    'base': base,
+                    'tax_amount': tax_amount
+                })
             if d['base'] < limit_val:
+                # getting data for document information:
+                if d['move'].id in move_data:
+                    move_data[d['move'].id]['base'] += base
+                    move_data[d['move'].id]['tax_amount'] += tax_amount
+                if d['move'].id not in move_data:
+                    move_data.update({d['move'].id: d})
+                    move_data[d['move'].id].update({
+                        'base': base,
+                        'tax_amount': tax_amount
+                    })
                 # summing up, what's left for each partner:
                 if d['partner'] in partner_data:
                     partner_data[d['partner']]['base'] += base
                     partner_data[d['partner']]['tax_amount'] += tax_amount
-                    partner_data[d['partner']]['moves'].append(d['move'])
+                    if d['move'] not in partner_data[d['partner']]['moves']:
+                        partner_data[d['partner']]['moves'].append(d['move'])
                 if d['partner'] not in partner_data:
                     partner_data.update({d['partner']: {
                         'limit_val': limit_val,
@@ -507,6 +529,17 @@ class L10nLvVatDeclaration(models.TransientModel):
                 data_of_file += ("\n            <VertibaBezPvn>" + str(p_data['base']) + "</VertibaBezPvn>")
                 data_of_file += ("\n            <PvnVertiba>" + str(p_data['tax_amount']) + "</PvnVertiba>")
                 data_of_file += ("\n        </R>")
+                # updating document information:
+                for move in p_data['moves']:
+                    if move.id in move_data:
+                        info_data['PVN1-I'].append({
+                            'doc_number': move_data[move.id]['move'].name,
+                            'deal_type': "V",
+                            'doc_type': '',
+                            'partner_name': partner['name'],
+                            'base': move_data[move.id]['base'],
+                            'tax_amount': move_data[move.id]['tax_amount']
+                        })
             if p_data['base'] < p_data['limit_val']:
                 # summing up, what's left:
                 if 'base' in other_data:
@@ -517,6 +550,10 @@ class L10nLvVatDeclaration(models.TransientModel):
                     other_data['tax_amount'] += p_data['tax_amount']
                 if 'tax_amount' not in other_data:
                     other_data.update({'tax_amount': p_data['tax_amount']})
+                if 'moves' in other_data:
+                    other_data['moves'] += p_data['moves']
+                if 'moves' not in other_data:
+                    other_data.update({'moves': p_data['moves']})
         if other_data:
             # putting in values for document type "T":
             data_of_file += "\n        <R>"
@@ -524,10 +561,23 @@ class L10nLvVatDeclaration(models.TransientModel):
             data_of_file += ("\n            <VertibaBezPvn>" + str(other_data['base']) + "</VertibaBezPvn>")
             data_of_file += ("\n            <PvnVertiba>" + str(other_data['tax_amount']) + "</PvnVertiba>")
             data_of_file += ("\n        </R>")
-        return data_of_file
+            # updating document information:
+            for move in other_data['moves']:
+                if move.id in move_data:
+                    partner = self.form_partner_data(move_data[move.id]['partner'])
+                    info_data['PVN1-I'].append({
+                        'doc_number': move_data[move.id]['move'].name,
+                        'deal_type': "T",
+                        'doc_type': '',
+                        'partner_name': partner['name'],
+                        'base': move_data[move.id]['base'],
+                        'tax_amount': move_data[move.id]['tax_amount']
+                    })
+        return data_of_file, info_data
 
     @api.model
-    def form_pvn1ii_data(self, data, data_of_file):
+    def form_pvn1ii_data(self, data, data_of_file, info_data):
+        info_data.update({'PVN1-II': []})
         for d in data:
             deal_type = d['prod_type'] in ['service', False] and 'P' or 'G'
             partner = self.form_partner_data(d['partner'])
@@ -554,12 +604,23 @@ class L10nLvVatDeclaration(models.TransientModel):
             data_of_file += "\n            <DokNumurs>" + unicode(d['move'].name) + "</DokNumurs>"
             data_of_file += "\n            <DokDatums>" + str(d['move'].date) + "</DokDatums>"
             data_of_file += "\n        </R>"
-        return data_of_file
+            # updating document information:
+            info_data['PVN1-II'].append({
+                'doc_number': d['move'].name,
+                'deal_type': deal_type,
+                'doc_type': '',
+                'partner_name': partner['name'],
+                'base': base,
+                'tax_amount': tax_amount
+            })
+        return data_of_file, info_data
 
     @api.model
-    def form_pvn1iii_data(self, data, data_of_file):
+    def form_pvn1iii_data(self, data, data_of_file, info_data):
         x_data = {}
         partner_data = {}
+        info_data.update({'PVN1-III': []})
+        move_data = {}
         for d in data:
             limit_val = 1430.0
             if d['move'].date <= datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
@@ -616,6 +677,15 @@ class L10nLvVatDeclaration(models.TransientModel):
                     data_of_file += ("\n            <DokNumurs>" + unicode(d['move'].name) + "</DokNumurs>")
                     data_of_file += ("\n            <DokDatums>" + str(d['move'].date) + "</DokDatums>")
                     data_of_file += "\n        </R>"
+                    # updating document information:
+                    info_data['PVN1-III'].append({
+                        'doc_number': d['move'].name,
+                        'deal_type': deal_type,
+                        'doc_type': doc_type,
+                        'partner_name': partner['name'],
+                        'base': base,
+                        'tax_amount': tax_amount
+                    })
                 # "X" document types:
                 if check_fpos(partner['fpos'], 'LR_VAT_non-payer') or (not partner['vat']):
                     if 'base' in x_data:
@@ -626,12 +696,32 @@ class L10nLvVatDeclaration(models.TransientModel):
                         x_data['tax_amount'] += tax_amount
                     if 'tax_amount' not in x_data:
                         x_data.update({'tax_amount': tax_amount})
+                    # updating document information:
+                    info_data['PVN1-III'].append({
+                        'doc_number': d['move'].name,
+                        'deal_type': '',
+                        'doc_type': "X",
+                        'partner_name': partner['name'],
+                        'base': base,
+                        'tax_amount': tax_amount
+                    })
             if d['base'] < limit_val:
+                # getting data for document information:
+                if d['move'].id in move_data:
+                    move_data[d['move'].id]['base'] += base
+                    move_data[d['move'].id]['tax_amount'] += tax_amount
+                if d['move'].id not in move_data:
+                    move_data.update({d['move'].id: d})
+                    move_data[d['move'].id].update({
+                        'base': base,
+                        'tax_amount': tax_amount
+                    })
                 # summing up, what's left for each partner:
                 if d['partner'] in partner_data:
                     partner_data[d['partner']]['base'] += base
                     partner_data[d['partner']]['tax_amount'] += tax_amount
-                    partner_data[d['partner']]['moves'].append(d['move'])
+                    if d['move'] not in partner_data[d['partner']]['moves']:
+                        partner_data[d['partner']]['moves'].append(d['move'])
                 if d['partner'] not in partner_data:
                     partner_data.update({d['partner']: {
                         'limit_val': limit_val,
@@ -652,6 +742,17 @@ class L10nLvVatDeclaration(models.TransientModel):
                 data_of_file += ("\n            <PvnVertiba>" + str(p_data['tax_amount']) + "</PvnVertiba>")
                 data_of_file += ("\n            <DokVeids>" + "V" + "</DokVeids>")
                 data_of_file += "\n        </R>"
+                # updating document information:
+                for move in p_data['moves']:
+                    if move.id in move_data:
+                        info_data['PVN1-III'].append({
+                            'doc_number': move_data[move.id]['move'].name,
+                            'deal_type': '',
+                            'doc_type': "V",
+                            'partner_name': partner['name'],
+                            'base': move_data[move.id]['base'],
+                            'tax_amount': move_data[move.id]['tax_amount']
+                        })
             # summing up, what's left:
             if p_data['base'] < p_data['limit_val']:
                 if 'base' in other_data:
@@ -662,6 +763,10 @@ class L10nLvVatDeclaration(models.TransientModel):
                     other_data['tax_amount'] += p_data['tax_amount']
                 if 'tax_amount' not in other_data:
                     other_data.update({'tax_amount': p_data['tax_amount']})
+                if 'moves' in other_data:
+                    other_data['moves'] += p_data['moves']
+                if 'moves' not in other_data:
+                    other_data.update({'moves': p_data['moves']})
         # putting in values for document type "T":
         if other_data:
             data_of_file += "\n        <R>"
@@ -669,6 +774,18 @@ class L10nLvVatDeclaration(models.TransientModel):
             data_of_file += ("\n            <PvnVertiba>" + str(other_data['tax_amount']) + "</PvnVertiba>")
             data_of_file += ("\n            <DokVeids>" + "T" + "</DokVeids>")
             data_of_file += ("\n        </R>")
+            # updating document information:
+            for move in other_data['moves']:
+                if move.id in move_data:
+                    partner = self.form_partner_data(move_data[move.id]['partner'])
+                    info_data['PVN1-III'].append({
+                        'doc_number': move_data[move.id]['move'].name,
+                        'deal_type': '',
+                        'doc_type': "T",
+                        'partner_name': partner['name'],
+                        'base': move_data[move.id]['base'],
+                        'tax_amount': move_data[move.id]['tax_amount']
+                    })
         # putting in values for document type "X":
         if x_data:
             data_of_file += "\n        <R>"
@@ -676,13 +793,22 @@ class L10nLvVatDeclaration(models.TransientModel):
             data_of_file += ("\n            <PvnVertiba>" + str(x_data['tax_amount']) + "</PvnVertiba>")
             data_of_file += ("\n            <DokVeids>" + "X" + "</DokVeids>")
             data_of_file += ("\n        </R>")
-        return data_of_file
+        return data_of_file, info_data
 
     @api.model
-    def form_pvn2_data(self, data, data_of_file):
+    def form_pvn2_data(self, data, data_of_file, info_data):
+        info_data.update({'PVN2': []})
         for d in data:
             partner = self.form_partner_data(d['partner'])
             deal_type = d['prod_type'] in ['service', False] and 'P' or 'G'
+            # getting tax amount:
+            if not d['child_taxes']:
+                tax_amount = d['amount']
+            else:
+                for c in d['child_taxes']:
+                    c_tags = [t.name for t in c['tax'].tag_ids]
+                    if '45' in c_tags:
+                        tax_amount = c['amount']
             base = d['refund'] and d['base'] * (-1.0) or d['base']
             data_of_file += "\n        <R>"
             data_of_file += "\n            <Valsts>" + unicode(partner['country']) + "</Valsts>"
@@ -690,7 +816,16 @@ class L10nLvVatDeclaration(models.TransientModel):
             data_of_file += "\n            <Summa>" + str(base) + "</Summa>"
             data_of_file += "\n            <Pazime>" + deal_type + "</Pazime>"
             data_of_file += "\n        </R>"
-        return data_of_file
+            # updating document information:
+            info_data['PVN2'].append({
+                'doc_number': d['move'].name,
+                'deal_type': deal_type,
+                'doc_type': '',
+                'partner_name': partner['name'],
+                'base': base,
+                'tax_amount': tax_amount
+            })
+        return data_of_file, info_data
 
     @api.multi
     def create_file(self):
@@ -748,6 +883,7 @@ class L10nLvVatDeclaration(models.TransientModel):
 
         moves = move_obj.search([('date','<=',self.date_to), ('date','>=',self.date_from), ('state','=','posted'), ('journal_id.type','in',['sale', 'purchase','expense'])])
         move_data = self.process_moves(moves)
+        info_data = {}
 
         add_pvn = False
         for key, value in move_data.iteritems():
@@ -764,30 +900,49 @@ class L10nLvVatDeclaration(models.TransientModel):
             data_of_file += "\n    </PVN>"
             if move_data.get('PVN1-I', []):
                 data_of_file += "\n    <PVN1-I>"
-                data_of_file = self.form_pvn1i_data(move_data['PVN1-I'], data_of_file)
+                data_of_file, info_data = self.form_pvn1i_data(move_data['PVN1-I'], data_of_file, info_data)
                 data_of_file += "\n    </PVN1-I>"
             if move_data.get('PVN1-II', []):
                 data_of_file += "\n    <PVN1-II>"
-                data_of_file = self.form_pvn1ii_data(move_data['PVN1-II'], data_of_file)
+                data_of_file, info_data = self.form_pvn1ii_data(move_data['PVN1-II'], data_of_file, info_data)
                 data_of_file += "\n    </PVN1-II>"
             if move_data.get('PVN1-III', []):
                 data_of_file += "\n    <PVN1-III>"
-                data_of_file = self.form_pvn1iii_data(move_data['PVN1-III'], data_of_file)
+                data_of_file, info_data = self.form_pvn1iii_data(move_data['PVN1-III'], data_of_file, info_data)
                 data_of_file += "\n    </PVN1-III>"
             if move_data.get('PVN2', []):
                 data_of_file += "\n    <PVN2>"
-                data_of_file = self.form_pvn2_data(move_data['PVN2'], data_of_file)
+                data_of_file, info_data = self.form_pvn2_data(move_data['PVN2'], data_of_file, info_data)
                 data_of_file += "\n    </PVN2>"
 
         data_of_file += "\n</DokPVNv4>"
 
         data_of_file_real = base64.encodestring(data_of_file.encode('utf8'))
 
+        # info:
+        info_file_columns = [_("Document Number"), _("Deal Type"), _("Document Type"), _("Partner"), _("Untaxed Amount"), _("Tax Amount")]
+        info_file_data = u",".join(info_file_columns)
+        info_file_data += u"\n"
+        ikey_list = ['PVN1-I', 'PVN1-II', 'PVN1-III', 'PVN2']
+        for ikey in ikey_list:
+            ivalue = info_data.get(ikey, [])
+            if ivalue:
+                info_file_data += ",,,,,\n"
+                info_file_data += (ikey + ",,,,,\n")
+                for ival in ivalue:
+                    info_file_data += ((ival['doc_number'] and ('"' + ival['doc_number'].replace('"', '') + '"') or "") + ",")
+                    info_file_data += ((ival['deal_type'] and ('"' + ival['deal_type'].replace('"', '') + '"') or "") + ",")
+                    info_file_data += ((ival['doc_type'] and ('"' + ival['doc_type'].replace('"', '') + '"') or "") + ",")
+                    info_file_data += ((ival['partner_name'] and ('"' + ival['partner_name'].replace('"', '') + '"') or "") + ",")
+                    info_file_data += ((ival['base'] and str(ival['base']) or "") + ",")
+                    info_file_data += ((ival['tax_amount'] and str(ival['tax_amount']) or "") + "\n")
+        info_file_data_real = base64.encodestring(info_file_data.encode('utf8'))
+
         self.write({
             'file_save': data_of_file_real,
             'name': self.name,
             'info_file_name': self.info_file_name,
-#            'info_file_save': info_file_data_real
+            'info_file_save': info_file_data_real
         })
 
         return {
