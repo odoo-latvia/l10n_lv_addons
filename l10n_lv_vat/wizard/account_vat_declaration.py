@@ -84,7 +84,7 @@ class L10nLvVatDeclaration(models.TransientModel):
     date_from = fields.Date(string='Date From', required=True, default=_default_date_from)
     date_to = fields.Date(string='Date To', required=True, default=_default_date_to)
     partner_id = fields.Many2one('res.partner', string='Related Partner', default=_default_partner)
-    msg = fields.Text(string='File Created', readonly=True, default='Save the File.')
+    msg = fields.Text(string='File Created', readonly=True, default=_('Save the File.'))
     file_save = fields.Binary(string='Save File', filters='*.xml', readonly=True)
     amount_overpaid = fields.Float(string='Amount Overpaid', digits=dp.get_precision('Account'), readonly=True)
     transfer = fields.Boolean(string='Transfer')
