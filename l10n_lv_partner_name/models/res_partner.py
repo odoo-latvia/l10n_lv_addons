@@ -37,25 +37,32 @@ class Partner(models.Model):
 
             old = self.browse(self.id)
 
-            if old.firstname != self.firstname:
-                self.name = u' '.join(filter(None, [self.firstname, self.surname]))
+            name = ''
+            if self.firstname:
+                name += self.firstname
+            if self.surname:
+                if name:
+                    name += ' '
+                name += self.surname
 
-            if old.surname != self.surname:
-                if ' ' in self.surname.strip():
-                    self.surname = self.surname.strip().replace(' ', '-')
-                self.name = u' '.join(filter(None, [self.firstname, self.surname]))
+            self.name = name or None
+
 
     @api.onchange('name')
     def change_name(self):
         if self.is_company:
-            self.firstname, self.surname = ('', '')
-        else:
+            self.firstname, self.surname = (None, None)
+
+        elif not self.env.context.get('change_name'):
             parts = (self.name or '').strip().rsplit(' ', 1)
             if len(parts) == 2:
                 self.firstname, self.surname = parts
             else:
-                self.firstname = parts[0]
-                self.surname = ''
+                if self.firstname == self.name or self.surname == self.name:
+                    pass
+                else:
+                    self.firstname = parts[0] or None
+                    self.surname = None
 
     @api.model
     def server_change_name(self, values):
@@ -93,9 +100,14 @@ class Partner(models.Model):
 
     @api.multi
     def write(self, values):
-        changed = self.new({}).server_change_name(values)
+        changed = self.server_change_name(values)
         values.update(changed)
         return super(Partner, self).write(values)
 
+    @api.multi
+    def generate_names(self):
+        for r in self:
+            if r.name:
+                r.write({'name': r.name})
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
