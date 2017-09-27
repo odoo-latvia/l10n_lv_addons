@@ -14,9 +14,9 @@
                 <form string="Periodical VAT Declaration">
                     <group string="Create VAT Declaration" attrs="{'invisible': [('file_save','!=',False)]}">
 		                <div>
-			                <label for="date_from" string="Period" class="oe_inline"/>
+			                <label for="date_from" string="Period" class="oe_inline" style="font-weight:bold;"/>
                         	<field name="date_from" class="oe_inline"/>
-			                <label for="date_to" string="-" class="oe_inline"/>
+			                <label for="date_to" string="-" class="oe_inline" style="font-weight:bold;"/>
 		    	            <field name="date_to" class="oe_inline"/>
 		                </div>
 		                <div>
