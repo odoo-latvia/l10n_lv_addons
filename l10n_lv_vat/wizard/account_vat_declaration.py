@@ -25,7 +25,7 @@
 from odoo import api, fields, models, _
 import base64
 import odoo.addons.decimal_precision as dp
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import UserError
 
@@ -841,19 +841,20 @@ class L10nLvVatDeclaration(models.TransientModel):
 
         # getting info for period tags:
         start_date = datetime.strptime(self.date_from, '%Y-%m-%d')
-        end_date = datetime.strptime(self.date_to, '%Y-%m-%d')
-        diff_month = relativedelta(end_date, start_date).months
+        end_date = datetime.strptime(self.date_to, '%Y-%m-%d') + timedelta(days=1)
+        diff = relativedelta(end_date, start_date)
+        diff_month = diff.months + (diff.years * 12)
         if diff_month == 1:
             data_of_file += "\n    <ParskMen>" + str(int(start_date.month)) + "</ParskMen>"
         if diff_month in [3, 6]:
             fy_end_date = datetime(start_date.year, company.fiscalyear_last_month, company.fiscalyear_last_day)
-            fy_start_date = fy_end_date - relativedelta(years=1) + relativedelta(days=1)
-            diff_month_fy = relativedelta(start_date, fy_start_date).months
-            if diff_month == 3:
-                quarter = (diff_month_fy > 9 and 4) or (diff_month_fy > 6 and 3) or (diff_month_fy > 3 and 2) or 1
+            diff_fy = relativedelta(start_date, fy_end_date - relativedelta(years=1) + timedelta(days=1))
+            diff_month_fy = diff_fy.months + (diff_fy.years * 12)
+            if diff_month == 3 and diff_month_fy in [3, 6, 9]:
+                quarter = (diff_month_fy == 9 and 4) or (diff_month_fy == 6 and 3) or (diff_month_fy == 3 and 2) or 1
                 data_of_file += "\n    <ParskCeturksnis>" + str(quarter) + "</ParskCeturksnis>"
-            if diff_month == 6:
-                half_year = (diff_month_fy > 6) and 2 or 1
+            if diff_month == 6 and diff_month_fy in [0, 6]:
+                half_year = (diff_month_fy == 6) and 2 or 1
                 data_of_file += "\n    <TaksPusgads>" + str(half_year) + "</TaksPusgads>"
 
         # getting company VAT number (company registry):
@@ -928,7 +929,7 @@ class L10nLvVatDeclaration(models.TransientModel):
             ivalue = info_data.get(ikey, [])
             if ivalue:
                 info_file_data += ",,,,,\n"
-                info_file_data += (ikey + ",,,,,\n")
+                info_file_data += (ikey.replace('-', '') + ",,,,,\n")
                 for ival in ivalue:
                     info_file_data += ((ival['doc_number'] and ('"' + ival['doc_number'].replace('"', '') + '"') or "") + ",")
                     info_file_data += ((ival['deal_type'] and ('"' + ival['deal_type'].replace('"', '') + '"') or "") + ",")
