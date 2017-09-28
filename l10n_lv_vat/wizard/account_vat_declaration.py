@@ -318,13 +318,18 @@ class L10nLvVatDeclaration(models.TransientModel):
                                     'child_taxes': p_child_taxes,
                                     'prod_type': key
                                 })
+                                if not tr['child_taxes']:
+                                    if '45' in row_tags and key != 'service':
+                                        md['45'] += value['base']
+                                    if '48.2' in row_tags and key == 'service':
+                                        md['48.2'] += value['base']
                         else:
                             md['PVN2'].append(tr)
-                        if not tr['child_taxes']:
-                            if '45' in row_tags:
-                                md['45'] += tr['base']
-                            if '48.2' in row_tags:
-                                md['48.2'] += tr['base']
+                            if not tr['child_taxes']:
+                                if '45' in row_tags and tr['prod_type'] != 'service':
+                                    md['45'] += tr['base']
+                                if '48.2' in row_tags and tr['prod_type'] == 'service':
+                                    md['48.2'] += tr['base']
                 if tr['refund']:
                     if 'PVN1-I' in sect_tags and tr['move'].journal_id.type == 'sale':
                         md['PVN1-I'].append(tr)
@@ -388,13 +393,18 @@ class L10nLvVatDeclaration(models.TransientModel):
                                     'child_taxes': p_child_taxes,
                                     'prod_type': key
                                 })
+                                if not tr['child_taxes']:
+                                    if '45' in row_tags and key != 'service':
+                                        md['45'] -= value['base']
+                                    if '48.2' in row_tags and key == 'service':
+                                         md['48.2'] -= value['base']
                         else:
                             md['PVN2'].append(tr)
-                        if not tr['child_taxes']:
-                            if '45' in row_tags:
-                                md['45'] -= tr['base']
-                            if '48.2' in row_tags:
-                                md['48.2'] -= tr['base']
+                            if not tr['child_taxes']:
+                                if '45' in row_tags and tr['prod_type'] != 'service':
+                                    md['45'] -= tr['base']
+                                if '48.2' in row_tags and tr['prod_type'] == 'service':
+                                    md['48.2'] -= tr['base']
 
         return md
 
