@@ -808,6 +808,7 @@ class L10nLvVatDeclaration(models.TransientModel):
     @api.model
     def form_pvn2_data(self, data, data_of_file, info_data):
         info_data.update({'PVN2': []})
+        partner_data = {}
         for d in data:
             partner = self.form_partner_data(d['partner'])
             deal_type = d['prod_type'] in ['service', False] and 'P' or 'G'
@@ -820,12 +821,15 @@ class L10nLvVatDeclaration(models.TransientModel):
                     if '45' in c_tags:
                         tax_amount = c['amount']
             base = d['refund'] and d['base'] * (-1.0) or d['base']
-            data_of_file += "\n        <R>"
-            data_of_file += "\n            <Valsts>" + unicode(partner['country']) + "</Valsts>"
-            data_of_file += "\n            <PVNNumurs>" + str(partner['vat']) + "</PVNNumurs>"
-            data_of_file += "\n            <Summa>" + str(base) + "</Summa>"
-            data_of_file += "\n            <Pazime>" + deal_type + "</Pazime>"
-            data_of_file += "\n        </R>"
+            tax_amount = d['refund'] and tax_amount * (-1.0) or tax_amount
+            if (d['partner'], deal_type) in partner_data:
+                partner_data[(d['partner'], deal_type)]['base'] += base
+                partner_data[(d['partner'], deal_type)]['tax_amount'] += tax_amount
+            if (d['partner'], deal_type) not in partner_data:
+                partner_data.update({(d['partner'], deal_type): {
+                    'base': base,
+                    'tax_amount': tax_amount
+                }})
             # updating document information:
             info_data['PVN2'].append({
                 'doc_number': d['move'].name,
@@ -835,6 +839,14 @@ class L10nLvVatDeclaration(models.TransientModel):
                 'base': base,
                 'tax_amount': tax_amount
             })
+        for pd, p_data in partner_data.iteritems():
+            partner = self.form_partner_data(pd[0])
+            data_of_file += "\n        <R>"
+            data_of_file += "\n            <Valsts>" + unicode(partner['country']) + "</Valsts>"
+            data_of_file += "\n            <PVNNumurs>" + str(partner['vat']) + "</PVNNumurs>"
+            data_of_file += "\n            <Summa>" + str(p_data['base']) + "</Summa>"
+            data_of_file += "\n            <Pazime>" + pd[1] + "</Pazime>"
+            data_of_file += "\n        </R>"
         return data_of_file, info_data
 
     @api.multi
