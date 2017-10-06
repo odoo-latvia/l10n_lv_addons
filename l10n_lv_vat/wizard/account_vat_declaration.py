@@ -25,7 +25,7 @@
 from odoo import api, fields, models, _
 import base64
 import odoo.addons.decimal_precision as dp
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import UserError
 
@@ -318,13 +318,18 @@ class L10nLvVatDeclaration(models.TransientModel):
                                     'child_taxes': p_child_taxes,
                                     'prod_type': key
                                 })
+                                if not tr['child_taxes']:
+                                    if '45' in row_tags and key != 'service':
+                                        md['45'] += value['base']
+                                    if '48.2' in row_tags and key == 'service':
+                                        md['48.2'] += value['base']
                         else:
                             md['PVN2'].append(tr)
-                        if not tr['child_taxes']:
-                            if '45' in row_tags:
-                                md['45'] += tr['base']
-                            if '48.2' in row_tags:
-                                md['48.2'] += tr['base']
+                            if not tr['child_taxes']:
+                                if '45' in row_tags and tr['prod_type'] != 'service':
+                                    md['45'] += tr['base']
+                                if '48.2' in row_tags and tr['prod_type'] == 'service':
+                                    md['48.2'] += tr['base']
                 if tr['refund']:
                     if 'PVN1-I' in sect_tags and tr['move'].journal_id.type == 'sale':
                         md['PVN1-I'].append(tr)
@@ -388,13 +393,18 @@ class L10nLvVatDeclaration(models.TransientModel):
                                     'child_taxes': p_child_taxes,
                                     'prod_type': key
                                 })
+                                if not tr['child_taxes']:
+                                    if '45' in row_tags and key != 'service':
+                                        md['45'] -= value['base']
+                                    if '48.2' in row_tags and key == 'service':
+                                         md['48.2'] -= value['base']
                         else:
                             md['PVN2'].append(tr)
-                        if not tr['child_taxes']:
-                            if '45' in row_tags:
-                                md['45'] -= tr['base']
-                            if '48.2' in row_tags:
-                                md['48.2'] -= tr['base']
+                            if not tr['child_taxes']:
+                                if '45' in row_tags and tr['prod_type'] != 'service':
+                                    md['45'] -= tr['base']
+                                if '48.2' in row_tags and tr['prod_type'] == 'service':
+                                    md['48.2'] -= tr['base']
 
         return md
 
@@ -798,6 +808,7 @@ class L10nLvVatDeclaration(models.TransientModel):
     @api.model
     def form_pvn2_data(self, data, data_of_file, info_data):
         info_data.update({'PVN2': []})
+        partner_data = {}
         for d in data:
             partner = self.form_partner_data(d['partner'])
             deal_type = d['prod_type'] in ['service', False] and 'P' or 'G'
@@ -810,12 +821,15 @@ class L10nLvVatDeclaration(models.TransientModel):
                     if '45' in c_tags:
                         tax_amount = c['amount']
             base = d['refund'] and d['base'] * (-1.0) or d['base']
-            data_of_file += "\n        <R>"
-            data_of_file += "\n            <Valsts>" + unicode(partner['country']) + "</Valsts>"
-            data_of_file += "\n            <PVNNumurs>" + str(partner['vat']) + "</PVNNumurs>"
-            data_of_file += "\n            <Summa>" + str(base) + "</Summa>"
-            data_of_file += "\n            <Pazime>" + deal_type + "</Pazime>"
-            data_of_file += "\n        </R>"
+            tax_amount = d['refund'] and tax_amount * (-1.0) or tax_amount
+            if (d['partner'], deal_type) in partner_data:
+                partner_data[(d['partner'], deal_type)]['base'] += base
+                partner_data[(d['partner'], deal_type)]['tax_amount'] += tax_amount
+            if (d['partner'], deal_type) not in partner_data:
+                partner_data.update({(d['partner'], deal_type): {
+                    'base': base,
+                    'tax_amount': tax_amount
+                }})
             # updating document information:
             info_data['PVN2'].append({
                 'doc_number': d['move'].name,
@@ -825,6 +839,14 @@ class L10nLvVatDeclaration(models.TransientModel):
                 'base': base,
                 'tax_amount': tax_amount
             })
+        for pd, p_data in partner_data.iteritems():
+            partner = self.form_partner_data(pd[0])
+            data_of_file += "\n        <R>"
+            data_of_file += "\n            <Valsts>" + unicode(partner['country']) + "</Valsts>"
+            data_of_file += "\n            <PVNNumurs>" + str(partner['vat']) + "</PVNNumurs>"
+            data_of_file += "\n            <Summa>" + str(p_data['base']) + "</Summa>"
+            data_of_file += "\n            <Pazime>" + pd[1] + "</Pazime>"
+            data_of_file += "\n        </R>"
         return data_of_file, info_data
 
     @api.multi
@@ -841,19 +863,20 @@ class L10nLvVatDeclaration(models.TransientModel):
 
         # getting info for period tags:
         start_date = datetime.strptime(self.date_from, '%Y-%m-%d')
-        end_date = datetime.strptime(self.date_to, '%Y-%m-%d')
-        diff_month = relativedelta(end_date, start_date).months
+        end_date = datetime.strptime(self.date_to, '%Y-%m-%d') + timedelta(days=1)
+        diff = relativedelta(end_date, start_date)
+        diff_month = diff.months + (diff.years * 12)
         if diff_month == 1:
             data_of_file += "\n    <ParskMen>" + str(int(start_date.month)) + "</ParskMen>"
         if diff_month in [3, 6]:
             fy_end_date = datetime(start_date.year, company.fiscalyear_last_month, company.fiscalyear_last_day)
-            fy_start_date = fy_end_date - relativedelta(years=1) + relativedelta(days=1)
-            diff_month_fy = relativedelta(start_date, fy_start_date).months
-            if diff_month == 3:
-                quarter = (diff_month_fy > 9 and 4) or (diff_month_fy > 6 and 3) or (diff_month_fy > 3 and 2) or 1
+            diff_fy = relativedelta(start_date, fy_end_date - relativedelta(years=1) + timedelta(days=1))
+            diff_month_fy = diff_fy.months + (diff_fy.years * 12)
+            if diff_month == 3 and diff_month_fy in [3, 6, 9]:
+                quarter = (diff_month_fy == 9 and 4) or (diff_month_fy == 6 and 3) or (diff_month_fy == 3 and 2) or 1
                 data_of_file += "\n    <ParskCeturksnis>" + str(quarter) + "</ParskCeturksnis>"
-            if diff_month == 6:
-                half_year = (diff_month_fy > 6) and 2 or 1
+            if diff_month == 6 and diff_month_fy in [0, 6]:
+                half_year = (diff_month_fy == 6) and 2 or 1
                 data_of_file += "\n    <TaksPusgads>" + str(half_year) + "</TaksPusgads>"
 
         # getting company VAT number (company registry):
@@ -928,7 +951,7 @@ class L10nLvVatDeclaration(models.TransientModel):
             ivalue = info_data.get(ikey, [])
             if ivalue:
                 info_file_data += ",,,,,\n"
-                info_file_data += (ikey + ",,,,,\n")
+                info_file_data += (ikey.replace('-', '') + ",,,,,\n")
                 for ival in ivalue:
                     info_file_data += ((ival['doc_number'] and ('"' + ival['doc_number'].replace('"', '') + '"') or "") + ",")
                     info_file_data += ((ival['deal_type'] and ('"' + ival['deal_type'].replace('"', '') + '"') or "") + ",")
