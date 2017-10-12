@@ -100,9 +100,12 @@ class Partner(models.Model):
 
     @api.multi
     def write(self, values):
-        changed = self.server_change_name(values)
-        values.update(changed)
-        return super(Partner, self).write(values)
+        for partner in self:
+            partner_vals = values.copy()
+            changed = partner.server_change_name(values)
+            partner_vals.update(changed)
+            super(Partner, partner).write(values)
+        return True
 
     @api.multi
     def generate_names(self):
