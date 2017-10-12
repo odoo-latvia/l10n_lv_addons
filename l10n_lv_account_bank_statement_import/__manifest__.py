@@ -37,7 +37,9 @@ Bank Statement data import in the following formats:
     'category': 'Accounting',
     'depends': ['account_bank_statement_import'],
     'data': [
-
+        'views/account_bank_transaction_type_view.xml',
+        'wizard/account_bank_statement_import_view.xml',
+        'data/account_bank_transaction_type_data.xml'
     ],
     'auto_install': False,
     'installable': False,

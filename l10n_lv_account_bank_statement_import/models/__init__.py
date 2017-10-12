@@ -22,7 +22,7 @@
 #
 ##############################################################################
 
-import models
-import wizard
+import account_bank_transaction_type
+import account_bank_statement
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -22,7 +22,14 @@
 #
 ##############################################################################
 
-import models
-import wizard
+from odoo import api, fields, models, _
+
+class AccountBankStatementLine(models.Model):
+    _inherit = "account.bank.statement.line"
+
+    transaction_type = fields.Char('Trans. Type Code', readonly=True)
+    partner_name = fields.Char(string='Partner Name', readonly=True)
+    partner_reg_id = fields.Char('Partner Registration Number', readonly=True)
+    partner_bank_account = fields.Char('Partner Bank Account', readonly=True)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
