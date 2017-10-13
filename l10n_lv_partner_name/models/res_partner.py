@@ -109,8 +109,9 @@ class Partner(models.Model):
 
     @api.multi
     def generate_names(self):
+        Partner = self.new()
         for r in self:
             if r.name:
-                r.write({'name': r.name})
+                r.write(Partner.server_change_name({'name': r.name}))
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
