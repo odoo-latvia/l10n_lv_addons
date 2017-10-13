@@ -23,11 +23,112 @@
 ##############################################################################
 
 from odoo import api, fields, models, _
+from xml.dom.minidom import getDOMImplementation, parseString
 
 class AccountBankStatementImport(models.TransientModel):
     _inherit = 'account.bank.statement.import'
 
-    format = fields.Selection([('iso20022', 'ISO 20022'), ('fidavista','FiDAViSta')], string='Format', required=True)
+
+    format = fields.Selection([('iso20022', 'ISO 20022'), ('fidavista','FiDAViSta')], string='Format', default='iso20022')
+    flag = fields.Boolean('Continue Anyway', help='If checked, continues without comparing balances.', default=False)
+    wrong_balance = fields.Boolean('Wrong Balance', default=False)
+
+
+    def find_bank_account(self, account_number):
+        bank_acc = False
+        if account_number:
+            bank_obj = self.env['res.partner.bank']
+            bank_acc = bank_obj.search([('acc_number','=',account_number)], limit=1)
+            if not len(bank_acc):
+                account_number_list = list(account_number)
+                account_number_list.insert(4,' ')
+                account_number_list.insert(9,' ')
+                account_number_list.insert(14,' ')
+                account_number_list.insert(19,' ')
+                account_number_list.insert(24,' ')
+                account_number_2 = "".join(account_number_list)
+                bank_acc = bank_obj.search([('acc_number','=',account_number_2)], limit=1)
+                if not len(bank_acc):
+                    bank_acc = False
+        return bank_acc
+
+    def check_balances(self, balance_start, account_number):
+        journal_obj = self.env['account.journal']
+        bs_obj = self.env['account.bank.statement']
+        test_bnk_acc = self.find_bank_account(account_number)
+        if test_bnk_acc:
+            journals = journal_obj.search([('bank_account_id','=',test_bnk_acc.id)])
+            test_bs = bs_obj.search([('journal_id','in',[j.id for j in journals])], order='date desc', limit=1)
+            if test_bs and test_bs.balance_end_real != float(balance_start) and self.flag == False:
+                raise UserError(_("The Ending Balance of the last Bank Statement (by date) imported for the Bank Account '%s' is not equal to the Starting Balance of this document. If this is OK with you, check the 'Continue Anyway' box and try to import again.") %(account_number))
+
+
+    @api.onchange('format', 'data_file')
+    def _onchange_data_file(self):
+        if self.data_file and self.format in ['iso20022', 'fidavista']:
+            # decoding and encoding for string parsing; parseString() method:
+            record = unicode(base64.decodestring(self.data_file), 'iso8859-4', 'strict').encode('iso8859-4','strict')
+            dom = parseString(record)
+
+            account_number = ''
+            statement_name = ''
+            balance_start = 0.0
+
+            bank_obj = self.env['res.partner.bank']
+            statement_obj = self.env['account.bank.statement']
+            journal_obj = self.env['account.journal']
+            cur_obj = self.env['res.currency']
+
+            if self.format == 'iso20022':
+                account_tag = statement.getElementsByTagName('Acct')[0]
+                account_number = account_tag.getElementsByTagName('IBAN')[0].toxml().replace('<IBAN>','').replace('</IBAN>','')
+                statement_name = account_number
+                ft_date_tag = statement.getElementsByTagName('FrToDt')
+                if ft_date_tag:
+                    start_datetime = ft_date_tag[0].getElementsByTagName('FrDtTm')[0].toxml().replace('<FrDtTm>','').replace('</FrDtTm>','')
+                    end_datetime = ft_date_tag[0].getElementsByTagName('ToDtTm')[0].toxml().replace('<ToDtTm>','').replace('</ToDtTm>','')
+                    start_date = datetime.strftime(datetime.strptime(start_datetime, '%Y-%m-%dT%H:%M:%SZ').date(), '%Y-%m-%d')
+                    end_date = datetime.strftime(datetime.strptime(end_datetime, '%Y-%m-%dT%H:%M:%SZ').date(), '%Y-%m-%d')
+                    statement_name += (' ' + start_date + ':' + end_date)
+                balances = statement.getElementsByTagName('Bal')
+                for b in balances:
+                    balance_amount = 0.0
+                    amount_tags = b.getElementsByTagName('Amt')
+                    for amt in amount_tags:
+                        if amt != cl_amount_tag:
+                            balance_amount = float(amt.firstChild.nodeValue)
+                    cd_ind = b.getElementsByTagName('CdtDbtInd')[0].toxml().replace('<CdtDbtInd>','').replace('</CdtDbtInd>','')
+                    if cd_ind == 'DBIT':
+                        balance_amount *= (-1)
+                    btype = b.getElementsByTagName('Tp')[0]
+                    type_code = btype.getElementsByTagName('CdOrPrtry')[0].getElementsByTagName('Cd')[0].toxml().replace('<Cd>','').replace('</Cd>','')
+                    found = False
+                    if type_code == 'OPBD':
+                        balance_start = balance_amount
+                        found = True
+                    if not found:
+                        bsubtype = btype.getElementsByTagName('SubType')
+                        if bsubtype:
+                            subtype_code = bsubtype[0].getElementsByTagName('Cd')[0].toxml().replace('<Cd>','').replace('</Cd>','')
+                            if subtype_code == 'OPBD':
+                                balance_start = balance_amount
+
+            if self.format == 'fidavista':
+                start_date = dom.getElementsByTagName('StartDate')[0].toxml().replace('<StartDate>','').replace('</StartDate>','')
+                end_date = dom.getElementsByTagName('EndDate')[0].toxml().replace('<EndDate>','').replace('</EndDate>','')
+                accountset = dom.getElementsByTagName('AccountSet')[0]
+                acc_no = accountset.getElementsByTagName('AccNo')[0].toxml().replace('<AccNo>','').replace('</AccNo>','')
+                statement_name = acc_no + ' ' + start_date+ ':' + end_date
+                balance_start = accountset.getElementsByTagName('OpenBal')[0].toxml().replace('<OpenBal>','').replace('</OpenBal>','')
+
+            wrong_balance = False
+            bank_account = self.find_bank_account(account_number)
+            if bank_account:
+                journals = journal_obj.search([('bank_account_id','=',bank_account.id)])
+                bank_statement = statement_obj.search([('journal_id', 'in', [j.id for j in journals])], order='date desc', limit=1)
+                if bank_statement:
+                    if bank_statement.balance_end_real != float(balance_start):
+                        wrong_balance = True
 
 
     def iso20022_parsing(self, data_file):
@@ -106,6 +207,9 @@ class AccountBankStatementImport(models.TransientModel):
                             balance_start = balance_amount
                         if subtype_code == 'CLBD':
                             balance_end_real = balance_amount
+
+            # checking balances:
+            self.check_balances(balance_start, account_number)
 
             svals = {
                 'name': name,
@@ -344,8 +448,6 @@ class AccountBankStatementImport(models.TransientModel):
         record = unicode(data_file, 'iso8859-4', 'strict').encode('iso8859-4','strict')
         dom = parseString(record)
 
-        journal_obj = self.env['account.journal']
-        bs_obj = self.env['account.bank.statement']
         cur_obj = self.env['res.currency']
         bank_obj = self.env['res.partner.bank']
 
@@ -364,21 +466,7 @@ class AccountBankStatementImport(models.TransientModel):
             balance_end_real = accountset.getElementsByTagName('CloseBal')[0].toxml().replace('<CloseBal>','').replace('</CloseBal>','')
 
             # checking balances:
-            test_bnk_acc = bank_obj.search([('acc_number','=',account_number)], limit=1)
-            if not test_bnk_acc:
-                account_number_list = list(account_number)
-                account_number_list.insert(4,' ')
-                account_number_list.insert(9,' ')
-                account_number_list.insert(14,' ')
-                account_number_list.insert(19,' ')
-                account_number_list.insert(24,' ')
-                account_number_2 = "".join(account_number_list)
-                test_bnk_acc = bank_obj.search([('acc_number','=',account_number_2)], limit=1)
-            if test_bnk_acc:
-                journals = journal_obj.search([('bank_account_id','=',test_bnk_acc.id)])
-                test_bs = bs_obj.search([('journal_id','in',[j.id for j in journals])], order='date desc', limit=1)
-                if test_bs and test_bs.balance_end_real != float(balance_start) and self.flag == False:
-                    raise UserError(_("The Ending Balance of the last Bank Statement (by date) imported for the Bank Account '%s' is not equal to the Starting Balance of this document. If this is OK with you, check the 'Continue Anyway' box and try to import again.") %(account_number))
+            self.check_balances(balance_start, account_number)
 
             svals = {
                 'name': account_number + ' ' + start_date + ':' + end_date,
