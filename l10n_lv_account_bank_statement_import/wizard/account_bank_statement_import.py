@@ -23,7 +23,10 @@
 ##############################################################################
 
 from odoo import api, fields, models, _
+import base64
 from xml.dom.minidom import getDOMImplementation, parseString
+from datetime import datetime
+from openerp.exceptions import UserError
 
 class AccountBankStatementImport(models.TransientModel):
     _inherit = 'account.bank.statement.import'
@@ -52,16 +55,6 @@ class AccountBankStatementImport(models.TransientModel):
                     bank_acc = False
         return bank_acc
 
-    def check_balances(self, balance_start, account_number):
-        journal_obj = self.env['account.journal']
-        bs_obj = self.env['account.bank.statement']
-        test_bnk_acc = self.find_bank_account(account_number)
-        if test_bnk_acc:
-            journals = journal_obj.search([('bank_account_id','=',test_bnk_acc.id)])
-            test_bs = bs_obj.search([('journal_id','in',[j.id for j in journals])], order='date desc', limit=1)
-            if test_bs and test_bs.balance_end_real != float(balance_start) and self.flag == False:
-                raise UserError(_("The Ending Balance of the last Bank Statement (by date) imported for the Bank Account '%s' is not equal to the Starting Balance of this document. If this is OK with you, check the 'Continue Anyway' box and try to import again.") %(account_number))
-
 
     @api.onchange('format', 'data_file')
     def _onchange_data_file(self):
@@ -80,20 +73,28 @@ class AccountBankStatementImport(models.TransientModel):
             cur_obj = self.env['res.currency']
 
             if self.format == 'iso20022':
-                account_tag = statement.getElementsByTagName('Acct')[0]
+                statements = dom.getElementsByTagName('Stmt') or []
+                if not statements:
+                    statements = dom.getElementsByTagName('Rpt') or []
+                account_tag = statements[0].getElementsByTagName('Acct')[0]
                 account_number = account_tag.getElementsByTagName('IBAN')[0].toxml().replace('<IBAN>','').replace('</IBAN>','')
                 statement_name = account_number
-                ft_date_tag = statement.getElementsByTagName('FrToDt')
+                ft_date_tag = statements[0].getElementsByTagName('FrToDt')
                 if ft_date_tag:
                     start_datetime = ft_date_tag[0].getElementsByTagName('FrDtTm')[0].toxml().replace('<FrDtTm>','').replace('</FrDtTm>','')
                     end_datetime = ft_date_tag[0].getElementsByTagName('ToDtTm')[0].toxml().replace('<ToDtTm>','').replace('</ToDtTm>','')
                     start_date = datetime.strftime(datetime.strptime(start_datetime, '%Y-%m-%dT%H:%M:%SZ').date(), '%Y-%m-%d')
                     end_date = datetime.strftime(datetime.strptime(end_datetime, '%Y-%m-%dT%H:%M:%SZ').date(), '%Y-%m-%d')
                     statement_name += (' ' + start_date + ':' + end_date)
-                balances = statement.getElementsByTagName('Bal')
+                balances = statements[0].getElementsByTagName('Bal')
                 for b in balances:
                     balance_amount = 0.0
                     amount_tags = b.getElementsByTagName('Amt')
+                    cl_amount_tag = False
+                    credit_line = b.getElementsByTagName('CdtLine')
+                    if credit_line:
+                        cl_amount_tag = credit_line[0].getElementsByTagName('Amt')
+                        cl_amount_tag = cl_amount_tag and cl_amount_tag[0] or False
                     for amt in amount_tags:
                         if amt != cl_amount_tag:
                             balance_amount = float(amt.firstChild.nodeValue)
@@ -129,6 +130,18 @@ class AccountBankStatementImport(models.TransientModel):
                 if bank_statement:
                     if bank_statement.balance_end_real != float(balance_start):
                         wrong_balance = True
+            self.wrong_balance = wrong_balance
+
+
+    def check_balances(self, balance_start, account_number):
+        journal_obj = self.env['account.journal']
+        bs_obj = self.env['account.bank.statement']
+        test_bnk_acc = self.find_bank_account(account_number)
+        if test_bnk_acc:
+            journals = journal_obj.search([('bank_account_id','=',test_bnk_acc.id)])
+            test_bs = bs_obj.search([('journal_id','in',[j.id for j in journals])], order='date desc', limit=1)
+            if test_bs and test_bs.balance_end_real != float(balance_start) and self.flag == False:
+                raise UserError(_("The Ending Balance of the last Bank Statement (by date) imported for the Bank Account '%s' is not equal to the Starting Balance of this document. If this is OK with you, check the 'Continue Anyway' box and try to import again.") %(account_number))
 
 
     def iso20022_parsing(self, data_file):
