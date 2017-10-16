@@ -35,6 +35,7 @@ class AccountBankStatementImport(models.TransientModel):
     format = fields.Selection([('iso20022', 'ISO 20022'), ('fidavista','FiDAViSta')], string='Format', default='iso20022')
     flag = fields.Boolean('Continue Anyway', help='If checked, continues without comparing balances.', default=False)
     wrong_balance = fields.Boolean('Wrong Balance', default=False)
+    statement_info = fields.Html(string='Statement Info', readonly=1)
 
 
     def find_bank_account(self, account_number):
@@ -66,6 +67,7 @@ class AccountBankStatementImport(models.TransientModel):
             account_number = ''
             statement_name = ''
             balance_start = 0.0
+            currency_name = False
 
             bank_obj = self.env['res.partner.bank']
             statement_obj = self.env['account.bank.statement']
@@ -113,6 +115,9 @@ class AccountBankStatementImport(models.TransientModel):
                             subtype_code = bsubtype[0].getElementsByTagName('Cd')[0].toxml().replace('<Cd>','').replace('</Cd>','')
                             if subtype_code == 'OPBD':
                                 balance_start = balance_amount
+                cur_tag = account_tag.getElementsByTagName('Ccy')
+                if cur_tag:
+                    currency_name = cur_tag[0].toxml().replace('<Ccy>','').replace('</Ccy>','')
 
             if self.format == 'fidavista':
                 start_date = dom.getElementsByTagName('StartDate')[0].toxml().replace('<StartDate>','').replace('</StartDate>','')
@@ -121,8 +126,10 @@ class AccountBankStatementImport(models.TransientModel):
                 acc_no = accountset.getElementsByTagName('AccNo')[0].toxml().replace('<AccNo>','').replace('</AccNo>','')
                 statement_name = acc_no + ' ' + start_date+ ':' + end_date
                 balance_start = accountset.getElementsByTagName('OpenBal')[0].toxml().replace('<OpenBal>','').replace('</OpenBal>','')
+                currency_name = accountset.getElementsByTagName('Ccy')[0].toxml().replace('<Ccy>','').replace('</Ccy>','')
 
             wrong_balance = False
+            imported = {}
             bank_account = self.find_bank_account(account_number)
             if bank_account:
                 journals = journal_obj.search([('bank_account_id','=',bank_account.id)])
@@ -130,6 +137,34 @@ class AccountBankStatementImport(models.TransientModel):
                 if bank_statement:
                     if bank_statement.balance_end_real != float(balance_start):
                         wrong_balance = True
+                    imported.update({
+                        'name': bank_statement.name,
+                        'balance_end': bank_statement.balance_end_real,
+                        'currency': bank_statement.currency_id
+                    })
+
+            currency = False
+            if currency_name:
+                currency = cur_obj.search([('name','=',currency_name)], limit=1)
+                if not currency:
+                    currency = cur_obj.search([('name','=',currency_name), ('active','=',False)], limit=1)
+            importing = {
+                'name': statement_name,
+                'balance_start': float(balance_start),
+                'currency': currency
+            }
+
+            info = """<table><tr>"""
+            if imported:
+                info += """<td style="padding:2px; border:1px solid black; font-weight:bold;">%s</td><td style="padding:2px; border:1px solid black; font-weight:bold;">%s</td>""" % (_('Last statement for selected account'), _('Ending Balance'))
+            info += """<td style="padding:2px; border:1px solid black; font-weight:bold;">%s</td><td style="padding:2px; border:1px solid black; font-weight:bold;">%s</td>""" % (_('Statement to import'), _('Starting Balance'))
+            info += "</tr><tr>"
+            if imported:
+                info += """<td style="padding:2px; border:1px solid black;">%s</td><td style="padding:2px; border:1px solid black; text-align: right;">%.02f %s</td>""" % (imported['name'], imported['balance_end'], imported['currency'] and (imported['currency'].symbol or imported['currency'].name) or '')
+            info += """<td style="padding:2px; border:1px solid black;">%s</td><td style="padding:2px; border:1px solid black; text-align: right;">%.02f %s</td>""" % (importing['name'], importing['balance_start'], importing['currency'] and (importing['currency'].symbol or importing['currency'].name) or '')
+            info += """</tr></table>"""
+
+            self.statement_info = info
             self.wrong_balance = wrong_balance
 
 
