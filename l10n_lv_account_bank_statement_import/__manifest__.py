@@ -39,6 +39,7 @@ Bank Statement data import in the following formats:
     'data': [
         'security/ir.model.access.csv',
         'views/account_bank_transaction_type_view.xml',
+        'views/account_bank_statement_view.xml',
         'wizard/account_bank_statement_import_view.xml',
         'data/account_bank_transaction_type_data.xml'
     ],
