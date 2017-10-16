@@ -123,8 +123,8 @@ class AccountBankStatementImport(models.TransientModel):
                 start_date = dom.getElementsByTagName('StartDate')[0].toxml().replace('<StartDate>','').replace('</StartDate>','')
                 end_date = dom.getElementsByTagName('EndDate')[0].toxml().replace('<EndDate>','').replace('</EndDate>','')
                 accountset = dom.getElementsByTagName('AccountSet')[0]
-                acc_no = accountset.getElementsByTagName('AccNo')[0].toxml().replace('<AccNo>','').replace('</AccNo>','')
-                statement_name = acc_no + ' ' + start_date+ ':' + end_date
+                account_number = accountset.getElementsByTagName('AccNo')[0].toxml().replace('<AccNo>','').replace('</AccNo>','')
+                statement_name = account_number + ' ' + start_date+ ':' + end_date
                 balance_start = accountset.getElementsByTagName('OpenBal')[0].toxml().replace('<OpenBal>','').replace('</OpenBal>','')
                 currency_name = accountset.getElementsByTagName('Ccy')[0].toxml().replace('<Ccy>','').replace('</Ccy>','')
 
