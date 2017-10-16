@@ -11,14 +11,10 @@
                 <field name="format" class="oe_inline"/>
             </ul>
             <field name="data_file" position="after">
-                <group invisible="1">
-                    <field name="wrong_balance"/>
-                </group>
                 <field name="statement_info" attrs="{'invisible': [('data_file','=',False)]}"/>
                 <group attrs="{'invisible': [('wrong_balance','=',False)]}">
-		            <p colspan="2"><font color="red"><b>Balances do not match!</b></font></p>
-                    <p colspan="2"><font color="red">The Ending Balance of the last Bank Statement (by date) imported for one of the the Bank Accounts is not equal to the Starting Balance of this document.</font></p>
 		            <field name="flag"/>
+		            <field name="wrong_balance" invisible="1"/>
                 </group>
             </field>
         </field>
