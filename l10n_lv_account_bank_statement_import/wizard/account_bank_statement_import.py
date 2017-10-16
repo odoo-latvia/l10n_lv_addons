@@ -164,7 +164,7 @@ class AccountBankStatementImport(models.TransientModel):
             info += """<td style="padding:2px; border:1px solid black;">%s</td><td style="padding:2px; border:1px solid black; text-align:right; color:%s;">%.02f %s</td>""" % (importing['name'], wrong_balance and 'red' or 'black', importing['balance_start'], importing['currency'] and (importing['currency'].symbol or importing['currency'].name) or '')
             info += """</tr></table>"""
             if wrong_balance:
-                info += """<p style="color:red; font-weight:bold;">%s</p><p style="color:red;">%s</p>""" % (_('Balances do not match!'), _('The Ending Balance of the last Bank Statement (by date) imported for one of the the Bank Accounts is not equal to the Starting Balance of this document.'))
+                info += """<p style="color:red; font-weight:bold;">%s</p><p style="color:red;">%s</p>""" % (_('Balances do not match!'), _('The Ending Balance of the last Bank Statement (by date) imported for the Bank Account is not equal to the Starting Balance of this document.'))
 
             self.statement_info = info
             self.wrong_balance = wrong_balance
@@ -687,5 +687,12 @@ class AccountBankStatementImport(models.TransientModel):
             return self.fidavista_parsing(data_file)
         else:
             return super(AccountBankStatementImport, self)._parse_file()
+
+
+    @api.model
+    def create(self, values):
+        res = super(AccountBankStatementImport, self).create(values)
+        res._onchange_data_file()
+        return res
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
