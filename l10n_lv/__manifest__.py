@@ -50,6 +50,7 @@ This is the base module for Latvian localization of :
         'data/account_tax_template_data.xml',
         'data/account_fiscal_position_template_data.xml',
         'data/l10n_lv_state_data.xml',
+        'data/res.bank.csv',
         'res_partner_view.xml',
     ],
     'auto_install': False,
