@@ -29,6 +29,9 @@ var FieldRegistry = formWidget.FieldChar.extend({
         return this.parse_value(this.$input.val(), '').replace('-', '');
     },
     validate: function() {
+        // FIXME: hack around bug
+        if (!this.$input) return false;
+
         var value = this.get_pk();
 
         if (value.length != 11) {
