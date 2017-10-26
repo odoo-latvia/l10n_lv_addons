@@ -20,7 +20,7 @@ class ResPartnerTitle(models.Model):
         ('company', 'Company'),
         ], 'Is Company')
 
-    def name_get(self, details=False):
+    def name_get(self, details=True):
 
         if details:
             name = u'{r.shortcut} {r.name}'
