@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="lv_account_template_2690" model="account.account.template">
+        <field name="name">Nauda ceļā</field>
+        <field name="code">2690</field>
+        <field name="user_type_id" ref="lv_account_type_2_5"/>
+        <field name="group_id" ref="lv_account_group_26"/>
+    </record>
+
+    <record id="l10n_lv_chart_template" model="account.chart.template">
+        <field name="name">Latvija – saimnieciskā aprēķina</field>
+        <field name="bank_account_code_prefix">262</field>
+        <field name="cash_account_code_prefix">261</field>
+        <field name="code_digits">4</field>
+        <field name="currency_id" ref="base.EUR"/>
+        <field name="transfer_account_id" ref="lv_account_template_2690"/>
+    </record>
+
+    <record id="l10n_lv.lv_account_template_2690" model="account.account.template">
+        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
+    </record>
+
+</odoo>
