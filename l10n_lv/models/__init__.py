@@ -22,37 +22,6 @@
 #
 ##############################################################################
 
-{
-    'name': 'Latvia - Accounting',
-    'version': '1.1',
-    'category': 'Localization',
-    'summary': 'Accounting configuration for Latvia',
-    'description': """
-Adds Chart of Accounts, Chart of Taxes, Fiscal Positions, Banks and Partner Titles.
-""",
-    'author': 'Allegro IT',
-    'website': 'http://www.allegro.lv',
-    'images': [],
-    'depends': [
-        'account'
-    ],
-    'data': [
-        'data/res_company_data.xml',
-        'data/account_group_data.xml',
-        'data/account_account_type_data.xml',
-        'data/account_account_tag_data.xml',
-        'data/account_chart_template_data.xml',
-        'data/account_acccount_template_data.xml',
-        'data/account_tax_template_data.xml',
-        'data/account_fiscal_position_template_data.xml',
-        'data/res_partner_title_data.xml',
-        'data/res.bank.csv',
-        'views/res_partner_view.xml'
-    ],
-    'demo': [],
-    'installable': True,
-    'auto_install': False,
-    'qweb': [],
-}
+from . import account
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
