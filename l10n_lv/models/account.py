@@ -71,20 +71,6 @@ class WizardMultiChartsAccounts(models.TransientModel):
 class ResConfigSettings(models.TransientModel):
     _inherit = "res.config.settings"
 
-#    @api.onchange('chart_template_id')
-#    def onchange_chart_template_id(self):
-#        lv_chart_template = self.env.ref('l10n_lv.l10n_lv_chart_template')
-#        if self.chart_template_id and lv_chart_template and self.chart_template_id.id == lv_chart_template.id:
-#            lv_sale_tax_tmpl = self.env.ref('l10n_lv.lv_tax_template_PVN-SR')
-#            lv_purchase_tax_tmpl = self.env.ref('l10n_lv.lv_tax_template_Pr-SR')
-#            if lv_sale_tax_tmpl:
-#                self.default_sale_tax_id = False
-#            if lv_purchase_tax_tmpl:
-#                self.default_purchase_tax_id = False
-#            cur_EUR = self.env.ref('base.EUR')
-#            if cur_EUR:
-#                self.currency_id = cur_EUR.id
-
     @api.multi
     def set_values(self):
         ctx = self.env.context.copy()
@@ -101,6 +87,26 @@ class ResConfigSettings(models.TransientModel):
             if lv_purchase_tax_tmpl:
                 ctx.update({'default_purchase_tax_id': lv_purchase_tax_tmpl.id})
         return super(ResConfigSettings, self.with_context(ctx)).set_values()
+
+
+class AccountTaxTemplate(models.Model):
+    _inherit = "account.tax.template"
+
+    @api.multi
+    def _generate_tax(self, company):
+        res = super(AccountTaxTemplate, self)._generate_tax(company)
+        lv_sale_tax_tmpl = self.env.ref('l10n_lv.lv_tax_template_PVN-SR')
+        lv_purchase_tax_tmpl = self.env.ref('l10n_lv.lv_tax_template_Pr-SR')
+        IrDefault = self.env['ir.default'].sudo()
+        if lv_sale_tax_tmpl and lv_sale_tax_tmpl.id in res['tax_template_to_tax']:
+            sale_tax_id = res['tax_template_to_tax'][lv_sale_tax_tmpl.id]
+            self.env['ir.config_parameter'].sudo().set_param("account.default_sale_tax_id", sale_tax_id)
+            IrDefault.set('product.template', "taxes_id", [sale_tax_id], company_id=company.id)
+        if lv_purchase_tax_tmpl and lv_purchase_tax_tmpl.id in res['tax_template_to_tax']:
+            purchase_tax_id = res['tax_template_to_tax'][lv_purchase_tax_tmpl.id]
+            self.env['ir.config_parameter'].sudo().set_param("account.default_purchase_tax_id", purchase_tax_id)
+            IrDefault.set('product.template', "supplier_taxes_id", [purchase_tax_id], company_id=company.id)
+        return res
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
