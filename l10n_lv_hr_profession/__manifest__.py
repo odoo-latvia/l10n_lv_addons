@@ -36,11 +36,7 @@ Profession, Health Hazard and Work Condition data for Latvian Professions.
     'depends': [
         'hr_profession'
     ],
-    'data': [
-        'data/hr.profession.csv',
-        'data/hr.job.hazard.csv',
-        'data/hr.job.condition.csv'
-    ],
+    'post_init_hook': 'post_init',
     'demo': [],
     'installable': True,
     'auto_install': False,
