@@ -218,6 +218,8 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         limit_val = 1000.0
         if doc_date > datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
             limit_val = 1430.0
+        if doc_date > datetime.strftime(datetime.strptime('2017-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
+            limit_val = 150.0
 
         for line in line_id:
 
@@ -513,6 +515,8 @@ class l10n_lv_vat_declaration(osv.osv_memory):
             limit_val = 1000.0
             if inv.date_invoice > datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
                 limit_val = 1430.0
+            if inv.date_invoice > datetime.strftime(datetime.strptime('2017-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
+                limit_val = 150.0
             d.update({'limit_val': limit_val})
             deal_type = ""
             if d['partner_vat'] and (d['partner_fpos'] and (check_fpos(d['partner_fpos'], 'LR_VAT_payer') or check_fpos(d['partner_fpos'], 'EU_VAT_payer'))):
@@ -627,6 +631,8 @@ class l10n_lv_vat_declaration(osv.osv_memory):
             limit_val = 1000.0
             if p_br.date_start > datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
                 limit_val = 1430.0
+            if p_br.date_start > datetime.strftime(datetime.strptime('2017-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
+                limit_val = 150.0
             tax_info = obj_tax_code.read(cr, uid, tax_code_ids, ['tax_code','code','sum_period'], context=ctx)
             for item in tax_info:
                 tax_code = item['tax_code']
