@@ -1,0 +1,728 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* l10n_lv
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-10-26 05:58+0000\n"
+"PO-Revision-Date: 2017-10-26 05:58+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_1_1
+msgid "1.1 Nemateriālie ieguldījumi"
+msgstr "1.1 Nemateriālie ieguldījumi"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_1_2
+msgid "1.2 Pamatlīdzekļi"
+msgstr "1.2 Pamatlīdzekļi"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_1_3
+msgid "1.3 Ieguldījuma īpašumi"
+msgstr "1.3 Ieguldījuma īpašumi"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_1_4
+msgid "1.4 Bioloģiskie aktīvi"
+msgstr "1.4 Bioloģiskie aktīvi"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_1_5
+msgid "1.5 Ilgtermiņa finanšu ieguldījumi"
+msgstr "1.5 Ilgtermiņa finanšu ieguldījumi"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_2_1
+msgid "2.1 Krājumi"
+msgstr "2.1 Krājumi"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_2_2
+msgid "2.2 Pārdošanai turēti ilgtermiņa ieguldījumi"
+msgstr "2.2 Pārdošanai turēti ilgtermiņa ieguldījumi"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_2_3
+msgid "2.3 Debitori"
+msgstr "2.3 Debitori"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_2_4
+msgid "2.4 Īstermiņa finanšu ieguldījumi"
+msgstr "2.4 Īstermiņa finanšu ieguldījumi"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_2_5
+msgid "2.5 Nauda"
+msgstr "2.5 Nauda"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_3
+msgid "3 Pašu kapitāls"
+msgstr "3 Pašu kapitāls"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_4
+msgid "4 Uzkrājumi"
+msgstr "4 Uzkrājumi"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_5
+msgid "5 Kreditori"
+msgstr "5 Kreditori"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_6
+msgid "6 Ieņēmumi"
+msgstr "6 Ieņēmumi"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_7
+msgid "7 Izdevumi"
+msgstr "7 Izdevumi"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_8_1
+msgid "8.1 Pārējie saimnieciskās darbības ieņēmumi"
+msgstr "8.1 Pārējie saimnieciskās darbības ieņēmumi"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_8_2
+msgid "8.2 Pārējās saimnieciskās darbības izmaksas"
+msgstr "8.2 Pārējās saimnieciskās darbības izmaksas"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_8_3
+msgid "8.3 Ārkārtas ieņēmumi"
+msgstr "8.3 Ārkārtas ieņēmumi"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_8_4
+msgid "8.4 Ārkārtas izmaksas"
+msgstr "8.4 Ārkārtas izmaksas"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_8_5
+msgid "8.5 Nodokļi"
+msgstr "8.5 Nodokļi"
+
+#. module: l10n_lv
+#: model:account.account.type,name:l10n_lv.lv_account_type_8_6
+msgid "8.6 Peļņa vai zaudējumi"
+msgstr "8.6 Peļņa vai zaudējumi"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.akp
+msgid "AKP"
+msgstr "AKP"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.arb
+msgid "ARB"
+msgstr "ARB"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.as
+msgid "AS"
+msgstr "AS"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.asf
+msgid "ASF"
+msgstr "ASF"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.as
+msgid "Akciju sabiedrība"
+msgstr "Akciju sabiedrība"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.arb
+msgid "Arodbiedrība"
+msgstr "Arodbiedrība"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.asf
+msgid "Atklātais sabiedriskais fonds"
+msgstr "Atklātais sabiedriskais fonds"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.baz
+msgid "BAZ"
+msgstr "BAZ"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.bdr
+msgid "BDR"
+msgstr "BDR"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.bie
+msgid "BIE"
+msgstr "BIE"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.baz
+msgid "Baznīca"
+msgstr "Baznīca"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.bdr
+msgid "Biedrība (BDR)"
+msgstr "Biedrība (BDR)"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.bie
+msgid "Biedrība (BIE)"
+msgstr "Biedrība (BIE)"
+
+#. module: l10n_lv
+#: model:ir.model.fields,field_description:l10n_lv.field_res_partner_bussiness_form
+#: model:ir.model.fields,field_description:l10n_lv.field_res_users_bussiness_form
+msgid "Bussiness Form"
+msgstr "Uzņēmējdarbības forma"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.cen
+msgid "CEN"
+msgstr "CEN"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.cen
+msgid "Centrs"
+msgstr "Centrs"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.die
+msgid "DIE"
+msgstr "DIE"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.drj
+msgid "DRJ"
+msgstr "DRJ"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.drz
+msgid "DRZ"
+msgstr "DRZ"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.die
+msgid "Diecēze"
+msgstr "Diecēze"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.drz
+msgid "Draudze"
+msgstr "Draudze"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.drj
+msgid "Draudze (jauna)"
+msgstr "Draudze (jauna)"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.egf
+msgid "EGF"
+msgstr "EGF"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.eig
+msgid "EIG"
+msgstr "EIG"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.eig
+msgid "Eiropas ekonomisko interešu grupa"
+msgstr "Eiropas ekonomisko interešu grupa"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.egf
+msgid "Eiropas ekonomisko interešu grupas filiāle"
+msgstr "Eiropas ekonomisko interešu grupas filiāle"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.se
+msgid "Eiropas komercsabiedrība"
+msgstr "Eiropas komercsabiedrība"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.sce
+msgid "Eiropas kooperatīvā sabiedrība"
+msgstr "Eiropas kooperatīvā sabiedrība"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.fil
+msgid "FIL"
+msgstr "FIL"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.fil
+msgid "Filiāle"
+msgstr "Filiāle"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.gim
+msgid "GIM"
+msgstr "GIM"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.ik
+msgid "IK"
+msgstr "IK"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.ind
+msgid "IND"
+msgstr "IND"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.roi
+msgid "Iestāde"
+msgstr "Iestāde"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.ik
+msgid "Individuālais komersants"
+msgstr "Individuālais komersants"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.ind
+msgid "Individuālais uzņēmums"
+msgstr "Individuālais uzņēmums"
+
+#. module: l10n_lv
+#: model:ir.model,name:l10n_lv.model_account_journal
+msgid "Journal"
+msgstr "Reģistrs"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.kat
+msgid "KAT"
+msgstr "KAT"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.kb
+msgid "KB"
+msgstr "KB"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.kbs
+msgid "KBS"
+msgstr "KBS"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.kbu
+msgid "KBU"
+msgstr "KBU"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.kf
+msgid "KF"
+msgstr "KF"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.klo
+msgid "KLO"
+msgstr "KLO"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.kor
+msgid "KOR"
+msgstr "KOR"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.ks
+msgid "KS"
+msgstr "KS"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.kss
+msgid "KSS"
+msgstr "KSS"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.kat
+msgid "Katoļu baznīcas publisko tiesību juridiskā persona"
+msgstr "Katoļu baznīcas publisko tiesību juridiskā persona"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.klo
+msgid "Klosteris"
+msgstr "Klosteris"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.ks
+msgid "Komandītsabiedrība"
+msgstr "Komandītsabiedrība"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.kbs
+msgid "Kooperatīvo biedrību savienība"
+msgstr "Kooperatīvo biedrību savienība"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.kss
+msgid "Kooperatīvo biedrību savienības uzņēmums"
+msgstr "Kooperatīvo biedrību savienības uzņēmums"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.kbu
+msgid "Kooperatīvo biedrību uzņēmums"
+msgstr "Kooperatīvo biedrību uzņēmums"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.kb
+msgid "Kooperatīvā sabiedrība"
+msgstr "Kooperatīvā sabiedrība"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.kor
+msgid "Korporācija (profesionālā biedrība)"
+msgstr "Korporācija (profesionālā biedrība)"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.lig
+msgid "LIG"
+msgstr "LIG"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.lig
+msgid "Līgumsabiedrība ar pilnu atbildību"
+msgstr "Līgumsabiedrība ar pilnu atbildību"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.mil
+msgid "MIL"
+msgstr "MIL"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.mis
+msgid "MIS"
+msgstr "MIS"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.mil
+msgid "Masu informācijas līdzeklis"
+msgstr "Masu informācijas līdzeklis"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.mis
+msgid "Misija"
+msgstr "Misija"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.nod
+msgid "NOD"
+msgstr "NOD"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.nod
+msgid "Nodibinājums"
+msgstr "Nodibinājums"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.paj
+msgid "PAJ"
+msgstr "PAJ"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.pap
+msgid "PAP"
+msgstr "PAP"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.par
+msgid "PAR"
+msgstr "PAR"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.pol
+msgid "POL"
+msgstr "POL"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.por
+msgid "POR"
+msgstr "POR"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.pp
+msgid "PP"
+msgstr "PP"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.ppa
+msgid "PPA"
+msgstr "PPA"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.pps
+msgid "PPS"
+msgstr "PPS"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.pro
+msgid "PRO"
+msgstr "PRO"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.prv
+msgid "PRV"
+msgstr "PRV"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.ps
+msgid "PS"
+msgstr "PS"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.psv
+msgid "PSV"
+msgstr "PSV"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.paj
+msgid "Paju sabiedrība"
+msgstr "Paju sabiedrība"
+
+#. module: l10n_lv
+#: model:ir.model,name:l10n_lv.model_res_partner
+msgid "Partner"
+msgstr "Partneris"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.psv
+msgid "Pašvaldības uzņēmums"
+msgstr "Pašvaldības uzņēmums"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.ps
+msgid "Pilnsabiedrība"
+msgstr "Pilnsabiedrība"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.pol
+msgid "Politiska organizācija (partija)"
+msgstr "Politiska organizācija (partija)"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.pps
+msgid "Politiskas partijas struktūrvienība"
+msgstr "Politiskas partijas struktūrvienība"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.ppa
+msgid "Politisko partiju apvienība"
+msgstr "Politisko partiju apvienība"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.pp
+msgid "Politiskā partija"
+msgstr "Politiskā partija"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.pro
+msgid "Profesionālā radošā organizācija"
+msgstr "Profesionālā radošā organizācija"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.par
+msgid "Pārstāvniecība"
+msgstr "Pārstāvniecība"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.rel
+msgid "REL"
+msgstr "REL"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.roi
+msgid "ROI"
+msgstr "ROI"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.rel
+msgid "Reliģiskas organizācijas uzņēmums"
+msgstr "Reliģiskas organizācijas uzņēmums"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.saa
+msgid "SAA"
+msgstr "SAA"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.sab
+msgid "SAB"
+msgstr "SAB"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.sav
+msgid "SAV"
+msgstr "SAV"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.sce
+msgid "SCE"
+msgstr "SCE"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.se
+msgid "SE"
+msgstr "SE"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.sia
+msgid "SIA"
+msgstr "SIA"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.skt
+msgid "SKT"
+msgstr "SKT"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.sou
+msgid "SOU"
+msgstr "SOU"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.spa
+msgid "SPA"
+msgstr "SPA"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.spo
+msgid "SPO"
+msgstr "SPO"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.saa
+msgid "Sabiedrisko organizāciju apvienība"
+msgstr "Sabiedrisko organizāciju apvienība"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.sab
+msgid "Sabiedriskā organizācija"
+msgstr "Sabiedriskā organizācija"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.sou
+msgid "Sabiedriskās organizācijas uzņēmums"
+msgstr "Sabiedriskās organizācijas uzņēmums"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.sia
+msgid "Sabiedrība ar ierobežotu atbildību"
+msgstr "Sabiedrība ar ierobežotu atbildību"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.pap
+msgid "Sabiedrība ar papildu atbildību"
+msgstr "Sabiedrība ar papildu atbildību"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.sav
+msgid "Savienība"
+msgstr "Savienība"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.spa
+msgid "Sporta sabiedrisko organizāciju apvienība"
+msgstr "Sporta sabiedrisko organizāciju apvienība"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.spo
+msgid "Sporta sabiedriskā organizācija"
+msgstr "Sporta sabiedriskā organizācija"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.uzn
+msgid "UZN"
+msgstr "UZN"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.uzn
+msgid "Uzņēmējsabiedrības uzņēmums"
+msgstr "Uzņēmējsabiedrības uzņēmums"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.vu
+msgid "VU"
+msgstr "VU"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.vu
+msgid "Valsts uzņēmums"
+msgstr "Valsts uzņēmums"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.zem
+msgid "ZEM"
+msgstr "ZEM"
+
+#. module: l10n_lv
+#: model:res.partner.title,shortcut:l10n_lv.zvj
+msgid "ZVJ"
+msgstr "ZVJ"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.zem
+msgid "Zemnieku saimniecība"
+msgstr "Zemnieku saimniecība"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.zvj
+msgid "Zvejnieku saimniecība"
+msgstr "Zvejnieku saimniecība"
+
+#. module: l10n_lv
+#: model:ir.model,name:l10n_lv.model_account_config_settings
+msgid "account.config.settings"
+msgstr "account.config.settings"
+
+#. module: l10n_lv
+#: model:ir.model,name:l10n_lv.model_wizard_multi_charts_accounts
+msgid "wizard.multi.charts.accounts"
+msgstr "wizard.multi.charts.accounts"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.kf
+msgid "Ārvalsts komersanta filiāle"
+msgstr "Ārvalsts komersanta filiāle"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.akp
+msgid "Ārvalsts komersanta pārstāvniecība"
+msgstr "Ārvalsts komersanta pārstāvniecība"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.prv
+msgid "Ārvalstu komersanta pārstāvis"
+msgstr "Ārvalstu komersanta pārstāvis"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.por
+msgid "Ārvalstu organizācijas pārstāvniecība"
+msgstr "Ārvalstu organizācijas pārstāvniecība"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.gim
+msgid "Ģimenes uzņēmums"
+msgstr "Ģimenes uzņēmums"
+
+#. module: l10n_lv
+#: model:res.partner.title,name:l10n_lv.skt
+msgid "Šķīrējtiesa"
+msgstr "Šķīrējtiesa"
+
