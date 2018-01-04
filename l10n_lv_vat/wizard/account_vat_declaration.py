@@ -441,6 +441,8 @@ class L10nLvVatDeclaration(models.TransientModel):
             limit_val = 1430.0
             if d['move'].date <= datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
                 limit_val = 1000.0
+            if d['move'].date <= datetime.strftime(datetime.strptime('2017-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
+                limit_val = 150.0
             partner = self.form_partner_data(d['partner'])
             deal_type = ""
             doc_type = "1"
@@ -635,6 +637,8 @@ class L10nLvVatDeclaration(models.TransientModel):
             limit_val = 1430.0
             if d['move'].date <= datetime.strftime(datetime.strptime('2013-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
                 limit_val = 1000.0
+            if d['move'].date <= datetime.strftime(datetime.strptime('2017-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
+                limit_val = 150.0
             partner = self.form_partner_data(d['partner'])
             # getting tax amount and deal type:
             row_codes = [tag.name for tag in d['tax'].tag_ids if tag.name not in ['PVN1-I', 'PVN1-II', 'PVN1-III', 'PVN2']]
