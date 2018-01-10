@@ -80,7 +80,8 @@ class hr_employee(osv.osv):
     _columns = {
         'disability_group': fields.selection([('I','I'), ('II','II'), ('III','III')], 'Disability group'),
         'holiday_ids': fields.one2many('hr.holidays', 'employee_id', 'Leaves'),
-        'dependent_ids': fields.one2many('hr.employee.dependent', 'employee_id', 'Dependents')
+        'dependent_ids': fields.one2many('hr.employee.dependent', 'employee_id', 'Dependents'),
+        'relief_ids': fields.one2many('hr.employee.relief', 'employee_id', 'Tax Relief')
     }
 
 class hr_employee_dependent(osv.osv):
@@ -91,6 +92,24 @@ class hr_employee_dependent(osv.osv):
         'name': fields.char('Name', required=True),
         'date_from': fields.date('Date From'),
         'date_to': fields.date('Date To')
+    }
+
+class hr_employee_untaxed(osv.osv):
+    _name = 'hr.employee.relief'
+
+    _columns = {
+        'employee_id': fields.many2one('hr.employee', 'Employee', required=True, ondelete='cascade'),
+        'type': fields.selection([
+            ('untaxed_month', 'Untaxed Minimum for Month'),
+            ('dependent', 'Dependent Person'),
+            ('disablitity1', 'Group 1 Disability'),
+            ('disablitity2', 'Group 2 Disability'),
+            ('disablitity3', 'Group 3 Disability')
+        ], 'Type', required=True),
+        'name': fields.char('Name', required=True),
+        'date_from': fields.date('Date From'),
+        'date_to': fields.date('Date To'),
+        'amount': fields.float('Amount')
     }
 
 class hr_contract(osv.osv):

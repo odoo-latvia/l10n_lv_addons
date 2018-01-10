@@ -72,16 +72,27 @@
             <field name="model">hr.employee</field>
             <field name="inherit_id" ref="hr_contract.hr_hr_employee_view_form2"/>
             <field name="arch" type="xml">
-                <field name="children" position="after">
+<!--                <field name="children" position="after">
                     <field name="disability_group"/>
-                </field>
+                </field> -->
                 <xpath expr="//notebook/page[@string='Personal Information']/group" position="inside">
-                    <group colspan="4" col="1" string="Dependents">
+<!--                    <group colspan="4" col="1" string="Dependents">
                         <field name="dependent_ids" nolabel="1">
                             <tree editable="top">
                                 <field name="name"/>
                                 <field name="date_from"/>
                                 <field name="date_to"/>
+                            </tree>
+                        </field>
+                    </group> -->
+                    <group colspan="4" col="1" string="Tax Relief">
+                        <field name="relief_ids" nolabel="1">
+                            <tree editable="top">
+                                <field name="type"/>
+                                <field name="name"/>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                                <field name="amount"/>
                             </tree>
                         </field>
                     </group>
