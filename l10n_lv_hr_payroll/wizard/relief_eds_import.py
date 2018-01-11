@@ -56,6 +56,7 @@ class relief_eds_import(osv.osv_memory):
         if file_employees is None:
             return False
         emp_obj = self.pool.get('hr.employee')
+        rel_obj = self.pool.get('hr.employee.relief')
         e_ids = [e.id for e in data.employee_ids]
         for fe in file_employees:
             emp_ids = []
@@ -126,5 +127,45 @@ class relief_eds_import(osv.osv_memory):
                             'date_to': umm_date_to,
                             'amount': float(umm_amount)
                         })
+                for emp_id in emp_ids:
+                    for dpl in dep_list:
+                        cr.execute("""SELECT id FROM hr_employee_relief WHERE type = 'dependent' AND employee_id = %s AND UPPER(name) = %s""", (emp_id, dpl['name'],))
+                        dep_ids = [r['id'] for r in cr.dictfetchall()]
+                        if dep_ids:
+                            rel_obj.write(cr, uid, dep_ids, {
+                                'date_from': dpl['date_from'],
+                                'date_to': dpl['date_to']
+                            }, context=context)
+                        else:
+                            dep_data = dpl.copy()
+                            dep_data.update({'employee_id': emp_id})
+                            rel_obj.create(cr, uid, dep_data, context=context)
+                    for dsl in dis_list:
+                        dis_ids = rel_obj.search(cr, uid, [
+                            ('employee_id','=',emp_id),
+                            ('type','=',dsl['type']),
+                            ('date_from','=',dsl['date_from']),
+                            ('date_to','=',dsl['date_to'])
+                        ], context=context)
+                        if not_dis_ids:
+                            dis_data = dsl.copy()
+                            dis_data.update({'employee_id': emp_id})
+                            rel_obj.create(cr, uid, dis_data, context=context)
+                    for uml in umm_list:
+                        umm_ids = rel_obj.search(cr, uid, [
+                            ('employee_id','=',emp_id),
+                            ('type','=','untaxed_month'),
+                            ('date_from','=',uml['date_from']),
+                            ('date_to','=',uml['date_to'])
+                        ], context=context)
+                        if umm_ids:
+                            rel_obj.write(cr, uid, umm_ids, {
+                                'name': uml['name'],
+                                'amount': uml['amount']
+                            }, context=context)
+                        else:
+                            umm_data = uml.copy()
+                            umm_data.update({'employee_id': emp_id})
+                            rel_obj.create(cr, uid, umm_data, context=context)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
