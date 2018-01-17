@@ -49,7 +49,8 @@ Adds a new report - Payslip Summary.
         'hr_payroll_view.xml',
         'views/report_payslip_summary.xml',
         'hr_payroll_report.xml',
-        'wizard/payslip_eds_export_view.xml'
+        'wizard/payslip_eds_export_view.xml',
+        'wizard/relief_eds_import_view.xml'
     ],
     'auto_install': False,
     'installable': True,

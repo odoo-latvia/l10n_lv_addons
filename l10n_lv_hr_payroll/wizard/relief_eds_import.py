@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2015 ITS-1 (<http://www.its1.lv/>)
+#    Copyright (C) 2018 ITS-1 (<http://www.its1.lv/>)
 #                       E-mail: <info@its1.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
 #                       Phone: +371 66116534
@@ -30,11 +30,12 @@ from datetime import datetime
 
 class relief_eds_import(osv.osv_memory):
     _name = 'relief.eds.import'
+    _rec_name = 'eds_fname'
 
     _columns = {
-        'eds_file': fields.binary('XML file from EDS', required=True),
-        'eds_fname': fields.char('EDS Filename'),
-        'employees_ids': fields.many2many('hr.employee', 'Employees')
+        'eds_file': fields.binary('XML File from EDS', required=True),
+        'eds_fname': fields.char('EDS File Name'),
+        'employees_ids': fields.many2many('hr.employee', string='Employees')
     }
 
     def _get_default_employees(self, cr, uid, context=None):
@@ -57,11 +58,11 @@ class relief_eds_import(osv.osv_memory):
             return False
         emp_obj = self.pool.get('hr.employee')
         rel_obj = self.pool.get('hr.employee.relief')
-        e_ids = [e.id for e in data.employee_ids]
+        e_ids = [e.id for e in data.employees_ids]
         for fe in file_employees:
             emp_ids = []
-            fe_pc = fe.getElementsByTagName('pers_kods')[0].toxml().replace('<pers_kods>').replace('</pers_kods>')
-            fe_name = fe.getElementsByTagName('vards_uzvards')[0].toxml().replace('<vards_uzvards>').replace('</vards_uzvards>')
+            fe_pc = fe.getElementsByTagName('pers_kods')[0].toxml().replace('<pers_kods>', '').replace('</pers_kods>', '')
+            fe_name = fe.getElementsByTagName('vards_uzvards')[0].toxml().replace('<vards_uzvards>', '').replace('</vards_uzvards>', '')
             if fe_pc:
                 cr.execute("SELECT id FROM hr_employee WHERE COALESCE(identification_id, '') != '' AND REPLACE(identification_id, '-', '') = %s AND id in %s", (fe_pc, tuple(e_ids),))
                 emp_ids = [r['id'] for r in cr.dictfetchall()]
@@ -71,13 +72,13 @@ class relief_eds_import(osv.osv_memory):
             if emp_ids:
                 dep_list = []
                 dep_main = fe.getElementsByTagName('apgadajamie')
-                if dep_main is not None:
+                if dep_main:
                     deps = dep_main[0].getElementsByTagName('apgadajamais')
                     for dep in deps:
-                        dep_name = dep.getElementsByTagName('vards_uzvards')[0].toxml().replace('<vards_uzvards>').replace('</vards_uzvards>')
-                        dep_df = dep.getElementsByTagName('datums_no')[0].toxml().replace('<datums_no>').replace('</datums_no>')
+                        dep_name = dep.getElementsByTagName('vards_uzvards')[0].toxml().replace('<vards_uzvards>', '').replace('</vards_uzvards>', '')
+                        dep_df = dep.getElementsByTagName('datums_no')[0].toxml().replace('<datums_no>', '').replace('</datums_no>', '')
                         dep_date_from = datetime.strftime(datetime.strptime(dep_df, '%Y-%m-%dT%H:%M:%S').date(), '%Y-%m-%d')
-                        dep_dt = dep.getElementsByTagName('datums_lidz')[0].toxml().replace('<datums_lidz>').replace('</datums_lidz>')
+                        dep_dt = dep.getElementsByTagName('datums_lidz')[0].toxml().replace('<datums_lidz>', '').replace('</datums_lidz>', '')
                         dep_date_to = datetime.strftime(datetime.strptime(dep_dt, '%Y-%m-%dT%H:%M:%S').date(), '%Y-%m-%d')
                         dep_list.append({
                             'type': 'dependent',
@@ -87,21 +88,21 @@ class relief_eds_import(osv.osv_memory):
                         })
                 dis_list = []
                 add_main = fe.getElementsByTagName('papildu_atvieglojumi')
-                if add_main is not None:
+                if add_main:
                     adds = add_main[0].getElementsByTagName('papildu_atvieglojums')
                     for add in adds:
-                        add_type = add.getElementsByTagName('veids')[0].toxml().replace('<veids>').replace('</veids>')
+                        add_type = add.getElementsByTagName('veids')[0].toxml().replace('<veids>', '').replace('</veids>', '')
                         dis_type = False
-                        if add_type == '1. grupas invalīds':
+                        if add_type == u'1. grupas invalīds':
                             dis_type = 'disability1'
-                        if add_type == '2. grupas invalīds':
+                        if add_type == u'2. grupas invalīds':
                             dis_type = 'disability2'
-                        if add_type == '3. grupas invalīds':
+                        if add_type == u'3. grupas invalīds':
                             dis_type = 'disability3'
                         if dis_type:
-                            dis_df = dep.getElementsByTagName('datums_no')[0].toxml().replace('<datums_no>').replace('</datums_no>')
+                            dis_df = add.getElementsByTagName('datums_no')[0].toxml().replace('<datums_no>', '').replace('</datums_no>', '')
                             dis_date_from = datetime.strftime(datetime.strptime(dis_df, '%Y-%m-%dT%H:%M:%S').date(), '%Y-%m-%d')
-                            dis_dt = dep.getElementsByTagName('datums_lidz')[0].toxml().replace('<datums_lidz>').replace('</datums_lidz>')
+                            dis_dt = add.getElementsByTagName('datums_lidz')[0].toxml().replace('<datums_lidz>', '').replace('</datums_lidz>', '')
                             dis_date_to = datetime.strftime(datetime.strptime(dis_dt, '%Y-%m-%dT%H:%M:%S').date(), '%Y-%m-%d')
                             dis_list.append({
                                 'type': dis_type,
@@ -111,15 +112,15 @@ class relief_eds_import(osv.osv_memory):
                             })
                 umm_list = []
                 umm_main = fe.getElementsByTagName('prognozetie_mnm')
-                if umm_main is not None:
+                if umm_main:
                     umms = umm_main[0].getElementsByTagName('prognozetais_mnm')
                     for umm in umms:
-                        umm_name = umm.getElementsByTagName('veids')[0].toxml().replace('<veids>').replace('</veids>')
-                        umm_df = dep.getElementsByTagName('datums_no')[0].toxml().replace('<datums_no>').replace('</datums_no>')
+                        umm_name = umm.getElementsByTagName('veids')[0].toxml().replace('<veids>', '').replace('</veids>', '')
+                        umm_df = umm.getElementsByTagName('datums_no')[0].toxml().replace('<datums_no>', '').replace('</datums_no>', '')
                         umm_date_from = datetime.strftime(datetime.strptime(umm_df, '%Y-%m-%dT%H:%M:%S').date(), '%Y-%m-%d')
-                        umm_dt = dep.getElementsByTagName('datums_lidz')[0].toxml().replace('<datums_lidz>').replace('</datums_lidz>')
+                        umm_dt = umm.getElementsByTagName('datums_lidz')[0].toxml().replace('<datums_lidz>', '').replace('</datums_lidz>', '')
                         umm_date_to = datetime.strftime(datetime.strptime(umm_dt, '%Y-%m-%dT%H:%M:%S').date(), '%Y-%m-%d')
-                        umm_amount = umm.getElementsByTagName('summa')[0].toxml().replace('<summa>').replace('</summa>')
+                        umm_amount = umm.getElementsByTagName('summa')[0].toxml().replace('<summa>', '').replace('</summa>', '')
                         umm_list.append({
                             'type': 'untaxed_month',
                             'name': umm_name,
@@ -129,14 +130,9 @@ class relief_eds_import(osv.osv_memory):
                         })
                 for emp_id in emp_ids:
                     for dpl in dep_list:
-                        cr.execute("""SELECT id FROM hr_employee_relief WHERE type = 'dependent' AND employee_id = %s AND UPPER(name) = %s""", (emp_id, dpl['name'],))
+                        cr.execute("""SELECT id FROM hr_employee_relief WHERE type = 'dependent' AND employee_id = %s AND UPPER(name) = %s AND date_from = %s AND date_to = %s""", (emp_id, dpl['name'], dpl['date_from'], dpl['date_to'],))
                         dep_ids = [r['id'] for r in cr.dictfetchall()]
-                        if dep_ids:
-                            rel_obj.write(cr, uid, dep_ids, {
-                                'date_from': dpl['date_from'],
-                                'date_to': dpl['date_to']
-                            }, context=context)
-                        else:
+                        if not dep_ids:
                             dep_data = dpl.copy()
                             dep_data.update({'employee_id': emp_id})
                             rel_obj.create(cr, uid, dep_data, context=context)
@@ -147,7 +143,7 @@ class relief_eds_import(osv.osv_memory):
                             ('date_from','=',dsl['date_from']),
                             ('date_to','=',dsl['date_to'])
                         ], context=context)
-                        if not_dis_ids:
+                        if not dis_ids:
                             dis_data = dsl.copy()
                             dis_data.update({'employee_id': emp_id})
                             rel_obj.create(cr, uid, dis_data, context=context)

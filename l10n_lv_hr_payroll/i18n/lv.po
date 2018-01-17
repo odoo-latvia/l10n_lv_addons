@@ -304,3 +304,34 @@ msgstr "2. grupas invaliditāte"
 msgid "Group 3 Disability"
 msgstr "3. grupas invaliditāte"
 
+#. module: l10n_lv_hr_payroll
+#: field:relief.eds.import,eds_file:0
+msgid "XML File from EDS"
+msgstr "XML formāta fails no EDS"
+
+#. module: l10n_lv_hr_payroll
+#: field:relief.eds.import,eds_fname:0
+msgid "EDS File Name"
+msgstr "EDS faila nosaukums"
+
+#. module: l10n_lv_hr_payroll
+#: field:relief.eds.import,employees_ids:0
+msgid "Employees"
+msgstr "Darbinieki"
+
+#. module: l10n_lv_hr_payroll
+#: view:relief.eds.import:l10n_lv_hr_payroll.relief_eds_import_view
+#: model:ir.actions.act_window,name:l10n_lv_hr_payroll.relief_eds_import
+msgid "Import Tax Relief EDS File"
+msgstr "Nodokļu atvieglojumu EDS faila imports"
+
+#. module: l10n_lv_hr_payroll
+#: view:relief.eds.import:l10n_lv_hr_payroll.relief_eds_import_view
+msgid "Import"
+msgstr "Importēt"
+
+#. module: l10n_lv_hr_payroll
+#: view:relief.eds.import:l10n_lv_hr_payroll.relief_eds_import_view
+msgid "Cancel"
+msgstr "Atcelt"
+

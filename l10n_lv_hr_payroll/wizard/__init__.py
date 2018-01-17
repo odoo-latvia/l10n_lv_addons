@@ -23,5 +23,6 @@
 ##############################################################################
 
 import payslip_eds_export
+import relief_eds_import
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -94,17 +94,18 @@ class hr_employee_dependent(osv.osv):
         'date_to': fields.date('Date To')
     }
 
-class hr_employee_untaxed(osv.osv):
+class hr_employee_relief(osv.osv):
     _name = 'hr.employee.relief'
+    _order = 'date_from desc'
 
     _columns = {
         'employee_id': fields.many2one('hr.employee', 'Employee', required=True, ondelete='cascade'),
         'type': fields.selection([
             ('untaxed_month', 'Untaxed Minimum for Month'),
             ('dependent', 'Dependent Person'),
-            ('disablitity1', 'Group 1 Disability'),
-            ('disablitity2', 'Group 2 Disability'),
-            ('disablitity3', 'Group 3 Disability')
+            ('disability1', 'Group 1 Disability'),
+            ('disability2', 'Group 2 Disability'),
+            ('disability3', 'Group 3 Disability')
         ], 'Type', required=True),
         'name': fields.char('Name', required=True),
         'date_from': fields.date('Date From'),
