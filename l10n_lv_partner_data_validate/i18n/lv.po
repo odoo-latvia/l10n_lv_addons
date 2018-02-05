@@ -1,0 +1,37 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* l10n_lv_partner_data_validate
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-05 11:52+0000\n"
+"PO-Revision-Date: 2018-02-05 11:52+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_lv_partner_data_validate
+#: model:ir.model,name:l10n_lv_partner_data_validate.model_res_partner
+msgid "Contact"
+msgstr "Kontaktpersona"
+
+#. module: l10n_lv_partner_data_validate
+#. openerp-web
+#: code:addons/l10n_lv_partner_data_validate/models/res_partner.py:38
+#: code:addons/l10n_lv_partner_data_validate/static/src/js/field_validate.js:46
+#, python-format
+msgid "Invalid registry number"
+msgstr "Nederīgs reģistrācijas numurs"
+
+#. module: l10n_lv_partner_data_validate
+#. openerp-web
+#: code:addons/l10n_lv_partner_data_validate/static/src/js/field_validate.js:46
+#, python-format
+msgid "Validation error"
+msgstr "Validācijas kļūda"
+
