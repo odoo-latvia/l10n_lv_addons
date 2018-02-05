@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="base.res_partner_title_madam" model="res.partner.title">
+        <field name="type" eval="'person'"/>
+    </record>
+    <record id="base.res_partner_title_miss" model="res.partner.title">
+        <field name="type" eval="'person'"/>
+    </record>
+    <record id="base.res_partner_title_mister" model="res.partner.title">
+        <field name="type" eval="'person'"/>
+    </record>
+    <record id="base.res_partner_title_doctor" model="res.partner.title">
+        <field name="type" eval="'person'"/>
+    </record>
+    <record id="base.res_partner_title_prof" model="res.partner.title">
+        <field name="type" eval="'person'"/>
+    </record>
+
+    <record model="res.partner.title" id="l10n_lv.kf">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.akp">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.arb">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.as">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.asf">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.baz">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.bdr">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.bie">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.cen">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.die">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.drj">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.drz">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.egf">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.eig">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.fil">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.gim">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.ik">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.ind">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.kb">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.kbs">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.kbu">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.klo">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.ks">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.kor">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.kss">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.lig">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.mis">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.nod">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.paj">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.pap">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.par">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.par">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.ps">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.pol">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.por">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.pp">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.ppa">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.pps">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.pro">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.prv">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.psv">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.rel">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.roi">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.saa">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.sab">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.sav">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.sce">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.se">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.sia">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.skt">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.sou">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.spa">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.spo">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.uzn">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.vu">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.zem">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.zvj">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.mil">
+        <field name="type" eval="'company'"/>
+    </record>
+    <record model="res.partner.title" id="l10n_lv.kat">
+        <field name="type" eval="'company'"/>
+    </record>
+
+</odoo>

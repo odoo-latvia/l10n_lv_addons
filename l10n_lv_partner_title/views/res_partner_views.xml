@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Partner Titles -->
+
+    <record model="ir.ui.view" id="res_partner_title_form">
+        <field name="name">res.partner.title.form.l10n.lv</field>
+        <field name="model">res.partner.title</field>
+        <field name="inherit_id" ref="base.view_partner_title_form"/>
+        <field name="arch" type="xml">
+            <field name="shortcut" position="after">
+                <field name="type"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="res_partner_title_tree">
+        <field name="name">res.partner.title.tree.l10n.lv</field>
+        <field name="model">res.partner.title</field>
+        <field name="inherit_id" ref="base.view_partner_title_tree"/>
+        <field name="arch" type="xml">
+            <field name="shortcut" position="after">
+                <field name="type"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Partner -->
+
+    <record model="ir.ui.view" id="res_partner_form">
+        <field name="name">res.partner</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='child_ids']/form//field[@name='type']" position="after">
+                <field name="company_type" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
