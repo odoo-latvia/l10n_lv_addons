@@ -172,6 +172,17 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 customs = True
         return customs
 
+    def _check_landed_cost(self, cr, uid, move_id, context=None):
+        lc = False
+        model_obj = self.pool.get('ir.model')
+        lc_exist = model_obj.search(cr, SUPERUSER_ID, [('model','=','stock.landed.cost')], context=context)
+        if lc_exist:
+            lc_obj = self.pool.get('stock.landed.cost')
+            lc_ids = lc_obj.search(cr, SUPERUSER_ID, [('account_move_id','=',move_id)], context=context)
+            if lc_ids:
+                lc = True
+        return lc
+
     def _get_amount_data(self, cr, uid, line, amount_tax, partner_country, context=None):
         ctx = context.copy()
         ctx.update({'date': line.move_id.date})
@@ -224,6 +235,8 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         for line in line_id:
 
             partner_id = line.partner_id and line.partner_id.id or False
+            if (not partner_id) and self._check_landed_cost(cr, uid, line.move_id.id, context=context):
+                continue
             if partner_id not in partner_data:
                 partner_data.update({partner_id: {}})
                 partner_country = line.partner_id and line.partner_id.country_id and line.partner_id.country_id.code or False
