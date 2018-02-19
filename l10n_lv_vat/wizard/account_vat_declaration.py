@@ -589,7 +589,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
 
         # defining file content:
         data_of_file = """<?xml version="1.0"?>
-<DokPVNv4 xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<DokPVNv5 xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <ParskGads>%(year)s</ParskGads>""" % ({'year': str(period_to.date_stop[:4])})
 
         # getting info for period tags:
@@ -1082,7 +1082,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
 
                 data_of_file += "\n    </PVN2>"
 
-        data_of_file += "\n</DokPVNv4>"
+        data_of_file += "\n</DokPVNv5>"
 
         data_of_file_real = base64.encodestring(data_of_file.encode('utf8'))
 
