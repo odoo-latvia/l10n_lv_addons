@@ -588,9 +588,12 @@ class l10n_lv_vat_declaration(osv.osv_memory):
         period_to = obj_acc_period.browse(cr, uid, data['period_to'][0], context=context)
 
         # defining file content:
+        version = '5'
+        if period_from.date_stop <= datetime.strftime(datetime.strptime('2017-12-31', '%Y-%m-%d'), '%Y-%m-%d'):
+            version = '4'
         data_of_file = """<?xml version="1.0"?>
-<DokPVNv5 xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <ParskGads>%(year)s</ParskGads>""" % ({'year': str(period_to.date_stop[:4])})
+<DokPVNv%(version)s xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ParskGads>%(year)s</ParskGads>""" % ({'version': version, 'year': str(period_to.date_stop[:4])})
 
         # getting info for period tags:
         starting_month = period_from.date_start[5:7]
@@ -684,6 +687,8 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 add_pvn = True
                 break
 
+        info_data = {}
+
         if add_pvn == True:
             data_of_file += "\n    <PVN>"
 
@@ -765,8 +770,6 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                             r_sale.append(value)
                         if value['tag_name'] == 'PVN2':
                             sale_EU.append(value)
-
-            info_data = {}
 
             # processing purchase and purchase_refund journal types:
             d_p_s = {}
@@ -1082,7 +1085,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
 
                 data_of_file += "\n    </PVN2>"
 
-        data_of_file += "\n</DokPVNv5>"
+        data_of_file += "\n</DokPVNv%(version)s>" % ({'version': version})
 
         data_of_file_real = base64.encodestring(data_of_file.encode('utf8'))
 
