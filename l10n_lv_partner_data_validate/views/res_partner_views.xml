@@ -8,7 +8,11 @@
             <field name="inherit_id" ref="l10n_lv_partner_data.view_partner_form_l10n_lv"/>
             <field name="arch" type="xml">
                 <field name="partner_registry" position="attributes">
-                    <attribute name="widget">registry</attribute>
+                    <attribute name="widget">regno</attribute>
+                    <attribute name="options">{"country_code_field": "country_code", "is_company_field": "is_company"}</attribute>
+                </field>
+                <field name="country_id" position="after">
+                    <field name="country_code" invisible="1"/>
                 </field>
             </field>
         </record>

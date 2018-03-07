@@ -1,65 +1,70 @@
-odoo.define('web.pk_validate_widget', function (require) {
-"use strict";
+odoo.define('web.lv_reg_no', function (require) {
+"use strict"
 
-var core = require('web.core');
-var Model = require('web.Model');
-var formWidget = require('web.form_widgets');
+var core = require('web.core')
+var registry = require('web.field_registry')
+var basic_fields = require('web.basic_fields')
 
-var _t = core._t;
-var Partner = new Model('res.partner');
-var Country = new Model('res.country');
+var _t = core._t
 
-var FieldRegistry = formWidget.FieldChar.extend({
-    init: function (field_manager, node) {
-        this._super(field_manager, node);
-        this.events.input = this.proxy(this.validate);
-        this.show_error = true;
-    },
-    show_warning: function() {
-        if (this.show_error) {
-            this.show_error = false;
-            this.do_warn.apply(this, arguments);
+// TODO ability to add country field constraint
+var FieldRegNo = basic_fields.FieldChar.extend({
+    DEBOUNCE: 100,
+    resetOnAnyFieldChange: true, // Have to listen to country changes
+    _parseValue: function (value) {
+        const parsed_value = this._super.apply(this, arguments)
 
-            setTimeout((function () {
-               this.show_error = true; 
-            }).bind(this), 3000);
+        if (! this.validate(parsed_value)) {
+            throw Exception('Invalid registry')
         }
-    }, 
-    get_pk: function() {
-        return this.parse_value(this.$input.val(), '').replace('-', '');
+        return value
     },
-    validate: function() {
-        // FIXME: hack around bug
-        if (!this.$input) return false;
-
-        var value = this.get_pk();
-
-        if (value.length != 11) {
-            this.$input.addClass('o_form_invalid');
-            this.set('valid', false);
+    // revalidate regno on country change
+    reset: function() {
+        const def = this._super.apply(this, arguments)
+        this._doAction()
+        return def
+    },
+    _doAction: function() {
+        const res = this._super.apply(this, arguments)
+        this.toggleValid(this.isValid())
+        return res
+    },
+    toggleValid: function(valid) {
+        this.$el.toggleClass('o_field_invalid', !valid)
+    },
+    isCompany: function() {
+        return this.record.data[this.nodeOptions.is_company_field]
+    },
+    checksum: function(number) {
+        const weights = [9, 1, 4, 8, 3, 10, 2, 5, 7, 6, 1]
+        return number.split('').map(Number).reduce((acc, n, i) => {
+            return acc + (n * weights[i])
+        }, 0) % 11
+    },
+    partnerFromLatvia: function() {
+        return (this.nodeOptions.country_code_field
+            && this.record.data[this.nodeOptions.country_code_field] == 'LV')
+    },
+    validate: function(value) {
+        if (this.partnerFromLatvia()) {
+            if (! value.match(/\d{11}/)) {
+                return false
+            }
+            else {
+                return this.checksum(value) === 3
+            }
         }
         else {
-
-            Partner.call('frontend_check', [value]).then((function (valid) {
-                if (!valid) {
-                    this.$input.addClass('o_form_invalid');
-                    this.show_warning(_t('Validation error'), _t('Invalid registry number'));
-                    this.set('valid', false);
-                } else {
-                    this.$input.removeClass('o_form_invalid');
-                    this.set('valid', true);
-                }
-
-            }).bind(this))
-
+            return true
         }
-
     }
-});
+})
 
-core.form_widget_registry
-    .add('registry', FieldRegistry);
+registry.add('regno', FieldRegNo)
 
-return FieldRegistry
+return {
+    RegNo: FieldRegNo,
+}
 
-});
+})

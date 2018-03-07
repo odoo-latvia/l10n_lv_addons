@@ -29,17 +29,7 @@ from odoo.addons.l10n_lv_partner_data_validate import pk
 class Partner(models.Model):
     _inherit = 'res.partner'
 
-    @api.one
-    @api.constrains('partner_registry', 'individual_registry', 'country_id')
-    def _check_registry(self):
-        if self.country_id.code == 'LV':
-            registry = self.partner_registry or self.individual_registry
-            if registry and not pk.validate(registry):
-                raise ValidationError(_('Invalid registry number'))
-
-    # TODO: provide proper server side validation
-    @api.model
-    def frontend_check(self, value):
-        return pk.validate(value)
+    country_id = fields.Many2one(default=lambda s: s.env.ref('base.lv').id)
+    country_code = fields.Char('Country Code', related='country_id.code')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
