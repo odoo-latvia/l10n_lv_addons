@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="inherit_view_general_configuration" model="ir.ui.view">
+        <field name="name">Firmas.lv integration settings</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="crm.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('app_settings_block')]" position="inside">
+
+                <h2>Firmas.lv</h2>
+                <div class="row mt16 o_settings_container">
+                    <div class="col-xs-12 col-md-6 o_setting_box" id="crm_lead">
+                        <div class="o_setting_left_pane">
+                            <field name="firmas_active"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="firmas_active"
+                                string="Enable Firmas.lv"/>
+                            <div attrs="{'invisible': [('firmas_active', '=', False)]}">
+                                <br/>
+                                <div>
+                                    <label for="firmas_username"
+                                        string="Username"/>
+                                </div>
+                                <div>
+                                    <field name="firmas_username"
+                                        placeholder="Username"/>
+                                </div>
+                                <div>
+                                    <label for="firmas_password"
+                                        string="Password"/>
+                                </div>
+                                <div>
+                                    <field name="firmas_password"
+                                        placeholder="Password"
+                                        password="True"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </xpath>
+        </field>
+    </record>
+</odoo>
