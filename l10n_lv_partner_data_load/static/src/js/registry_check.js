@@ -68,7 +68,7 @@ const RegistryCheckBtn = lv_reg_no.RegNo.include({
         }, $('<div/>', {'class': 'btn-group', 'role': 'group'}))
     },
     toggleButtons: function(show) {
-        const bool = show || !this.isValid() && !this.isCompany()
+        const bool = show || !(this.isValid() && this.isCompany())
         this.$btnCheckRegno.find('button')
             .prop('disabled', _ => bool)
     },
