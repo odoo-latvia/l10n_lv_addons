@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<template id="report_saleorder_docket">
+    <t t-call="web.html_container">
+        <t t-set="is_docket" t-value="True"/>
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="sale.report_saleorder_document" t-lang="doc.partner_id.lang"/>
+        </t>
+    </t>
+</template>
+
+<report
+    id="action_report_docket_invoice"
+    string="Docket"
+    model="sale.order"
+    report_type="qweb-pdf"
+    file="l10n_lv_invoice.report_saleorder_docket"
+    name="l10n_lv_invoice.report_saleorder_docket"
+    print_report_name="'Docket - %s' % (object.name)"
+/>
+
+<template id="report_saleorder_document" inherit_id="sale.report_saleorder_document">
+
+    <xpath expr="//p[@id='fiscal_position_remark']" position="after">
+        <div t-if="env.context.get('docket', False) or is_docket">
+            <style>
+                .sig .sigcell {
+                    border-bottom: 1px solid black;
+                    width: 92%;
+                    margin: 0 3%;
+                }
+                table.sig {
+                    width: 100%;
+                    margin: 20px 0;
+                }
+                .sig tr {
+                    vertical-align: bottom;
+                    position: relative;
+                }
+                .sig tr td {
+                    padding-top: 12px;
+                }
+                .sig tr td div {
+                    margin: 0 4%;
+                }
+                .sig tr td:nth-child(odd) {
+                    width: 20%;
+                }
+                .sig tr td:nth-child(even) {
+                    width: 30%;
+                }
+            </style>
+            <table class="sig">
+                <tr>
+                    <td>
+                        Salesperson<br/>
+                        Firstname, lastname
+                    </td>
+                    <td>
+                        <!-- wkhtmltopdf disregards vertical-align: bottom -->
+                        <div>&amp;nbsp;</div>
+                        <div class="sigcell"><span t-esc="doc.user_id.name"/></div>
+                    </td>
+                    <td>
+                        Salesperson<br/>
+                        Firstname, lastname
+                    </td>
+                    <td>
+                        <div>&amp;nbsp;</div>
+                        <div class="sigcell">&amp;nbsp;</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><div t-esc="datetime.date.today().strftime('%Y.%m.%d')"/></td>
+                    <td></td>
+                    <td><div class="sigcell"/></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <div class="sigcell">&amp;nbsp;</div>
+                    </td>
+                    <td></td>
+                    <td>
+                        <div class="sigcell"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </xpath>
+
+    <div name="total" position="attributes">
+        <attribute name="style">margin: 0px;</attribute>
+    </div>
+
+    <div name="total" position="after">
+        <t t-if="doc.num2words">
+            <div style="clear: both; padding: 2em;">
+                <span>Total in words: <strong t-esc="doc.num2words(doc.amount_total)"/></span>
+            </div>
+        </t>
+    </div>
+
+    <xpath expr="//div[@class='page']/div[@class='row']" position="replace">
+        <style>
+            .sub {
+                font-size: .75em;
+                line-height: 1.25em;
+            }
+            .field {
+                margin-top: 10px;
+            }
+        </style>
+
+        <div class="row">
+            <div class="col-xs-6">
+
+                <div>
+                    <span class="sub">Supplier</span><br/><strong><t t-esc="doc.company_id.partner_id.name"/></strong>
+                </div>
+
+                <div class="field" t-if="doc.partner_id.bank_ids">
+                        <span class="sub">Account</span><br/>
+                        <t t-foreach="doc.company_id.partner_id.bank_ids.mapped(lambda s: ', '.join(filter(None, [s.acc_number, s.bank_id.bic])))" t-as="account">
+                            <span t-esc="account"/>
+                            <t t-if="not account_last">
+                                <br/>
+                            </t>
+                        </t>
+                </div>
+
+                <div class="field">
+                    <span class="sub">Address</span>
+                    <span t-field="doc.company_id.partner_id"
+                    t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>
+                </div>
+            </div>
+
+            <div class="col-xs-6">
+
+                <div>
+                    <span class="sub">Reciever</span><br/><strong><t t-esc="doc.partner_id.name"/></strong>
+                </div>
+                <div class="field" t-if="doc.partner_id.bank_ids">
+                    <span>
+                        <span class="sub">Account</span><br/>
+                        <t t-foreach="doc.partner_id.bank_ids.mapped(lambda s: ', '.join(filter(None, [s.acc_number, s.bank_id.bic])))" t-as="account">
+                            <span t-esc="account"/>
+                            <t t-if="not account_last">
+                                <br/>
+                            </t>
+                        </t>
+                    </span>
+                </div>
+
+                <t t-if="doc.partner_shipping_id == doc.partner_invoice_id
+                            and doc.partner_invoice_id != doc.partner_id
+                            or doc.partner_shipping_id != doc.partner_invoice_id">
+                    <div class="field">
+                        <span class="sub" t-if="doc.partner_shipping_id == doc.partner_invoice_id">Invoicing and shipping address</span>
+                        <span class="sub" t-if="doc.partner_shipping_id != doc.partner_invoice_id">Invoicing address</span>
+                        <span t-field="doc.partner_invoice_id"
+                            t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>
+                    </div>
+                    <div t-if="doc.partner_shipping_id != doc.partner_invoice_id" class="mt8 field">
+                        <span class="sub">Shipping address</span>
+                        <span t-field="doc.partner_shipping_id"
+                            t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>
+                    </div>
+                </t>
+            </div>
+        </div>
+
+    </xpath>
+
+</template>
+
+<template id="external_layout_standart" inherit_id="web.external_layout_standard">
+    <xpath expr="div[@class='header']" position="replace">
+        <div class="header">
+            <div class="row">
+                <div class="col-xs-3 mb4">
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="max-height: 90px; bottom: 0px;"/>
+                </div>
+            </div>
+        </div>
+    </xpath>
+</template>
+
+</odoo>
