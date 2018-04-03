@@ -12,12 +12,12 @@
 
 <report
     id="action_report_docket_invoice"
-    string="Docket"
+    string="Invoice / Delivery Note"
     model="sale.order"
     report_type="qweb-pdf"
     file="l10n_lv_invoice.report_saleorder_docket"
     name="l10n_lv_invoice.report_saleorder_docket"
-    print_report_name="'Docket - %s' % (object.name)"
+    print_report_name="'Delivery Note - %s' % (object.name)"
 />
 
 <template id="report_saleorder_document" inherit_id="sale.report_saleorder_document">
