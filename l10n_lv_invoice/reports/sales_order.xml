@@ -121,7 +121,11 @@
                     <span class="sub">Supplier</span><br/><strong><t t-esc="doc.company_id.partner_id.name"/></strong>
                 </div>
 
-                <div class="field" t-if="doc.partner_id.bank_ids">
+                <div class="field" t-if="doc.company_id.company_registry">
+                    <span class="sub">Registration No.</span><br/><span t-esc="doc.company_id.company_registry"/>
+                </div>
+
+                <div class="field" t-if="doc.company_id.partner_id.bank_ids">
                         <span class="sub">Account</span><br/>
                         <t t-foreach="doc.company_id.partner_id.bank_ids.mapped(lambda s: ', '.join(filter(None, [s.acc_number, s.bank_id.bic])))" t-as="account">
                             <span t-esc="account"/>
@@ -143,6 +147,11 @@
                 <div>
                     <span class="sub">Reciever</span><br/><strong><t t-esc="doc.partner_id.name"/></strong>
                 </div>
+
+                <div class="field" t-if="doc.partner_id.is_company and doc.partner_id.partner_registry">
+                    <span class="sub">Registration No.</span><br/><span t-esc="doc.partner_id.partner_registry"/>
+                </div>
+
                 <div class="field" t-if="doc.partner_id.bank_ids">
                     <span>
                         <span class="sub">Account</span><br/>

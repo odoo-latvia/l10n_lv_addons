@@ -30,7 +30,8 @@
     'author': 'Allegro IT',
     'website': 'http://www.allegro.lv',
     'depends': [
-        'sale'
+        'sale',
+        'l10n_lv_partner_data'
     ],
     'data': [
         'reports/sales_order.xml'
