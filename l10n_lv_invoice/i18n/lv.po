@@ -38,7 +38,7 @@ msgstr "<span class=\"sub\">Saņēmējs</span><br/>"
 #. module: l10n_lv_invoice
 #: model:ir.ui.view,arch_db:l10n_lv_invoice.report_saleorder_document
 msgid "<span class=\"sub\">Registration No.</span><br/>"
-msgstr "<span class=\"sub\">Reg.no.</span><br/>"
+msgstr "<span class=\"sub\">Reg.nr.</span><br/>"
 
 #. module: l10n_lv_invoice
 #: model:ir.ui.view,arch_db:l10n_lv_invoice.report_saleorder_document
