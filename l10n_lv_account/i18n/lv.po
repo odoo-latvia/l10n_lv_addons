@@ -1,0 +1,73 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * l10n_lv_account
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-04-18 11:16+0000\n"
+"PO-Revision-Date: 2018-04-18 11:16+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_lv_account
+#: model:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
+msgid "&amp;nbsp;"
+msgstr "&amp;nbsp;"
+
+#. module: l10n_lv_account
+#: model:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
+msgid "<span class=\"sub\">Account</span><br/>"
+msgstr "<span class=\"sub\">Konts</span><br/>"
+
+#. module: l10n_lv_account
+#: model:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
+msgid "<span class=\"sub\">Address</span>"
+msgstr "<span class=\"sub\">Adrese</span>"
+
+#. module: l10n_lv_account
+#: model:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
+msgid "<span class=\"sub\">Reciever</span><br/>"
+msgstr "<span class=\"sub\">Saņēmējs</span><br/>"
+
+#. module: l10n_lv_account
+#: model:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
+msgid "<span class=\"sub\">Registration No.</span><br/>"
+msgstr "<span class=\"sub\">Reg.nr.</span><br/>"
+
+#. module: l10n_lv_account
+#: model:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
+msgid "<span class=\"sub\">Supplier</span><br/>"
+msgstr "<span class=\"sub\">Piegādātājs</span><br/>"
+
+#. module: l10n_lv_account
+#: model:ir.model,name:l10n_lv_account.model_account_invoice
+msgid "Invoice"
+msgstr "Rēķins"
+
+#. module: l10n_lv_account
+#: model:ir.actions.report,name:l10n_lv_account.action_report_docket_invoice
+msgid "Invoice with Signature"
+msgstr "Invoice with Signature"
+
+#. module: l10n_lv_account
+#: model:ir.model,name:l10n_lv_account.model_sale_order
+msgid "Quotation"
+msgstr "Quotation"
+
+#. module: l10n_lv_account
+#: model:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
+msgid "Salesperson<br/>\n"
+"                        Firstname, lastname"
+msgstr "Pārdevējs<br/>\n"
+"                        Vārds, uzvārds"
+
+#. module: l10n_lv_account
+#: model:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
+msgid "Total in words:"
+msgstr "Summa vārdiem:"
