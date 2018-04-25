@@ -18,7 +18,7 @@
     report_type="qweb-pdf"
     file="l10n_lv_account.report_invoice"
     name="l10n_lv_account.report_invoice"
-    print_report_name="'Invoice w Sig - %s' % (object.name)"
+    print_report_name="'Invoices w Sig - %s' % (object.name)"
 />
 
 <template id="report_invoice_document" inherit_id="account.report_invoice_document">
