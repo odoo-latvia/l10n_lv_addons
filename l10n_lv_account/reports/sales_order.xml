@@ -67,7 +67,7 @@
                         <div class="sigcell"><span t-esc="o.user_id.name"/></div>
                     </td>
                     <td>
-                        Salesperson<br/>
+                        Reciever<br/>
                         Firstname, lastname
                     </td>
                     <td>
