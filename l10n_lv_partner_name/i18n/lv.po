@@ -1,0 +1,38 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* l10n_lv_partner_name
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-06-27 13:50+0000\n"
+"PO-Revision-Date: 2017-06-27 13:50+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_lv_partner_name
+#: model:ir.model.fields,field_description:l10n_lv_partner_name.field_res_partner_firstname
+#: model:ir.model.fields,field_description:l10n_lv_partner_name.field_res_users_firstname
+#: model:ir.ui.view,arch_db:l10n_lv_partner_name.view_partner_form
+#: model:ir.ui.view,arch_db:l10n_lv_partner_name.view_partner_simple_form
+msgid "Firstname"
+msgstr "Vārds"
+
+#. module: l10n_lv_partner_name
+#: model:ir.model,name:l10n_lv_partner_name.model_res_partner
+msgid "Partner"
+msgstr "Partneris"
+
+#. module: l10n_lv_partner_name
+#: model:ir.model.fields,field_description:l10n_lv_partner_name.field_res_partner_surname
+#: model:ir.model.fields,field_description:l10n_lv_partner_name.field_res_users_surname
+#: model:ir.ui.view,arch_db:l10n_lv_partner_name.view_partner_form
+#: model:ir.ui.view,arch_db:l10n_lv_partner_name.view_partner_simple_form
+msgid "Surname"
+msgstr "Uzvārds"
+
