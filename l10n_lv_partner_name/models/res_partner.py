@@ -31,80 +31,75 @@ class Partner(models.Model):
     surname = fields.Char()
 
 
+    def create_fullname(self, data):
+        """ Construct a partner's fullname from a dict or recordset"""
+        parts = []
+        for field in ['firstname', 'surname']:
+            try:
+                if data[field]:
+                    parts.append(data[field])
+            except KeyError:
+                pass
+
+        return ' '.join(parts)
+
+
+    def create_firstlast_names(self, data):
+        """ Construct firstname and surname from a dict or recordset with a name"""
+        try:
+            name = (data['name'] or '').strip()
+        except KeyError:
+            return None, None
+
+        parts = name.rsplit(' ', 1)
+
+        if len(parts) == 2:
+            return tuple(parts)
+        else:
+            return parts[0], None
+
+
     @api.onchange('firstname', 'surname')
     def change_first_last_name(self):
         if not self.is_company:
-
-            old = self.browse(self.id)
-
-            name = ''
-            if self.firstname:
-                name += self.firstname
-            if self.surname:
-                if name:
-                    name += ' '
-                name += self.surname
-
-            self.name = name or None
+            self.name = self.create_fullname(self)
 
 
     @api.onchange('name')
     def change_name(self):
         if self.is_company:
-            self.firstname, self.surname = (None, None)
-
-        elif not self.env.context.get('change_name'):
-            parts = (self.name or '').strip().rsplit(' ', 1)
-            if len(parts) == 2:
-                self.firstname, self.surname = parts
-            else:
-                if self.firstname == self.name or self.surname == self.name:
-                    pass
-                else:
-                    self.firstname = parts[0] or None
-                    self.surname = None
-
-    @api.model
-    def server_change_name(self, values):
-        changes = []
-        change_values = values.copy()
-
-        if 'name' in values:
-            changes.append('name')
-        else:
-            if 'firstname' in values:
-                changes.append('firstname')
-            elif 'surname' in values:
-                changes.append('surname')
-
-        for field in ['name', 'firstname', 'surname']:
-            if field not in values:
-                change_values.update({field: getattr(self, field)})
-
-        if changes:
-            updates = self.onchange(
-                    change_values,
-                    changes,
-                    self._onchange_spec())
-
-            return updates.get('value', {})
+            self.firstname, self.surname = None, None
 
         else:
-            return {}
+            self.firstname, self.surname = self.create_firstlast_names(self)
 
     @api.model
     def create(self, values):
-        changed = self.new({}).server_change_name(values)
-        values.update(changed)
-        return super(Partner, self).create(values)
+        if not values.get('is_company'):
+            if values.get('name'):
+                fname, sname = self.create_firstlast_names(values)
+                values.update(firstname=fname, surname=sname)
+            else:
+                values.update(name=self.create_fullname(values))
+
+        res = super(Partner, self).create(values)
+        return res
 
     @api.multi
     def write(self, values):
+
+        if values.get('name'):
+            fname, sname = self.create_firstlast_names(values)
+            values.update(firstname=fname, surname=sname)
+
         for partner in self:
-            partner_vals = values.copy()
-            changed = partner.server_change_name(values)
-            partner_vals.update(changed)
-            super(Partner, partner).write(values)
+            if not values.get('name'):
+                partner_values = values.copy()
+                name = self.create_fullname(partner_values)
+                partner_values.update(name=name)
+                super(Partner, partner).write(partner_values)
+            else:
+                super(Partner, partner).write(values)
         return True
 
     @api.multi
