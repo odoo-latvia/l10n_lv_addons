@@ -97,8 +97,8 @@
 
     <div name="total" position="after">
         <t t-if="doc.num2words">
-            <div style="clear: both; padding: 2em;">
-                <span>Total in words: <strong t-esc="doc.num2words(doc.amount_total)"/></span>
+            <div>
+                <span>Total in words: <t t-esc="doc.num2words(doc.amount_total)"/></span>
             </div>
         </t>
     </div>

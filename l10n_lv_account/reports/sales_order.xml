@@ -43,6 +43,8 @@
                     position: relative;
                 }
                 .sig tr td {
+                    padding-left: 5px;
+                    padding-right: 5px;
                     padding-top: 12px;
                 }
                 .sig tr td div {
@@ -101,9 +103,7 @@
 
     <xpath expr="//div[@id='total']" position="after">
         <t t-if="o.num2words">
-            <div style="clear: both; padding: 2em;">
-                <span>Total in words: <strong t-esc="o.num2words(o.amount_total)"/></span>
-            </div>
+            <span>Total in words: <t t-esc="o.num2words(o.amount_total)"/></span>
         </t>
     </xpath>
 
