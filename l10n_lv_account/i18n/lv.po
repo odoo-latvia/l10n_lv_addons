@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-25 14:40+0000\n"
-"PO-Revision-Date: 2018-04-25 14:40+0000\n"
+"POT-Creation-Date: 2018-06-07 14:24+0000\n"
+"PO-Revision-Date: 2018-06-07 14:24+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -47,8 +47,8 @@ msgstr "Rēķins"
 
 #. module: l10n_lv_account
 #: model:ir.actions.report,name:l10n_lv_account.action_report_docket_invoice
-msgid "Invoices with Signature"
-msgstr "Rēķini ar parakstiem"
+msgid "Invoice with Signature"
+msgstr "Rēķins ar parakstu"
 
 #. module: l10n_lv_account
 #: model:ir.model,name:l10n_lv_account.model_sale_order
