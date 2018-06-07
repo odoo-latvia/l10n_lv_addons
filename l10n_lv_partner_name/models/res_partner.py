@@ -93,7 +93,7 @@ class Partner(models.Model):
             values.update(firstname=fname, surname=sname)
 
         for partner in self:
-            if not values.get('name'):
+            if not values.get('name') and not partner.name:
                 partner_values = values.copy()
                 name = self.create_fullname(partner_values)
                 partner_values.update(name=name)
