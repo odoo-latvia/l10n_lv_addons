@@ -69,19 +69,27 @@
                         <div class="sigcell"><span t-esc="o.user_id.name"/></div>
                     </td>
                     <td>
+                    <!--
                         Reciever<br/>
                         Firstname, lastname
+                    -->
                     </td>
                     <td>
+                    <!--
                         <div>&amp;nbsp;</div>
                         <div class="sigcell">&amp;nbsp;</div>
+                    -->
                     </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td><div t-esc="datetime.date.today().strftime('%Y.%m.%d')"/></td>
                     <td></td>
-                    <td><div class="sigcell"/></td>
+                    <td>
+                    <!--
+                        <div class="sigcell"/>
+                    -->
+                    </td>
                 </tr>
                 <tr>
                     <td></td>
@@ -90,7 +98,9 @@
                     </td>
                     <td></td>
                     <td>
+                    <!--
                         <div class="sigcell"/>
+                    -->
                     </td>
                 </tr>
             </table>

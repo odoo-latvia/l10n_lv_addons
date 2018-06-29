@@ -51,7 +51,7 @@
                     width: 30%;
                 }
             </style>
-            <table class="sig" style="page-break-inside: avoid">
+            <table class="sig" style="page-break-inside: avoid" t-if="doc.state != 'cancel'">
                 <tr>
                     <td>
                         Salesperson<br/>
@@ -63,28 +63,40 @@
                         <div class="sigcell"><span t-esc="doc.user_id.name"/></div>
                     </td>
                     <td>
-                        Reciever<br/>
-                        Firstname, lastname
+                        <t t-if="doc.state in ['sale', 'done']">
+                            Reciever<br/>
+                            Firstname, lastname
+                        </t>
                     </td>
                     <td>
-                        <div>&amp;nbsp;</div>
-                        <div class="sigcell">&amp;nbsp;</div>
+                        <t t-if="doc.state in ['sale', 'done']">
+                            <div>&amp;nbsp;</div>
+                            <div class="sigcell">&amp;nbsp;</div>
+                        </t>
                     </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td><div t-esc="datetime.date.today().strftime('%Y.%m.%d')"/></td>
                     <td></td>
-                    <td><div class="sigcell"/></td>
+                    <td>
+                        <t t-if="doc.state in ['sale', 'done']">
+                            <div class="sigcell"/>
+                        </t>
+                    </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>
-                        <div class="sigcell">&amp;nbsp;</div>
+                        <t t-if="doc.state in ['sale', 'done']">
+                            <div class="sigcell">&amp;nbsp;</div>
+                        </t>
                     </td>
                     <td></td>
                     <td>
-                        <div class="sigcell"/>
+                        <t t-if="doc.state in ['sale', 'done']">
+                            <div class="sigcell"/>
+                        </t>
                     </td>
                 </tr>
             </table>
