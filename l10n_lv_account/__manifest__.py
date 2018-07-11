@@ -37,7 +37,7 @@
         'l10n_lv_partner_data'
     ],
     'data': [
-        'reports/sales_order.xml'
+#        'reports/sales_order.xml'
     ],
     'demo': [],
     'installable': True,
