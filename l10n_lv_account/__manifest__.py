@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Part of Odoo.
-#    Copyright (C) 2017 Allegro IT (<http://www.allegro.lv/>)
+#    Copyright (C) 2018 Allegro IT (<http://www.allegro.lv/>)
 #                       E-mail: <info@allegro.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
 #                       Phone: +371 67289467
@@ -37,7 +37,7 @@
         'l10n_lv_partner_data'
     ],
     'data': [
-#        'reports/sales_order.xml'
+        'reports/report_invoice.xml'
     ],
     'demo': [],
     'installable': True,
