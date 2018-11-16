@@ -36,7 +36,8 @@ class payslip_eds_export(osv.osv_memory):
         'name': fields.char('File Name', size=32, required=True),
         'file_save': fields.binary('Save File', filters='*.xml', readonly=True),
         'responsible_id': fields.many2one('hr.employee', 'Responsible', required=True),
-        'date_pay': fields.date('Payment Date', required=True)
+        'date_pay': fields.date('Payment Date', required=True),
+        'iin_src': fields.selection([('sel_month', 'Selected Month'), ('prev_month','Previous Month')], string='IIN From', required=True, default='prev_month')
     }
 
     def get_year_month(self, cr, uid, context=None):
@@ -181,6 +182,29 @@ class payslip_eds_export(osv.osv_memory):
         'date_pay': _get_default_date_pay
     }
 
+    def get_prev_iin(self, cr, uid, lines, context=None):
+        payslips = []
+        for l in lines:
+            if l.slip_id and l.slip_id not in payslips:
+                payslips.append(l.slip_id)
+        date_from = False
+        employee_id = False
+        for p in payslips:
+            employee_id = p.employee_id.id
+            if date_from != False and p.date_from < date_from:
+                date_from = p.date_from
+            if date_from == False:
+                date_from = p.date_from
+        iin = 0.0
+        if payslips:
+            ps_obj = self.pool.get('hr.payslip')
+            prev_ps_ids = ps_obj.search(cr, uid, [('employee_id','=',employee_id), ('date_from','<',date_from)], order='date_from desc', limit=len(payslips), context=context)
+            for pps in ps_obj.browse(cr, uid, prev_ps_ids, context=context):
+                for pl in pps.line_ids:
+                    if pl.code == 'IIN':
+                        iin += pl.total
+        return iin
+
     def create_xml(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
@@ -241,13 +265,15 @@ class payslip_eds_export(osv.osv_memory):
                     ienakumi = 0.0
                     iemaksas = 0.0
                     iin = 0.0
+                    if data_exp.iin_src == 'prev_month':
+                        iin = self.get_prev_iin(cr, uid, v['lines'], context=context)
                     rn = 0.0
                     for l in v['lines']:
                         if l.salary_rule_id.category_id.code == 'BRUTOnLV':
                             ienakumi += l.total
                         if l.salary_rule_id.category_id.code == 'VSAOILV':
                             iemaksas += l.total
-                        if l.code == 'IIN':
+                        if data_exp.iin_src == 'sel_month' and l.code == 'IIN':
                             iin += l.total
                         if l.code == 'RN':
                             rn += l.total

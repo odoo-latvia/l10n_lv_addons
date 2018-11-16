@@ -335,3 +335,18 @@ msgstr "Importēt"
 msgid "Cancel"
 msgstr "Atcelt"
 
+#. module: l10n_lv_hr_payroll
+#: field:payslip.eds.export,iin_src:0
+msgid "IIN From"
+msgstr "IIN no"
+
+#. module: l10n_lv_hr_payroll
+#: selection:payslip.eds.export,iin_src:0
+msgid "Selected Month"
+msgstr "Izvēlētā mēneša"
+
+#. module: l10n_lv_hr_payroll
+#: selection:payslip.eds.export,iin_src:0
+msgid "Previous Month"
+msgstr "Iepiekšējā mēneša"
+
