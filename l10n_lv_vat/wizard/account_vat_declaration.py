@@ -237,8 +237,13 @@ class l10n_lv_vat_declaration(osv.osv_memory):
             partner_id = line.partner_id and line.partner_id.id or False
             if (not partner_id) and self._check_landed_cost(cr, uid, line.move_id.id, context=context):
                 continue
+            pdn = line.move_id.name
+            if hasattr(line, 'invoice_code_char'):
+                exp = self.pool.get('hr.expense.expense').search(cr, uid, [('account_move_id','=',line.move_id.id)], context=context)
+                if exp:
+                    pdn = line.invoice_code_char
             if partner_id not in partner_data:
-                partner_data.update({partner_id: {}})
+                partner_data.update({(partner_id, pdn): {}})
                 partner_country = line.partner_id and line.partner_id.country_id and line.partner_id.country_id.code or False
                 vat_no = line.partner_id and line.partner_id.vat or False
                 partner_vat = False
@@ -253,7 +258,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                     partner_country = 'EL'
                 if line.partner_id and (not partner_vat) and hasattr(line.partner_id, 'company_registry'):
                     partner_vat = line.partner_id.company_registry
-                partner_data[partner_id].update({
+                partner_data[(partner_id, pdn)].update({
                     'partner_id': partner_id,
                     'partner_name': line.partner_id and line.partner_id.name or '',
                     'partner_country': partner_country,
@@ -282,42 +287,42 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 })
 
             if line.tax_code_id and self._check_tax_code(cr, uid, line.tax_code_id.id, context=context):
-                currency_data = self._get_amount_data(cr, uid, line, (line.tax_amount * line.tax_code_id.sign), partner_data[partner_id]['partner_country'], context=context)
-                partner_data[partner_id]['amount_tax'] += currency_data['tax_amount']
-                partner_data[partner_id]['amount_tax_cur'] += currency_data['cur_amount']
-                partner_data[partner_id]['currency'] = currency_data['country_currency']
-                if line.tax_code_id.tax_code and line.tax_code_id.tax_code not in partner_data[partner_id]['tax_codes']:
-                    partner_data[partner_id]['tax_codes'].append(line.tax_code_id.tax_code)
+                currency_data = self._get_amount_data(cr, uid, line, (line.tax_amount * line.tax_code_id.sign), partner_data[(partner_id, pdn)]['partner_country'], context=context)
+                partner_data[(partner_id, pdn)]['amount_tax'] += currency_data['tax_amount']
+                partner_data[(partner_id, pdn)]['amount_tax_cur'] += currency_data['cur_amount']
+                partner_data[(partner_id, pdn)]['currency'] = currency_data['country_currency']
+                if line.tax_code_id.tax_code and line.tax_code_id.tax_code not in partner_data[(partner_id, pdn)]['tax_codes']:
+                    partner_data[(partner_id, pdn)]['tax_codes'].append(line.tax_code_id.tax_code)
                     if line.tax_code_id.tax_code == '61' and line.move_id.ref:
-                        partner_data[partner_id]['doc_number'] = line.move_id.ref
+                        partner_data[(partner_id, pdn)]['doc_number'] = line.move_id.ref
             if (line.tax_code_id and self._check_tax_base_code(cr, uid, line.tax_code_id.id, context=context)) or ((not line.tax_code_id) and line.tax_amount != 0.0):
                 sign = line.tax_code_id and line.tax_code_id.sign or 1.0
-                currency_data = self._get_amount_data(cr, uid, line, (line.tax_amount * sign), partner_data[partner_id]['partner_country'], context=context)
-                partner_data[partner_id]['amount_untaxed'] += currency_data['tax_amount']
-                partner_data[partner_id]['amount_untaxed_cur'] += currency_data['cur_amount']
-                partner_data[partner_id]['currency'] = currency_data['country_currency']
+                currency_data = self._get_amount_data(cr, uid, line, (line.tax_amount * sign), partner_data[(partner_id, pdn)]['partner_country'], context=context)
+                partner_data[(partner_id, pdn)]['amount_untaxed'] += currency_data['tax_amount']
+                partner_data[(partner_id, pdn)]['amount_untaxed_cur'] += currency_data['cur_amount']
+                partner_data[(partner_id, pdn)]['currency'] = currency_data['country_currency']
                 if line.tax_code_id.tax_code:
                     if line.tax_code_id.tax_code == '45':
-                        partner_data[partner_id]['amount_untaxed_45'] += currency_data['tax_amount']
+                        partner_data[(partner_id, pdn)]['amount_untaxed_45'] += currency_data['tax_amount']
                     if line.tax_code_id.tax_code == '48.2':
-                        partner_data[partner_id]['amount_untaxed_48.2'] += currency_data['tax_amount']
-                    if line.tax_code_id.tax_code not in partner_data[partner_id]['tax_codes_l']:
-                        partner_data[partner_id]['tax_codes_l'].append(line.tax_code_id.tax_code)
+                        partner_data[(partner_id, pdn)]['amount_untaxed_48.2'] += currency_data['tax_amount']
+                    if line.tax_code_id.tax_code not in partner_data[(partner_id, pdn)]['tax_codes_l']:
+                        partner_data[(partner_id, pdn)]['tax_codes_l'].append(line.tax_code_id.tax_code)
 
             if not line.tax_code_id:
-                currency_data = self._get_amount_data(cr, uid, line, (line.debit or line.credit), partner_data[partner_id]['partner_country'], context=context)
-                partner_data[partner_id]['amount_taxed'] += currency_data['tax_amount']
-                partner_data[partner_id]['amount_taxed_cur'] += currency_data['cur_amount']
-                partner_data[partner_id]['currency'] = currency_data['country_currency']
+                currency_data = self._get_amount_data(cr, uid, line, (line.debit or line.credit), partner_data[(partner_id, pdn)]['partner_country'], context=context)
+                partner_data[(partner_id, pdn)]['amount_taxed'] += currency_data['tax_amount']
+                partner_data[(partner_id, pdn)]['amount_taxed_cur'] += currency_data['cur_amount']
+                partner_data[(partner_id, pdn)]['currency'] = currency_data['country_currency']
 
             if line.invoice:
-                if line.invoice not in partner_data[partner_id]['invoices']:
-                    partner_data[partner_id]['invoices'].append(line.invoice)
+                if line.invoice not in partner_data[(partner_id, pdn)]['invoices']:
+                    partner_data[(partner_id, pdn)]['invoices'].append(line.invoice)
                 if line.invoice.type in ['in_invoice', 'in_refund'] and line.invoice.supplier_invoice_number:
-                    partner_data[partner_id]['doc_number'] = line.invoice.supplier_invoice_number
+                    partner_data[(partner_id, pdn)]['doc_number'] = line.invoice.supplier_invoice_number
 
-            if line.product_id and line.product_id.type not in partner_data[partner_id]['product_types']:
-                partner_data[partner_id]['product_types'].append(line.product_id.type)
+            if line.product_id and line.product_id.type not in partner_data[(partner_id, pdn)]['product_types']:
+                partner_data[(partner_id, pdn)]['product_types'].append(line.product_id.type)
 
         # amount check:
         for key, value in partner_data.iteritems():
