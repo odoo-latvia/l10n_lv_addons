@@ -242,7 +242,7 @@ class l10n_lv_vat_declaration(osv.osv_memory):
                 exp = self.pool.get('hr.expense.expense').search(cr, uid, [('account_move_id','=',line.move_id.id)], context=context)
                 if exp:
                     pdn = line.invoice_code_char
-            if partner_id not in partner_data:
+            if (partner_id, pdn) not in partner_data:
                 partner_data.update({(partner_id, pdn): {}})
                 partner_country = line.partner_id and line.partner_id.country_id and line.partner_id.country_id.code or False
                 vat_no = line.partner_id and line.partner_id.vat or False
