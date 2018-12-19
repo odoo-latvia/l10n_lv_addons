@@ -188,18 +188,28 @@ class payslip_eds_export(osv.osv_memory):
             if l.slip_id and l.slip_id not in payslips:
                 payslips.append(l.slip_id)
         date_from = False
+        date_to = False
         employee_id = False
         for p in payslips:
             employee_id = p.employee_id.id
-            if date_from != False and p.date_from < date_from:
+            if date_from == False or date_from != False and p.date_from < date_from:
                 date_from = p.date_from
-            if date_from == False:
-                date_from = p.date_from
+            if date_to == False or date_to != False and p.date_to < date_to:
+                date_to = p.date_to
         iin = 0.0
         if payslips:
+            days_diff = datetime.strptime(date_to, '%Y-%m-%d') - datetime.strptime(date_from, '%Y-%m-%d')
+            dys = days_diff.days
             ps_obj = self.pool.get('hr.payslip')
-            prev_ps_ids = ps_obj.search(cr, uid, [('employee_id','=',employee_id), ('date_from','<',date_from)], order='date_from desc', limit=len(payslips), context=context)
+            prev_ps_ids = ps_obj.search(cr, uid, [('employee_id','=',employee_id), ('date_from','<',date_from)], order='date_from desc', context=context)
+            dys2 = 0
+            c = 0
             for pps in ps_obj.browse(cr, uid, prev_ps_ids, context=context):
+                c += 1
+                d_diff = datetime.strptime(pps.date_to, '%Y-%m-%d') - datetime.strptime(pps.date_from, '%Y-%m-%d')
+                dys2 += d_diff.days
+                if c > 1 and dys2 > dys:
+                    break
                 for pl in pps.line_ids:
                     if pl.code == 'IIN':
                         iin += pl.total
