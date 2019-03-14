@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Part of Odoo.
-#    Copyright (C) 2017 Allegro IT (<http://www.allegro.lv/>)
+#    Copyright (C) 2019 Allegro IT (<http://www.allegro.lv/>)
 #                       E-mail: <info@allegro.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
 #                       Phone: +371 67289467
@@ -23,6 +23,7 @@
 ##############################################################################
 
 from odoo import api, fields, models, _
+from odoo.http import request
 
 class AccountJournal(models.Model):
     _inherit = "account.journal"
@@ -42,51 +43,38 @@ class AccountJournal(models.Model):
         return res
 
 
-class WizardMultiChartsAccounts(models.TransientModel):
-    _inherit = "wizard.multi.charts.accounts"
+class AccountChartTemplate(models.Model):
+    _inherit = "account.chart.template"
 
-    @api.onchange('chart_template_id')
-    def onchange_chart_template_id(self):
-        res = super(WizardMultiChartsAccounts, self).onchange_chart_template_id()
-        lv_chart_template = self.env.ref('l10n_lv.l10n_lv_chart_template')
-        if lv_chart_template and self.chart_template_id.id == lv_chart_template.id:
-            self.sale_tax_rate = 21.0
-            self.purchase_tax_rate = 21.0
+    def load_for_current_company(self, sale_tax_rate, purchase_tax_rate):
+        self.ensure_one()
+        if self == self.env.ref('l10n_lv.l10n_lv_chart_template'):
+            sale_tax_rate = 21.0
+            purchase_tax_rate = 21.0
+        res = super(AccountChartTemplate, self).load_for_current_company(sale_tax_rate, purchase_tax_rate)
+        if self == self.env.ref('l10n_lv.l10n_lv_chart_template'):
+            if request and request.session.uid:
+                current_user = self.env['res.users'].browse(request.uid)
+                company = current_user.company_id
+            else:
+                company = self.env.user.company_id
+            sale_tax = self.env['account.tax'].search([
+                ('type_tax_use','=','sale'), 
+                ('amount_type','=','percent'), 
+                ('amount','=',21.0), 
+                ('company_id','=',company.id)
+            ], limit=1)
+            if sale_tax and company.account_sale_tax_id != sale_tax:
+                company.account_sale_tax_id = sale_tax.id
+            purchase_tax = self.env['account.tax'].search([
+                ('type_tax_use','=','purchase'), 
+                ('amount_type','=','percent'), 
+                ('amount','=',21.0), 
+                ('company_id','=',company.id)
+            ], limit=1)
+            if purchase_tax and company.account_purchase_tax_id != purchase_tax:
+                company.account_purchase_tax_id = purchase_tax.id
         return res
-
-    @api.model
-    def create(self, values):
-        tax_values = [
-            'default_sale_tax_rate',
-            'default_purchase_tax_rate',
-            'default_sale_tax_id',
-            'default_purchase_tax_id'
-        ]
-        for tv in tax_values:
-            if self.env.context.get(tv):
-                values.update({tv[8:]: self.env.context[tv]})
-        return super(WizardMultiChartsAccounts, self).create(values)
-
-
-class ResConfigSettings(models.TransientModel):
-    _inherit = "res.config.settings"
-
-    @api.multi
-    def set_values(self):
-        ctx = self.env.context.copy()
-        lv_chart_template = self.env.ref('l10n_lv.l10n_lv_chart_template')
-        if self.chart_template_id and lv_chart_template and self.chart_template_id.id == lv_chart_template.id:
-            ctx.update({
-                'default_sale_tax_rate': 21.0,
-                'default_purchase_tax_rate': 21.0
-            })
-            lv_sale_tax_tmpl = self.env.ref('l10n_lv.lv_tax_template_PVN-SR')
-            lv_purchase_tax_tmpl = self.env.ref('l10n_lv.lv_tax_template_Pr-SR')
-            if lv_sale_tax_tmpl:
-                ctx.update({'default_sale_tax_id': lv_sale_tax_tmpl.id})
-            if lv_purchase_tax_tmpl:
-                ctx.update({'default_purchase_tax_id': lv_purchase_tax_tmpl.id})
-        return super(ResConfigSettings, self.with_context(ctx)).set_values()
 
 
 class AccountTaxTemplate(models.Model):

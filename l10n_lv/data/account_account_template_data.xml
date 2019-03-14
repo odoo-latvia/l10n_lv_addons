@@ -461,6 +461,14 @@
         <field name="group_id" ref="lv_account_group_26"/>
     </record>
 
+<!--    <record id="lv_account_template_2690" model="account.account.template">
+        <field name="name">Nauda ceļā</field>
+        <field name="code">2690</field>
+        <field name="user_type_id" ref="lv_account_type_2_5"/>
+        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
+        <field name="group_id" ref="lv_account_group_26"/>
+    </record> -->
+
 <!-- -->
 
     <record id="lv_account_template_3110" model="account.account.template">

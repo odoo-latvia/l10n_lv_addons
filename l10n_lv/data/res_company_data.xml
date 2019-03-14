@@ -4,7 +4,6 @@
     <record id="base.main_company" model="res.company">
         <field name="bank_account_code_prefix">262</field>
         <field name="cash_account_code_prefix">261</field>
-        <field name="accounts_code_digits">4</field>
         <field name="currency_id" ref="base.EUR"/>
     </record>
 

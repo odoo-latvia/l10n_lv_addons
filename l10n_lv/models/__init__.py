@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Part of Odoo.
-#    Copyright (C) 2017 Allegro IT (<http://www.allegro.lv/>)
+#    Copyright (C) 2019 Allegro IT (<http://www.allegro.lv/>)
 #                       E-mail: <info@allegro.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
 #                       Phone: +371 67289467
@@ -22,6 +22,6 @@
 #
 ##############################################################################
 
-#from . import account
+from . import account
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
