@@ -43,7 +43,7 @@ Validates the checksum of Registration No. and Personal No. to Partner.
     ],
     'external_dependencies': {'python': ['stdnum']},
     'demo': [],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
     'qweb': [],
 }

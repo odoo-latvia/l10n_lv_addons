@@ -38,7 +38,7 @@ Profession, Health Hazard and Work Condition data for Latvian Professions.
     ],
     'post_init_hook': 'post_init',
     'demo': [],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
     'qweb': [],
 }

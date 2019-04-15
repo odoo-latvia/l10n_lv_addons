@@ -23,21 +23,22 @@
 ##############################################################################
 
 {
-    'name': 'Latvia - Accounting Invoice',
+    'name': 'LV Partner data',
     'version': '1.1',
     'category': 'Localization',
-    'summary': 'Localize account for lv',
     'description': """
-    Add invoice report with signatures
-    """,
+Additional Partner data for Latvia.
+=====================================
+Adds Registration No. and Personal No. to Partner.
+""",
     'author': 'Allegro IT',
     'website': 'http://www.allegro.lv',
+    'images': [],
     'depends': [
-        'account',
-        'l10n_lv_partner_data'
+        'base'
     ],
     'data': [
-        'reports/report_invoice.xml'
+       'views/res_partner_views.xml'
     ],
     'demo': [],
     'installable': False,

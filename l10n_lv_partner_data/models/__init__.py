@@ -22,27 +22,6 @@
 #
 ##############################################################################
 
-{
-    'name': 'Latvia - Accounting Invoice',
-    'version': '1.1',
-    'category': 'Localization',
-    'summary': 'Localize account for lv',
-    'description': """
-    Add invoice report with signatures
-    """,
-    'author': 'Allegro IT',
-    'website': 'http://www.allegro.lv',
-    'depends': [
-        'account',
-        'l10n_lv_partner_data'
-    ],
-    'data': [
-        'reports/report_invoice.xml'
-    ],
-    'demo': [],
-    'installable': False,
-    'auto_install': False,
-    'qweb': [],
-}
+from . import res_partner
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -45,7 +45,7 @@ First and middle names are seporated by a space 'Martins Juris Kristians'.
         'views/res_partner_view.xml'
     ],
     'auto_install': False,
-    'installable': True,
+    'installable': False,
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
