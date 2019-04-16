@@ -41,7 +41,7 @@ Browse, search by abbreviations.
        'data/res_partner_title_data.xml'
     ],
     'demo': [],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'qweb': [],
 }

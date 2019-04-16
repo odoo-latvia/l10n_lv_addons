@@ -152,7 +152,7 @@
             <field name="name">Sabiedrība ar papildu atbildību</field>
         </record>
 
-        <record model="res.partner.title" id="par">
+        <record model="res.partner.title" id="par_arv">
             <field name="shortcut">PAR</field>
             <field name="name">Ārvalstu komersanta pārstāvniecība</field>
         </record>

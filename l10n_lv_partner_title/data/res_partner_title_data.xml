@@ -107,7 +107,7 @@
     <record model="res.partner.title" id="l10n_lv.pap">
         <field name="type" eval="'company'"/>
     </record>
-    <record model="res.partner.title" id="l10n_lv.par">
+    <record model="res.partner.title" id="l10n_lv.par_arv">
         <field name="type" eval="'company'"/>
     </record>
     <record model="res.partner.title" id="l10n_lv.par">

@@ -31,7 +31,7 @@ msgid "Individual"
 msgstr "Privātpersona"
 
 #. module: l10n_lv_partner_title
-#: model:ir.model.fields,field_description:l10n_lv_partner_title.field_res_partner_title_type
+#: model:ir.model.fields,field_description:l10n_lv_partner_title.field_res_partner_title__type
 msgid "Type"
 msgstr "Veids"
 
