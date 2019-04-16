@@ -59,17 +59,16 @@ class Partner(models.Model):
             return parts[0], None
 
 
-    @api.onchange('firstname', 'surname')
+    @api.onchange('firstname', 'surname', 'is_company')
     def change_first_last_name(self):
-        if not self.is_company:
+        if (not self.is_company) and (self.firstname or self.surname):
             self.name = self.create_fullname(self)
 
 
-    @api.onchange('name')
+    @api.onchange('name', 'is_company')
     def change_name(self):
         if self.is_company:
             self.firstname, self.surname = None, None
-
         else:
             self.firstname, self.surname = self.create_firstlast_names(self)
 
@@ -81,17 +80,13 @@ class Partner(models.Model):
                 values.update(firstname=fname, surname=sname)
             else:
                 values.update(name=self.create_fullname(values))
-
-        res = super(Partner, self).create(values)
-        return res
+        return super(Partner, self).create(values)
 
     @api.multi
     def write(self, values):
-
         if values.get('name'):
             fname, sname = self.create_firstlast_names(values)
             values.update(firstname=fname, surname=sname)
-
         for partner in self:
             if not values.get('name') and not partner.name:
                 partner_values = values.copy()
@@ -102,11 +97,17 @@ class Partner(models.Model):
                 super(Partner, partner).write(values)
         return True
 
-    @api.multi
+    @api.model
     def generate_names(self):
-        Partner = self.new()
-        for r in self:
-            if r.name:
-                r.write(Partner.server_change_name({'name': r.name}))
+        nonames = self.search([('is_company','=',False), '|', ('firstname','=',False), ('surname','=',False)])
+        for nn in nonames:
+            fname, sname = self.create_firstlast_names(nn)
+            nn_vals = {}
+            if (not nn.firstname) and fname:
+                nn_vals.update({'firstname': fname})
+            if (not nn.surname) and sname:
+                nn_vals.update({'surname': sname})
+            if nn_vals:
+                nn.write(nn_vals)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

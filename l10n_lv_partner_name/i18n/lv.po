@@ -16,8 +16,8 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_lv_partner_name
-#: model:ir.model.fields,field_description:l10n_lv_partner_name.field_res_partner_firstname
-#: model:ir.model.fields,field_description:l10n_lv_partner_name.field_res_users_firstname
+#: model:ir.model.fields,field_description:l10n_lv_partner_name.field_res_partner__firstname
+#: model:ir.model.fields,field_description:l10n_lv_partner_name.field_res_users__firstname
 #: model:ir.ui.view,arch_db:l10n_lv_partner_name.view_partner_form
 #: model:ir.ui.view,arch_db:l10n_lv_partner_name.view_partner_simple_form
 msgid "Firstname"
@@ -29,8 +29,8 @@ msgid "Partner"
 msgstr "Partneris"
 
 #. module: l10n_lv_partner_name
-#: model:ir.model.fields,field_description:l10n_lv_partner_name.field_res_partner_surname
-#: model:ir.model.fields,field_description:l10n_lv_partner_name.field_res_users_surname
+#: model:ir.model.fields,field_description:l10n_lv_partner_name.field_res_partner__surname
+#: model:ir.model.fields,field_description:l10n_lv_partner_name.field_res_users__surname
 #: model:ir.ui.view,arch_db:l10n_lv_partner_name.view_partner_form
 #: model:ir.ui.view,arch_db:l10n_lv_partner_name.view_partner_simple_form
 msgid "Surname"
