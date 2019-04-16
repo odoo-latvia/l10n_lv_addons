@@ -41,7 +41,7 @@ Adds Registration No. and Personal No. to Partner.
        'views/res_partner_views.xml'
     ],
     'demo': [],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'qweb': [],
 }

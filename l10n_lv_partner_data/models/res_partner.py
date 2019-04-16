@@ -27,13 +27,17 @@ from odoo import api, fields, models, _
 class Partner(models.Model):
     _inherit = "res.partner"
 
-    partner_registry = fields.Char(string='Registration No. / Personal No.', index=True)
-    individual_registry = fields.Char(string='Personal No.', related='partner_registry')
+    partner_registry = fields.Char(string='Registration No.', index=True)
+    individual_registry = fields.Char(string='Personal No.')
     code = fields.Char(string='Code')
 
     @api.onchange('individual_registry')
     def _change_individual_registry(self):
         self.partner_registry = self.individual_registry
+
+    @api.onchange('partner_registry')
+    def _change_partner_registry(self):
+        self.individual_registry = self.partner_registry
 
 
 class Company(models.Model):

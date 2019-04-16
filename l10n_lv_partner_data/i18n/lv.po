@@ -16,10 +16,10 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_lv_partner_data
-#: model:ir.model.fields,field_description:l10n_lv_partner_data.field_res_partner_code
-#: model:ir.model.fields,field_description:l10n_lv_partner_data.field_res_users_code
-#: model:ir.ui.view,arch_db:l10n_lv_partner_data.view_partner_form_l10n_lv
-#: model:ir.ui.view,arch_db:l10n_lv_partner_data.view_partner_simple_form_l10n_lv
+#: model:ir.model.fields,field_description:l10n_lv_partner_data.field_res_partner__code
+#: model:ir.model.fields,field_description:l10n_lv_partner_data.field_res_users__code
+#: model_terms:ir.ui.view,arch_db:l10n_lv_partner_data.view_partner_form_l10n_lv
+#: model_terms:ir.ui.view,arch_db:l10n_lv_partner_data.view_partner_simple_form_l10n_lv
 msgid "Code"
 msgstr "Kods"
 
@@ -34,22 +34,19 @@ msgid "Contact"
 msgstr "Kontaktpersona"
 
 #. module: l10n_lv_partner_data
-#: model:ir.model.fields,field_description:l10n_lv_partner_data.field_res_partner_individual_registry
-#: model:ir.model.fields,field_description:l10n_lv_partner_data.field_res_users_individual_registry
-#: model:ir.ui.view,arch_db:l10n_lv_partner_data.view_partner_form_l10n_lv
-#: model:ir.ui.view,arch_db:l10n_lv_partner_data.view_partner_simple_form_l10n_lv
+#: model:ir.model.fields,field_description:l10n_lv_partner_data.field_res_partner__individual_registry
+#: model:ir.model.fields,field_description:l10n_lv_partner_data.field_res_users__individual_registry
 msgid "Personal No."
 msgstr "Personas kods"
 
 #. module: l10n_lv_partner_data
-#: model:ir.ui.view,arch_db:l10n_lv_partner_data.view_partner_form_l10n_lv
-#: model:ir.ui.view,arch_db:l10n_lv_partner_data.view_partner_simple_form_l10n_lv
+#: model:ir.model.fields,field_description:l10n_lv_partner_data.field_res_partner__partner_registry
+#: model:ir.model.fields,field_description:l10n_lv_partner_data.field_res_users__partner_registry
 msgid "Registration No."
 msgstr "Reģistrācijas Nr."
 
 #. module: l10n_lv_partner_data
-#: model:ir.model.fields,field_description:l10n_lv_partner_data.field_res_partner_partner_registry
-#: model:ir.model.fields,field_description:l10n_lv_partner_data.field_res_users_partner_registry
+#: model_terms:ir.ui.view,arch_db:l10n_lv_partner_data.view_res_partner_filter_l10n_lv
 msgid "Registration No. / Personal No."
 msgstr "Reģistrācijas Nr. / Personas kods"
 
