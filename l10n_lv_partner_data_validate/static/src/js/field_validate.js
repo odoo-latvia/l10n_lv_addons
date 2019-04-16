@@ -47,7 +47,7 @@ var FieldRegNo = basic_fields.FieldChar.extend({
             && this.record.data[this.nodeOptions.country_code_field] == 'LV')
     },
     validate: function(value) {
-        if (this.partnerFromLatvia()) {
+        if (this.partnerFromLatvia() && this.isCompany() && Boolean(value)) {
             if (! value.match(/\d{11}/)) {
                 return false
             }
