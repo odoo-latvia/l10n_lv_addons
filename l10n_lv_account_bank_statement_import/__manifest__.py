@@ -49,7 +49,7 @@ Bank Statement data import in the following formats:
         'data/account_bank_transaction_type_data.xml'
     ],
     'demo': [],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'qweb': [],
 }

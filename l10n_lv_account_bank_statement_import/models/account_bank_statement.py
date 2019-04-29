@@ -25,7 +25,7 @@
 from odoo import api, fields, models, _
 
 class AccountBankStatementLine(models.Model):
-    _name = "account.bank.statement.line"
+    _inherit = "account.bank.statement.line"
 
     transaction_type = fields.Char('Trans. Type Code', readonly=True)
     partner_reg_id = fields.Char('Partner Registration Number', readonly=True)
