@@ -22,8 +22,25 @@
 #
 ##############################################################################
 
-from . import account_bank_transaction_type
-from . import account_bank_statement
-from . import account_journal
+from odoo import api, fields, models, _
+
+class AccountJournal(models.Model):
+    _inherit = "account.journal"
+
+    def __get_bank_statements_available_sources(self):
+        res = super(AccountJournal, self).__get_bank_statements_available_sources()
+        add_manual = True
+        add_import = True
+        for r in res:
+            if r[0] == 'manual':
+                add_manual = False
+            if r[0] == 'file_import':
+                add_import = False
+        if add_manual:
+            res.append(('manual', _('Record Manually')))
+        if add_import:
+            res.append(('file_import', _('File Import')))
+        return res
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

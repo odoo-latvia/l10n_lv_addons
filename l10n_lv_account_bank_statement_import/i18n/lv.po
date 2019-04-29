@@ -202,3 +202,15 @@ msgstr "Bankas konta pēdējā (pēc datuma) ielādētā bankas izraksta noslēd
 msgid "The Ending Balance of the last Bank Statement (by date) imported for the Bank Account '%s' is not equal to the Starting Balance of this document. If this is OK with you, check the 'Continue Anyway' box and try to import again."
 msgstr "Bankas konta %s pēdējā (pēc datuma) ielādētā bankas izraksta noslēdzošā bilance nesakrīt ar šajā dokumentā norādīto sākuma bilanci. Ja uzskatāt, ka dati ir pareizi, atzīmējiet lauku 'Turpināt, neņemot vērā' un mēģiniet importēt vēlreiz."
 
+#. module: l10n_lv_account_bank_statement_import
+#: code:addons/l10n_lv_account_bank_statement_import/models/account_journal.py:38
+#, python-format
+msgid "Record Manually"
+msgstr "Manuāli ieraksti"
+
+#. module: l10n_lv_account_bank_statement_import
+#: code:addons/l10n_lv_account_bank_statement_import/models/account_journal.py:40
+#, python-format
+msgid "File Import"
+msgstr "Failu imports"
+

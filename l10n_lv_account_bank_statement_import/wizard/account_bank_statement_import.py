@@ -24,9 +24,11 @@
 
 from odoo import api, fields, models, _
 import base64
+import ast
 from xml.dom.minidom import getDOMImplementation, parseString
 from datetime import datetime
 from openerp.exceptions import UserError
+from dateutil.parser import parse
 
 class AccountBankStatementImport(models.TransientModel):
     _inherit = 'account.bank.statement.import'
@@ -61,7 +63,8 @@ class AccountBankStatementImport(models.TransientModel):
     def _onchange_data_file(self):
         if self.data_file and self.format in ['iso20022', 'fidavista']:
             # decoding and encoding for string parsing; parseString() method:
-            record = unicode(base64.decodestring(self.data_file), 'iso8859-4', 'strict').encode('iso8859-4','strict')
+            stringAsByte = "b'%s'" % self.data_file
+            record = str(base64.decodestring(ast.literal_eval(stringAsByte)), 'iso8859-4', 'strict').encode('iso8859-4','strict')
             dom = parseString(record)
 
             account_number = ''
@@ -89,8 +92,8 @@ class AccountBankStatementImport(models.TransientModel):
                 if ft_date_tag:
                     start_datetime = ft_date_tag[0].getElementsByTagName('FrDtTm')[0].toxml().replace('<FrDtTm>','').replace('</FrDtTm>','')
                     end_datetime = ft_date_tag[0].getElementsByTagName('ToDtTm')[0].toxml().replace('<ToDtTm>','').replace('</ToDtTm>','')
-                    start_date = datetime.strftime(datetime.strptime(start_datetime, '%Y-%m-%dT%H:%M:%SZ').date(), '%Y-%m-%d')
-                    end_date = datetime.strftime(datetime.strptime(end_datetime, '%Y-%m-%dT%H:%M:%SZ').date(), '%Y-%m-%d')
+                    start_date = datetime.strftime(parse(start_datetime).date(), '%Y-%m-%d')
+                    end_date = datetime.strftime(parse(end_datetime).date(), '%Y-%m-%d')
                     statement_name += (' ' + start_date + ':' + end_date)
                 balances = statements[0].getElementsByTagName('Bal')
                 for b in balances:
@@ -186,7 +189,7 @@ class AccountBankStatementImport(models.TransientModel):
 
 
     def iso20022_parsing(self, data_file):
-        record = unicode(data_file, 'iso8859-4', 'strict').encode('iso8859-4','strict')
+        record = str(data_file, 'iso8859-4', 'strict').encode('iso8859-4','strict')
         dom = parseString(record)
 
         statements = dom.getElementsByTagName('Stmt') or []
@@ -219,8 +222,8 @@ class AccountBankStatementImport(models.TransientModel):
             if ft_date_tag:
                 start_datetime = ft_date_tag[0].getElementsByTagName('FrDtTm')[0].toxml().replace('<FrDtTm>','').replace('</FrDtTm>','')
                 end_datetime = ft_date_tag[0].getElementsByTagName('ToDtTm')[0].toxml().replace('<ToDtTm>','').replace('</ToDtTm>','')
-                start_date = datetime.strftime(datetime.strptime(start_datetime, '%Y-%m-%dT%H:%M:%SZ').date(), '%Y-%m-%d')
-                end_date = datetime.strftime(datetime.strptime(end_datetime, '%Y-%m-%dT%H:%M:%SZ').date(), '%Y-%m-%d')
+                start_date = datetime.strftime(parse(start_datetime).date(), '%Y-%m-%d')
+                end_date = datetime.strftime(parse(end_datetime).date(), '%Y-%m-%d')
                 name += (' ' + start_date + ':' + end_date)
 
             # getting balances:
@@ -499,7 +502,7 @@ class AccountBankStatementImport(models.TransientModel):
 
     def fidavista_parsing(self, data_file):
         # decoding and encoding for string parsing; parseString() method:
-        record = unicode(data_file, 'iso8859-4', 'strict').encode('iso8859-4','strict')
+        record = str(data_file, 'iso8859-4', 'strict').encode('iso8859-4','strict')
         dom = parseString(record)
 
         cur_obj = self.env['res.currency']
@@ -693,11 +696,11 @@ class AccountBankStatementImport(models.TransientModel):
             return super(AccountBankStatementImport, self)._parse_file()
 
 
-    @api.model
-    def create(self, values):
-        res = super(AccountBankStatementImport, self).create(values)
-        res._onchange_data_file()
-        return res
+#    @api.model
+#    def create(self, values):
+#        res = super(AccountBankStatementImport, self).create(values)
+#        res._onchange_data_file()
+#        return res
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
