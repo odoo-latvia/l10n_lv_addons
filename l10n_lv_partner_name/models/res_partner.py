@@ -51,6 +51,11 @@ class Partner(models.Model):
         except KeyError:
             return None, None
 
+        try:
+            name = name.decode()
+        except AttributeError:
+            pass
+
         parts = name.rsplit(' ', 1)
 
         if len(parts) == 2:
