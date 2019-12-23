@@ -1,0 +1,748 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_bt_rate_af" model="hr.bt.rate">
+        <field name="name">Afganistāna</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">170.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_al" model="hr.bt.rate">
+        <field name="name">Albānija</field>
+        <field name="amount_allow">33.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">110.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_dz" model="hr.bt.rate">
+        <field name="name">Alžīrija</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">110.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_usa_ny" model="hr.bt.rate">
+        <field name="name">ASV (Ņujorka)</field>
+        <field name="amount_allow">60.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">350.0</field>
+        <field name="lodging_currency_id" ref="base.USD"/>
+    </record>
+
+    <record id="hr_bt_rate_usa_except_ny_vi" model="hr.bt.rate">
+        <field name="name">ASV (izņemot Ņujorku un Virdžīnas)</field>
+        <field name="amount_allow">60.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">300.0</field>
+        <field name="lodging_currency_id" ref="base.USD"/>
+    </record>
+
+    <record id="hr_bt_rate_usa_vi" model="hr.bt.rate">
+        <field name="name">ASV (Virdžīnas)</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">150.0</field>
+        <field name="lodging_currency_id" ref="base.USD"/>
+    </record>
+
+    <record id="hr_bt_rate_ad" model="hr.bt.rate">
+        <field name="name">Andora</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">150.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_ae" model="hr.bt.rate">
+        <field name="name">AAE</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">200.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_au" model="hr.bt.rate">
+        <field name="name">Austrālija</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">300.0</field>
+        <field name="lodging_currency_id" ref="base.AUD"/>
+    </record>
+
+    <record id="hr_bt_rate_at" model="hr.bt.rate">
+        <field name="name">Austrija</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">200.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_az" model="hr.bt.rate">
+        <field name="name">Azerbaidžāna</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">150.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_bh" model="hr.bt.rate">
+        <field name="name">Bahreina</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">200.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_by" model="hr.bt.rate">
+        <field name="name">Baltkrievija</field>
+        <field name="amount_allow">30.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">120.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_be" model="hr.bt.rate">
+        <field name="name">Beļģija</field>
+        <field name="amount_allow">60.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">250.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_ba" model="hr.bt.rate">
+        <field name="name">Bosnija un Hercegovina</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">120.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_br" model="hr.bt.rate">
+        <field name="name">Brazīlija</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">220.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_bg" model="hr.bt.rate">
+        <field name="name">Bulgārija</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">150.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_cz" model="hr.bt.rate">
+        <field name="name">Čehija</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">170.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_dk" model="hr.bt.rate">
+        <field name="name">Dānija</field>
+        <field name="amount_allow">60.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">1700.0</field>
+        <field name="lodging_currency_id" ref="base.DKK"/>
+    </record>
+
+    <record id="hr_bt_rate_kr" model="hr.bt.rate">
+        <field name="name">Dienvidkoreja</field>
+        <field name="amount_allow">52.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">190.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_eg" model="hr.bt.rate">
+        <field name="name">Ēģipte</field>
+        <field name="amount_allow">30.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">170.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_fr" model="hr.bt.rate">
+        <field name="name">Francija</field>
+        <field name="amount_allow">60.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">250.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_gi" model="hr.bt.rate">
+        <field name="name">Gibraltārs</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">60.0</field>
+        <field name="lodging_currency_id" ref="base.GBP"/>
+    </record>
+
+    <record id="hr_bt_rate_gl" model="hr.bt.rate">
+        <field name="name">Grenlande</field>
+        <field name="amount_allow">46.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">170.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_gr" model="hr.bt.rate">
+        <field name="name">Grieķija</field>
+        <field name="amount_allow">55.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">200.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_ge" model="hr.bt.rate">
+        <field name="name">Gruzija</field>
+        <field name="amount_allow">30.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">120.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_gt" model="hr.bt.rate">
+        <field name="name">Gvatemala</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">90.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_hr" model="hr.bt.rate">
+        <field name="name">Horvātija</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">130.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_ee" model="hr.bt.rate">
+        <field name="name">Igaunija</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">120.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_in" model="hr.bt.rate">
+        <field name="name">Indija</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">270.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_id" model="hr.bt.rate">
+        <field name="name">Indonēzija</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">180.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_iq" model="hr.bt.rate">
+        <field name="name">Irāka</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">110.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_ir" model="hr.bt.rate">
+        <field name="name">Irāna</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">110.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_is" model="hr.bt.rate">
+        <field name="name">Islande</field>
+        <field name="amount_allow">65.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">250.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_it" model="hr.bt.rate">
+        <field name="name">Itālija</field>
+        <field name="amount_allow">60.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">300.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_il" model="hr.bt.rate">
+        <field name="name">Izraēla</field>
+        <field name="amount_allow">60.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">200.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_ie" model="hr.bt.rate">
+        <field name="name">Īrija</field>
+        <field name="amount_allow">60.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">260.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_jp" model="hr.bt.rate">
+        <field name="name">Japāna</field>
+        <field name="amount_allow">70.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">250.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_nz" model="hr.bt.rate">
+        <field name="name">Jaunzēlande</field>
+        <field name="amount_allow">74.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">280.0</field>
+        <field name="lodging_currency_id" ref="base.AUD"/>
+    </record>
+
+    <record id="hr_bt_rate_ye" model="hr.bt.rate">
+        <field name="name">Jemena</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">200.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_ca" model="hr.bt.rate">
+        <field name="name">Kanāda</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">270.0</field>
+        <field name="lodging_currency_id" ref="base.CAD"/>
+    </record>
+
+    <record id="hr_bt_rate_qa" model="hr.bt.rate">
+        <field name="name">Katara</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">200.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_kz" model="hr.bt.rate">
+        <field name="name">Kazahstāna</field>
+        <field name="amount_allow">30.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">160.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_ke" model="hr.bt.rate">
+        <field name="name">Kenija</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">150.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_cy" model="hr.bt.rate">
+        <field name="name">Kipra</field>
+        <field name="amount_allow">46.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">170.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_kg" model="hr.bt.rate">
+        <field name="name">Kirgizstāna</field>
+        <field name="amount_allow">30.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">160.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_xk" model="hr.bt.rate">
+        <field name="name">Kosova</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">120.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_ru_mo_sp" model="hr.bt.rate">
+        <field name="name">Krievija (Maskava un Sanktpēterburga)</field>
+        <field name="amount_allow">46.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">270.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_ru_except_mp_sp" model="hr.bt.rate">
+        <field name="name">Krievija (izņemot Maskavu un Sanktpēterburgu)</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">190.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_kw" model="hr.bt.rate">
+        <field name="name">Kuveita</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">200.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_cn_bj_sh_sz_gz_hz" model="hr.bt.rate">
+        <field name="name">Ķīna (Pekina, Šanhaja, Šenžeņa, Guanžou, Hanžou)</field>
+        <field name="amount_allow">45.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">200.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_cn_hk_mc" model="hr.bt.rate">
+        <field name="name">Ķīna (Honkonga, Makao)</field>
+        <field name="amount_allow">55.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">250.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_cn_except_hk_mc_bj_sh_sz_gz_hz" model="hr.bt.rate">
+        <field name="name">Ķīna (izņemot Honkongu, Makao, Pekinu, Šanhaju, Šenžeņu, Guanžou, Hanžou)</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">180.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_lr" model="hr.bt.rate">
+        <field name="name">Libērija</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">100.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_uk" model="hr.bt.rate">
+        <field name="name">Lielbritānija</field>
+        <field name="amount_allow">65.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">330.0</field>
+        <field name="lodging_currency_id" ref="base.GBP"/>
+    </record>
+
+    <record id="hr_bt_rate_lt" model="hr.bt.rate">
+        <field name="name">Lietuva</field>
+        <field name="amount_allow">30.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">120.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_li" model="hr.bt.rate">
+        <field name="name">Lihtenšteina</field>
+        <field name="amount_allow">60.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">280.0</field>
+        <field name="lodging_currency_id" ref="base.CHF"/>
+    </record>
+
+    <record id="hr_bt_rate_lu" model="hr.bt.rate">
+        <field name="name">Luksemburga</field>
+        <field name="amount_allow">60.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">280.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_my" model="hr.bt.rate">
+        <field name="name">Malaizija</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">180.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_mt" model="hr.bt.rate">
+        <field name="name">Malta</field>
+        <field name="amount_allow">45.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">170.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_ma" model="hr.bt.rate">
+        <field name="name">Maroka</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">170.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_me" model="hr.bt.rate">
+        <field name="name">Melnkalne</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">120.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_md" model="hr.bt.rate">
+        <field name="name">Moldova</field>
+        <field name="amount_allow">30.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">120.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_mc" model="hr.bt.rate">
+        <field name="name">Monako</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">170.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_mn" model="hr.bt.rate">
+        <field name="name">Mongolija</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">170.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_nl" model="hr.bt.rate">
+        <field name="name">Nīderlande</field>
+        <field name="amount_allow">60.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">220.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_no" model="hr.bt.rate">
+        <field name="name">Norvēģija</field>
+        <field name="amount_allow">65.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">2000.0</field>
+        <field name="lodging_currency_id" ref="base.NOK"/>
+    </record>
+
+    <record id="hr_bt_rate_om" model="hr.bt.rate">
+        <field name="name">Omāna</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">200.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_pl" model="hr.bt.rate">
+        <field name="name">Polija</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">150.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_pt" model="hr.bt.rate">
+        <field name="name">Portugāle</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">200.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_ro" model="hr.bt.rate">
+        <field name="name">Rumānija</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">150.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_sm" model="hr.bt.rate">
+        <field name="name">Sanmarīno</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">150.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_sa" model="hr.bt.rate">
+        <field name="name">Saūda Arābija</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">200.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_rs" model="hr.bt.rate">
+        <field name="name">Serbija</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">160.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_sg" model="hr.bt.rate">
+        <field name="name">Singapūra</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">150.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_sk" model="hr.bt.rate">
+        <field name="name">Slovākija</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">160.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_si" model="hr.bt.rate">
+        <field name="name">Slovēnija</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">130.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_fi" model="hr.bt.rate">
+        <field name="name">Somija</field>
+        <field name="amount_allow">55.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">220.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_es" model="hr.bt.rate">
+        <field name="name">Spānija</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">180.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_ch" model="hr.bt.rate">
+        <field name="name">Šveice</field>
+        <field name="amount_allow">60.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">320.0</field>
+        <field name="lodging_currency_id" ref="base.CHF"/>
+    </record>
+
+    <record id="hr_bt_rate_tj" model="hr.bt.rate">
+        <field name="name">Tadžikistāna</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">160.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_tn" model="hr.bt.rate">
+        <field name="name">Tunisija</field>
+        <field name="amount_allow">30.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">170.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_tr" model="hr.bt.rate">
+        <field name="name">Turcija</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">160.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_tm" model="hr.bt.rate">
+        <field name="name">Turkmenistāna</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">180.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_ua" model="hr.bt.rate">
+        <field name="name">Ukraina</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">200.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_hu" model="hr.bt.rate">
+        <field name="name">Ungārija</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">160.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_uz" model="hr.bt.rate">
+        <field name="name">Uzbekistāna</field>
+        <field name="amount_allow">40.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">160.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_de_hb_mn_fr_bl" model="hr.bt.rate">
+        <field name="name">Vācija (Hamburga, Minhene, Frankfurte un Berlīne)</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">220.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_de_except_hb_mn_fr_bl" model="hr.bt.rate">
+        <field name="name">Vācija (izņemot Hamburgu, Minheni, Frankfurti un Berlīni)</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">180.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_vn" model="hr.bt.rate">
+        <field name="name">Vjetnama</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">170.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_kp" model="hr.bt.rate">
+        <field name="name">Ziemeļmaķedonija</field>
+        <field name="amount_allow">35.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">140.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_se" model="hr.bt.rate">
+        <field name="name">Zviedrija</field>
+        <field name="amount_allow">50.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">260.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+    <record id="hr_bt_rate_other" model="hr.bt.rate">
+        <field name="name">Pārējās valstis</field>
+        <field name="amount_allow">30.0</field>
+        <field name="allow_currency_id" ref="base.EUR"/>
+        <field name="amount_lodging">110.0</field>
+        <field name="lodging_currency_id" ref="base.EUR"/>
+    </record>
+
+</odoo>
