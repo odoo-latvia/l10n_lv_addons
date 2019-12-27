@@ -22,6 +22,29 @@
 #
 ##############################################################################
 
-from . import models
+from odoo import api, fields, models, _
+
+class BusinessTripRate(models.Model):
+    _inherit = 'hr.bt.rate'
+
+    @api.model
+    def update_currencies(self):
+        cur_list = ['EUR', 'USD', 'AUD', 'DKK', 'GBP', 'CAD', 'CHF', 'NOK']
+        datas = self.env['ir.model.data'].sudo().search([
+            ('name','in',cur_list),
+            ('module','=','base'),
+            ('model','=','res.currency')
+        ])
+        c_ids = []
+        for d in datas:
+            if d.res_id and d.res_id not in c_ids:
+                c_ids.append(d.res_id)
+        currencies = self.env['res.currency'].sudo().search([
+            ('id','in',c_ids),
+            ('active','=',False)
+        ])
+        if currencies:
+            currencies.toggle_active()
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

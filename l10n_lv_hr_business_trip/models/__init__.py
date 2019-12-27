@@ -22,6 +22,6 @@
 #
 ##############################################################################
 
-from . import models
+from . import hr_business_trip
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

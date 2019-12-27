@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- Currencies -->
+
+    <function name="update_currencies" model="hr.bt.rate"/>
+
+    <!-- Business Trip Rates -->
+
     <record id="hr_bt_rate_af" model="hr.bt.rate">
         <field name="name">Afganistāna</field>
         <field name="amount_allow">40.0</field>
