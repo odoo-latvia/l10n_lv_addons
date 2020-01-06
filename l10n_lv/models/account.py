@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Part of Odoo.
-#    Copyright (C) 2019 Allegro IT (<http://www.allegro.lv/>)
+#    Copyright (C) 2020 Allegro IT (<http://www.allegro.lv/>)
 #                       E-mail: <info@allegro.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
 #                       Phone: +371 67289467
@@ -23,7 +23,6 @@
 ##############################################################################
 
 from odoo import api, fields, models, _
-from odoo.http import request
 
 class AccountJournal(models.Model):
     _inherit = "account.journal"
@@ -46,18 +45,13 @@ class AccountJournal(models.Model):
 class AccountChartTemplate(models.Model):
     _inherit = "account.chart.template"
 
-    def load_for_current_company(self, sale_tax_rate, purchase_tax_rate):
+    def _load(self, sale_tax_rate, purchase_tax_rate, company):
         self.ensure_one()
-        if self == self.env.ref('l10n_lv.l10n_lv_chart_template'):
+        if self == self.env.ref('l10n_lv.l10n_lv_chart_template', False):
             sale_tax_rate = 21.0
             purchase_tax_rate = 21.0
-        res = super(AccountChartTemplate, self).load_for_current_company(sale_tax_rate, purchase_tax_rate)
-        if self == self.env.ref('l10n_lv.l10n_lv_chart_template'):
-            if request and request.session.uid:
-                current_user = self.env['res.users'].browse(request.uid)
-                company = current_user.company_id
-            else:
-                company = self.env.user.company_id
+        res = super(AccountChartTemplate, self)._load(sale_tax_rate, purchase_tax_rate, company)
+        if self == self.env.ref('l10n_lv.l10n_lv_chart_template', False):
             sale_tax = self.env['account.tax'].search([
                 ('type_tax_use','=','sale'), 
                 ('amount_type','=','percent'), 
@@ -80,7 +74,6 @@ class AccountChartTemplate(models.Model):
 class AccountTaxTemplate(models.Model):
     _inherit = "account.tax.template"
 
-    @api.multi
     def _generate_tax(self, company):
         res = super(AccountTaxTemplate, self)._generate_tax(company)
         lv_sale_tax_tmpl = self.env.ref('l10n_lv.lv_tax_template_PVN-SR')
