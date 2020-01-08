@@ -4,7 +4,7 @@
     <record id="lv_account_type_1_1" model="account.account.type">
         <field name="name">1.1 Nemateriālie ieguldījumi</field>
         <field name="type">other</field>
-        <field name="internal_group">equity</field>
+        <field name="internal_group">asset</field>
     </record>
 
     <record id="lv_account_type_1_2" model="account.account.type">
@@ -16,67 +16,67 @@
     <record id="lv_account_type_1_3" model="account.account.type">
         <field name="name">1.3 Ieguldījuma īpašumi</field>
         <field name="type">other</field>
-        <field name="internal_group">equity</field>
+        <field name="internal_group">asset</field>
     </record>
 
     <record id="lv_account_type_1_4" model="account.account.type">
         <field name="name">1.4 Bioloģiskie aktīvi</field>
         <field name="type">other</field>
-        <field name="internal_group">equity</field>
+        <field name="internal_group">asset</field>
     </record>
 
     <record id="lv_account_type_1_5" model="account.account.type">
         <field name="name">1.5 Ilgtermiņa finanšu ieguldījumi</field>
         <field name="type">other</field>
-        <field name="internal_group">equity</field>
+        <field name="internal_group">asset</field>
     </record>
 
     <record id="lv_account_type_2_1" model="account.account.type">
         <field name="name">2.1 Krājumi</field>
         <field name="type">other</field>
-        <field name="internal_group">equity</field>
+        <field name="internal_group">asset</field>
     </record>
 
     <record id="lv_account_type_2_2" model="account.account.type">
         <field name="name">2.2 Pārdošanai turēti ilgtermiņa ieguldījumi</field>
         <field name="type">other</field>
-        <field name="internal_group">equity</field>
+        <field name="internal_group">asset</field>
     </record>
 
     <record id="lv_account_type_2_3" model="account.account.type">
         <field name="name">2.3 Debitori</field>
         <field name="type">receivable</field>
-        <field name="internal_group">income</field>
+        <field name="internal_group">asset</field>
     </record>
 
     <record id="lv_account_type_2_4" model="account.account.type">
         <field name="name">2.4 Īstermiņa finanšu ieguldījumi</field>
         <field name="type">other</field>
-        <field name="internal_group">expense</field>
+        <field name="internal_group">asset</field>
     </record>
 
     <record id="lv_account_type_2_5" model="account.account.type">
         <field name="name">2.5 Nauda</field>
         <field name="type">other</field>
-        <field name="internal_group">equity</field>
+        <field name="internal_group">asset</field>
     </record>
 
     <record id="lv_account_type_3" model="account.account.type">
         <field name="name">3 Pašu kapitāls</field>
         <field name="type">other</field>
-        <field name="internal_group">equity</field>
+        <field name="internal_group">liability</field>
     </record>
 
     <record id="lv_account_type_4" model="account.account.type">
         <field name="name">4 Uzkrājumi</field>
         <field name="type">other</field>
-        <field name="internal_group">equity</field>
+        <field name="internal_group">liability</field>
     </record>
 
     <record id="lv_account_type_5" model="account.account.type">
         <field name="name">5 Kreditori</field>
         <field name="type">payable</field>
-        <field name="internal_group">expense</field>
+        <field name="internal_group">liability</field>
     </record>
 
     <record id="lv_account_type_6" model="account.account.type">
@@ -124,7 +124,7 @@
     <record id="lv_account_type_8_6" model="account.account.type">
         <field name="name">8.6 Peļņa vai zaudējumi</field>
         <field name="type">other</field>
-        <field name="internal_group">equity</field>
+        <field name="internal_group">income</field>
     </record>
 
 </odoo>
