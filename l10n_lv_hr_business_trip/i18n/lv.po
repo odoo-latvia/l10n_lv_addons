@@ -1,0 +1,482 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* l10n_lv_hr_business_trip
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-02-20 09:02+0000\n"
+"PO-Revision-Date: 2020-02-20 09:02+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_af
+msgid "Afghanistan"
+msgstr "Afganistāna"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_al
+msgid "Albania"
+msgstr "Albānija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_dz
+msgid "Algeria"
+msgstr "Alžīrija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_usa_ny
+msgid "USA (New York)"
+msgstr "ASV (Ņujorka)"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_usa_except_ny_vi
+msgid "USA (except New York and Virginia)"
+msgstr "ASV (izņemot Ņujorku un Virdžīnas)"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_usa_vi
+msgid "USA (Virginia)"
+msgstr "ASV (Virdžīnas)"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ad
+msgid "Andorra"
+msgstr "Andora"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ae
+msgid "UAE"
+msgstr "AAE"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_au
+msgid "Australia"
+msgstr "Austrālija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_at
+msgid "Austria"
+msgstr "Austrija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_az
+msgid "Azerbaijan"
+msgstr "Azerbaidžāna"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_bh
+msgid "Bahrain"
+msgstr "Bahreina"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_by
+msgid "Belarus"
+msgstr "Baltkrievija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_be
+msgid "Belgium"
+msgstr "Beļģija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ba
+msgid "Bosnia and Herzegovina"
+msgstr "Bosnija un Hercegovina"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_br
+msgid "Brazil"
+msgstr "Brazīlija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_bg
+msgid "Bulgaria"
+msgstr "Bulgārija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_cz
+msgid "Czechia"
+msgstr "Čehija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_dk
+msgid "Denmark"
+msgstr "Dānija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_kr
+msgid "South Korea"
+msgstr "Dienvidkoreja"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_eg
+msgid "Egypt"
+msgstr "Ēģipte"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_fr
+msgid "France"
+msgstr "Francija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_gi
+msgid "Gibraltar"
+msgstr "Gibraltārs"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_gl
+msgid "Greenland"
+msgstr "Grenlande"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_gr
+msgid "Greece"
+msgstr "Grieķija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ge
+msgid "Georgia"
+msgstr "Gruzija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_gt
+msgid "Guatemala"
+msgstr "Gvatemala"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_hr
+msgid "Croatia"
+msgstr "Horvātija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ee
+msgid "Estonia"
+msgstr "Igaunija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_in
+msgid "India"
+msgstr "Indija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_id
+msgid "Indonesia"
+msgstr "Indonēzija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_iq
+msgid "Iraq"
+msgstr "Irāka"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ir
+msgid "Iran"
+msgstr "Irāna"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_is
+msgid "Iceland"
+msgstr "Islande"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_it
+msgid "Italy"
+msgstr "Itālija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_il
+msgid "Israel"
+msgstr "Izraēla"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ie
+msgid "Ireland"
+msgstr "Īrija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_jp
+msgid "Japan"
+msgstr "Japāna"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_nz
+msgid "New Zealand"
+msgstr "Jaunzēlande"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ye
+msgid "Yemen"
+msgstr "Jemena"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ca
+msgid "Canada"
+msgstr "Kanāda"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_qa
+msgid "Qatar"
+msgstr "Katara"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_kz
+msgid "Kazakhstan"
+msgstr "Kazahstāna"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ke
+msgid "Kenya"
+msgstr "Kenija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_cy
+msgid "Cyprus"
+msgstr "Kipra"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_kg
+msgid "Kyrgyzstan"
+msgstr "Kirgizstāna"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_xk
+msgid "Kosovo"
+msgstr "Kosova"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ru_mo_sp
+msgid "Russia (Moscow and Saint Petersburg)"
+msgstr "Krievija (Maskava un Sanktpēterburga)"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ru_except_mp_sp
+msgid "Russia (except Moscow and Saint Petersburg)"
+msgstr "Krievija (izņemot Maskavu un Sanktpēterburgu)"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_kw
+msgid "Kuwait"
+msgstr "Kuveita"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_cn_bj_sh_sz_gz_hz
+msgid "China (Beijing, Shanghai, Shenzhen, Guangzhou, Hangzhou)"
+msgstr "Ķīna (Pekina, Šanhaja, Šenžeņa, Guanžou, Hanžou)"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_cn_hk_mc
+msgid "China (Hong Kong, Macau)"
+msgstr "Ķīna (Honkonga, Makao)"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_cn_except_hk_mc_bj_sh_sz_gz_hz
+msgid "China (except Hong Kong, Macau, Beijing, Shanghai, Shenzhen, Guangzhou, Hangzhou)"
+msgstr "Ķīna (izņemot Honkongu, Makao, Pekinu, Šanhaju, Šenžeņu, Guanžou, Hanžou)"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_lr
+msgid "Liberia"
+msgstr "Libērija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_uk
+msgid "Great Britain"
+msgstr "Lielbritānija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_lt
+msgid "Lithuania"
+msgstr "Lietuva"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_li
+msgid "Liechtenstein"
+msgstr "Lihtenšteina"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_lu
+msgid "Luxembourg"
+msgstr "Luksemburga"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_my
+msgid "Malaysia"
+msgstr "Malaizija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_mt
+msgid "Malta"
+msgstr "Malta"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ma
+msgid "Morocco"
+msgstr "Maroka"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_me
+msgid "Montenegro"
+msgstr "Melnkalne"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_md
+msgid "Moldova"
+msgstr "Moldova"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_mc
+msgid "Monaco"
+msgstr "Monako"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_mn
+msgid "Mongolia"
+msgstr "Mongolija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_nl
+msgid "Netherlands"
+msgstr "Nīderlande"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_no
+msgid "Norway"
+msgstr "Norvēģija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_om
+msgid "Oman"
+msgstr "Omāna"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_pl
+msgid "Poland"
+msgstr "Polija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_pt
+msgid "Portugal"
+msgstr "Portugāle"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ro
+msgid "Romania"
+msgstr "Rumānija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_sm
+msgid "San Marino"
+msgstr "Sanmarīno"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_sa
+msgid "Saudi Arabia"
+msgstr "Saūda Arābija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_rs
+msgid "Serbia"
+msgstr "Serbija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_sg
+msgid "Singapore"
+msgstr "Singapūra"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_sk
+msgid "Slovakia"
+msgstr "Slovākija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_si
+msgid "Slovenia"
+msgstr "Slovēnija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_fi
+msgid "Finland"
+msgstr "Somija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_es
+msgid "Spain"
+msgstr "Spānija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ch
+msgid "Switzerland"
+msgstr "Šveice"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_tj
+msgid "Tajikistan"
+msgstr "Tadžikistāna"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_tn
+msgid "Tunisia"
+msgstr "Tunisija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_tr
+msgid "Turkey"
+msgstr "Turcija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_tm
+msgid "Turkmenistan"
+msgstr "Turkmenistāna"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_ua
+msgid "Ukraine"
+msgstr "Ukraina"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_hu
+msgid "Hungary"
+msgstr "Ungārija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_uz
+msgid "Uzbekistan"
+msgstr "Uzbekistāna"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_de_hb_mn_fr_bl
+msgid "Germany (Hamburg, Munich, Frankfurt and Berlin)"
+msgstr "Vācija (Hamburga, Minhene, Frankfurte un Berlīne)"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_de_except_hb_mn_fr_bl
+msgid "Germany (except Hamburg, Munich, Frankfurt and Berlin)"
+msgstr "Vācija (izņemot Hamburgu, Minheni, Frankfurti un Berlīni)"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_vn
+msgid "Vietnam"
+msgstr "Vjetnama"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_kp
+msgid "North Macedonia"
+msgstr "Ziemeļmaķedonija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_se
+msgid "Sweden"
+msgstr "Zviedrija"
+
+#. module: l10n_lv_account
+#: model:hr.bt.rate,name:l10n_lv_hr_business_trip.hr_bt_rate_other
+msgid "Other countries"
+msgstr "Pārējās valstis"
+
