@@ -440,7 +440,7 @@
     </record>
 
     <record id="hr_bt_rate_uk" model="hr.bt.rate">
-        <field name="name">Great Britain</field>
+        <field name="name">United Kingdom</field>
         <field name="amount_allow">65.0</field>
         <field name="allow_currency_id" ref="base.EUR"/>
         <field name="amount_lodging">330.0</field>
