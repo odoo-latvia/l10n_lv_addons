@@ -363,7 +363,8 @@ class AccountBankStatementImport(models.TransientModel):
                         if line_cd_ind == 'DBIT':
                             line_amount_cur *= (-1)
                         line_cur_code = amt_cur_tag.attributes['Ccy'].value
-                        line_cur = cur_obj.search([('name','=',line_cur_code)], limit=1)
+                        if line_cur_code != currency_code:
+                            line_cur = cur_obj.search([('name','=',line_cur_code)], limit=1)
                     trans_amt_tag = amt_details_tag[0].getElementsByTagName('TxAmt')
                     if trans_amt_tag:
                         amt_tag = trans_amt_tag[0].getElementsByTagName('Amt')
@@ -569,7 +570,7 @@ class AccountBankStatementImport(models.TransientModel):
                     line_cur_tag = cPartySet[0].getElementsByTagName('Ccy')
                     if line_cur_tag:
                         line_cur_txt = line_cur_tag[0].toxml().replace('<Ccy>','').replace('</Ccy>','').replace('<Ccy/>','')
-                        if line_cur_txt:
+                        if line_cur_txt and line_cur_txt != currency_code:
                             line_cur = cur_obj.search([('name','=',line_cur_txt)], limit=1)
                     line_amount_cur_tag = cPartySet[0].getElementsByTagName('Amt')
                     if line_amount_cur_tag:
