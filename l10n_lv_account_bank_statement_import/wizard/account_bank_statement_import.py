@@ -199,7 +199,7 @@ class AccountBankStatementImport(models.TransientModel):
         cur_obj = self.env['res.currency']
         ba_obj = self.env['res.partner.bank']
         partner_obj = self.env['res.partner']
-        config_obj = self.env['account.bank.transaction.type']
+#        config_obj = self.env['account.bank.transaction.type']
 
         currency_code = False
         account_number = False
@@ -465,16 +465,16 @@ class AccountBankStatementImport(models.TransientModel):
                         partner = partners
 
                 # getting account:
-                account_id = False
-                if partner:
-                    if line_cd_ind == 'CRDT':
-                        account_id = partner.property_account_receivable_id.id
-                    if line_cd_ind == 'DBIT':
-                        account_id = partner.property_account_payable_id.id
-                if (not partner) and type_code:
-                    config = config_obj.search([('name','=',type_code)], limit=1)
-                    if config:
-                        account_id = config.account_id.id
+#                account_id = False
+#                if partner:
+#                    if line_cd_ind == 'CRDT':
+#                        account_id = partner.property_account_receivable_id.id
+#                    if line_cd_ind == 'DBIT':
+#                       account_id = partner.property_account_payable_id.id
+#                if (not partner) and type_code:
+#                    config = config_obj.search([('name','=',type_code)], limit=1)
+#                    if config:
+#                        account_id = config.account_id.id
 
                 svals['transactions'].append({
                     'unique_import_id': unique_import_id,
@@ -491,7 +491,7 @@ class AccountBankStatementImport(models.TransientModel):
                     'partner_id': partner and partner.id or False,
                     'transaction_type': type_code,
                     'bank_account_id': bank_account and bank_account.id or False,
-                    'account_id': account_id,
+#                    'account_id': account_id,
                     'bank_name': bank_name,
                     'bank_bic': bank_bic
                 })
@@ -561,7 +561,7 @@ class AccountBankStatementImport(models.TransientModel):
                 partner_reg_id = False
                 partner_bank_account = False
                 bank_account = False
-                account_id = False
+#                account_id = False
                 bank_name = False
                 bank_bic = False
                 cPartySet = line.getElementsByTagName('CPartySet')
@@ -606,11 +606,11 @@ class AccountBankStatementImport(models.TransientModel):
                         if len([p.id for p in partners]) == 1:
                             partner = partners
                     # setting account if partner found:
-                    if partner:
-                        if cord == 'C':
-                            account_id = partner.property_account_receivable_id.id
-                        if cord == 'D':
-                            account_id = partner.property_account_payable_id.id
+#                    if partner:
+#                        if cord == 'C':
+#                            account_id = partner.property_account_receivable_id.id
+#                        if cord == 'D':
+#                            account_id = partner.property_account_payable_id.id
                     # getting bank data:
                     bank_name_tag = cPartySet[0].getElementsByTagName('BankName')
                     if bank_name_tag:
@@ -626,11 +626,11 @@ class AccountBankStatementImport(models.TransientModel):
                     type_code = type_code_tag[0].toxml().replace('<TypeCode>','').replace('</TypeCode>','')
                 if (not type_code_tag) and type_name_tag:
                     type_code = type_name_tag[0].toxml().replace('<TypeName>','').replace('</TypeName>','')
-                if not partner:
-                    config_obj = self.env['account.bank.transaction.type']
-                    config = config_obj.search([('name','=',type_code)], limit=1)
-                    if config:
-                        account_id = config.account_id.id
+#                if not partner:
+#                    config_obj = self.env['account.bank.transaction.type']
+#                    config = config_obj.search([('name','=',type_code)], limit=1)
+#                    if config:
+#                        account_id = config.account_id.id
 
                 svals['transactions'].append({
                     'date': line_date,
@@ -646,7 +646,7 @@ class AccountBankStatementImport(models.TransientModel):
                     'partner_id': partner and partner.id or False,
                     'transaction_type': type_code,
                     'bank_account_id': bank_account and bank_account.id or False,
-                    'account_id': account_id,
+#                    'account_id': account_id,
                     'bank_name': bank_name,
                     'bank_bic': bank_bic
                 })

@@ -22,9 +22,21 @@
 #
 ##############################################################################
 
-from . import account_bank_transaction_type
-from . import account_bank_statement
-from . import account_journal
-from . import reconcilliation_widget
+from odoo import api, fields, models, _
+
+class AccountReconciliation(models.AbstractModel):
+    _inherit = 'account.reconciliation.widget'
+
+    @api.model
+    def _get_statement_line(self, st_line):
+        res = super(AccountReconciliation, self)._get_statement_line(st_line)
+        if (not st_line.partner_id) and st_line.transaction_type:
+            config = self.env['account.bank.transaction.type'].search([
+                ('name','=',st_line.transaction_type)
+            ], limit=1)
+            if config:
+                res['open_balance_account_id'] = config.account_id.id
+        return res
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
