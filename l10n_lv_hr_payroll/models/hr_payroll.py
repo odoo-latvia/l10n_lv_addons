@@ -28,9 +28,17 @@ from dateutil.relativedelta import relativedelta
 from datetime import timedelta
 
 
+class HolidaysType(models.Model):
+    _inherit = "hr.leave.type"
+
+    code = fields.Char(string='Code')
+    reduces_tax_relief = fields.Boolean(string='Reduces Tax Relief')
+
+
 class Employee(models.Model):
     _inherit = "hr.employee"
 
+    holiday_ids = fields.One2many('hr.leave', 'employee_id', string='Leaves')
     relief_ids = fields.One2many('hr.employee.relief', 'employee_id', string='Tax Relief')
 
 
@@ -64,7 +72,7 @@ class HrPayslip(models.Model):
     @api.model
     def get_worked_day_lines(self, contracts, date_from, date_to):
         res = super(HrPayslip, self).get_worked_day_lines(contracts, date_from, date_to)
-        hd_type_obj = self.env['hr.holidays.status']
+        hd_type_obj = self.env['hr.leave.type']
         for r in res:
             hd_type = hd_type_obj.search([('name','=',r['name'])], limit=1)
             if hd_type and hd_type.code and hd_type.code != r['code']:
@@ -174,6 +182,34 @@ class HrPayslip(models.Model):
                         'contract_id': contract.id
                     })
         return res
+
+    @api.multi
+    def reload_inputs(self):
+        self.ensure_one()
+        wd_line_vals = self.get_worked_day_lines(self.contract_id, self.date_from, self.date_to)
+        if wd_line_vals:
+            wd_obj = self.env['hr.payslip.worked_days']
+            for wd in wd_line_vals:
+                wd_lines = wd_obj.search([('payslip_id','=',self.id), ('code','=',wd['code']), ('contract_id','=',wd['contract_id'])])
+                if wd_lines:
+                    wd_lines.write(wd)
+                else:
+                    wd_vals = wd.copy()
+                    wd_vals.update({'payslip_id': self.id})
+                    wd_vals.create(wd_vals)
+        input_line_vals = self.get_inputs(self.contract_id, self.date_from, self.date_to)
+        if input_line_vals:
+            input_obj = self.env['hr.payslip.input']
+            for inp in input_line_wals:
+                inp_lines = input_obj.search([('payslip_id','=',self.id), ('code','=',inp['code']), ('contract_id','=',inp['contract_id'])])
+                if inp_lines:
+                    if 'amount' in inp:
+                        inp_lines.write({'amount': inp['amount']})
+                else:
+                    inp_vals = inp.copy()
+                    inp_vals.update({'payslip_id': self.id})
+                    input_obj.create(inp_vals)
+        return True
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
