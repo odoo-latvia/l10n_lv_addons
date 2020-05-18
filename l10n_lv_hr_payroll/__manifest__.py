@@ -45,7 +45,7 @@ Adds button "Reload Inputs" in Payslip form, which calls the same function as th
 #        'wizard/relief_eds_import_view.xml'
     ],
     'auto_install': False,
-    'installable': False,
+    'installable': True,
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

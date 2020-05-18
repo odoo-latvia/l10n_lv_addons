@@ -26,6 +26,7 @@ from odoo import api, fields, models, _
 import datetime
 from dateutil.relativedelta import relativedelta
 from datetime import timedelta
+from odoo.tools import float_round
 
 
 class HolidaysType(models.Model):
@@ -60,8 +61,8 @@ class EmployeeRelief(models.Model):
         ('disability3', 'Group 3 Disability')
     ], string='Type', required=True)
     name = fields.Char(string='Name', required=True)
-    date_from = fields.Date(string='Date From')
-    date_to = fields.Date(string='Date To')
+    date_from = fields.Date(string='Valid From')
+    date_to = fields.Date(string='Valid Until')
     amount = fields.Monetary(string='Amount')
     currency_id = fields.Many2one('res.currency', string='Currency', default=_get_default_currency)
 
@@ -210,6 +211,10 @@ class HrPayslip(models.Model):
                     inp_vals.update({'payslip_id': self.id})
                     input_obj.create(inp_vals)
         return True
+
+    @api.model
+    def round_float(self, value, precision_digits=None, precision_rounding=None, rounding_method='HALF-UP'):
+        return float_round(value, precision_digits=precision_digits, precision_rounding=precision_rounding, rounding_method=rounding_method)
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
