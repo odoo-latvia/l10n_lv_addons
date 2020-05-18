@@ -2,8 +2,8 @@
 ##############################################################################
 #
 #    Part of Odoo.
-#    Copyright (C) 2020 ITS-1 (<http://www.its1.lv/>)
-#                       E-mail: <info@its1.lv>
+#    Copyright (C) 2020 Allegro IT (<http://www.allegro.lv/>)
+#                       E-mail: <info@allegro.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
 #                       Phone: +371 67289467
 #
