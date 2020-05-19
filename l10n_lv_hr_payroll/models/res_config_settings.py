@@ -22,7 +22,13 @@
 #
 ##############################################################################
 
-from . import relief_eds_import
-from . import payslip_eds_export
+from odoo import fields, models
+
+class ResConfigSettings(models.TransientModel):
+    _inherit = 'res.config.settings'
+
+    payslip_eds_export_responsible_id = fields.Many2one('hr.employee', string='Responsible for Payslip EDS Export', config_parameter='payslip_eds_export.responsible_id')
+    payslip_eds_export_date_pay_day = fields.Integer(string='Payment Day for Payslip EDS Export', config_parameter='payslip_eds_export.date_pay_day')
+    
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

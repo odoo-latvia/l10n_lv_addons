@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record model="ir.config_parameter" id="cp_payslip_eds_export_responsible_id">
+            <field name="key">payslip_eds_export.responsible_id</field>
+            <field name="value" ref="hr.employee_admin"/>
+        </record>
+
+        <record model="ir.config_parameter" id="cp_payslip_eds_export_date_pay_day">
+            <field name="key">payslip_eds_export.date_pay_day</field>
+            <field name="value">31</field>
+        </record>
+
+    </data>
+</odoo>
