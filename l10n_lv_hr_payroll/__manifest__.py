@@ -42,7 +42,7 @@ Adds button "Reload Inputs" in Payslip form, which calls the same function as th
         'security/ir.model.access.csv',
         'views/hr_payroll_views.xml',
 #        'wizard/payslip_eds_export_view.xml',
-#        'wizard/relief_eds_import_view.xml'
+        'wizard/relief_eds_import_view.xml'
     ],
     'auto_install': False,
     'installable': True,

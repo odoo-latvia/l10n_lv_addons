@@ -57,12 +57,15 @@ class ReliefEDSImport(models.TransientModel):
             if fe_pc:
                 emp_query_str = """SELECT id FROM hr_employee 
                     WHERE COALESCE(identification_id, '') != '' 
-                    AND REPLACE(identification_id, '-', '') = %s 
+                    AND REPLACE(identification_id, '-', '') = '%s' 
                     AND id %s %s""" % (fe_pc, len(e_ids) == 1 and '=' or 'in', len(e_ids) == 1 and e_ids[0] or tuple(e_ids),)
                 self._cr.execute(emp_query_str)
                 emp_ids = [r['id'] for r in self._cr.dictfetchall()]
             if (not e_ids) and fe_name:
-                emp_query_str = "SELECT emp.id FROM hr_employee AS emp LEFT JOIN resource_resource AS res ON emp.resource_id = res.id WHERE UPPER(res.name) = %s AND emp.id %s %s" % (fe_name, len(e_ids) == 1 and '=' or 'in', len(e_ids) == 1 and e_ids[0] or tuple(e_ids),)
+                emp_query_str = """SELECT emp.id FROM hr_employee AS emp 
+                    LEFT JOIN resource_resource AS res ON emp.resource_id = res.id 
+                    WHERE UPPER(res.name) = %s 
+                    AND emp.id %s %s""" % (fe_name, len(e_ids) == 1 and '=' or 'in', len(e_ids) == 1 and e_ids[0] or tuple(e_ids),)
                 self._cr.execute(emp_query_str)
                 emp_ids = [r['id'] for r in self._cr.dictfetchall()]
             if emp_ids:
