@@ -89,7 +89,7 @@ class HrPayslip(models.Model):
             avg_salary = 0.0
             if date_from and date_to and employee:
                 # get date 6 months earlier:
-                date_to_6 = datetime.datetime.strftime((datetime.datetime.strptime(date_to, '%Y-%m-%d') + relativedelta(months=-7)), '%Y-%m-%d')
+                date_to_6 = datetime.datetime.strftime((isinstance(date_to, str) and datetime.datetime.strptime(date_to, '%Y-%m-%d') or date_to + relativedelta(months=-7)), '%Y-%m-%d')
                 # find all payslips within these 6 months:
                 curr_pss = self.search([('date_from','=',date_from), ('date_to','=',date_to), ('employee_id','=',employee.id), ('contract_id','=',contract.id)])
                 cur_ps_ids = [cps.id for cps in curr_pss]
@@ -109,8 +109,9 @@ class HrPayslip(models.Model):
                         # if there are no worked day lines, compute workdays from dates:
                         if not prev_ps.worked_days_line_ids:
                             oneday = datetime.timedelta(days=1)
-                            test_date = datetime.datetime.strptime(prev_ps.date_from, '%Y-%m-%d')
-                            while test_date != datetime.datetime.strptime(prev_ps.date_to, '%Y-%m-%d'):
+                            test_date = isinstance(prev_ps.date_from, str) and datetime.datetime.strptime(prev_ps.date_from, '%Y-%m-%d') or prev_ps.date_from
+                            test_date_to = isinstance(prev_ps.date_from, str) and datetime.datetime.strptime(prev_ps.date_to, '%Y-%m-%d') or prev_ps.date_to
+                            while test_date != test_date_to:
                                 if test_date.weekday() in [0, 1, 2, 3, 4]:
                                     prev_wd += 1.0
                                 test_date += oneday
@@ -120,7 +121,7 @@ class HrPayslip(models.Model):
                                 prev_ts += l.total
                         # if there are no computed lines, compute them to get data:
                         if not prev_ps.line_ids:
-                            prev_lines = self.get_payslip_lines([contract.id], prev_ps.id)
+                            prev_lines = self._get_payslip_lines([contract.id], prev_ps.id)
                             for pl in prev_lines:
                                 if pl['code'] in ['LD', 'PIEM', 'PIEMV']:
                                     prev_ts += (float(pl['quantity']) * pl['amount'] * pl['rate'] / 100)
@@ -149,16 +150,16 @@ class HrPayslip(models.Model):
                     # define start total:
                     curr_ts = 0.0
                     # if current payslip ids, get payslip line computed values:
-                    if curr_ps_ids:
-                        for c in curr_ps_ids:
-                            ps_lines = self.get_payslip_lines([contract.id], c.id)
+                    if cur_ps_ids:
+                        for c in cur_ps_ids:
+                            ps_lines = self._get_payslip_lines([contract.id], c)
                             for p in ps_lines:
                                 if p['code'] in ['LD', 'PIEM', 'PIEMV']:
                                     curr_ts += (float(p['quantity']) * p['amount'] * p['rate'] / 100)
                     # if no current payslip ids, compute the value:
-                    if (not curr_ps_ids) and total_days != 0.0:
+                    if (not cur_ps_ids) and total_days != 0.0:
                         curr_ts += contract.wage * curr_wd / total_days
-                        ip_lines = self.get_inputs(contract, date_from, date_to)
+                        ip_lines = res
                         if ip_lines:
                             for cil in ip_lines:
                                 if cil['code'] == 'PIEMV':
@@ -201,7 +202,7 @@ class HrPayslip(models.Model):
         input_line_vals = self.get_inputs(self.contract_id, self.date_from, self.date_to)
         if input_line_vals:
             input_obj = self.env['hr.payslip.input']
-            for inp in input_line_wals:
+            for inp in input_line_vals:
                 inp_lines = input_obj.search([('payslip_id','=',self.id), ('code','=',inp['code']), ('contract_id','=',inp['contract_id'])])
                 if inp_lines:
                     if 'amount' in inp:

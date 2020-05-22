@@ -35,12 +35,10 @@ class PayslipEDSExport(models.TransientModel):
         year_list = []
         month_list = []
         for payslip in payslip_obj.browse(self.env.context.get('active_ids',[])):
-            date_from = datetime.strptime(payslip.date_from, '%Y-%m-%d')
-            date_to = datetime.strptime(payslip.date_to, '%Y-%m-%d')
-            month_from = int(datetime.strftime(date_from, '%m'))
-            month_to = int(datetime.strftime(date_to, '%m'))
-            year_from = int(datetime.strftime(date_from, '%Y'))
-            year_to = int(datetime.strftime(date_to, '%Y'))
+            month_from = int(datetime.strftime(payslip.date_from, '%m'))
+            month_to = int(datetime.strftime(payslip.date_to, '%m'))
+            year_from = int(datetime.strftime(payslip.date_from, '%Y'))
+            year_to = int(datetime.strftime(payslip.date_to, '%Y'))
             if month_from not in month_list:
                 month_list.append(month_from)
             if month_to not in month_list:
@@ -60,10 +58,10 @@ class PayslipEDSExport(models.TransientModel):
             if company.id in result:
                 result[company.id]['payslips'].append(payslip)
             else:
-                result.update({company_id: {
+                result.update({company.id: {
                     'company_reg': company.company_registry,
                     'company_name': company.name,
-                    'payslips': payslips
+                    'payslips': [payslip]
                 }})
 
         for c_id, c_vals in result.items():
@@ -168,7 +166,7 @@ class PayslipEDSExport(models.TransientModel):
                 date_to = p.date_to
         pit = 0.0
         if payslips:
-            days_diff = datetime.strptime(date_to, '%Y-%m-%d') - datetime.strptime(date_from, '%Y-%m-%d')
+            days_diff = date_to - date_from
             dys = days_diff.days
             ps_obj = self.env['hr.payslip']
             prev_pss = ps_obj.search([('employee_id','=',employee_id), ('date_from','<',date_from)], order='date_from desc')
@@ -176,7 +174,7 @@ class PayslipEDSExport(models.TransientModel):
             c = 0
             for pps in prev_pss:
                 c += 1
-                d_diff = datetime.strptime(pps.date_to, '%Y-%m-%d') - datetime.strptime(pps.date_from, '%Y-%m-%d')
+                d_diff = pps.date_to - pps.date_from
                 dys2 += d_diff.days
                 if c > 1 and dys2 > dys:
                     break
@@ -217,7 +215,7 @@ class PayslipEDSExport(models.TransientModel):
                 data_of_file += ("\n  <NmrKods>" + d['company_reg'] + "</NmrKods>")
             if not d['company_reg']:
                 data_of_file += ("\n  <NmrKods/>")
-            date_pay = str(int(datetime.strftime((datetime.strptime(self.date_pay, '%Y-%m-%d')), '%d')))
+            date_pay = str(int(datetime.strftime(self.date_pay, '%d')))
             data_of_file += ("\n  <IzmaksasDatums>" + date_pay + "</IzmaksasDatums>")
             data_of_file += ("\n  <Sagatavotajs>" + self.responsible_id.name + "</Sagatavotajs>")
             if self.responsible_id.work_phone:
@@ -231,7 +229,7 @@ class PayslipEDSExport(models.TransientModel):
             tot_contributions = 0.0
             tot_pit = 0.0
             tot_rf = 0.0
-            for key, value in table_dict.iteritems():
+            for key, value in table_dict.items():
                 data_of_file += ("\n  <Tab%s>" % key)
                 for v in value:
                     data_of_file += "\n    <R>"
@@ -290,7 +288,7 @@ class PayslipEDSExport(models.TransientModel):
         if (not def_resp_id) or def_resp_id != self.responsible_id.id:
             cp_obj.set_param('payslip_eds_export.responsible_id', str(self.responsible_id.id))
         def_date_pay_day = cp_obj.get_param('payslip_eds_export.date_pay_day')
-        exp_date_pay_day = datetime.strftime(datetime.strptime(self.date_pay, '%Y-%m-%d'), '%d')
+        exp_date_pay_day = datetime.strftime(self.date_pay, '%d')
         if (not def_date_pay_day) or def_date_pay_day != exp_date_pay_day:
             cp_obj.set_param('payslip_eds_export.date_pay_day', str(exp_date_pay_day))
 
