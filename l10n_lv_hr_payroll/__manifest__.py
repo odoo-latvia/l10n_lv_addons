@@ -33,6 +33,13 @@ Upgrades Employee onchange function, so that it:
 * computes average salary for last 6 months (VDA6M) in Other Inputs;
 * uses Leave Type Code in Worked Days.
 Adds button "Reload Inputs" in Payslip form, which calls the same function as the Employee onchange function, so that, in case of data change, you don't have to edit the payslip and change employee again to see it.
+
+After the installation of this module you should:
+* put the value "LEGAL" in the Leave Type "Legal Leaves" Code field;
+* create a Leave Type named "Official Holidays" with the code "OFFICIAL" and create official holiday leaves for all employees;
+* create a Leave Type named "Sick Leaves Paid 75%" with the code "SICK75" and create separate leaves for the days of the sick leave, which are paid by 75% of the salary;
+* create a Leave Type named "Sick Leaves Paid 80%" with the code "SICK80" and create separate leaves for the days of the sick leave, which are paid by 80% of the salary;
+* mark the field Reduces Tax Relief for the Leave Types, which reduce tax relief.
     """,
     'author': 'Allegro IT',
     'website': 'http://www.allegro.lv',
