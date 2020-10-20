@@ -54,7 +54,7 @@ class Company(models.Model):
             })
         return company
 
-    @api.multi
+    @api.model
     def write(self, values):
         res = super(Company, self).write(values)
         if 'company_registry' in values:

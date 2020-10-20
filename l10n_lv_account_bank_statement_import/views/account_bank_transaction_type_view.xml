@@ -50,7 +50,6 @@
     <record id="action_bank_transaction_type" model="ir.actions.act_window">
         <field name="name">Bank Transaction Types</field>
         <field name="res_model">account.bank.transaction.type</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="account_bank_transaction_type_search"/>
         <field name="context">{}</field>

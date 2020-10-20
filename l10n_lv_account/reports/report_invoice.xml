@@ -14,7 +14,7 @@
 <report
     id="action_report_docket_invoice"
     string="Invoice with Signature"
-    model="account.invoice"
+    model="account.move"
     report_type="qweb-pdf"
     file="l10n_lv_account.report_invoice"
     name="l10n_lv_account.report_invoice"
@@ -109,9 +109,7 @@
         </t>
     </xpath>
 
-    <xpath expr="//tbody[hasclass('invoice_tbody')]/tr[last()]" position="replace"/>
-
-    <xpath expr="//div[@class='page']/div[@class='row']" position="replace">
+    <xpath expr="//div[@class='clearfix']/div[@class='row']" position="replace">
         <style>
             .sub {
                 font-size: .75em;
@@ -174,7 +172,7 @@
 </template>
 
 <template id="external_layout_standart" inherit_id="web.external_layout_standard">
-    <xpath expr="div[@class='header']" position="replace">
+    <xpath expr="div[@t-attf-class='header o_company_#{company.id}_layout']" position="replace">
         <div class="header">
             <div class="row">
                 <div class="col-xs-3 mb4">

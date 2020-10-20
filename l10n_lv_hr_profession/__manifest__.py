@@ -34,11 +34,11 @@ Profession, Health Hazard and Work Condition data for Latvian Professions.
     'website': 'http://www.allegro.lv',
     'images': [],
     'depends': [
-        'hr_profession'
+        'hr'
     ],
     'post_init_hook': 'post_init',
     'demo': [],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'qweb': [],
 }

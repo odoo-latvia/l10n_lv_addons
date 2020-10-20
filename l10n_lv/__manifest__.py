@@ -24,7 +24,7 @@
 
 {
     'name': 'Latvia - Accounting',
-    'version': '1.1',
+    'version': '14.0',
     'category': 'Localization',
     'summary': 'Accounting configuration for Latvia',
     'description': """
@@ -37,14 +37,14 @@ Adds Chart of Accounts, Chart of Taxes, Fiscal Positions, Banks and Partner Titl
         'account'
     ],
     'data': [
+        'data/account_chart_template_data.xml',
         'data/res_company_data.xml',
         'data/account_group_data.xml',
         'data/account_account_type_data.xml',
         'data/account_account_tag_data.xml',
-        'data/account_chart_template_data.xml',
         'data/account_account_template_data.xml',
-        'data/account_tax_template_data.xml',
-        'data/account_fiscal_position_template_data.xml',
+        #'data/account_tax_template_data.xml',
+        #'data/account_fiscal_position_template_data.xml',
         'data/res_partner_title_data.xml',
         'data/res.bank.csv',
         'views/res_partner_view.xml'

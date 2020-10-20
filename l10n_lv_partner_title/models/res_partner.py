@@ -27,19 +27,19 @@ from odoo import api, fields, models, _
 class Partner(models.Model):
     _inherit = 'res.partner'
 
-    title = fields.Many2one(domain="['|', ('type', '=', company_type), ('type', '=', False)]")
+    title = fields.Many2one(domain="['|', ('company_type', '=', company_type), ('company_type', '=', False)]")
 
 
 class PartnerTitle(models.Model):
     _inherit = 'res.partner.title'
     _rec_name = 'shortcut'
 
-    type = fields.Selection([
+    company_type = fields.Selection([
         ('person', 'Individual'),
         ('company', 'Company'),
         ], 'Type')
+ 
 
-    @api.multi
     def name_get(self, details=True):
         if details:
             name = u'{r.shortcut} {r.name}'

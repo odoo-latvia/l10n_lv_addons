@@ -41,9 +41,9 @@ msgid "<span class=\"sub\">Supplier </span>"
 msgstr "<span class=\"sub\">Piegādātājs</span><br/>"
 
 #. module: l10n_lv_account
-#: model:ir.model,name:l10n_lv_account.model_account_invoice
-msgid "Invoice"
-msgstr "Rēķins"
+#: model:ir.model,name:l10n_lv_account.model_account_move
+msgid "Journal Entry"
+msgstr "Žurnāla ieraksts"
 
 #. module: l10n_lv_account
 #: model:ir.actions.report,name:l10n_lv_account.action_report_docket_invoice

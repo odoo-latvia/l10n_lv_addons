@@ -80,7 +80,6 @@ class AccountChartTemplate(models.Model):
 class AccountTaxTemplate(models.Model):
     _inherit = "account.tax.template"
 
-    @api.multi
     def _generate_tax(self, company):
         res = super(AccountTaxTemplate, self)._generate_tax(company)
         lv_sale_tax_tmpl = self.env.ref('l10n_lv.lv_tax_template_PVN-SR')
@@ -95,6 +94,12 @@ class AccountTaxTemplate(models.Model):
             self.env['ir.config_parameter'].sudo().set_param("account.default_purchase_tax_id", purchase_tax_id)
             IrDefault.set('product.template', "supplier_taxes_id", [purchase_tax_id], company_id=company.id)
         return res
+
+
+class AccountAccountTemplate(models.Model):
+    _inherit = "account.account.template"
+
+    group_id = fields.Many2one('account.group')
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

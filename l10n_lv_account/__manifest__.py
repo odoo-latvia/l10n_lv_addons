@@ -40,7 +40,7 @@
         'reports/report_invoice.xml'
     ],
     'demo': [],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'qweb': [],
 }

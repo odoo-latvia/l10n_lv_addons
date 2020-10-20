@@ -467,7 +467,7 @@ class L10nLvVatDeclaration(models.TransientModel):
             if d['refund']:
                 doc_type = "4"
                 limit_val = 0.0
-            if doc_type != "6" and (not len(self.env['account.invoice'].search([('move_id','=',d['move'].id)]))) and d['move'].journal_id.type != 'expense':
+            if doc_type != "6" and (not len(self.env['account.move'].search([('id','=',d['move'].id)]))) and d['move'].journal_id.type != 'expense':
                 doc_type = "5"
             # getting tax amount:
             if not d['child_taxes']:
@@ -853,7 +853,7 @@ class L10nLvVatDeclaration(models.TransientModel):
             data_of_file += "\n        </R>"
         return data_of_file, info_data
 
-    @api.multi
+    @api.model
     def create_file(self):
         self.ensure_one()
         company = self.env['res.users'].browse(self.env.uid).company_id

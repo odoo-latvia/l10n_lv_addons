@@ -10,7 +10,7 @@
         <field name="amount_type">percent</field>
         <field name="amount">21.0</field>
         <field name="description">Pr-21</field>
-        <field name="account_id" ref="lv_account_template_5721"/>
+        <field name="cash_basis_transition_account_id" ref="lv_account_template_5721"/>
         <field name="refund_account_id" ref="lv_account_template_5721"/>
         <field name="tag_ids" eval="[(6, 0, [ref('lv_account_tax_tag_62'), ref('lv_account_tax_tag_64')])]"/>
     </record>

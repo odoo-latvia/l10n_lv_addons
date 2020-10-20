@@ -25,10 +25,10 @@
 def post_init(cr, registry):
     from odoo.tools import convert_file
     profession_file = 'data/hr.profession.csv'
-    convert_file(cr, 'l10n_lv_hr_profession', profession_file, None, mode='init', noupdate=True, kind='init', report=None)
+    convert_file(cr, 'l10n_lv_hr_profession', profession_file, None, mode='init', noupdate=True, kind='init')
     hazard_file = 'data/hr.job.hazard.csv'
-    convert_file(cr, 'l10n_lv_hr_profession', hazard_file, None, mode='init', noupdate=True, kind='init', report=None)
+    convert_file(cr, 'l10n_lv_hr_profession', hazard_file, None, mode='init', noupdate=True, kind='init')
     condition_file = 'data/hr.job.condition.csv'
-    convert_file(cr, 'l10n_lv_hr_profession', condition_file, None, mode='init', noupdate=True, kind='init', report=None)
+    convert_file(cr, 'l10n_lv_hr_profession', condition_file, None, mode='init', noupdate=True, kind='init')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
