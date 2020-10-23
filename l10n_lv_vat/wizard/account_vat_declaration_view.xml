@@ -53,12 +53,13 @@
 
         <record id="action_vat_declaration_l10n_lv" model="ir.actions.act_window">
             <field name="name">VAT Declaration</field>
+            <field name="type">ir.actions.act_window</field>
             <field name="res_model">l10n_lv.vat.declaration</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="view_vat_declaration_l10n_lv"/>
             <field name="target">new</field>
         </record>
-        
+
         <menuitem
             name="VAT Declaration"
             parent="menu_finance_latvian_statement"
