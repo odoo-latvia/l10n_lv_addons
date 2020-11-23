@@ -52,6 +52,7 @@ def check_fpos(fpos, fpos_need):
 
 class L10nLvVatDeclaration(models.TransientModel):
     _name = "l10n_lv.vat.declaration"
+    _inherit = "account.common.journal.report"
     _description = "VAT Declaration"
 
     @api.model

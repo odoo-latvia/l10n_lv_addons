@@ -35,6 +35,7 @@ Latvian localization, which allows you to export XML data for VAT declarations.
     'category': 'Localization',
     'depends': ['l10n_lv'],
     'data': [
+        'views/menuitems.xml',
         'wizard/account_vat_declaration_view.xml',
     ],
     'auto_install': False,
