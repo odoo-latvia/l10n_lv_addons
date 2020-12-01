@@ -38,7 +38,7 @@ Validates the checksum of Registration No. and Personal No. to Partner.
         'l10n_lv_partner_data'
     ],
     'data': [
-        'views/res_partner_views.xml',
+ #       'views/res_partner_views.xml',
         'views/templates.xml'
     ],
     'external_dependencies': {'python': ['stdnum']},
