@@ -12,7 +12,7 @@
                     <attribute name="options">{"country_code_field": "country_code", "is_company_field": "is_company"}</attribute>
                 </field>
                 <field name="country_id" position="after">
-                    <field name="country_code" />
+                    <field name="country_code" invisible="1"/>
                 </field>
             </field>
         </record>
