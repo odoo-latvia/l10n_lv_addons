@@ -2,197 +2,197 @@
 <odoo noupdate="0">
 
     <record id="base.res_partner_title_madam" model="res.partner.title">
-        <field name="company_type">person</field>
+        <field name="type">person</field>
     </record>
     <record id="base.res_partner_title_miss" model="res.partner.title">
-        <field name="company_type">person</field>
+        <field name="type">person</field>
     </record>
     <record id="base.res_partner_title_mister" model="res.partner.title">
-        <field name="company_type">person</field>
+        <field name="type">person</field>
     </record>
     <record id="base.res_partner_title_doctor" model="res.partner.title">
-        <field name="company_type">person</field>
+        <field name="type">person</field>
     </record>
     <record id="base.res_partner_title_prof" model="res.partner.title">
-        <field name="company_type">person</field>
+        <field name="type">person</field>
     </record>
 
     <record model="res.partner.title" id="l10n_lv.kf">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.akp">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.arb">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.as">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.asf">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.baz">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.bdr">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.bie">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.cen">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.die">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.drj">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.drz">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.egf">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.eig">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.fil">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.gim">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.ik">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.ind">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.kb">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.kbs">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.kbu">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.klo">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.ks">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.kor">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.kss">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.lig">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.mis">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.nod">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.paj">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.pap">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.par_arv">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.par">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.ps">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.pol">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.por">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.pp">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.ppa">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.pps">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.pro">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.prv">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.psv">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.rel">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.roi">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.saa">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.sab">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.sav">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.sce">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.se">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.sia">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.skt">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.sou">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.spa">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.spo">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.uzn">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.vu">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.zem">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.zvj">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.mil">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
     <record model="res.partner.title" id="l10n_lv.kat">
-        <field name="company_type">company</field>
+        <field name="type">company</field>
     </record>
 
 </odoo>

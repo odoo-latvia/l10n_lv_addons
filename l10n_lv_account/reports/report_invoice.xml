@@ -109,7 +109,7 @@
         </t>
     </xpath>
 
-    <xpath expr="//div[@class='clearfix']/div[@class='row']" position="replace">
+    <xpath expr="//div[hasclass('clearfix')]/div[hasclass('row')]" position="replace">
         <style>
             .sub {
                 font-size: .75em;

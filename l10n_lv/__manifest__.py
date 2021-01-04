@@ -47,6 +47,7 @@ Adds Chart of Accounts, Chart of Taxes, Fiscal Positions, Banks and Partner Titl
         'data/account_fiscal_position_template_data.xml',
         'data/res_partner_title_data.xml',
         'data/res.bank.csv',
+        'data/account_payment_terms_data.xml',
         'views/res_partner_view.xml'
     ],
     'demo': [],

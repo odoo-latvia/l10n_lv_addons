@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Part of Odoo.
-#    Copyright (C) 2018 Allegro (<http://www.allegro.lv/>)
+#    Copyright (C) 2020 Allegro IT (<http://www.allegro.lv/>)
 #                       E-mail: <info@allegro.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
 #                       Phone: +371 67289467
@@ -26,18 +26,18 @@
     'name': 'LV Partner name',
     'version': '1.0',
     'description': """
-Partner seporate first and last name fields.
+Separate partner first and last name fields.
 ============================================
 
-A partners surname is the last complete word. Multiple surnames can be
-writen by delimiting them with a dash. "Berzins Priede" -> "Berzins-Priede".
+For individuals partner surname is the last complete word. Multiple surnames can be
+written by delimiting them with a dash. "Berzins Priede" -> "Berzins-Priede".
 The conversion is automatic when writen in the surname field.
 
-First and middle names are seporated by a space 'Martins Juris Kristians'.
+First and middle names are separated by a space 'Martins Juris Kristians'.
 
 
     """,
-    'author': 'Allegro',
+    'author': 'Allegro IT',
     'website': 'http://www.allegro.lv/',
     'category': 'Hidden',
     'depends': ['base'],

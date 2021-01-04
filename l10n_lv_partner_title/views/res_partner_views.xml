@@ -9,7 +9,7 @@
         <field name="inherit_id" ref="base.view_partner_title_form"/>
         <field name="arch" type="xml">
             <field name="shortcut" position="after">
-                <field name="company_type"/>
+                <field name="type"/>
             </field>
         </field>
     </record>
@@ -20,7 +20,7 @@
         <field name="inherit_id" ref="base.view_partner_title_tree"/>
         <field name="arch" type="xml">
             <field name="shortcut" position="after">
-                <field name="company_type"/>
+                <field name="type"/>
             </field>
         </field>
     </record>
