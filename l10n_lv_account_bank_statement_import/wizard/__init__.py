@@ -22,6 +22,6 @@
 #
 ##############################################################################
 
-from . import account_bank_statement_import
+from . import account_statement_import
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

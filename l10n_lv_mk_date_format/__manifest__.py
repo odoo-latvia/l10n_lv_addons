@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Part of Odoo.
-#    Copyright (C) 2018 Allegro (<http://www.allegro.lv/>)
+#    Copyright (C) 2021 Allegro (<http://www.allegro.lv/>)
 #                       E-mail: <info@allegro.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
 #                       Phone: +371 67289467
@@ -28,10 +28,10 @@
     'description': """
     Replace odoo's default date format 
     %Y-%m-%d
-    with mk's
-    %d-%m-%Y
+    with Latvian MK recommendations 
+    %d.%m.%Y
     """,
-    'author': 'Allegro',
+    'author': 'Allegro IT',
     'website': 'http://www.allegro.lv/',
     'category': 'Hidden',
     'depends': ['base'],
@@ -42,4 +42,3 @@
     'installable': True,
 }
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
