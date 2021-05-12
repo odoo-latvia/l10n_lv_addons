@@ -2,7 +2,7 @@
 <odoo>
 
     <record id="lv_account_type_1_1" model="account.account.type">
-        <field name="name">Nemateriālie ieguldījumi</field>
+        <field name="name">1.1. Nemateriālie ieguldījumi</field>
         <field name="type">other</field>
         <field name="internal_group">equity</field>
     </record>
