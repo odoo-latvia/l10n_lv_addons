@@ -23,11 +23,34 @@
 ##############################################################################
 
 from odoo import api, fields, models, _
+from xml.dom.minidom import parseString
 
 class Partner(models.Model):
     _inherit = 'res.partner'
 
-    title = fields.Many2one(domain="['|', ('type', '=', company_type), ('type', '=', False)]")
+    @api.model
+    def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
+        res = super(Partner, self).fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
+        dom = parseString(res['arch'])
+        if view_type != 'search':
+            xml_fields = dom.getElementsByTagName('field')
+            ct_found = False
+            t_field_tag = False
+            for f in xml_fields:
+                if f.getAttribute('name') == 'company_type':
+                    ct_found = True
+                if f.getAttribute('name') == 'title':
+                    t_field_tag = f
+            if t_field_tag and (not t_field_tag.getAttribute('domain')):
+                t_field_tag.setAttribute("domain", "['|', ('type', '=', company_type), ('type', '=', False)]")
+                if (not ct_found):
+                    ct_field_tag = dom.createElement("field")
+                    ct_field_tag.setAttribute("name", "company_type")
+                    ct_field_tag.setAttribute("invisible", "1")
+                    t_field_parent = t_field_tag.parentNode
+                    t_field_parent.insertBefore(ct_field_tag, t_field_tag)
+        res['arch'] = dom.toxml()
+        return res
 
 
 class PartnerTitle(models.Model):
