@@ -29,35 +29,38 @@ class AccountJournal(models.Model):
     _inherit = "account.journal"
 
     @api.model
-    def _prepare_liquidity_account(self, name, company, currency_id, type):
-        res = super(AccountJournal, self)._prepare_liquidity_account(name, company, currency_id, type)
-        if type in ('bank', 'cash'):
+    def _fill_missing_values(self, vals):
+        journal_type = vals.get('type')
+        if journal_type in ('bank', 'cash') and (not vals.get('default_account_id')):
+            company = self.env['res.company'].browse(vals['company_id']) if vals.get('company_id') else self.env.company
             user_type = self.env.ref('l10n_lv.lv_account_type_2_5')
-            if user_type:
-                res['user_type_id'] = user_type.id
             group = self.env.ref('l10n_lv.lv_account_group_261')
-            if type == 'bank':
+            if journal_type == 'bank':
                 group = self.env.ref('l10n_lv.lv_account_group_262')
-            if group:
-                res.update({'group_id': group.id})
-        return res
+            liquidity_account = self.env['account.account'].create({
+                'name': vals.get('name'),
+                'code': self.env['account.account']._search_new_account_code(company, digits, liquidity_account_prefix),
+                'user_type_id': user_type.id,
+                'currency_id': vals.get('currency_id'),
+                'company_id': company.id,
+                'group_id': group.id
+            })
+            vals.update({
+                'default_account_id': liquidity_account.id,
+            })
+        super(AccountJournal, self)._fill_missing_values(vals)
 
 
 class AccountChartTemplate(models.Model):
     _inherit = "account.chart.template"
 
-    def load_for_current_company(self, sale_tax_rate, purchase_tax_rate):
+    def _load(self, sale_tax_rate, purchase_tax_rate, company):
         self.ensure_one()
         if self == self.env.ref('l10n_lv.l10n_lv_chart_template'):
             sale_tax_rate = 21.0
             purchase_tax_rate = 21.0
-        res = super(AccountChartTemplate, self).load_for_current_company(sale_tax_rate, purchase_tax_rate)
+        res = super(AccountChartTemplate, self)._load(sale_tax_rate, purchase_tax_rate, company)
         if self == self.env.ref('l10n_lv.l10n_lv_chart_template'):
-            if request and request.session.uid:
-                current_user = self.env['res.users'].browse(request.uid)
-                company = current_user.company_id
-            else:
-                company = self.env.user.company_id
             sale_tax = self.env['account.tax'].search([
                 ('type_tax_use','=','sale'), 
                 ('amount_type','=','percent'), 
