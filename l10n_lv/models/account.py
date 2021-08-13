@@ -33,10 +33,15 @@ class AccountJournal(models.Model):
         journal_type = vals.get('type')
         if journal_type in ('bank', 'cash') and (not vals.get('default_account_id')):
             company = self.env['res.company'].browse(vals['company_id']) if vals.get('company_id') else self.env.company
+            random_account = self.env['account.account'].search([('company_id', '=', company.id)], limit=1)
+            digits = len(random_account.code) if random_account else 6
             user_type = self.env.ref('l10n_lv.lv_account_type_2_5')
-            group = self.env.ref('l10n_lv.lv_account_group_261')
             if journal_type == 'bank':
+                liquidity_account_prefix = company.bank_account_code_prefix or ''
                 group = self.env.ref('l10n_lv.lv_account_group_262')
+            else:
+                liquidity_account_prefix = company.cash_account_code_prefix or company.bank_account_code_prefix or ''
+                group = self.env.ref('l10n_lv.lv_account_group_261')
             liquidity_account = self.env['account.account'].create({
                 'name': vals.get('name'),
                 'code': self.env['account.account']._search_new_account_code(company, digits, liquidity_account_prefix),
