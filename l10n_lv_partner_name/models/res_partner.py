@@ -87,7 +87,6 @@ class Partner(models.Model):
                 values.update(name=self.create_fullname(values))
         return super(Partner, self).create(values)
 
-    @api.model
     def write(self, values):
         if values.get('name'):
             fname, sname = self.create_firstlast_names(values)
