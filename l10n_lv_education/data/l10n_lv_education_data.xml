@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="False">
+
+        <record id="res_edu_level_general_basic_education" model="res.edu.level">
+            <field name="name">General Basic Education</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="res_edu_level_level_1_professional_continuing_education" model="res.edu.level">
+            <field name="name">Level 1 Professional Continuing Education</field>
+            <field name="sequence">2</field>
+        </record>
+
+        <record id="res_edu_level_professional_basic_education" model="res.edu.level">
+            <field name="name">Professional Basic Education</field>
+            <field name="sequence">3</field>
+        </record>
+
+        <record id="res_edu_level_level_2_professional_continuing_education" model="res.edu.level">
+            <field name="name">Level 2 Professional Continuing Education</field>
+            <field name="sequence">4</field>
+        </record>
+
+        <record id="res_edu_level_general_secondary_education" model="res.edu.level">
+            <field name="name">General Secondary Education</field>
+            <field name="sequence">5</field>
+        </record>
+
+        <record id="res_edu_level_vocational_education" model="res.edu.level">
+            <field name="name">Vocational Education</field>
+            <field name="sequence">6</field>
+        </record>
+
+        <record id="res_edu_level_vocational_secondary_education" model="res.edu.level">
+            <field name="name">Vocational Secondary Education</field>
+            <field name="sequence">7</field>
+        </record>
+
+        <record id="res_edu_level_level_2_professional_continuing_education" model="res.edu.level">
+            <field name="name">Level 2 Professional Continuing Education</field>
+            <field name="sequence">8</field>
+        </record>
+
+        <record id="res_edu_level_level_1_professional_higher_college_education" model="res.edu.level">
+            <field name="name">Level 1 Professional Higher (College) Education</field>
+            <field name="sequence">9</field>
+        </record>
+
+        <record id="res_edu_level_academic_bachelors_degree" model="res.edu.level">
+            <field name="name">Academic Bachelor's Degree</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="res_edu_level_professional_bachelors_degree" model="res.edu.level">
+            <field name="name">Professional Bachelor's Degree</field>
+            <field name="sequence">11</field>
+        </record>
+
+        <record id="res_edu_level_level_2_professional_higher_education" model="res.edu.level">
+            <field name="name">Level 2 Professional Higher Education</field>
+            <field name="sequence">12</field>
+        </record>
+
+        <record id="res_edu_level_academic_masters_degree" model="res.edu.level">
+            <field name="name">Academic Master's Degree</field>
+            <field name="sequence">13</field>
+        </record>
+
+        <record id="res_edu_level_professional_masters_degree" model="res.edu.level">
+            <field name="name">Professional Master's Degree</field>
+            <field name="sequence">14</field>
+        </record>
+
+        <record id="res_edu_level_doctorate" model="res.edu.level">
+            <field name="name">Doctorate</field>
+            <field name="sequence">15</field>
+        </record>
+
+    </data>
+</odoo>
