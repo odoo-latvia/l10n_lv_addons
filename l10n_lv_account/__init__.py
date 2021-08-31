@@ -2,10 +2,10 @@
 ##############################################################################
 #
 #    Part of Odoo.
-#    Copyright (C) 2018 Allegro IT (<http://www.allegro.lv/>)
-#                       E-mail: <info@allegro.lv>
+#    Copyright (C) 2021 Ozols Grupa (<http://www.ozols.lv/>)
+#                       E-mail: <info@ozols.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
-#                       Phone: +371 67289467
+#                       Phone: +371 67289211
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -22,6 +22,6 @@
 #
 ##############################################################################
 
-from . import models, wizard
+from . import models
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

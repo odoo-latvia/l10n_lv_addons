@@ -1,14 +1,14 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* l10n_lv_account
+# 	* l10n_lv_account
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-14 09:02+0000\n"
-"PO-Revision-Date: 2018-06-14 09:02+0000\n"
-"Last-Translator: <>\n"
+"POT-Creation-Date: 2021-08-31 12:45+0000\n"
+"PO-Revision-Date: 2021-08-31 12:45+0000\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -43,40 +43,45 @@ msgstr ""
 #. module: l10n_lv_account
 #: model_terms:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
 msgid "<strong>Payment Terms:</strong>"
-msgstr "<strong>Maksājuma nosacījumi:</strong>"
-
-#. module: l10n_lv_account
-#: model:ir.model,name:l10n_lv_account.model_account_setup_bank_manual_config
-msgid "Bank setup manual config"
-msgstr ""
+msgstr "<strong>Apmaksas nosacījumi:</strong>"
 
 #. module: l10n_lv_account
 #: model:ir.model.fields,field_description:l10n_lv_account.field_account_move__display_name
-#: model:ir.model.fields,field_description:l10n_lv_account.field_account_setup_bank_manual_config__display_name
 msgid "Display Name"
-msgstr "Nosaukums"
+msgstr "Attēlojamais nosaukums"
 
 #. module: l10n_lv_account
 #: model:ir.model.fields,field_description:l10n_lv_account.field_account_move__id
-#: model:ir.model.fields,field_description:l10n_lv_account.field_account_setup_bank_manual_config__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
+
+#. module: l10n_lv_account
+#: model:ir.actions.report,name:l10n_lv_account.action_report_docket_invoice
+msgid "Invoice with Signature"
+msgstr "Rēķins ar parakstu"
 
 #. module: l10n_lv_account
 #: model:ir.model,name:l10n_lv_account.model_account_move
 msgid "Journal Entry"
-msgstr "Žurnāla ieraksts"
+msgstr "Grāmatojums"
 
 #. module: l10n_lv_account
 #: model:ir.model.fields,field_description:l10n_lv_account.field_account_move____last_update
-#: model:ir.model.fields,field_description:l10n_lv_account.field_account_setup_bank_manual_config____last_update
 msgid "Last Modified on"
-msgstr "Pēdējoreiz modificēts"
+msgstr "Pēdējo reizi labots"
 
 #. module: l10n_lv_account
 #: model_terms:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
 msgid "Please use the following communication for your payment :"
-msgstr "Maksājumā lūdzam minēt:"
+msgstr "Maksājumā lūdzam norādīt:"
+
+#. module: l10n_lv_account
+#: model_terms:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
+msgid ""
+"Reciever<br/>\n"
+"                        Firstname, lastname"
+msgstr "Saņēmējs<br/>\n"
+"                        Vārds, uzvārds"
 
 #. module: l10n_lv_account
 #: model_terms:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
@@ -84,26 +89,16 @@ msgid "Registration No."
 msgstr "Reģistrācijas Nr."
 
 #. module: l10n_lv_account
-#: model:ir.model,name:l10n_lv_account.model_sale_order
-msgid "Quotation"
-msgstr "Piedāvājums"
-
-#. module: l10n_lv_account
-#: model:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
-msgid "Reciever<br/>\n"
-"                        Firstname, lastname"
-msgstr "Saņēmējs<br/>\n"
-"                        Vārds, uzvārds"
-
-#. module: l10n_lv_account
-#: model:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
-msgid "Salesperson<br/>\n"
+#: model_terms:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
+msgid ""
+"Salesperson<br/>\n"
 "                        Firstname, lastname"
 msgstr "Pārdevējs<br/>\n"
 "                        Vārds, uzvārds"
 
 #. module: l10n_lv_account
-#: model:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
 msgid "Total in words:"
 msgstr "Summa vārdiem:"
+
 
