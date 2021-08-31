@@ -2,10 +2,10 @@
 ##############################################################################
 #
 #    Part of Odoo.
-#    Copyright (C) 2018 Allegro (<http://www.allegro.lv/>)
-#                       E-mail: <info@allegro.lv>
+#    Copyright (C) 2021 Ozols Grupa (<http://www.ozols.lv/>)
+#                       E-mail: <info@ozols.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
-#                       Phone: +371 67289467
+#                       Phone: +371 67289211
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -26,17 +26,14 @@
     'name': 'LV MK Date Format',
     'version': '1.0',
     'description': """
-    Replace odoo's default date format 
-    %Y-%m-%d
-    with mk's
-    %d-%m-%Y
+Replaces Latvian language's default date format with %d.%m.%Y.
     """,
-    'author': 'Allegro',
-    'website': 'http://www.allegro.lv/',
+    'author': 'Ozols Grupa',
+    'website': 'http://www.ozols.lv',
     'category': 'Hidden',
     'depends': ['base'],
     'data': [
-        'data.xml'
+        'data/date_format_data.xml'
     ],
     'auto_install': False,
     'installable': True,
