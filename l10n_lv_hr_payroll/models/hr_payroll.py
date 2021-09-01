@@ -2,10 +2,10 @@
 ##############################################################################
 #
 #    Part of Odoo.
-#    Copyright (C) 2020 Allegro IT (<http://www.allegro.lv/>)
-#                       E-mail: <info@allegro.lv>
+#    Copyright (C) 2021 Ozols Grupa (<http://www.ozols.lv/>)
+#                       E-mail: <info@ozols.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
-#                       Phone: +371 67289467
+#                       Phone: +371 67289211
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -32,11 +32,10 @@ from odoo.tools import float_round
 class HolidaysType(models.Model):
     _inherit = "hr.leave.type"
 
-    code = fields.Char(string='Code')
     reduces_tax_relief = fields.Boolean(string='Reduces Tax Relief')
 
 
-class Employee(models.Model):
+class HrEmployeePrivate(models.Model):
     _inherit = "hr.employee"
 
     holiday_ids = fields.One2many('hr.leave', 'employee_id', string='Leaves')
@@ -69,17 +68,6 @@ class EmployeeRelief(models.Model):
 
 class HrPayslip(models.Model):
     _inherit = "hr.payslip"
-
-    @api.model
-    def get_worked_day_lines(self, contracts, date_from, date_to):
-        res = super(HrPayslip, self).get_worked_day_lines(contracts, date_from, date_to)
-        hd_type_obj = self.env['hr.leave.type']
-        for r in res:
-            hd_type = hd_type_obj.search([('name','=',r['name'])], limit=1)
-            if hd_type and hd_type.code and hd_type.code != r['code']:
-                ind = res.index(r)
-                res[ind]['code'] = hd_type.code
-        return res
 
     @api.model
     def get_inputs(self, contracts, date_from, date_to):

@@ -23,12 +23,12 @@
         </field>
     </record>
 
-    <act_window id="payslip_eds_export" name="Export to XML for EDS"
+<!--    <act_window id="payslip_eds_export" name="Export to XML for EDS"
             src_model="hr.payslip"
             res_model="payslip.eds.export"
             view_mode="form"
             view_type="form"
             target="new"
-            key2="client_action_multi"/>
+            key2="client_action_multi"/> -->
 
 </odoo>

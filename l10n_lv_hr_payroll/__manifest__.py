@@ -2,10 +2,10 @@
 ##############################################################################
 #
 #    Part of Odoo.
-#    Copyright (C) 2020 Allegro IT (<http://www.allegro.lv/>)
-#                       E-mail: <info@allegro.lv>
+#    Copyright (C) 2021 Ozols Grupa (<http://www.ozols.lv/>)
+#                       E-mail: <info@ozols.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
-#                       Phone: +371 67289467
+#                       Phone: +371 67289211
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -28,30 +28,36 @@
     'description': """
 Latvian Payroll
 -------------------------
-Adds Code field to Leave types.
-Upgrades Employee onchange function, so that it:
-* computes average salary for last 6 months (VDA6M) in Other Inputs;
-* uses Leave Type Code in Worked Days.
+Upgrades Employee onchange function, so that it computes average salary for last 6 months (VDA6M) in Other Inputs.
+
 Adds button "Reload Inputs" in Payslip form, which calls the same function as the Employee onchange function, so that, in case of data change, you don't have to edit the payslip and change employee again to see it.
 
+
 After the installation of this module you should:
-* put the value "LEGAL" in the Leave Type "Legal Leaves" Code field;
+
 * create a Leave Type named "Official Holidays" with the code "OFFICIAL" and create official holiday leaves for all employees;
+
 * create a Leave Type named "Sick Leaves Paid 75%" with the code "SICK75" and create separate leaves for the days of the sick leave, which are paid by 75% of the salary;
+
 * create a Leave Type named "Sick Leaves Paid 80%" with the code "SICK80" and create separate leaves for the days of the sick leave, which are paid by 80% of the salary;
+
 * mark the field Reduces Tax Relief for the Leave Types, which reduce tax relief.
+
+
+This module depends from the module "hr_payroll_community", which is available here:
+https://github.com/CybroOdoo/OpenHRMS
     """,
-    'author': 'Allegro IT',
-    'website': 'http://www.allegro.lv',
+    'author': 'Ozols Grupa',
+    'website': 'http://www.ozols.lv',
     'category': 'Localization',
-    'depends': ['hr_payroll'],
+    'depends': ['hr_payroll_community'],
     'data': [
         'security/ir.model.access.csv',
         'views/hr_payroll_views.xml',
         'views/res_config_settings_views.xml',
         'wizard/payslip_eds_export_view.xml',
         'wizard/relief_eds_import_view.xml',
-        'data/hr_payroll_data.xml'
+#        'data/hr_payroll_data.xml'
     ],
     'auto_install': False,
     'installable': True,
