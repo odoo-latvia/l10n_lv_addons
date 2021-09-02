@@ -28,6 +28,7 @@ from datetime import date, datetime, timedelta
 
 class PayslipEDSExport(models.TransientModel):
     _name = 'payslip.eds.export'
+    _description = 'Pay Slip EDS Export'
 
     @api.model
     def get_year_month(self):

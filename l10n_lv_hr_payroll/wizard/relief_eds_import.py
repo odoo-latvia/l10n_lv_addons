@@ -29,6 +29,7 @@ from datetime import datetime
 
 class ReliefEDSImport(models.TransientModel):
     _name = 'relief.eds.import'
+    _description = 'Relief EDS Import'
     _rec_name = 'eds_fname'
 
     @api.model
