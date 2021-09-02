@@ -2,3 +2,4 @@
 "access_hr_employee_relief_manager","hr.employee.relief.manager","model_hr_employee_relief","hr.group_hr_manager",1,1,1,1
 "access_hr_employee_relief_user","hr.employee.relief.user","model_hr_employee_relief","base.group_user",1,0,0,0
 "access_relief_eds_import_manager","relief.eds.import.manager","model_relief_eds_import","hr.group_hr_manager",1,1,1,1
+"access_payslip_eds_export_payroll_manager","payslip.eds.export.payroll.manager","model_payslip_eds_export","hr_payroll_community.group_hr_payroll_community_manager",1,1,1,1

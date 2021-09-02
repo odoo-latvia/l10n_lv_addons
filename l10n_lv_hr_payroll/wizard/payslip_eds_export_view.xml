@@ -23,12 +23,13 @@
         </field>
     </record>
 
-<!--    <act_window id="payslip_eds_export" name="Export to XML for EDS"
-            src_model="hr.payslip"
-            res_model="payslip.eds.export"
-            view_mode="form"
-            view_type="form"
-            target="new"
-            key2="client_action_multi"/> -->
+    <record id="payslip_eds_export" model="ir.actions.act_window">
+        <field name="name">Export to XML for EDS</field>
+        <field name="binding_model_id" ref="hr_payroll_community.model_hr_payslip"/>
+        <field name="binding_type">action</field>
+        <field name="res_model">payslip.eds.export</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
 
 </odoo>
