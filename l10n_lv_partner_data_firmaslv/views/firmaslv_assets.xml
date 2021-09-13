@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="Firmas.lv Assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" type="text/scss" href="/l10n_lv_partner_data_firmaslv/static/src/scss/firmaslv.scss"/>
+            <script type="text/javascript" src="/l10n_lv_partner_data_firmaslv/static/src/js/firmaslv_core.js" />
+            <script type="text/javascript" src="/l10n_lv_partner_data_firmaslv/static/src/js/firmaslv_fieldchar.js"/>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_partner_form_firmaslv" model="ir.ui.view">
+        <field name="name">res.partner.form.firmas.lv</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="l10n_lv_partner_data.view_partner_form_l10n_lv"/>
+        <field name="arch" type="xml">
+            <field name="partner_registry" position="attributes">
+                <attribute name="widget">firmaslv</attribute>
+            </field>
+        </field>
+    </record>
+
+</odoo>

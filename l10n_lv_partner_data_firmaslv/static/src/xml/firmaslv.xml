@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+    <div t-name="l10n_lv_partner_data_firmaslv.dropdown" class="o_firmaslv_dropdown dropdown-menu show" role="menu">
+        <t t-foreach="suggestions" t-as="info">
+            <a role="menuitem" href="#"
+                t-attf-class="dropdown-item o_firmaslv_suggestion clearfix#{info_index == 0 and ' active' or ''}"
+                t-att-data-index="info_index">
+                <img t-att-src="info['logo']" onerror="this.src='/base/static/img/company_image.png'" alt="Placeholder"/>
+                <div class="o_firmaslv_info">
+                    <strong><t t-esc="info['label'] or '&#160;'"/></strong>
+                    <div><t t-esc="info['description']"/></div>
+                </div>
+            </a>
+        </t>
+    </div>
+</templates>
