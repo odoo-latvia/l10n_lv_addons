@@ -171,15 +171,20 @@ var FirmasLVMixin = {
      * @private
      */
     _getFirmasLVSuggestions: function (value) {
-
+        var self = this;
         var def = this._rpc({
             model: 'res.partner',
             method: 'load_firmaslv_suggestions',
-            args: [value],
+            args: [value, this.name],
         }, {
             shadow: true,
         }).then(function (suggestions) {
+            var rem_ind = -1;
             suggestions.map(function (suggestion) {
+                if (suggestion.error) {
+                    self.do_notify(false, suggestion.error_message);
+                    rem_ind = suggestions.indexOf(suggestion);
+                }
                 suggestion.logo = suggestion.logo || '';
                 suggestion.label = suggestion.legal_name || suggestion.name;
                 if (suggestion.vat) suggestion.description = suggestion.vat;
@@ -192,6 +197,9 @@ var FirmasLVMixin = {
 
                 return suggestion;
             });
+            if (rem_ind > -1) {
+                suggestions.splice(rem_ind, 1);
+            }
             return suggestions;
         });
 
