@@ -59,10 +59,16 @@ var FirmasLVMixin = {
      * @private
      */
     _loadFirmasLVData: function (company) {
+        var virtualid = company.virtualid;
+        company.street = company.address;
+        delete company.virtualid;
+        delete company.address;
+        delete company.status;
+        delete company.src;
         return this._rpc({
             model: 'res.partner',
             method: 'load_firmaslv_data',
-            args: [company.website, company.partner_gid, company.vat],
+            args: [virtualid],
         });
     },
 

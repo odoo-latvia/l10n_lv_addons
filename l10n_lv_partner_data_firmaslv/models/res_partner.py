@@ -57,7 +57,7 @@ class Partner(models.Model):
             return {'SessionId': sessionid_node.nodeValue}
 
     @api.model
-    def load_firmaslv_suggestions(self, value, field_name=False, utf=True):
+    def get_firmaslv_response(self, act, value, field_name=False, utf=True):
         param_obj = self.env['ir.config_parameter'].sudo()
         usr = param_obj.get_param('firmaslv_user')
         pwd = param_obj.get_param('firmaslv_password')
@@ -71,23 +71,29 @@ class Partner(models.Model):
                 sessionid = lc['SessionId']
         baseurl = 'https://www.firmas.lv/api'
         params = {
-            'act': 'URSEARCH_XML',
+            'act': act,
             'SessionId': sessionid
         }
-        if not field_name:
-            params.update({'any': value})
-        else:
-            field_term_map = {
-                'name': 'name',
-                'partner_registry': 'code',
-                'vat': 'code',
-                'street': 'adr',
-                'street2': 'adr'
-            }
-            if field_name in field_term_map:
-                params.update({field_term_map[field_name]: value})
-            else:
+        if act == 'URSEARCH_XML':
+            if not field_name:
                 params.update({'any': value})
+            else:
+                field_term_map = {
+                    'name': 'name',
+                    'partner_registry': 'code',
+                    'vat': 'code',
+                    'street': 'adr',
+                    'street2': 'adr'
+                }
+                if field_name in field_term_map:
+                    params.update({field_term_map[field_name]: value})
+                else:
+                    params.update({'any': value})
+        if act == 'URPERSON_XML':
+            params.update({
+                'code': value,
+#                'part': 'B'
+            })
         if utf:
             params.update({'utf': 1})
         response = requests.post(baseurl, params=params)
@@ -100,8 +106,8 @@ class Partner(models.Model):
             for f in fault:
                 fc = f.getElementsByTagName('Firmaslv:errorCode')
                 if fc:
-                    fc_node = fs[0].firstChild
-                    fc_val = fs_node.nodeValue
+                    fc_node = fc[0].firstChild
+                    fc_val = fc_node.nodeValue
                     if fc_val in login_codes:
                         needs_login = True
                         break
@@ -133,8 +139,14 @@ class Partner(models.Model):
                         return [{'error': True, 'error_message': error_msg}]
             else:
                 error_message = 'Firmas.lv: %s' % " ".join(error_msgs)
-                return [{'error': True, 'error_message': error_message}]
+                return {'error': True, 'error_message': error_message}
+        return rc
 
+    @api.model
+    def load_firmaslv_suggestions(self, value, field_name=False):
+        rc = self.get_firmaslv_response('URSEARCH_XML', value, field_name=field_name)
+        if isinstance(rc, dict):
+            return [rc]
         res = []
         answ_list = rc.getElementsByTagName('list')
         if answ_list:
@@ -164,13 +176,106 @@ class Partner(models.Model):
                         if otag_value:
                             answ_dict.update({fld: otag_value})
                 if answ_dict:
+                    answ_dict.update({'src': 'Firmas.lv'})
                     res.append(answ_dict)
         return res
 
     @api.model
-    def load_firmaslv_data(self, company_domain, partner_gid, vat):
-        return {
-            'name': 'Test'
-        }
+    def load_firmaslv_data(self, virtualid):
+        def process_address(address, country_id=False):
+            addr_tag_list = ['address_full', 'city', 'region', 'village', 'parish', 'street', 'housename', 'house', 'flat', 'index']
+            addr_tag_data = {}
+            for atag_name in addr_tag_list:
+                atag = address[0].getElementsByTagName(atag_name)
+                if atag:
+                    atag_node = atag[0].firstChild
+                    atag_value = atag_node.nodeValue
+                    if atag_value:
+                        addr_tag_data.update({atag_name: atag_value})
+            addr_data = {}
+            if addr_tag_data:
+                if addr_tag_data.get('index', False):
+                    addr_data.update({'zip': addr_tag_data['index']})
+                street_lst = []
+                for sf in ['street', 'housename', 'house', 'flat']:
+                    if addr_tag_data.get(sf, False):
+                        street_lst.append(addr_tag_data[sf])
+                if addr_tag_data.get('region', False):
+                    stts_domain = [('name','=',addr_tag_data['region'])]
+                    if country_id:
+                        stts_domain.append(('country_id','=',country_id['id']))
+                    stts = self.env['res.country.state'].sudo().search(stts_domain)
+                    if len(stts) == 1:
+                        addr_data.update({'state_id': {'id': stts.id, 'display_name': stts.display_name}})
+                        if not country_id:
+                            addr_data.update({'country_id': {'id': stts.country_id.id, 'display_name': stts.country_id.display_name}})
+                    else:
+                        street_lst.append(addr_tag_data['region'])
+                if street_lst:
+                    addr_data.update({'street': ", ".join(street_lst)})
+                city_lst = []
+                for cf in ['city', 'village', 'parish']:
+                    if addr_tag_data.get(cf, False):
+                        city_lst.append(addr_tag_data[cf])
+                if city_lst:
+                    addr_data.update({'city': ", ".join(city_lst)})
+                if (not addr_data) and addr_tag_data.get('address_full', False):
+                    addr_data.update({'street': addr_tag_data['address_full']})
+                if addr_data:
+                    for af in ['street', 'street2', 'city', 'state_id', 'zip', 'country_id']:
+                        if af not in addr_data:
+                            addr_data.update({af: False})
+            return addr_data
+        res_data = {}
+        if virtualid:
+            rc = self.get_firmaslv_response('URPERSON_XML', virtualid)
+            if isinstance(rc, dict):
+                return rc
+            answ = rc.getElementsByTagName('answer')
+            if answ:
+                country = answ[0].getElementsByTagName('country')
+                if country:
+                    country_node = country[0].firstChild
+                    country_code = country_node.nodeValue
+                    if country_code:
+                        ctry = self.env['res.country'].sudo().search([('code','=',country_code)])
+                        if len(ctry) == 1:
+                            res_data.update({'country_id': {'id': ctry.id, 'display_name': ctry.display_name}})
+                person = answ[0].getElementsByTagName('person')
+                if person:
+                    person_term_map = {
+                        'name': 'name',
+                        'firm': 'short_name',
+                        'type': 'title',
+                        'regcode': 'partner_registry',
+                        'vatcode': 'vat',
+                        'phone': 'phone',
+                        'email': 'email',
+                        'www': 'website'
+                    }
+                    for tag, fld in person_term_map.items():
+                        ptag = person[0].getElementsByTagName(tag)
+                        if ptag:
+                            ptag_node = ptag[0].firstChild
+                            ptag_value = ptag_node.nodeValue
+                            if ptag_value:
+                                res_data.update({fld: ptag_value})
+                    if res_data.get('title', False):
+                        ttls = self.env['res.partner.title'].sudo().search([('shortcut','=',res_data['title'])])
+                        if len(ttls) == 1:
+                            res_data.update({'title': {'id': ttls.id, 'display_name': ttls.display_name}})
+                            if res_data.get('short_name', False):
+                                res_data.update({'name': res_data['short_name']})
+                        else:
+                            res_data.pop('title')
+                    res_data.pop('short_name')
+                    address = person[0].getElementsByTagName('address')
+                    if address:
+                        addr_data = process_address(address, country_id=res_data.get('country_id', False))
+                        if addr_data:
+                            if res_data.get('country_id', False) and 'country_id' in addr_data and (not addr_data['country_id']):
+                                addr_data.pop('country_id')
+                            res_data.update(addr_data)
+        return res_data
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
