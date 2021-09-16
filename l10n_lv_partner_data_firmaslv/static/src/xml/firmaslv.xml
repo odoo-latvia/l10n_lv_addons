@@ -9,8 +9,8 @@
                 <div class="o_firmaslv_info">
                     <strong><t t-esc="info['label'] or '&#160;'"/></strong>
                     <div><t t-esc="info['description']"/></div>
+                    <div t-if="'src' in info and info['src']" style="text-align:right; color:grey;"><span t-esc="info['src']"/></div>
                 </div>
-                <p t-if="'src' in info and info['src']" style="text-align:right; color:grey;"><span t-esc="info['src']"/></p>
             </a>
         </t>
     </div>

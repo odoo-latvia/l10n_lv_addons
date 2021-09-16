@@ -132,6 +132,9 @@ var FieldFirmasLV = FieldChar.extend(FirmasLVMixin, {
                     // update the input's value directly
                     if (self.onlyVAT)
                         self.$input.val(self._formatValue(company.vat));
+                    else if (self.name === 'partner_registry') {
+                        self.$input.val(self._formatValue(company.partner_registry));
+                    }
                     else
                         self.$input.val(self._formatValue(company.name));
                 },
