@@ -35,10 +35,6 @@ class Partner(models.Model):
     def _change_individual_registry(self):
         self.partner_registry = self.individual_registry
 
-    @api.onchange('partner_registry')
-    def _change_partner_registry(self):
-        self.individual_registry = self.partner_registry
-
 
 class Company(models.Model):
     _inherit = "res.company"
