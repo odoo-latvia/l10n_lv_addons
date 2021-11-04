@@ -51,8 +51,8 @@ msgid "Vocational Secondary Education"
 msgstr "Profesionālā vidējā izglītība"
 
 #. module: l10n_lv_education
-#: model:res.edu.level,name:l10n_lv_education.res_edu_level_level_2_professional_continuing_education
-msgid "Level 2 Professional Continuing Education"
+#: model:res.edu.level,name:l10n_lv_education.res_edu_level_level_3_professional_continuing_education
+msgid "Level 3 Professional Continuing Education"
 msgstr "3. līmeņa profesionālā tālākizglītība"
 
 #. module: l10n_lv_education

@@ -37,8 +37,8 @@
             <field name="sequence">7</field>
         </record>
 
-        <record id="res_edu_level_level_2_professional_continuing_education" model="res.edu.level">
-            <field name="name">Level 2 Professional Continuing Education</field>
+        <record id="res_edu_level_level_3_professional_continuing_education" model="res.edu.level">
+            <field name="name">Level 3 Professional Continuing Education</field>
             <field name="sequence">8</field>
         </record>
 
