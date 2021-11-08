@@ -27,7 +27,7 @@
     'version': '1.1',
     'category': 'Localization',
     'description': """
-Adds a meands of distinguishing between company and individual titles.
+Adds a means of distinguishing between company and individual titles.
 Browse, search by abbreviations.
 """,
     'author': 'Ozols Grupa',
