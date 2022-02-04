@@ -54,6 +54,7 @@ Adds Chart of Accounts, Chart of Taxes, Fiscal Positions, Banks and Partner Titl
     'installable': True,
     'auto_install': False,
     'qweb': [],
+    "license": "LGPL-3",
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
