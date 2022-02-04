@@ -37,13 +37,14 @@ Browse, search by abbreviations.
         'l10n_lv'
     ],
     'data': [
-       'views/res_partner_views.xml',
-       'data/res_partner_title_data.xml'
+        'views/res_partner_views.xml',
+        'data/res_partner_title_data.xml'
     ],
     'demo': [],
     'installable': True,
     'auto_install': False,
     'qweb': [],
+    "license": "LGPL-3",
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

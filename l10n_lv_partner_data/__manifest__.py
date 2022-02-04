@@ -38,12 +38,13 @@ Adds Registration No. and Personal No. to Partner.
         'base'
     ],
     'data': [
-       'views/res_partner_views.xml'
+        'views/res_partner_views.xml'
     ],
     'demo': [],
     'installable': True,
     'auto_install': False,
     'qweb': [],
+    "license": "LGPL-3",
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
