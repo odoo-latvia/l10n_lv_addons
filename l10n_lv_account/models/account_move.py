@@ -37,6 +37,8 @@ class AccountMove(models.Model):
     def num2words(self):
         if num2words:
             lg = self.env.context.get('lang', 'en')
+            if not lg:
+                lg = 'en'
             if '_' in lg:
                 lg = self.env.lang.split('_')[0]
             return lambda n: num2words(n, lang=lg, to='currency')
