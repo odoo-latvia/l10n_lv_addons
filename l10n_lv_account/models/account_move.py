@@ -34,11 +34,11 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     @property
-    def num2words(self):
+    def num2words(self, lang='en'):
         if num2words:
-            lg = 'en'
-            if self.env.lang:
-                lg = self.env.lang.split('_')[0]
+            lg = lang
+            if '_' in lg:
+                lg = lg.split('_')[0]
             return lambda n: num2words(n, lang=lg, to='currency')
         return None
 
