@@ -36,7 +36,12 @@ class AccountMove(models.Model):
     @property
     def num2words(self):
         if num2words:
-            return lambda n: num2words(n, lang='lv', to='currency')
+            lg = self.env.context.get('lang', 'en')
+            if not lg:
+                lg = 'en'
+            if '_' in lg:
+                lg = self.env.lang.split('_')[0]
+            return lambda n: num2words(n, lang=lg, to='currency')
         return None
 
     def action_invoice_print(self):

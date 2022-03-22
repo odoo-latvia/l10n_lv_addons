@@ -184,7 +184,7 @@
 
     <xpath expr="//div[@id='total']" position="after">
         <t t-if="o.num2words">
-            <span class="total-in-words">Total in words: <strong t-esc="o.num2words(o.amount_total)"/></span>
+            <span class="total-in-words">Total in words: <strong t-esc="o.with_context(lang=o.partner_id.lang).num2words(o.amount_total)"/></span>
         </t>
     </xpath>
 </template>
