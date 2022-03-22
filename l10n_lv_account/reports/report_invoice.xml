@@ -47,14 +47,14 @@
         <attribute name="style">padding:0;margin:0</attribute>
     </div>
 
-    <t t-foreach="o.amount_by_group" position="replace">
+    <!--<t t-foreach="o.amount_by_group" position="replace">
         <tr style="">
             <td><span>Taxes</span></td>
             <td class="text-right">
                 <span t-field="o.amount_tax"/>
             </td>
         </tr>
-    </t>
+    </t>-->
     <span id="line_tax_ids" position="replace">
         <span t-esc="', '.join(map(lambda x: (str(int(x.amount)) or x.description), line.tax_ids))" id="line_tax_ids" />%
     </span>
