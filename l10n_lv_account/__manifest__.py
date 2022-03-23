@@ -34,11 +34,14 @@
     'website': 'http://www.ozols.lv',
     'depends': [
         'account',
+        'sale',
         'l10n_lv_partner_data'
     ],
     'data': [
         'views/tax_group_view.xml',
-        'reports/report_invoice.xml'
+        'views/sale_order_views.xml',
+        'reports/report_invoice.xml',
+        'reports/sale_report_templates.xml',
     ],
     'demo': [],
     'installable': True,

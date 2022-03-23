@@ -32,6 +32,11 @@ msgstr "<span>Piegādātājs: </span>"
 
 #. module: l10n_lv_account
 #: model_terms:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
+msgid "<span>VAT</span>"
+msgstr "<span>PVN</span>"
+
+#. module: l10n_lv_account
+#: model_terms:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
 msgid "<span>Taxes</span>"
 msgstr "<span>Nodokļi</span>"
 
@@ -44,6 +49,17 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
 msgid "<strong>Payment Terms:</strong>"
 msgstr "<strong>Apmaksas nosacījumi:</strong>"
+
+
+#. module: l10n_lv_account
+#: model_terms:ir.ui.view,arch_db:l10n_lv_account.view_tax_group_form
+msgid "Account Tax Group"
+msgstr "Nodokļu Grupa"
+
+#. module: l10n_lv_account
+#: model_terms:ir.actions.act_window,help:l10n_lv_account.action_tax_group
+msgid "Create a new tax group"
+msgstr "Izveidot jaunu nodokļu grupu"
 
 #. module: l10n_lv_account
 #: model:ir.model.fields,field_description:l10n_lv_account.field_account_move__display_name
@@ -69,6 +85,11 @@ msgstr "Grāmatojums"
 #: model:ir.model.fields,field_description:l10n_lv_account.field_account_move____last_update
 msgid "Last Modified on"
 msgstr "Pēdējo reizi labots"
+
+#. module: l10n_lv_account
+#: model_terms:ir.ui.view,arch_db:l10n_lv_account.report_saleorder_document
+msgid "&amp;nbsp;<span>on</span>&amp;nbsp;"
+msgstr "&amp;nbsp;<span>no</span>&amp;nbsp;"
 
 #. module: l10n_lv_account
 #: model_terms:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
@@ -97,8 +118,26 @@ msgstr "Pārdevējs<br/>\n"
 "                        Vārds, uzvārds"
 
 #. module: l10n_lv_account
+#: model:ir.actions.act_window,name:l10n_lv_account.action_tax_group
+msgid "Tax Group"
+msgstr "Nodokļu grupas"
+
+#. module: l10n_lv_account
+#: model:ir.ui.menu,name:l10n_lv_account.menu_tax_group
+msgid "Tax Groups"
+msgstr "Nodokļu grupas"
+
+#. module: l10n_lv_account
 #: model_terms:ir.ui.view,arch_db:l10n_lv_account.report_invoice_document
 msgid "Total in words:"
 msgstr "Summa vārdiem:"
 
+#. module: l10n_lv_account
+#: model_terms:ir.ui.view,arch_db:l10n_lv_account.report_saleorder_document
+msgid "VAT"
+msgstr "PVN"
 
+#. module: l10n_lv_account
+#: model_terms:ir.ui.view,arch_db:l10n_lv_account.report_saleorder_document
+msgid "on"
+msgstr "no"

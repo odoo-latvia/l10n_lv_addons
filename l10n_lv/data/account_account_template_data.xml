@@ -814,6 +814,15 @@
         <field name="group_id" ref="lv_account_group_574"/>
     </record>
 
+    <record id="lv_account_template_5744" model="account.account.template">
+        <field name="name">PVN no saņemtajiem avansiem</field>
+        <field name="code">5744</field>
+        <field name="user_type_id" ref="lv_account_type_5"/>
+        <field name="reconcile" eval="True"/>
+        <field name="chart_template_id" ref="l10n_lv_chart_template"/>
+        <field name="group_id" ref="lv_account_group_574"/>
+    </record>
+
 <!-- -->
 
     <record id="lv_account_template_5751" model="account.account.template">
