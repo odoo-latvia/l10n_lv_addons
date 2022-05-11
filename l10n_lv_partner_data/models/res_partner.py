@@ -33,7 +33,8 @@ class Partner(models.Model):
 
     @api.onchange('individual_registry')
     def _change_individual_registry(self):
-        self.partner_registry = self.individual_registry
+        if self.company_type == 'individual':
+            self.partner_registry = self.individual_registry
 
 
 class Company(models.Model):
