@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Part of Odoo.
-#    Copyright (C) 2021 Ozols Grupa (<http://www.ozols.lv/>)
+#    Copyright (C) 2022 Ozols Grupa (<http://www.ozols.lv/>)
 #                       E-mail: <info@ozols.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
 #                       Phone: +371 67289211
