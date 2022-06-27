@@ -37,6 +37,7 @@ Bank Statement data import in the following formats:
 """,
     'author': 'Allegro IT',
     'website': 'http://www.allegro.lv',
+    'license': 'AGPL-3',
     'images': [],
     'depends': [
         'account_bank_statement_import'
