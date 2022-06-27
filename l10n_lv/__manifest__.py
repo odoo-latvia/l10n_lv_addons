@@ -30,8 +30,9 @@
     'description': """
 Adds Chart of Accounts, Chart of Taxes, Fiscal Positions, Banks and Partner Titles.
 """,
-    'author': 'Ozols Grupa',
-    'website': 'http://www.ozols.lv',
+    'author': 'Allegro IT',
+    'website': 'http://www.allegro.lv',
+    'license': 'AGPL-3',
     'images': [],
     'depends': [
         'account'
