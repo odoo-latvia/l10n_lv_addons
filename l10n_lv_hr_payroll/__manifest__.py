@@ -47,8 +47,9 @@ After the installation of this module you should:
 This module depends from the module "hr_payroll_community", which is available here:
 https://github.com/CybroOdoo/OpenHRMS
     """,
-    'author': 'Ozols Grupa',
-    'website': 'http://www.ozols.lv',
+    'author': 'Allegro IT',
+    'website': 'http://www.allegro.lv',
+    'license': 'AGPL-3',
     'category': 'Localization',
     'depends': ['hr_payroll_community'],
     'data': [
