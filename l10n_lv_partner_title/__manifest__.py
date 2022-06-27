@@ -30,8 +30,9 @@
 Adds a means of distinguishing between company and individual titles.
 Browse, search by abbreviations.
 """,
-    'author': 'Ozols Grupa',
-    'website': 'http://www.ozols.lv',
+    'author': 'Allegro IT',
+    'website': 'http://www.allegro.lv',
+    'license': 'AGPL-3',
     'images': [],
     'depends': [
         'l10n_lv'
