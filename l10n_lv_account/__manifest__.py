@@ -30,8 +30,9 @@
     'description': """
     Adds invoice report with signatures
     """,
-    'author': 'Ozols Grupa',
-    'website': 'http://www.ozols.lv',
+    'author': 'Allegro IT',
+    'website': 'http://www.allegro.lv',
+    'license': 'AGPL-3',
     'depends': [
         'account',
         'sale',
