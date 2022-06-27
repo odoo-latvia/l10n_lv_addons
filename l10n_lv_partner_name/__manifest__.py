@@ -37,8 +37,9 @@ First and middle names are separated by a space 'Martins Juris Kristians'.
 
 
     """,
-    'author': 'Ozols Grupa',
-    'website': 'http://www.ozols.lv',
+    'author': 'Allegro IT',
+    'website': 'http://www.allegro.lv',
+    'license': 'AGPL-3',
     'category': 'Hidden',
     'depends': ['base'],
     'data': [
