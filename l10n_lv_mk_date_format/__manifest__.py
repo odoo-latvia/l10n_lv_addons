@@ -28,8 +28,9 @@
     'description': """
 Replaces Latvian language's default date format with %d.%m.%Y.
     """,
-    'author': 'Ozols Grupa',
-    'website': 'http://www.ozols.lv',
+    'author': 'Allegro IT',
+    'website': 'http://www.allegro.lv',
+    'license': 'AGPL-3',
     'category': 'Hidden',
     'depends': ['base'],
     'data': [
