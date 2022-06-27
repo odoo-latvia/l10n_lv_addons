@@ -35,6 +35,7 @@ This module adds Latvian Education Level data.
     'depends': ['base_education'],
     'author': 'Ozols Grupa',
     'website': 'http://www.ozols.lv',
+    'license': 'lGPL-3',
     'data': [
         'data/l10n_lv_education_data.xml',
     ],
