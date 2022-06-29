@@ -1,4 +1,4 @@
-# Lattvijas lokalizācijas moduļi
+# Latvijas lokalizācijas moduļi
 * l10n_lv — vispārējs Latvijas lokalizācijas modulis
 * l10n_lv_account_bank_statement_import — ISO 20022 formāta datu apmaiņa ar bankām
 * l10n_lv_hr_payroll — algu konfigurācija
