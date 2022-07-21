@@ -2,10 +2,10 @@
 ##############################################################################
 #
 #    Part of Odoo.
-#    Copyright (C) 2022 Ozols Grupa (<http://www.ozols.lv/>)
-#                       E-mail: <info@ozols.lv>
+#    Copyright (C) 2022 Allegro IT (<http://www.allegro.lv/>)
+#                       E-mail: <info@allegro.lv>
 #                       Address: <Vienibas gatve 109 LV-1058 Riga Latvia>
-#                       Phone: +371 67289211
+#                       Phone: +371 67289467
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -33,7 +33,7 @@ Adds Registration No. and Personal No. to Partner.
 """,
     'author': 'Allegro IT',
     'website': 'http://www.allegro.lv',
-    'license': 'AGPL-3',
+    'license': 'LGPL-3',
     'images': [],
     'depends': [
         'base'
@@ -47,4 +47,3 @@ Adds Registration No. and Personal No. to Partner.
     'qweb': [],
 }
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
